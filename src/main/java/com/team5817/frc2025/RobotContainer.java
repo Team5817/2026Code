@@ -82,11 +82,11 @@ public class RobotContainer {
         public void makeRealRobot() {
 
                 mIntake = new Intake(
-                                new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLER,
+                                new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLERS,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
                                 new RollerSubsystemIOTalonFX(Ports.BOTTOM_INDEXER,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
-                                new RollerSubsystemIOTalonFX(Ports.SIDE_INDEXER,
+                                new RollerSubsystemIOTalonFX(Ports.SPINPUT,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
                                 new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
 
