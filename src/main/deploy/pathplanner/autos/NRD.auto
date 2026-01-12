@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHN2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N2ToD0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D0ToDT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DTToC0"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
