@@ -53,7 +53,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     forceZero();
   }
 
-  protected enum ControlState {
+  public enum ControlState {
     POSITION,
     VOLTAGE
   }

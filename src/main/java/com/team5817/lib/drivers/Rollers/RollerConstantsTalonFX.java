@@ -1,6 +1,7 @@
 package com.team5817.lib.drivers.Rollers;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
 public class RollerConstantsTalonFX {
     public NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
@@ -24,4 +25,11 @@ public class RollerConstantsTalonFX {
     public double kMaxReverseOutput = -12.0; // Voltsa
 
     public boolean counterClockwisePositive = false;
+   
+    public TalonFXConstants kMainConstants = new TalonFXConstants();
+    public TalonFXConstants[] kFollowerConstants = new TalonFXConstants[0];
+    public boolean kFollowerOpposeMasterDirection = false;
+
 }
+
+

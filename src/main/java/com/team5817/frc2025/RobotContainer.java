@@ -48,8 +48,9 @@ public class RobotContainer {
         public Drive mDrive = null;
         public Intake mIntake = null;
         public Vision mVision = null;
-        public Superstructure mSuperstructure = null;
         public GamepieceVision mGamepieceVision = null;
+        public Superstructure mSuperstructure = null;
+
         public SwerveDriveSimulation driveSimulation = null;
 
         public RobotContainer() {
@@ -81,6 +82,10 @@ public class RobotContainer {
 
         public void makeRealRobot() {
 
+                
+                
+
+                /*needs to be rafactored */
                 mIntake = new Intake(
                                 new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLERS,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),

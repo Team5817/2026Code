@@ -31,24 +31,30 @@ public class Ports {
 	public static final CanDeviceId BR_CANCODER = new CanDeviceId(4, "canivore1");
 
 	/* SUBSYSTEM CAN DEVICE IDS*/
-	public static final CanDeviceId ENDEFFECTOR_WRIST = new CanDeviceId(9);
-	public static final CanDeviceId ENDEFFECTOR_ROLLER = new CanDeviceId(10);
+	public static final CanDeviceId INTAKE_PIVOT = new CanDeviceId(9);
+	public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10);
+
+	public static final CanDeviceId SPINPUT = new CanDeviceId(11);
+
 	
+	public static final CanDeviceId TURRET = new CanDeviceId(12);
+	public static final CanDeviceId HOOD = new CanDeviceId(13);
+	public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(14);
+	public static final CanDeviceId FLYWHEEL_2 = new CanDeviceId(15);
+
 	
-	public static final CanDeviceId INTAKE_PIVOT = new CanDeviceId(11);
-	public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(12);
-	
-	public static final CanDeviceId SPINPUT = new CanDeviceId(13);
-	public static final CanDeviceId CLIMB = new CanDeviceId(14);
+	public static final CanDeviceId CLIMB = new CanDeviceId(16);
 
 
 
+	public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(17);
 
-	public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(15);
+	public static final CanDeviceId PIGEON = new CanDeviceId(18,"canivore1");
 
-	public static final CanDeviceId PIGEON = new CanDeviceId(16,"canivore1");
+	 //initally meant for rev blinkin, switch to candl?
+	public static final CanDeviceId LEDS = new CanDeviceId(19, "rio");
 
-	public static final CanDeviceId LEDS = new CanDeviceId(17, "rio");//initally meant for rev blinkin, switch to candl?
+
 
 	/* BEAM BREAK DIO CHANNELS */
 	//public static final int INDEXER_BEAM_BREAK = 0;
