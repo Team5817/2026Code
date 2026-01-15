@@ -84,9 +84,10 @@ private double scoringOffset = 0;
 
   @Override
   public void writePeriodicOutputs() {
-    double trackedOutput = mState.getTrackedOutput(distanceFromRung);
+    double trackedOutput = 0; //mState.getTrackedOutput(distanceFromRung);
     if (mState == State.L1 || mState == State.L2 || mState == State.L3)
-      trackedOutput += scoringOffset;
+     // trackedOutput += scoringOffset;
+        trackedOutput = mState.demand;
     
     setPositionSetpoint(trackedOutput);
 
