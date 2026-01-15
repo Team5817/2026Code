@@ -23,7 +23,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
     super(State.ZERO, io, false);
   }
 private double scoringOffset = 0;
-    private double distanceFromScoringPosition = 0;
+    private double distanceFromRung = 0;
   final static double kStrictError = 0;
   final static double kMediumError = 0;
   final static double kLenientError = 0;
@@ -55,11 +55,11 @@ private double scoringOffset = 0;
       this.map = map;
     }
 
-    public double getTrackedOutput(double distanceFromScoringPosition) {
+    public double getTrackedOutput(double distanceFromRung) {
       if (map == null) {
         return demand;
       }
-      double des = this.demand + map.get(distanceFromScoringPosition);
+      double des = this.demand + map.get(distanceFromRung);
       des = Util.limit(des, ClimbConstants.kClimbServoConstants.kMinUnitsLimit,
           ClimbConstants.kClimbServoConstants.kMaxUnitsLimit);
       return des;
@@ -75,11 +75,16 @@ private double scoringOffset = 0;
     public ControlState getControlState() {
       return ControlState.POSITION;
     }
+
   }
+
+    public void updateRungDistance(double dist) {
+        this.distanceFromRung = dist;
+    }
 
   @Override
   public void writePeriodicOutputs() {
-    double trackedOutput = mState.getTrackedOutput(distanceFromScoringPosition);
+    double trackedOutput = mState.getTrackedOutput(distanceFromRung);
     if (mState == State.L1 || mState == State.L2 || mState == State.L3)
       trackedOutput += scoringOffset;
     
