@@ -3,13 +3,13 @@ package com.team5817.frc2025.subsystems.Climb;
 import javax.security.auth.PrivateCredentialPermission;
 
 import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.team5817.frc2025.RobotVisualizer;
 import com.team5817.lib.Util;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.SequentialRequest;
+import com.team5817.lib.requests.WaitRequest;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
    * @param constants the constants for the elevator
    */
   public Climb(ServoMotorIO io) {
-    super(State.ZERO, io, false);
+    super(State.ZERO, io, true);
   }
 
 
@@ -35,9 +35,9 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
    */
   public enum State implements ServoState {
     ZERO(0),
-    READY(0),
-    RETRACT(0),
-    EXTEND(0);
+    READY(.10),
+    RETRACT(.5),
+    EXTEND(.64);
 
     @Getter
     private double demand = 0;
@@ -65,33 +65,42 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
     public ControlState getControlState() {
       return ControlState.POSITION;
     }
-
   }
 
-   void advanceClimbSequence(){
+  public Request advanceClimbSequence(){
     switch (mState) {
       case ZERO:
-        setState(State.READY);
-        break;
+        return stateRequest(State.READY);
       case READY:
-        setState(State.RETRACT);
-        break;
+        return stateRequest(State.RETRACT);
       case RETRACT:
-        setState(State.EXTEND);
-        break;
+        return stateRequest(State.EXTEND);
       case  EXTEND:
-        setState(State.RETRACT);
-        break;
+        return stateRequest(State.RETRACT);
     }
+    return null;
   }
-  void resetClimbStages(){
+
+  public Request climbRequest(){
+    return new SequentialRequest(
+      advanceClimbSequence(), 
+      //Wait For Climb BB
+      advanceClimbSequence(), 
+      new WaitRequest(1),
+      advanceClimbSequence(),
+      new WaitRequest(1),
+      advanceClimbSequence() 
+    );
+  }
+
+  public void resetClimbStages(){
     setState(State.ZERO);
   }
 
    @Override
   public void outputTelemetry() {
 
-
+    //Robot Visualizer TODO
     super.outputTelemetry();
   }
 } 
