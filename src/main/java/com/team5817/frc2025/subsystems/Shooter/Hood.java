@@ -1,64 +1,73 @@
 package com.team5817.frc2025.subsystems.Shooter;
 
+import java.util.function.DoubleSupplier;
+
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 
 public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
 
-    final static double kTightError = 1.3;
-    final static double kLooseError = 4.0;
-  
-   
-    public Hood(ServoMotorIO io) {
+    private static final double kTightError = 1.3;
+    private static final double kLooseError = 4.0;
+
+    public Hood(
+        ServoMotorIO io,
+        DoubleSupplier hubAngleSupplier,
+        DoubleSupplier lobAngleSupplier
+    )
+     {
         super(State.STOW, io);
+
+        State.AIM.setSupplier(hubAngleSupplier);
+        State.LOBBING.setSupplier(lobAngleSupplier);
     }
 
-  /**
-     * Hood states.
-     * Angles are placeholders until CAD is finalized.
-     */
     public enum State implements ServoState {
-        IDLE(0.0, kLooseError),
-        STOW(0.0, kLooseError),
-        LOW(10.0, kTightError),
-        MID(25.0, kTightError),
-        HIGH(40.0, kTightError),
-        AIM(0.0, kTightError),
-        DISABLE;
+        STOW(() -> 0.0, kLooseError),
+        LOW(() -> 0.0, kTightError),
+        HIGH(() -> 0.0, kTightError),
+        AIM(kTightError),
+        LOBBING(kTightError);
+       
+        private DoubleSupplier demand;
+        private final double allowableError;
+
+        State(double allowableError) {
+            this.demand = ()->0;
+            this.allowableError = allowableError;
+        }
+
+        State(DoubleSupplier supplier, double allowableError) {
+            this.demand = supplier;
+            this.allowableError = allowableError;
+        }
+
+        void setSupplier(DoubleSupplier supplier) {
+            this.demand = supplier;
+        }
 
 
-
-    private double demand = 0.0;
-    private double allowableError = 0.0;
-    private boolean disabled = false;
-
-    State(double demand, double allowableError) {
-        this.demand = demand;
-        this.allowableError = allowableError;
-    }
-
-    State() {
-        this.disabled = true;
-    }
 
     @Override
     public double getDemand() {
-        return demand;
-    }
+            return demand.getAsDouble();
+        }
 
     @Override
     public double getAllowableError() {
-        return allowableError;
-    }
+            return allowableError;
+        }
 
     @Override
     public boolean isDisabled() {
-        return disabled;
-    }
+            return false;
+        }
 
     @Override
     public ControlState getControlState() {
-        return ControlState.POSITION;
+            return ControlState.POSITION;
+        }
     }
-}}
+
+}

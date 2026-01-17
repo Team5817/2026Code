@@ -44,9 +44,8 @@ public class ShooterConstants {
 public enum FlywheelState implements IRollerState{
 
     IDLE(0.0),
-    SPOOL(0.0),
-    SHOOT(0.0),
-    EJECT(0.0);
+    SHOOT(12),
+    EJECT(3);
 
     @Getter
     private final double demand;

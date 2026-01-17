@@ -1,59 +1,71 @@
 package com.team5817.frc2025.subsystems.Shooter;
 
+import java.util.function.DoubleSupplier;
+
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 
-
 public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
-    final static double kTightError = 1.0;
-    final static double kLooseError = 4.0;
+    private static final double kTightError = 1.0;
+    private static final double kLooseError = 4.0;
 
-    public Turret(ServoMotorIO io) {
-        super(State.IDLE, io);
+        public Turret(
+        ServoMotorIO io,
+        DoubleSupplier hubAngleSupplier,
+        DoubleSupplier lobAngleSupplier
+    ) 
+    {
+        super(State.STOW, io);
+
+        State.AIM.setSupplier(hubAngleSupplier);
+        State.LOBBING.setSupplier(lobAngleSupplier);
     }
-    
-    
 
-      public enum State implements ServoState {
-            IDLE(0.0, kLooseError),
-            HOLD(0.0, kTightError),
-            AIM(0.0, kTightError),
-            DISABLE;
-
-
-        private double demand = 0.0;
-        private double allowableError = 0.0;
-        private boolean disabled = false;
-
-        State(double demand, double allowableError) {
-        this.demand = demand;
-        this.allowableError = allowableError;
+    public enum State implements ServoState {
+        STOW(() -> 0.0, kLooseError),
+        AIM(kTightError),//set in constructor
+        LOBBING(kTightError);//set in constructor
+        
+        
+        private DoubleSupplier demand;
+        private final double allowableError;
+        State(double allowableError) {
+            this.demand = ()->0;
+            this.allowableError = allowableError;
+        }
+        State(DoubleSupplier supplier, double allowableError) {
+            this.demand = supplier;
+            this.allowableError = allowableError;
         }
 
-        State() {
-        this.disabled = true;
+        void setSupplier(DoubleSupplier supplier) {
+            this.demand = supplier;
         }
+
 
         @Override
         public double getDemand() {
-        return demand;
+            return demand.getAsDouble();
         }
 
         @Override
         public double getAllowableError() {
-        return allowableError;
+            return allowableError;
+        }
+
+
+        @Override
+        public ControlState getControlState() {
+            return ControlState.POSITION;
         }
 
         @Override
         public boolean isDisabled() {
-        return disabled;
+            return false;
         }
+    }
 
-        @Override
-        public ControlState getControlState() {
-        return ControlState.POSITION;
-        }
-    }
-    }
+
+}
