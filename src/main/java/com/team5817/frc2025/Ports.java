@@ -34,7 +34,8 @@ public class Ports {
 	public static final CanDeviceId INTAKE_PIVOT = new CanDeviceId(9);
 	public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10);
 
-	public static final CanDeviceId SPINPUT = new CanDeviceId(11);
+	public static final CanDeviceId SPINDEXER_1 = new CanDeviceId(11);
+	
 
 	
 	public static final CanDeviceId TURRET = new CanDeviceId(12);

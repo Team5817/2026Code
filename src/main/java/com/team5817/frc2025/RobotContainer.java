@@ -91,7 +91,7 @@ public class RobotContainer {
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
                                 new RollerSubsystemIOTalonFX(Ports.BOTTOM_INDEXER,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
-                                new RollerSubsystemIOTalonFX(Ports.SPINPUT,
+                                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
                                 new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
 
