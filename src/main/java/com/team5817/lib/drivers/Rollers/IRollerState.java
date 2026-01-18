@@ -4,6 +4,7 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 
 public interface IRollerState {
   public double getDemand();
+  public double getToleranceRadsPerSec();
 
   public RollerControlMode getControlMode();
 }

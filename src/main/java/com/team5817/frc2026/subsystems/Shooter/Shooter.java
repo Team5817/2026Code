@@ -1,0 +1,108 @@
+package com.team5817.frc2026.subsystems.Shooter;
+
+
+import org.littletonrobotics.junction.Logger;
+
+import com.team5817.frc2026.planners.ShootingPlannerI;
+import com.team5817.frc2026.subsystems.Shooter.ShooterConstants.FlywheelState;
+import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.drivers.Rollers.RollerSubsystem;
+import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
+import com.team5817.lib.drivers.Servos.ServoMotorIO;
+import com.team5817.lib.requests.Request;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+public class Shooter extends Subsystem{
+    
+    @Getter private final Turret turret;
+    @Getter private final Hood hood;
+    @Getter private final RollerSubsystem<ShooterConstants.FlywheelState> flywheel;
+
+    ShootingPlannerI planner;
+    public Shooter(
+        ServoMotorIO turretIO,
+        ServoMotorIO hoodIO,
+        RollerSubsystemIO flywheelIO,
+        ShootingPlannerI planner
+    ){
+        
+        this.turret = new Turret(turretIO , planner.getHubTurretAngleSupplier(), planner.getLobTurretAngleSupplier());
+        this.hood = new Hood(hoodIO, planner.getHubHoodAngleSupplier(), planner.getLobHoodAngleSupplier());
+        FlywheelState.HUB.setSupplier(planner.getHubFlywheelSpeedSupplier());
+        FlywheelState.LOB.setSupplier(planner.getLobFlywheelSpeedSupplier());
+        this.flywheel = new RollerSubsystem<ShooterConstants.FlywheelState>(FlywheelState.IDLE, "Shoooter/Flywheel", flywheelIO);
+        this.planner = planner;
+    }   
+    
+    @Getter
+    @Accessors(prefix = "m")
+    private State mState = State.IDLE;
+    @Getter
+    @Setter
+    private State desiredState = State.IDLE;
+    private boolean atState = false;
+    public enum State {
+            IDLE(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
+            CLOSE(Turret.State.STOW, Hood.State.CLOSE, ShooterConstants.FlywheelState.CLOSE),
+            FAR(Turret.State.STOW, Hood.State.FAR, ShooterConstants.FlywheelState.FAR),
+            AIM(Turret.State.AIM, Hood.State.AIM, ShooterConstants.FlywheelState.HUB),
+            LOB(Turret.State.LOBBING, Hood.State.LOBBING, ShooterConstants.FlywheelState.LOB);
+
+            final Turret.State turretState;
+            final Hood.State hoodState;
+            final ShooterConstants.FlywheelState flywheelState;
+
+            State(Turret.State turretState, Hood.State hoodState, ShooterConstants.FlywheelState flywheelState) {
+                this.turretState = turretState;
+                this.hoodState = hoodState;
+                this.flywheelState = flywheelState;
+            }
+    }
+    @Override
+    public void periodic() {
+        atState = turret.atState() && hood.atState() && flywheel.atState();
+        if(mState != desiredState){
+            turret.setState(desiredState.turretState);
+            hood.setState(desiredState.hoodState);
+            flywheel.setState(desiredState.flywheelState);
+            if(atState){
+                mState = desiredState;
+            }
+        }
+    }
+    @Override
+    public void outputTelemetry() {
+        Logger.recordOutput("Shooter/Current State", mState);
+        Logger.recordOutput("Shooter/Desired State", desiredState);
+        turret.outputTelemetry();
+        hood.outputTelemetry();
+        flywheel.outputTelemetry();
+    }
+    public Request stateRequest(State state) {
+        return new Request() {
+            @Override
+            public void act() {
+                setDesiredState(state);
+            }
+            @Override
+            public boolean isFinished() {
+                return atState;
+            }
+        };
+    }
+
+    @Override
+    public void readPeriodicInputs() {
+        flywheel.readPeriodicInputs();
+        turret.readPeriodicInputs();
+        hood.readPeriodicInputs();
+    }
+    @Override
+    public void writePeriodicOutputs() {
+        flywheel.writePeriodicOutputs();
+        turret.writePeriodicOutputs();
+        hood.writePeriodicOutputs();
+    }
+    }

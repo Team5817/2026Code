@@ -16,7 +16,10 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState> exten
   protected S mState;
   private final boolean allowAutoStateOutput;
   protected boolean atState = false;
-
+  public boolean atState() {
+    return atState;
+  }
+  
   public StateBasedServoMotorSubsystem(S initialState, ServoMotorIO io,
       boolean enableAutoStateOutput) {
     super(io);

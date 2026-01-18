@@ -6,7 +6,7 @@ import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.Logger;
 
 import com.team254.lib.geometry.Pose2d;
-import com.team5817.frc2025.subsystems.GamePieceVision.GamepieceVision.RobotPoseSupplier;
+import com.team5817.frc2026.subsystems.GamePieceVision.GamepieceVision.RobotPoseSupplier;
 import com.team5817.lib.util.AllianceFlipUtil;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -31,7 +31,9 @@ public class GamepieceVisionIOSim implements GamepieceVisionIO {
     Translation2d robotTranslation = robotPose.getTranslation().wpi();
     edu.wpi.first.math.geometry.Rotation2d robotRotation = robotPose.getRotation().wpi();
 
-    List<Pose3d> gamepieces = mSimulatedArena.getGamePiecesByType("Coral");
+    List<Pose3d> gamepieces = mSimulatedArena.getGamePiecesByType("Coral").stream().map(
+      gp -> gp.getPose3d()
+    ).toList();
 
     Pose3d base = new Pose3d(2, .583, 0, Rotation3d.kZero);
 

@@ -33,9 +33,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import com.team5817.frc2025.subsystems.Drive.Drive;
+import com.team5817.frc2026.generated.TunerConstants;
+import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.lib.util.PhoenixUtil;
-import com.team5817.frc2025.generated.TunerConstants;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;

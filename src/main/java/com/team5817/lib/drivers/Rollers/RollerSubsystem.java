@@ -13,8 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.lang.Thread.State;
-
 import org.littletonrobotics.junction.Logger;
 
 import com.team5817.lib.drivers.Subsystem;
@@ -35,6 +33,11 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   @Accessors(prefix = "m")
   private S mState;
 
+  protected boolean atState = true;
+  public boolean atState() {
+    return atState;
+  }
+
   public enum RollerControlMode {
     VOLTAGE,
     TORQUE,
@@ -53,6 +56,11 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   public void readPeriodicInputs() {
     io.updateInputs(inputs);
     Logger.processInputs(inputsName, inputs);
+    if(mState.getControlMode() == RollerControlMode.VELOCITY){
+      atState = Math.abs(inputs.data.velocityRadsPerSec() - mState.getDemand()) < mState.getToleranceRadsPerSec();
+    } else {
+      atState = true;
+    }
     disconnected.set(
         !motorConnectedDebouncer.calculate(inputs.data.connected()));
     tempFault.set(inputs.data.tempFault());

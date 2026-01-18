@@ -1,6 +1,7 @@
 package com.team5817.lib.drivers.Servos;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
@@ -48,7 +49,7 @@ public class ServoConstants {
   public double kMaxForwardOutput = 12.0; // Volts
   public double kMaxReverseOutput = -12.0; // Voltsa
 
-  public boolean kFollowerOpposeMasterDirection = false;
+  public MotorAlignmentValue kFollowerOpposeMasterDirection = MotorAlignmentValue.Aligned;
 
   public double kMaxUnitsLimit = Double.POSITIVE_INFINITY;
   public double kMinUnitsLimit = Double.NEGATIVE_INFINITY;

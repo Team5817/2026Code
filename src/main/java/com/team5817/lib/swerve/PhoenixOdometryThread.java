@@ -16,8 +16,8 @@ package com.team5817.lib.swerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
-import com.team5817.frc2025.generated.TunerConstants;
-import com.team5817.frc2025.subsystems.Drive.Drive;
+import com.team5817.frc2026.generated.TunerConstants;
+import com.team5817.frc2026.subsystems.Drive.Drive;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotController;

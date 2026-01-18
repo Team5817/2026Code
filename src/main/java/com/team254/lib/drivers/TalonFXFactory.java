@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
@@ -36,7 +37,7 @@ public class TalonFXFactory {
     }
 
     public static TalonFX createPermanentFollowerTalon(CanDeviceId follower_id, CanDeviceId main_id,
-            boolean opposeMasterDirection) {
+            MotorAlignmentValue opposeMasterDirection) {
         if (!follower_id.getBus().equals(main_id.getBus())) {
             throw new RuntimeException("Main and Follower Talons must be on the same CAN bus");
         }

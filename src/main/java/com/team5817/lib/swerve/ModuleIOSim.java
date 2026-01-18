@@ -22,7 +22,7 @@ import java.util.Arrays;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 
-import com.team5817.frc2025.generated.TunerConstants;
+import com.team5817.frc2026.generated.TunerConstants;
 import com.team5817.lib.util.PhoenixUtil;
 
 /**

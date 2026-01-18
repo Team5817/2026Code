@@ -19,8 +19,8 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.team254.lib.geometry.Rotation2d;
-import com.team5817.frc2025.generated.TunerConstants;
-import com.team5817.frc2025.subsystems.Drive.Drive;
+import com.team5817.frc2026.generated.TunerConstants;
+import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.lib.util.PhoenixUtil;
 
 import edu.wpi.first.math.util.Units;
