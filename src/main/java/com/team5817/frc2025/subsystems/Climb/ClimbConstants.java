@@ -3,16 +3,8 @@ package com.team5817.frc2025.subsystems.Climb;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.frc2025.Ports;
 import com.team5817.lib.drivers.Servos.ServoConstants;
-import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-
-/**
- * Constants related to the Elevator subsystem.
- */
 public final class ClimbConstants {
-  // 115.93
-  // 7.92
   public static final ServoConstants kClimbServoConstants = new ServoConstants();
 
   static {
@@ -20,13 +12,6 @@ public final class ClimbConstants {
 
     kClimbServoConstants.kMainConstants.id = Ports.CLIMB;
     kClimbServoConstants.kMainConstants.counterClockwisePositive = true;
-
-    /*TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.ELEVATOR_2;
-    followerConstants.counterClockwisePositive = false;
-    followerConstants.invert_sensor_phase = false;*/
-
-   // kClimbServoConstants.kFollowerConstants = new TalonFXConstants[] { followerConstants };
 
     kClimbServoConstants.kHomePosition = 0; // degrees
     kClimbServoConstants.kRotationsPerUnitDistance = 72.82 / 1.4 * 3 / 4;
@@ -63,19 +48,4 @@ public final class ClimbConstants {
     kClimbServoConstants.kHomingVelocityWindow = 0.1;
 
   }
-
-  public static double kHomingZone = 0.1; // degrees
-  public static final double kCoralClearHeight = 0.15; // rotations
-  public static final double kCoralClearHeightRanThroughFinger = 1.6;
-  public static final InterpolatingDoubleTreeMap kMidOffsetMap = new InterpolatingDoubleTreeMap();
-  static {
-    kMidOffsetMap.put(-.112, -0.149804);
-    kMidOffsetMap.put(0.0, 0.0);
-  }
-  public static final InterpolatingDoubleTreeMap kHighOffsetMap = new InterpolatingDoubleTreeMap();
-  static {
-    kHighOffsetMap.put(-.11, -0.0);
-    kHighOffsetMap.put(0.0, 0.0);
-  }
-
 }
