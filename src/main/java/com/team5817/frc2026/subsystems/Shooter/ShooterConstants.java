@@ -2,6 +2,8 @@ package com.team5817.frc2026.subsystems.Shooter;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.team254.lib.geometry.Pose2d;
+import com.team254.lib.geometry.Rotation2d;
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.IRollerState;
@@ -10,22 +12,19 @@ import java.util.function.DoubleSupplier;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
-/**
- * Centralized shooter constants and per-target lookup tables.
- *
- * This cleaned version consolidates map initialization into a single
- * static initializer to avoid duplicate/ malformed blocks introduced
- * during earlier edits.
- */
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+
+
 public class ShooterConstants {
 
     public static final RollerConstantsTalonFX flywheelConstants = new RollerConstantsTalonFX();
 
-    // Also expose per-target maps as named constants so enums can reference them in their constructors.
-    public static final edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap HOOD_MAP_LOB;
-    public static final edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
-    public static final edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap HOOD_MAP_HUB;
-    public static final edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
+    public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
+    public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
+    public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
+    public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
+
+    public static Pose2d shooterTransform = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
 
     static {
         // Basic flywheel/talon defaults
@@ -51,32 +50,27 @@ public class ShooterConstants {
         flywheelConstants.kFollowerOpposeMasterDirection = false;
 
         // Default maps for LOB
-        edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap lobHood = new edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap();
+        InterpolatingDoubleTreeMap lobHood = new InterpolatingDoubleTreeMap();
         lobHood.put(1.0, 10.0);
         lobHood.put(2.0, 12.5);
         lobHood.put(3.5, 15.0);
         lobHood.put(5.0, 18.0);
 
-        edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap lobFly = new edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap();
-        lobFly.put(1.0, 1000.0);
-        lobFly.put(2.0, 2000.0);
-        lobFly.put(3.5, 3000.0);
-        lobFly.put(5.0, 4000.0);
+        InterpolatingDoubleTreeMap lobFly = new InterpolatingDoubleTreeMap();
+        lobFly.put(1.0,80.0);
+        lobFly.put(5.0, 90.0);
 
         // Default maps for HUB
-        edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap hubHood = new edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap();
+        InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
         hubHood.put(1.0, 5.0);
         hubHood.put(2.0, 7.5);
         hubHood.put(3.5, 10.0);
         hubHood.put(5.0, 12.0);
 
-        edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap hubFly = new edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap();
-        hubFly.put(1.0, 1500.0);
-        hubFly.put(2.0, 2500.0);
-        hubFly.put(3.5, 3500.0);
-        hubFly.put(5.0, 4500.0);
+        InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
+        hubFly.put(1.0, 50.0);
+        hubFly.put(5.0, 80.0);
 
-        // Publish named constants (used by ShootingTarget constructor if desired)
         HOOD_MAP_LOB = lobHood;
         FLYWHEEL_MAP_LOB = lobFly;
         HOOD_MAP_HUB = hubHood;
@@ -181,27 +175,21 @@ public class ShooterConstants {
             }
         }
 
-        /**
-     * Flywheel states for the Shooter roller subsystem.
-     *
-     * This enum implements IRollerState so it can be used with RollerSubsystem.
-     * It supports setting a dynamic DoubleSupplier for velocity-demand states (HUB/LOB)
-     * so the ShootingPlanner can provide live setpoints.
-     */
+
     public enum FlywheelState implements IRollerState {
         IDLE(0.0, RollerControlMode.VOLTAGE),
-        CLOSE(0.0, RollerControlMode.VELOCITY),
-        FAR(0.0, RollerControlMode.VELOCITY),
-        HUB(0.0, RollerControlMode.VELOCITY),
-        LOB(0.0, RollerControlMode.VELOCITY);
+        CLOSE(50.0, RollerControlMode.VELOCITY),
+        FAR(80.0, RollerControlMode.VELOCITY),
+        HUB(70.0, RollerControlMode.VELOCITY), // Placeholder, set at runtime
+        LOBBING(80.0, RollerControlMode.VELOCITY); // Placeholder, set at runtime
 
         private final RollerControlMode controlMode;
         private final double toleranceRadsPerSec = 0.1;
         private DoubleSupplier supplier = () -> 0.0;
 
-        FlywheelState(double staticDemand, RollerControlMode controlMode) {
+        FlywheelState(double demand, RollerControlMode controlMode) {
             this.controlMode = controlMode;
-            this.supplier = () -> staticDemand;
+            this.supplier = () -> demand;
         }
 
         public void setSupplier(DoubleSupplier supplier) {

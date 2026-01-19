@@ -1,33 +1,36 @@
 package com.team5817.lib.requests;
 
+import lombok.Getter;
+
 public class RequestExecutor {
-	private Request activeRequest = null;
+	@Getter
+	private Request currentRequest = null;
 	private boolean startedCurrentRequest = false;
 
 	public void request(Request r) {
-		if (activeRequest != null) {
-			activeRequest.cleanup();
+		if (currentRequest != null) {
+			currentRequest.cleanup();
 		}
-		activeRequest = r;
+		currentRequest = r;
 		startedCurrentRequest = false;
 	}
 
 	public void update() {
-		if (activeRequest == null) {
+		if (currentRequest == null) {
 			return;
 		}
 
-		if (!startedCurrentRequest && activeRequest.allowed()) {
-			activeRequest.act();
+		if (!startedCurrentRequest && currentRequest.allowed()) {
+			currentRequest.act();
 			startedCurrentRequest = true;
 		}
 
-		if (startedCurrentRequest && activeRequest.isFinished()) {
-			activeRequest = null;
+		if (startedCurrentRequest && currentRequest.isFinished()) {
+			currentRequest = null;
 		}
 	}
 
 	public boolean isFinished() {
-		return activeRequest == null;
+		return currentRequest == null;
 	}
 }

@@ -527,7 +527,7 @@ public class Drive extends Subsystem {
   }
 
   /** Returns the measured chassis speeds of the robot. */
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return new ChassisSpeeds(kinematics.toChassisSpeeds(getModuleStates()));
   }
 

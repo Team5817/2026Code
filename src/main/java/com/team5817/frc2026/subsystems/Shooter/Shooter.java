@@ -1,9 +1,14 @@
 package com.team5817.frc2026.subsystems.Shooter;
 
 
-import org.littletonrobotics.junction.AutoLogOutput;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
+import com.team254.lib.geometry.Pose2d;
+import com.team254.lib.geometry.Rotation2d;
+import com.team254.lib.swerve.ChassisSpeeds;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.planners.ShootingPlannerI;
 import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants.FlywheelState;
@@ -28,31 +33,33 @@ public class Shooter extends Subsystem{
         ServoMotorIO turretIO,
         ServoMotorIO hoodIO,
         RollerSubsystemIO flywheelIO,
-        ShootingPlannerI planner
+        Supplier<Pose2d> robotPoseSupplier,
+        Supplier<ChassisSpeeds> robotVelocitySupplier,
+        DoubleSupplier  timeSinceVision
     ){
-        
-    this.turret = new Turret(turretIO , planner.getTurretAngleSupplier(ShootingTarget.HUB), planner.getTurretAngleSupplier(ShootingTarget.LOB));
-    this.hood = new Hood(hoodIO, planner.getHoodAngleSupplier(ShootingTarget.HUB), planner.getHoodAngleSupplier(ShootingTarget.LOB));
-    FlywheelState.HUB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
-    FlywheelState.LOB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
-        this.flywheel = new RollerSubsystem<ShooterConstants.FlywheelState>(FlywheelState.IDLE, "Shoooter/Flywheel", flywheelIO);
-        this.planner = planner;
+        Supplier<Rotation2d> robotHeadingSupplier = () -> robotPoseSupplier.get().getRotation();
+        Supplier<Pose2d> shooterPoseSupplier = () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
+        this.planner = new ShootingPlanner(shooterPoseSupplier, robotVelocitySupplier, () -> atState, timeSinceVision);
+        this.turret = new Turret(turretIO , planner.getTurretAngleSupplier(ShootingTarget.HUB), planner.getTurretAngleSupplier(ShootingTarget.LOB), robotHeadingSupplier);
+        this.hood = new Hood(hoodIO, planner.getHoodAngleSupplier(ShootingTarget.HUB), planner.getHoodAngleSupplier(ShootingTarget.LOB));
+        FlywheelState.HUB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
+        FlywheelState.LOBBING.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
+        this.flywheel = new RollerSubsystem<ShooterConstants.FlywheelState>(FlywheelState.IDLE, "Shooter/Flywheel", flywheelIO);
     }   
     @Getter
     @Accessors(prefix = "m")
     private State mState = State.STOW;
     @Getter
     @Setter
-    private State desiredState = State.AIM;
+    private State desiredState = State.HUB;
     private boolean atState = false;
-    @AutoLogOutput(key = "Shooter/ForcedStow")
     private boolean forcedStow = false;
     public enum State {
             STOW(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
             CLOSE(Turret.State.STOW, Hood.State.CLOSE, ShooterConstants.FlywheelState.CLOSE),
             FAR(Turret.State.STOW, Hood.State.FAR, ShooterConstants.FlywheelState.FAR),
-            AIM(Turret.State.AIM, Hood.State.AIM, ShooterConstants.FlywheelState.HUB),
-            LOB(Turret.State.LOBBING, Hood.State.LOBBING, ShooterConstants.FlywheelState.LOB);
+            HUB(Turret.State.HUB, Hood.State.HUB, ShooterConstants.FlywheelState.HUB),
+            LOB(Turret.State.LOBBING, Hood.State.LOBBING, ShooterConstants.FlywheelState.LOBBING);
 
             final Turret.State turretState;
             final Hood.State hoodState;
@@ -66,6 +73,8 @@ public class Shooter extends Subsystem{
     }
     @Override
     public void periodic() {
+        if(followPlan)
+            setDesiredState(planner.recommendedShooterState());
         if(forcedStow){
             desiredState = State.STOW;
         }
@@ -83,6 +92,8 @@ public class Shooter extends Subsystem{
     public void outputTelemetry() {
         Logger.recordOutput("Shooter/Current State", mState);
         Logger.recordOutput("Shooter/Desired State", desiredState);
+        Logger.recordOutput("Shooter/Forced Stow", forcedStow);
+        Logger.recordOutput("Shooter/Follow Plan", followPlan);
         turret.outputTelemetry();
         hood.outputTelemetry();
         flywheel.outputTelemetry();
@@ -114,5 +125,9 @@ public class Shooter extends Subsystem{
     }
     public void forceStow(boolean forced) {
         forcedStow = forced;
+    }
+    private boolean followPlan = false;
+    public void followPlan(boolean followPlan){
+        this.followPlan = followPlan;
     }
     }

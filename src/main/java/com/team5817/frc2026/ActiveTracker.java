@@ -3,6 +3,7 @@ package com.team5817.frc2026;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -61,9 +62,11 @@ public class ActiveTracker {
 
     private static boolean ensureWonAuto() {
         if (wonAuto != null) return true;
+        if(DriverStation.getAlliance().isEmpty()) return false;
+
         String gameData = DriverStation.getGameSpecificMessage();
         if (gameData != null && gameData.length() > 0) {
-            wonAuto = gameData.charAt(0) == 'R';
+            wonAuto = gameData.charAt(0) == (DriverStation.getAlliance().get().equals(Alliance.Red)? 'R' : 'B');
             return true;
         }
         return false;
@@ -84,10 +87,10 @@ public class ActiveTracker {
                 break;
             }
         }
-
+        
         // if current window is active for our alliance => already active
         if (current != null && current.isActiveFor(wonAuto)) return 0;
-
+        
         // otherwise find next window (with smaller start) that will be active
         // windows are ordered from largest start to smallest start, so iterate and find first with start < matchTime
         for (TeleopWindow w : TELEOP_WINDOWS) {
@@ -100,6 +103,7 @@ public class ActiveTracker {
     }
 
     public static void updateActive() {
+        updateTelemetry();
         if (!ensureWonAuto()) {
             // can't decide yet; keep current state
             return;
@@ -125,30 +129,30 @@ public class ActiveTracker {
 
         // fallback
         isActive = false;
-    }
-    
-    public static boolean shouldShakeController() {
-        double tta = getTimeToActive();
-
-        boolean trigger = false;
-
-        if (tta < 5.0 && previousTimeToActive >= 5.0 && !hasShakenController) {
-            trigger = true;
-            hasShakenController = true;
-        }
-
-
-        if (isActive || tta == Double.POSITIVE_INFINITY || tta >= 5.0) {
-            hasShakenController = false;
-        }
-
-        previousTimeToActive = tta;
-        return trigger;
-    }
-
-    public void updateTelemetry() {
+            }
+            
+            public static boolean shouldShakeController() {
+                double tta = getTimeToActive();
+        
+                boolean trigger = false;
+        
+                if (tta < 5.0 && previousTimeToActive >= 5.0 && !hasShakenController) {
+                    trigger = true;
+                    hasShakenController = true;
+                }
+        
+        
+                if (isActive || tta == Double.POSITIVE_INFINITY || tta >= 5.0) {
+                    hasShakenController = false;
+                }
+        
+                previousTimeToActive = tta;
+                return trigger;
+            }
+        
+    public static void updateTelemetry() {
         Logger.recordOutput("ActiveTracker/Is Active", isActive);
-        Logger.recordOutput("ActiveTracker/Won Auto", wonAuto);
+        Logger.recordOutput("ActiveTracker/Won Auto", wonAuto != null ? wonAuto : false);
         Logger.recordOutput("ActiveTracker/Time To Active", getTimeToActive());
     }
 }

@@ -25,6 +25,7 @@ import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.lib.Elastic;
 import com.team5817.lib.Util;
+import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.vision.LimelightPoseCalibrator;
 import com.team5817.lib.RobotMode;
 
@@ -157,6 +158,7 @@ public class Robot extends LoggedRobot {
     Elastic.selectTab("Teleoperated");
     mDrive.stop();
     mRobotContainer.mIntake.conformToState(Intake.State.IDLE);
+    mRobotContainer.mSuperstructure.request(new AutoShootRequest(mRobotContainer.mShooter.getPlanner(), mRobotContainer.mSuperstructure).addName("AutoShoot"));
   }
 
   /**
@@ -164,7 +166,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    controls.twoControllerMode();
+    controls.oneControllerMode();
     controlBoard.update();
 
     mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -192,16 +194,15 @@ public class Robot extends LoggedRobot {
   /**
    * This method is called periodically when the robot is disabled.
    */
-  @SuppressWarnings("null")
   @Override
   public void disabledPeriodic() {
     l.update();
     // if(mVision.getMovingAverage().getSize()!=0&&neverEnabled)
     // mDrive.zeroGyro(mVision.getMovingAverage().getAverage());
-    Optional<AutoBase> autoMode = null;
-    if (autoMode.isPresent() && (autoMode.get() != mAutoExecuter.getAuto())) {
-      mAutoExecuter.setAuto(autoMode.get());
-    }
+    // Optional<AutoBase> autoMode = null;
+    // if (autoMode.isPresent() && (autoMode.get() != mAutoExecuter.getAuto())) {
+    //   mAutoExecuter.setAuto(autoMode.get());
+    // }
   }
 
 

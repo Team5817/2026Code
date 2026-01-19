@@ -24,18 +24,12 @@ public class ShootingConfig {
         this.hubBounds = hubBounds;
     }
 
-    /**
-     * Default configuration using the same hardcoded values that were previously in ShootingPlanner.
-     */
-    public static ShootingConfig defaultConfig() {
-        // Per-target maps now live on ShootingTarget. No default per-target maps are
-        // created here to avoid duplication; ShootingTarget enum supplies defaults.
-        InterpolatingDoubleTreeMap timeMap = new InterpolatingDoubleTreeMap();
-            timeMap.put(1.0, 10.0);
-            timeMap.put(5.0, 18.0);
 
-        Bounds dangerBounds = new Bounds(0.0, 0.0, 5.0, 27.0);
-        Bounds hubBounds = new Bounds(10.0, 0.0, 25.0, 27.0);
+    public static ShootingConfig defaultConfig() {
+        InterpolatingDoubleTreeMap timeMap = new InterpolatingDoubleTreeMap();
+            timeMap.put(1.0, .2);
+        Bounds hubBounds = new Bounds(0.0, 0.0, 5.0, 9.0);
+        Bounds dangerBounds = new Bounds(4.0, 0.0, 5.3, 1.3);
 
         return new ShootingConfig(
             timeMap,

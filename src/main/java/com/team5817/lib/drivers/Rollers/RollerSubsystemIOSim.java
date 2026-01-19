@@ -34,7 +34,7 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
     sim.update(RobotConstants.kLooperDt);
     inputs.data = new RollerSubsystemIOData(
         sim.getAngularPositionRad(),
-        sim.getAngularVelocityRadPerSec(),
+        this.rps,
         appliedVoltage,
         sim.getCurrentDrawAmps(),
         gearbox.getCurrent(sim.getAngularVelocityRadPerSec(), appliedVoltage),
@@ -52,5 +52,10 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
   @Override
   public void runTorqueCurrent(double amps) {
     runVolts(gearbox.getVoltage(gearbox.getTorque(amps), sim.getAngularVelocityRadPerSec()));
+  }
+  private double rps =0;
+  @Override
+  public void runVelocity(double rps) {
+    this.rps = rps;
   }
 }

@@ -5,6 +5,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
+import com.team5817.lib.requests.AutoShootRequest;
 
 /**
  * The DriverControls class handles the input from the driver and co-driver
@@ -42,17 +43,17 @@ public class DriverControls {
     if (driver.getStartButton())
       d.allianceZeroGyro();
 
-    //LT intake
-    if(driver.leftTrigger.wasActivated()){
-      s.mIntake.conformToState(Intake.State.INTAKING);
-    }
-    if(driver.leftTrigger.wasReleased()){
-      s.mIntake.conformToState(Intake.State.IDLE);
-    }
-    //LB Reverse Indexer
-    if(driver.getLeftBumperButton()){
-      s.mIndexer.conformToState(Superstructure.IndexerState.REVERSE);
-    }
+    // //LT intake
+    // if(driver.leftTrigger.wasActivated()){
+    //   s.mIntake.conformToState(Intake.State.INTAKING);
+    // }
+    // if(driver.leftTrigger.wasReleased()){
+    //   s.mIntake.conformToState(Intake.State.IDLE);
+    // }
+    // //LB Reverse Indexer
+    // if(driver.getLeftBumperButton()){
+    //   s.mIndexer.conformToState(Superstructure.IndexerState.REVERSE);
+    // }
     //RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
     //RT Slow mode
@@ -63,14 +64,14 @@ public class DriverControls {
       s.request(s.CloseShotRequest());
     }
     if(driver.getYButtonReleased()){
-      s.clearRequestQueue();
+      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
     //A Far
     if(driver.getAButtonPressed()){
       s.request(s.FarShotRequest());
     }
     if(driver.getAButtonReleased()){
-      s.clearRequestQueue();
+      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
     //B Force Hood
     if(driver.getBButtonPressed()){
@@ -78,15 +79,16 @@ public class DriverControls {
     }
     if(driver.getBButtonReleased()){
       s.mShooter.forceStow(false);
+      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
-    //Down Climb
-    if(driver.POV180.wasActivated()){
-      s.request(s.advanceClimbRequest());
-    }
-    //Up Unclimb
-    if(driver.POV0.wasActivated()){
-      s.request(s.resetClimb());
-    }
+    // //Down Climb
+    // if(driver.POV180.wasActivated()){
+    //   s.request(s.advanceClimbRequest());
+    // }
+    // //Up Unclimb
+    // if(driver.POV0.wasActivated()){
+    //   s.request(s.resetClimb());
+    // }
     //Controller Shake
     if(ActiveTracker.shouldShakeController()){
       driver.rumble(0.3, 1);;

@@ -198,6 +198,9 @@ public class ChassisSpeeds implements StructSerializable{
     public Twist2d toTwist2d() {
         return new Twist2d(vxMetersPerSecond, vyMetersPerSecond, omegaRadiansPerSecond);
     }
+    public Pose2d toPose2d() {
+        return new Pose2d(new Translation2d(vxMetersPerSecond, vyMetersPerSecond), new Rotation2d(omegaRadiansPerSecond,true));
+    }
 
     @Override
     public String toString() {

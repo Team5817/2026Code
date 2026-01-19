@@ -11,11 +11,9 @@ import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
 import com.team254.lib.util.SynchronousPIDF;
 import com.team5817.frc2026.generated.TunerConstants;
-import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
-import com.team5817.frc2026.subsystems.GamePieceVision.GamepieceVision;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
@@ -29,9 +27,6 @@ import com.team5817.lib.drivers.Servos.ServoMotorIOTalonFX;
 import com.team5817.lib.drivers.Vision.VisionIO;
 import com.team5817.lib.drivers.Vision.VisionIOLimelight;
 import com.team5817.lib.drivers.Vision.VisionIOPhotonVisionSim;
-import com.team5817.lib.drivers.GamepieceVision.GamepieceVisionIO;
-import com.team5817.lib.drivers.GamepieceVision.GamepieceVisionIOLimelight;
-import com.team5817.lib.drivers.GamepieceVision.GamepieceVisionIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
@@ -42,16 +37,13 @@ import com.team5817.lib.swerve.ModuleIO;
 import com.team5817.lib.swerve.ModuleIOSim;
 import com.team5817.lib.swerve.ModuleIOTalonFX;
 
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 
 public class RobotContainer {
         public Drive mDrive = null;
         public Intake mIntake = null;
         public Shooter mShooter = null;
         public Vision mVision = null;
-        public GamepieceVision mGamepieceVision = null;
         public Superstructure mSuperstructure = null;
 
         public SwerveDriveSimulation driveSimulation = null;
@@ -68,7 +60,7 @@ public class RobotContainer {
                                 break;
                 }
 
-                // makeEmptyRobot();
+                makeEmptyRobot();
 
                 SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
@@ -79,17 +71,13 @@ public class RobotContainer {
                                 mDrive,
                                 mSuperstructure,
                                 mVision,
-                                mGamepieceVision);
+                                mShooter,
+                                mIntake);
 
         }
 
         public void makeRealRobot() {
 
-                
-                
-                
-
-                /*needs to be rafactored */
                 mIntake = new Intake(
                                 new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLERS,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
@@ -107,31 +95,23 @@ public class RobotContainer {
                                 new ModuleIOTalonFX(TunerConstants.BackRight),
                                 SwerveConstants.stabilizePID,
                                 SwerveConstants.snapPID);
+                                
+                mVision = new Vision(
+                        mDrive::addVisionMeasurement,
+                        new VisionIOLimelight("limelight-front", mDrive::getHeading),
+                        new VisionIOLimelight("limelight-back", mDrive::getHeading),
+                        new VisionIOLimelight("limelight-turret", ()->mDrive.getHeading().add(Rotation2d.fromDegrees(mShooter.getTurret().getPosition()))));
 
                 mShooter = new Shooter(
                         new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
                         new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
                         new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
-                        new ShootingPlanner(
-                                null,
-                         null,
-                          null,
-                           null));//TODO: pass real suppliers
+                        mDrive::getPose,
+                        mDrive::getChassisSpeeds,
+                        mVision::timeSinceUpdate);
+                        
 
-                mVision = new Vision(
-                                mDrive::addVisionMeasurement,
-                                // new VisionIOLimelight("limelight-up", mDrive::getHeading),
-                                new VisionIOLimelight("limelight-left", mDrive::getHeading),
-                                new VisionIOLimelight("limelight-right", mDrive::getHeading));
-
-
-                mGamepieceVision = new GamepieceVision(
-                                this::wasteVision,
-                                mDrive::getPose,
-                                new GamepieceVisionIOLimelight(
-                                                "Limelight-back",
-                                                VisionConstants.robotToCameraBack,
-                                                Units.inchesToMeters(2)));     
+                 
         }
 
         public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
@@ -168,14 +148,13 @@ public class RobotContainer {
                                                 this::getMapleSimPose),
                                 new VisionIOPhotonVisionSim("limelight-left", VisionConstants.robotToCameraRight,
                                                 this::getMapleSimPose));
-
-                mGamepieceVision = new GamepieceVision(
-                                this::wasteVision,
-                                this::getMapleSimPose,
-                                new GamepieceVisionIOSim(
-                                        this::getMapleSimPose,
-                                        SimulatedArena.getInstance()
-                                        ));
+                mShooter = new Shooter(
+                                new ServoMotorIOSim(ShooterConstants.TurretConstants.kTurretServoConstants),
+                                new ServoMotorIOSim(ShooterConstants.HoodConstants.kHoodServoConstants),
+                                new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
+                                mDrive::getPose,
+                                mDrive::getChassisSpeeds,
+                                mVision::timeSinceUpdate);
         }
         private Pose2d getMapleSimPose(){
                 return new Pose2d(driveSimulation.getSimulatedDriveTrainPose());
@@ -219,13 +198,17 @@ public class RobotContainer {
                                 },
                                 new VisionIO() {
                                 });
-
-                if(mGamepieceVision == null)
-                        mGamepieceVision = new GamepieceVision(
-                                this::wasteVision,
-                                mDrive::getPose,
-                                new GamepieceVisionIO() {
-                                });
+                if(mShooter == null)
+                        mShooter = new Shooter(
+                                new ServoMotorIO() {
+                                },
+                                new ServoMotorIO() {
+                                },
+                                new RollerSubsystemIO() {
+                                },
+                                () -> new Pose2d(),
+                                () -> null,
+                                () -> Double.POSITIVE_INFINITY);
         }
 
 
@@ -239,11 +222,5 @@ public class RobotContainer {
         if (RobotMode.mode != RobotMode.Mode.SIM) return;
 
         Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
-        Logger.recordOutput(
-                "FieldSimulation/Coral",
-                SimulatedArena.getInstance().getGamePiecesByType("Coral").toArray(new Pose3d[0]));
-        Logger.recordOutput(
-                "FieldSimulation/Algae",
-                SimulatedArena.getInstance().getGamePiecesByType("Algae").toArray(new Pose3d[0]));
     }
 }

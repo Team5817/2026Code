@@ -178,6 +178,18 @@ public class Vision extends Subsystem {
       "Vision/Summary/RobotPosesRejected",
       allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
   }
+  public double timeSinceUpdate(){
+    double minTimeSince = Double.MAX_VALUE;
+    for(int i =0; i < io.length; i++){
+      if((inputs[i].poseObservations.length == 0))
+        continue;
+      double timeSince = inputs[i].poseObservations[0].timestamp();//TODO test
+      if(timeSince < minTimeSince){
+        minTimeSince = timeSince;
+      }
+    }
+    return minTimeSince;
+  }
 
   @FunctionalInterface
   public static interface VisionConsumer {

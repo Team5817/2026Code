@@ -1,7 +1,6 @@
 package com.team5817.lib.requests;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.planners.ShootingPlannerI;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -15,11 +14,16 @@ public class AutoShootRequest extends Request {
 	}
 	@Override
 	public void act() {
-		s.mShooter.setDesiredState(planner.recommendedShooterState());
-		if(planner.shouldShoot())
-			s.mIndexer.setDesiredState(Superstructure.IndexerState.INDEX);
-		else 
-			s.mIndexer.setDesiredState(Superstructure.IndexerState.OFF);
+		s.mShooter.followPlan(true);
+		Logger.recordOutput("Shooter/Should Shoot", planner.shouldShoot());
+		// if(planner.shouldShoot())
+		// 	s.mIndexer.setDesiredState(Superstructure.IndexerState.INDEX);
+		// else 
+		// 	s.mIndexer.setDesiredState(Superstructure.IndexerState.OFF);
+	}
+	@Override
+	public void cleanup() {
+		s.mShooter.followPlan(false);
 	}
 	@Override
 	public boolean isFinished() {

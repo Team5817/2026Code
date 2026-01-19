@@ -17,7 +17,7 @@ public interface RollerSubsystemIO {
 
   record RollerSubsystemIOData(
       double positionRads,
-      double velocityRadsPerSec,
+      double velocityRotsPerSec,
       double appliedVoltage,
       double supplyCurrentAmps,
       double torqueCurrentAmps,
@@ -34,7 +34,7 @@ public interface RollerSubsystemIO {
   }
 
   /* Run rollers at velocity */
-  default void runVelocity(double volts) {
+  default void runVelocity(double rps) {
   }
 
   default void runTorqueCurrent(double amps) {

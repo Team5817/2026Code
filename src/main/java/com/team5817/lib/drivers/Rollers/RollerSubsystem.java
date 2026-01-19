@@ -32,7 +32,6 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   @Setter
   @Accessors(prefix = "m")
   private S mState;
-
   protected boolean atState = true;
   public boolean atState() {
     return atState;
@@ -57,7 +56,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
     io.updateInputs(inputs);
     Logger.processInputs(inputsName, inputs);
     if(mState.getControlMode() == RollerControlMode.VELOCITY){
-      atState = Math.abs(inputs.data.velocityRadsPerSec() - mState.getDemand()) < mState.getToleranceRadsPerSec();
+      atState = Math.abs(inputs.data.velocityRotsPerSec() - mState.getDemand()) < mState.getToleranceRadsPerSec();
     } else {
       atState = true;
     }
@@ -78,9 +77,13 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
         io.runVolts(mState.getDemand());
         break;
     }
+    
     Logger.recordOutput(inputsName + "/State", mState);
-    Logger.recordOutput(inputsName + "/Control Mode", mState);
+    Logger.recordOutput(inputsName + "/Control Mode", mState.getControlMode());
+    Logger.recordOutput(inputsName+ "/Desired", mState.getDemand());
+    Logger.recordOutput(inputsName + "/Error", mState.getDemand()- inputs.data.velocityRotsPerSec());
     Logger.recordOutput(inputsName + "/BrakeModeEnabled", brakeModeEnabled);
+    Logger.recordOutput(inputsName + "/atState", atState);
   }
 
   public RollerSubsystem(S initialState, String name, RollerSubsystemIO io) {
@@ -99,7 +102,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   }
 
   public double getVelocity() {
-    return inputs.data.velocityRadsPerSec();
+    return inputs.data.velocityRotsPerSec();
   }
 
   public Request stateRequest(S newState) {

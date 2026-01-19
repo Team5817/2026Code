@@ -57,6 +57,7 @@
 *.tar.gz
 *.rar
 
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -185,3 +186,5 @@ compile_commands.json
 
 # Eclipse generated file for annotation processors
 .factorypath
+src/main/java/com/team5817/BuildConstants.java
+simgui-ds.json

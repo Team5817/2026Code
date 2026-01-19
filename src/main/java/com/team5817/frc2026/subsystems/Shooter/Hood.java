@@ -21,7 +21,7 @@ public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
      {
         super(State.STOW, io);
 
-        State.AIM.setSupplier(hubAngleSupplier);
+        State.HUB.setSupplier(hubAngleSupplier);
         State.LOBBING.setSupplier(lobAngleSupplier);
     }
 
@@ -29,7 +29,7 @@ public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
         STOW(() -> 0.0, kLooseError),
         CLOSE(() -> 0.0, kTightError),
         FAR(() -> 0.0, kTightError),
-        AIM(kTightError),
+        HUB(kTightError),
         LOBBING(kTightError);
        
         private DoubleSupplier demand;
