@@ -5,15 +5,15 @@ package com.team5817;
  */
 public final class BuildConstants {
   public static final String MAVEN_GROUP = "";
-  public static final String MAVEN_NAME = "2026Code-1";
+  public static final String MAVEN_NAME = "2026Code-2";
   public static final String VERSION = "unspecified";
-  public static final int GIT_REVISION = 6;
-  public static final String GIT_SHA = "8668273ce2235c1e8467db86b577670cc66ce377";
-  public static final String GIT_DATE = "2026-01-17 22:08:47 PST";
+  public static final int GIT_REVISION = 7;
+  public static final String GIT_SHA = "70f6008ad0137018cf3d2622b8db02bd31bfcdf0";
+  public static final String GIT_DATE = "2026-01-18 00:08:41 PST";
   public static final String GIT_BRANCH = "main";
-  public static final String BUILD_DATE = "2026-01-17 23:55:46 PST";
-  public static final long BUILD_UNIX_TIME = 1768722946638L;
-  public static final int DIRTY = 1;
+  public static final String BUILD_DATE = "2026-01-18 00:10:54 PST";
+  public static final long BUILD_UNIX_TIME = 1768723854222L;
+  public static final int DIRTY = 0;
 
   private BuildConstants(){}
 }

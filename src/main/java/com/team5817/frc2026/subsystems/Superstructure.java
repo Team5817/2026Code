@@ -3,8 +3,12 @@ package com.team5817.frc2026.subsystems;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.requests.AutoShootRequest;
+import com.team5817.lib.requests.IfRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.SequentialRequest;
+
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,8 @@ public class Superstructure extends Subsystem {
   public Drive mDrive;
   public Shooter mShooter;
 
+  @Setter
+  private boolean allowAutoShoot = true;
   /**
    * Constructor for the Superstructure class.
    */
@@ -40,7 +46,7 @@ public class Superstructure extends Subsystem {
       //indexer on
       forever()
     ).withCleanup(
-      () -> mShooter.setDesiredState(Shooter.State.IDLE)
+      () -> mIndexer.conformToState(Indexer.State.OFF)
     );
   }
 
@@ -50,11 +56,18 @@ public class Superstructure extends Subsystem {
       //indexer on
       forever()
     ).withCleanup(
-      () -> mShooter.setDesiredState(Shooter.State.IDLE)
+      () -> mIndexer.conformToState(Indexer.State.OFF)
     );
   }
 
-  
+  @Override
+  public void periodic() {
+    manageRequests();
+    if(allRequestsComplete && allowAutoShoot){
+      request(new AutoShootRequest(mShooter.getPlanner(), this));
+    }
+  }
+
 
   /**
    * Checks if all requests have been completed.
@@ -125,15 +138,6 @@ public class Superstructure extends Subsystem {
     queuedRequests.add(req);
   }
 
-      @Override
-      public void start() {
-      }
-
-      @Override
-      public void periodic() {
-        manageRequests();
-      }
-
   public void manageRequests() {
     try {
       if (hasNewRequest && activeRequest != null) {
@@ -187,8 +191,7 @@ public class Superstructure extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    if (activeRequest != null)
-      Logger.recordOutput("State", activeRequest.getName());
+    Logger.recordOutput("Active Request", activeRequest.getName());
   }
 
   public Request BooleanWaitRequest(BooleanSupplier booleanSupplier, boolean target) {

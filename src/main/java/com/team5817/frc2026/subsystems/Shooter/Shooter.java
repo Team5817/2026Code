@@ -1,6 +1,7 @@
 package com.team5817.frc2026.subsystems.Shooter;
 
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.planners.ShootingPlannerI;
@@ -20,7 +21,8 @@ public class Shooter extends Subsystem{
     @Getter private final Hood hood;
     @Getter private final RollerSubsystem<ShooterConstants.FlywheelState> flywheel;
 
-    ShootingPlannerI planner;
+    @Getter
+    private ShootingPlannerI planner;
     public Shooter(
         ServoMotorIO turretIO,
         ServoMotorIO hoodIO,
@@ -35,16 +37,17 @@ public class Shooter extends Subsystem{
         this.flywheel = new RollerSubsystem<ShooterConstants.FlywheelState>(FlywheelState.IDLE, "Shoooter/Flywheel", flywheelIO);
         this.planner = planner;
     }   
-    
     @Getter
     @Accessors(prefix = "m")
-    private State mState = State.IDLE;
+    private State mState = State.STOW;
     @Getter
     @Setter
-    private State desiredState = State.IDLE;
+    private State desiredState = State.AIM;
     private boolean atState = false;
+    @AutoLogOutput(key = "Shooter/ForcedStow")
+    private boolean forcedStow = false;
     public enum State {
-            IDLE(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
+            STOW(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
             CLOSE(Turret.State.STOW, Hood.State.CLOSE, ShooterConstants.FlywheelState.CLOSE),
             FAR(Turret.State.STOW, Hood.State.FAR, ShooterConstants.FlywheelState.FAR),
             AIM(Turret.State.AIM, Hood.State.AIM, ShooterConstants.FlywheelState.HUB),
@@ -62,7 +65,10 @@ public class Shooter extends Subsystem{
     }
     @Override
     public void periodic() {
-        atState = turret.atState() && hood.atState() && flywheel.atState();
+        if(forcedStow){
+            desiredState = State.STOW;
+        }
+        atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
         if(mState != desiredState){
             turret.setState(desiredState.turretState);
             hood.setState(desiredState.hoodState);
@@ -104,5 +110,8 @@ public class Shooter extends Subsystem{
         flywheel.writePeriodicOutputs();
         turret.writePeriodicOutputs();
         hood.writePeriodicOutputs();
+    }
+    public void forceStow(boolean forced) {
+        forcedStow = forced;
     }
     }

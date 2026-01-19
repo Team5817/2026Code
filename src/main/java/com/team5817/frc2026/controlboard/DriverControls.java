@@ -1,7 +1,9 @@
 package com.team5817.frc2026.controlboard;
 
+import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 
 /**
@@ -41,17 +43,18 @@ public class DriverControls {
       d.allianceZeroGyro();
 
     //LT intake
-    if(driver.getLeftTriggerAxis()>0.5){
-      s.request(s.mIntake.intakeRequest());
+    if(driver.leftTrigger.wasActivated()){
+      s.mIntake.conformToState(Intake.State.INTAKING);
+    }
+    if(driver.leftTrigger.wasReleased()){
+      s.mIntake.conformToState(Intake.State.IDLE);
     }
     //LB Reverse Indexer
-    if(driver.getLeftBumper()){
-      s.request(s.mIndexer.reverseIndexerRequest());
+    if(driver.getLeftBumperButton()){
+      s.mIndexer.conformToState(Superstructure.IndexerState.REVERSE);
     }
-    //RB active toggle
-    if(driver.getRightBumperPressed()){
-      s.toggleActive();
-    }
+    //RB don't Shoot
+    s.setAllowAutoShoot(!driver.getRightBumperButton());
     //RT Slow mode
     mControlBoard.setSwerveScalar(1-driver.getRightTriggerAxis()*.7);//coefficient is percent to reduce speed by
     
@@ -71,9 +74,11 @@ public class DriverControls {
     }
     //B Force Hood
     if(driver.getBButtonPressed()){
-      s.mShooter.stateRequest(Shooter.State.IDLE).act();
+      s.mShooter.forceStow(true);
     }
-    
+    if(driver.getBButtonReleased()){
+      s.mShooter.forceStow(false);
+    }
     //Down Climb
     if(driver.POV180.wasActivated()){
       s.request(s.advanceClimbRequest());
@@ -81,6 +86,10 @@ public class DriverControls {
     //Up Unclimb
     if(driver.POV0.wasActivated()){
       s.request(s.resetClimb());
+    }
+    //Controller Shake
+    if(ActiveTracker.shouldShakeController()){
+      driver.rumble(0.3, 1);;
     }
   }
 

@@ -121,6 +121,9 @@ public class Translation2d implements ITranslation2d<Translation2d>,StructSerial
     public Translation2d inverse() {
         return new Translation2d(-x_, -y_);
     }
+    public boolean inBounds(Bounds b){
+        return (x_ >= b.minX() && x_ <= b.maxX() && y_ >= b.minY() && y_ <= b.maxY());
+    }
 
     @Override
     public Translation2d interpolate(final Translation2d other, double x) {

@@ -112,7 +112,10 @@ public class RobotContainer {
                         new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
                         new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
                         new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
-                        new ShootingPlanner(mDrive::getPose));
+                        new ShootingPlanner(null,
+                         null,
+                          null,
+                           null));//TODO: pass real suppliers
 
                 mVision = new Vision(
                                 mDrive::addVisionMeasurement,
