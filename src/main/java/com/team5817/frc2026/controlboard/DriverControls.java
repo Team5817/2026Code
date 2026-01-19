@@ -3,8 +3,6 @@ package com.team5817.frc2026.controlboard;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Drive.Drive;
-import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.lib.requests.AutoShootRequest;
 
 /**
@@ -81,14 +79,14 @@ public class DriverControls {
       s.mShooter.forceStow(false);
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
-    // //Down Climb
-    // if(driver.POV180.wasActivated()){
-    //   s.request(s.advanceClimbRequest());
-    // }
-    // //Up Unclimb
-    // if(driver.POV0.wasActivated()){
-    //   s.request(s.resetClimb());
-    // }
+    //Down Climb
+    if(driver.POV180.wasActivated()){
+      s.mClimb.advanceClimbRequest().act();
+    }
+    //Up Unclimb
+    if(driver.POV0.wasActivated()){
+      s.mClimb.resetClimbStages();
+    }
     //Controller Shake
     if(ActiveTracker.shouldShakeController()){
       driver.rumble(0.3, 1);;

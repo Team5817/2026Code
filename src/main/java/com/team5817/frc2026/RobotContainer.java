@@ -12,6 +12,8 @@ import com.team254.lib.geometry.Translation2d;
 import com.team254.lib.util.SynchronousPIDF;
 import com.team5817.frc2026.generated.TunerConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Climb.Climb;
+import com.team5817.frc2026.subsystems.Climb.ClimbConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -44,6 +46,7 @@ public class RobotContainer {
         public Intake mIntake = null;
         public Shooter mShooter = null;
         public Vision mVision = null;
+        public Climb mClimb = null;
         public Superstructure mSuperstructure = null;
 
         public SwerveDriveSimulation driveSimulation = null;
@@ -65,19 +68,22 @@ public class RobotContainer {
                 SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
                 mSuperstructure = new Superstructure(
-                                mDrive,mShooter);
+                                mDrive,mShooter, mClimb);
 
                 mSubsystemManager.setSubsystems(
                                 mDrive,
                                 mSuperstructure,
                                 mVision,
                                 mShooter,
-                                mIntake);
+                                mIntake,
+                                mClimb);
 
         }
 
         public void makeRealRobot() {
-
+                mClimb = new Climb(
+                        new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants)
+                );
                 mIntake = new Intake(
                                 new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLERS,
                                                 IntakeConstants.RollerConstants.motorConstants, 1),
@@ -120,6 +126,9 @@ public class RobotContainer {
                 driveSimulation = new SwerveDriveSimulation(SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
                 SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
+                mClimb = new Climb(
+                        new ServoMotorIOSim(ClimbConstants.kClimbServoConstants)
+                );
                 mIntake = new Intake(
                                 new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
                                 new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
@@ -161,7 +170,11 @@ public class RobotContainer {
         }
 
         public void makeEmptyRobot() {
-
+                if(mClimb == null)
+                        mClimb = new Climb(
+                          new ServoMotorIO() {      
+                          } 
+                        );
                 if(mIntake == null)
                         mIntake = new Intake(
                                 new RollerSubsystemIO() {
