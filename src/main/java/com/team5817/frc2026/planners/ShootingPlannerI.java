@@ -4,13 +4,14 @@ import java.util.function.DoubleSupplier;
 
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 
+/**
+ * Planner interface that provides suppliers for different shooting targets.
+ * Switched to a target-keyed API to make it easier to add new targets.
+ */
 public interface ShootingPlannerI {
-    DoubleSupplier getLobHoodAngleSupplier();
-    DoubleSupplier getLobTurretAngleSupplier();
-    DoubleSupplier getLobFlywheelSpeedSupplier();
-    DoubleSupplier getHubHoodAngleSupplier();
-    DoubleSupplier getHubTurretAngleSupplier();
-    DoubleSupplier getHubFlywheelSpeedSupplier();
-    Shooter.State  recommendedShooterState();
+    DoubleSupplier getHoodAngleSupplier(ShootingTarget target);
+    DoubleSupplier getTurretAngleSupplier(ShootingTarget target);
+    DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget target);
+    Shooter.State recommendedShooterState();
     Boolean shouldShoot();
 }

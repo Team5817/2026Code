@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.planners.ShootingPlannerI;
+import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants.FlywheelState;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
@@ -30,10 +31,10 @@ public class Shooter extends Subsystem{
         ShootingPlannerI planner
     ){
         
-        this.turret = new Turret(turretIO , planner.getHubTurretAngleSupplier(), planner.getLobTurretAngleSupplier());
-        this.hood = new Hood(hoodIO, planner.getHubHoodAngleSupplier(), planner.getLobHoodAngleSupplier());
-        FlywheelState.HUB.setSupplier(planner.getHubFlywheelSpeedSupplier());
-        FlywheelState.LOB.setSupplier(planner.getLobFlywheelSpeedSupplier());
+    this.turret = new Turret(turretIO , planner.getTurretAngleSupplier(ShootingTarget.HUB), planner.getTurretAngleSupplier(ShootingTarget.LOB));
+    this.hood = new Hood(hoodIO, planner.getHoodAngleSupplier(ShootingTarget.HUB), planner.getHoodAngleSupplier(ShootingTarget.LOB));
+    FlywheelState.HUB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
+    FlywheelState.LOB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
         this.flywheel = new RollerSubsystem<ShooterConstants.FlywheelState>(FlywheelState.IDLE, "Shoooter/Flywheel", flywheelIO);
         this.planner = planner;
     }   

@@ -1,5 +1,7 @@
 package com.team5817.frc2026.planners;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -9,21 +11,14 @@ import com.team254.lib.geometry.Translation2d;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 
-import lombok.Getter;
-
+/**
+ * Shooting planner that provides target-keyed suppliers for hood, turret and flywheel.
+ */
 public class ShootingPlanner implements ShootingPlannerI {
-    @Getter
-    DoubleSupplier lobHoodAngleSupplier;
-    @Getter
-    DoubleSupplier lobTurretAngleSupplier;
-    @Getter
-    DoubleSupplier lobFlywheelSpeedSupplier;
-    @Getter
-    DoubleSupplier hubHoodAngleSupplier;
-    @Getter
-    DoubleSupplier hubTurretAngleSupplier;
-    @Getter
-    DoubleSupplier hubFlywheelSpeedSupplier;
+
+    private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers = new EnumMap<>(ShootingTarget.class);
+    private final Map<ShootingTarget, DoubleSupplier> turretAngleSuppliers = new EnumMap<>(ShootingTarget.class);
+    private final Map<ShootingTarget, DoubleSupplier> flywheelSpeedSuppliers = new EnumMap<>(ShootingTarget.class);
 
     private Supplier<Pose2d> futureShooterPoseSupplier;
     private Supplier<Pose2d> shooterPoseSupplier;
@@ -43,8 +38,17 @@ public class ShootingPlanner implements ShootingPlannerI {
         this.timeSinceVision = timeSinceVision;
         this.config = config;
 
-        Supplier<Translation2d> shooterToHub = () -> this.shooterPoseSupplier.get().getTranslation().minus(hubLocation);
-        Supplier<Translation2d> shooterToLob = () -> this.shooterPoseSupplier.get().getTranslation().minus(lobLocation);
+        Supplier<ShootingTarget> closestLobTarget = () -> {
+            Translation2d shooterToLobR = this.shooterPoseSupplier.get().getTranslation().minus(ShootingTarget.LOBR.getLocation());
+            Translation2d shooterToLobL = this.shooterPoseSupplier.get().getTranslation().minus(ShootingTarget.LOBL.getLocation());
+            if (shooterToLobR.norm() < shooterToLobL.norm()) {
+                return ShootingTarget.LOBR;
+            } else {
+                return ShootingTarget.LOBL;
+            }
+        };
+        Supplier<Translation2d> shooterToHub = () -> this.shooterPoseSupplier.get().getTranslation().minus(ShootingTarget.HUB.getLocation());
+        Supplier<Translation2d> shooterToLob = () -> this.shooterPoseSupplier.get().getTranslation().minus(closestLobTarget.get().getLocation());
         Supplier<Double> timeSupplier = () -> {
             switch (recommendedShooterState()) {
                 case AIM:
@@ -63,39 +67,37 @@ public class ShootingPlanner implements ShootingPlannerI {
             )
         );
 
-        Supplier<Translation2d> futureShooterToHub = () -> this.futureShooterPoseSupplier.get().getTranslation().minus(hubLocation);
-        Supplier<Translation2d> futureShooterToLob = () -> this.futureShooterPoseSupplier.get().getTranslation().minus(lobLocation);
+        Supplier<Translation2d> futureShooterToHub = () -> this.futureShooterPoseSupplier.get().getTranslation().minus(ShootingTarget.HUB.getLocation());
+        Supplier<Translation2d> futureShooterToLob = () -> this.futureShooterPoseSupplier.get().getTranslation().minus(ShootingTarget.LOB.getLocation());
 
-        lobHoodAngleSupplier = () -> {
-            double distance = futureShooterToLob.get().norm();
-            return (double)config.hoodLobMap.get(distance);
-        };
-        lobFlywheelSpeedSupplier = () -> {
-            double distance = futureShooterToLob.get().norm();
-            return (double)config.flywheelLobMap.get(distance);
-        };
-        hubHoodAngleSupplier = () -> {
-            double distance = futureShooterToHub.get().norm();
-            return (double)config.hoodHubMap.get(distance);
-        };
-        hubFlywheelSpeedSupplier = () -> {
-            double distance = futureShooterToHub.get().norm();
-            return (double)config.flywheelHubMap.get(distance);
-        };
+        Map<ShootingTarget, Supplier<Translation2d>> futureToTarget = new EnumMap<>(ShootingTarget.class);
+        futureToTarget.put(ShootingTarget.HUB, futureShooterToHub);
+        futureToTarget.put(ShootingTarget.LOB, futureShooterToLob);
 
-        lobTurretAngleSupplier = () -> {
-            Translation2d toLob = futureShooterToLob.get();
-            return toLob.direction().getDegrees();
-        };
+        for (ShootingTarget t : ShootingTarget.values()) {
+            Supplier<Translation2d> futureTo = futureToTarget.get(t);
 
-        hubTurretAngleSupplier = () -> {
-            Translation2d toHub = futureShooterToHub.get();
-            return toHub.direction().getDegrees();
-        };
+            hoodAngleSuppliers.put(t, () -> {
+                double distance = futureTo.get().norm();
+                return (double) t.getHoodMap().get(distance);
+            });
+
+            flywheelSpeedSuppliers.put(t, () -> {
+                double distance = futureTo.get().norm();
+                return (double) t.getFlywheelMap().get(distance);
+            });
+
+            turretAngleSuppliers.put(t, () -> {
+                Translation2d to = futureTo.get();
+                return to.direction().getDegrees();
+            });
+        }
     }
+
     public ShootingPlanner(Supplier<Pose2d> shooterPoseSupplier) {
         this(shooterPoseSupplier, () -> new Pose2d(), () -> true, () -> 0.0);
     }
+
     public Shooter.State recommendedShooterState(){
         if(futureShooterPoseSupplier.get().getTranslation().inBounds(config.dangerBounds))//inbounds for danger zone
             return Shooter.State.STOW;
@@ -108,23 +110,26 @@ public class ShootingPlanner implements ShootingPlannerI {
     public Boolean shouldShoot() {
         if(!atStateSupplier.getAsBoolean())
             return false;
-        
         switch (recommendedShooterState()) {
-            case AIM:
-                if(shooterPosVelocitySupplier.get().getTranslation().norm() > config.velocityThresholdMetersPerSecond)//TODO tune velocity threshold
+            case AIM: {
+                ShootingTarget target = ShootingTarget.HUB;
+                if (shooterPosVelocitySupplier.get().getTranslation().norm() > target.getVelocityThreshold()) //TODO tune velocity threshold
                     return false;
 
-                if(shooterPosVelocitySupplier.get().getRotation().getDegrees() > config.rotationThresholdDegrees)//TODO tune velocity threshold
+                if (shooterPosVelocitySupplier.get().getRotation().getDegrees() > target.getRotationThreshold()) //TODO tune rotation threshold
                     return false;
                 break;
-        
-            case LOB:
-                if(shooterPosVelocitySupplier.get().getTranslation().norm() > config.velocityThresholdMetersPerSecond)//TODO tune velocity threshold
+            }
+
+            case LOB: {
+                ShootingTarget target = ShootingTarget.LOB;
+                if (shooterPosVelocitySupplier.get().getTranslation().norm() > target.getVelocityThreshold()) //TODO tune velocity threshold
                     return false;
 
-                if(shooterPosVelocitySupplier.get().getRotation().getDegrees() > config.rotationThresholdDegrees)//TODO tune velocity threshold
+                if (shooterPosVelocitySupplier.get().getRotation().getDegrees() > target.getRotationThreshold()) //TODO tune rotation threshold
                     return false;
                 break;
+            }
             case STOW:
                 return false;
             default:
@@ -133,8 +138,25 @@ public class ShootingPlanner implements ShootingPlannerI {
                 return null;
         }
 
-        if(timeSinceVision.getAsDouble()>config.timeSinceVisionThresholdSeconds)//TODO tune time since vision threshold
+        // Use the threshold for the current recommended target
+        ShootingTarget currentTarget = recommendedShooterState() == Shooter.State.AIM ? ShootingTarget.HUB : ShootingTarget.LOB;
+        if (timeSinceVision.getAsDouble() > currentTarget.getTimeSinceVisionThreshold()) //TODO tune time since vision threshold
             return false;
         return true;
-        }
     }
+
+    @Override
+    public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
+        return hoodAngleSuppliers.get(target);
+    }
+
+    @Override
+    public DoubleSupplier getTurretAngleSupplier(ShootingTarget target) {
+        return turretAngleSuppliers.get(target);
+    }
+
+    @Override
+    public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget target) {
+        return flywheelSpeedSuppliers.get(target);
+    }
+}
