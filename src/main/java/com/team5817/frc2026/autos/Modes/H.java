@@ -51,7 +51,7 @@ public class H extends AutoBase {
     sh.setDesiredState(Shooter.State.STOW);
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));
-      r(new                     TrajectoryAction(t.next(), d));
+      r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));
     }
     sh.followPlan(false);
