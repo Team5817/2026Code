@@ -113,11 +113,11 @@ public class DriveMotionPlanner {
         sample_point.getYVel(),
         sample_point.getThetaVel());
     mOutput = updatePIDChassis(chassis_speeds);
-
-    mPathIsFinished = distance(current_state, mCurrentTrajectoryLength) < SwerveConstants.kTrajectoryDeadband ||
+    double distanceToEnd = distance(current_state, mCurrentTrajectoryLength);
+    mPathIsFinished = distanceToEnd < SwerveConstants.kTrajectoryDeadband ||
         Timer.getTimestamp() - startTime > timeout;
     mOutput = ChassisSpeeds.fromFieldRelativeSpeeds(mOutput, current_state.getRotation());
-
+    Logger.recordOutput("Auto/Distance to End",distanceToEnd);
     return mOutput;
   }
 

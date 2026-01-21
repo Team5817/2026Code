@@ -4,7 +4,6 @@
 
 package com.team5817.frc2026;
 
-import java.util.Optional;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 
@@ -18,6 +17,7 @@ import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.BuildConstants;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoExecuter;
+import com.team5817.frc2026.autos.AutoModeFactory;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.controlboard.ControlBoard;
 import com.team5817.frc2026.controlboard.DriverControls;
@@ -37,6 +37,8 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
+import java.util.Optional;
+
 import org.ironmaple.simulation.SimulatedArena;
 
 /**
@@ -47,6 +49,7 @@ public class Robot extends LoggedRobot {
   private RobotContainer mRobotContainer;
   private SubsystemManager mSubsystemManager;
   private AutoExecuter mAutoExecuter;
+  private AutoModeFactory mAutoModeFactory;
   DriverControls controls;
   ControlBoard controlBoard;
 
@@ -98,6 +101,7 @@ public class Robot extends LoggedRobot {
     mRobotContainer = new RobotContainer();
 
     mDrive = mRobotContainer.mDrive;
+    mAutoModeFactory = new AutoModeFactory(mRobotContainer.mSuperstructure, mDrive);
     mSubsystemManager = SubsystemManager.getInstance();
 
     Elastic.selectTab("Pre Match");
@@ -199,10 +203,13 @@ public class Robot extends LoggedRobot {
     l.update();
     // if(mVision.getMovingAverage().getSize()!=0&&neverEnabled)
     // mDrive.zeroGyro(mVision.getMovingAverage().getAverage());
-    // Optional<AutoBase> autoMode = null;
-    // if (autoMode.isPresent() && (autoMode.get() != mAutoExecuter.getAuto())) {
-    //   mAutoExecuter.setAuto(autoMode.get());
-    // }
+    mAutoModeFactory.updateModeCreator();
+    Optional<AutoBase> autoMode = mAutoModeFactory.getAutoMode();
+    if (!autoMode.isPresent()) 
+      return;
+    if (autoMode.get() != mAutoExecuter.getAuto())
+      mAutoExecuter.setAuto(autoMode.get());
+    
   }
 
 

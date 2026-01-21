@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHToH"
+            "pathName": "SHFToH"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "N1ToEZ"
+            "pathName": "N1ToC0"
           }
         }
       ]
