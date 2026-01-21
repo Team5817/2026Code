@@ -1,9 +1,8 @@
 package com.team5817.lib.drivers.Servos;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.ControlState;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ServoMotorIO {
 
@@ -27,47 +26,39 @@ public interface ServoMotorIO {
     public double rotor_position;
   }
 
-  default public ServoConstants getConstants() {return new ServoConstants();}
-
-  default public void updateInputs(ServoMotorIOInputs inputs) {
+  public default ServoConstants getConstants() {
+    return new ServoConstants();
   }
 
-  default public void setControl(ServoMotorSubsystem.ControlState mControlState, double demand) {
+  public default void updateInputs(ServoMotorIOInputs inputs) {}
+
+  public default void setControl(ServoMotorSubsystem.ControlState mControlState, double demand) {
     if (mControlState == ControlState.POSITION) {
       runPosition(demand);
     } else if (mControlState == ControlState.VOLTAGE) {
       runVoltage(demand);
     }
-
   }
 
-  default public void runPosition(double units) {
-  }
+  public default void runPosition(double units) {}
 
-  default public void runVoltage(double volts) {
-  }
+  public default void runVoltage(double volts) {}
 
-  default public void zeroSensors() {
+  public default void zeroSensors() {
     zeroSensors(0);
   }
 
-  default public void zeroSensors(double newPose) {
-  }
+  public default void zeroSensors(double newPose) {}
 
-  default public void forceZeroSensors() {
-  }
+  public default void forceZeroSensors() {}
 
-  default public void setNeutralMode(NeutralModeValue mode) {
+  public default void setNeutralMode(NeutralModeValue mode) {}
 
-  }
+  public default void setStatorCurrentLimit(double limit, boolean enable) {}
 
-  default public void setStatorCurrentLimit(double limit, boolean enable) {
-  }
+  public default void writeConfigs() {}
 
-  default public void writeConfigs() {
-  }
-
-  default public boolean checkDeviceConfiguration() {
+  public default boolean checkDeviceConfiguration() {
     return true;
   }
 }

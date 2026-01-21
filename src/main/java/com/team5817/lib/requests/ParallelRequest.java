@@ -12,67 +12,67 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * A Request which takes a list of Requests and executes them in parallel.
- */
+/** A Request which takes a list of Requests and executes them in parallel. */
 public class ParallelRequest extends Request {
-	private final List<Request> idleRequests;
-	private final List<Request> inProgressRequests;
+  private final List<Request> idleRequests;
+  private final List<Request> inProgressRequests;
 
-	public ParallelRequest(Request... requests) {
-		idleRequests = new LinkedList<>(Arrays.asList(requests));
-		inProgressRequests = new LinkedList<>();
-	}
+  public ParallelRequest(Request... requests) {
+    idleRequests = new LinkedList<>(Arrays.asList(requests));
+    inProgressRequests = new LinkedList<>();
+  }
 
-	@Override
-	public void cleanup() {
-		inProgressRequests.forEach(r -> r.cleanup());
-		idleRequests.forEach(r -> r.cleanup());
-		super.cleanup();
-	}
+  @Override
+  public void cleanup() {
+    inProgressRequests.forEach(r -> r.cleanup());
+    idleRequests.forEach(r -> r.cleanup());
+    super.cleanup();
+  }
 
-	private void startRequestsIfAllowed() {
-		for (Iterator<Request> iter = idleRequests.iterator(); iter.hasNext(); ) {
-			Request request = iter.next();
-			if (request.allowed()) {
-				request.act();
-				inProgressRequests.add(request);
-				iter.remove();
-			}
-		}
-	}
-	@Override
-	public Request addName(String name) {
-		super.addName(name);
-		for(Request r: idleRequests) {
-			if(r.name!=Request.defaultName) {
-				r.addName(name);
-			}
-		}
-		for(Request r: inProgressRequests) {
-			if(r.name!=Request.defaultName) {
-				r.addName(name);
-			}
-		}
-		return this;
-	}
+  private void startRequestsIfAllowed() {
+    for (Iterator<Request> iter = idleRequests.iterator(); iter.hasNext(); ) {
+      Request request = iter.next();
+      if (request.allowed()) {
+        request.act();
+        inProgressRequests.add(request);
+        iter.remove();
+      }
+    }
+  }
 
-	@Override
-	public void act() {
-		startRequestsIfAllowed();
-	}
+  @Override
+  public Request addName(String name) {
+    super.addName(name);
+    for (Request r : idleRequests) {
+      if (r.name != Request.defaultName) {
+        r.addName(name);
+      }
+    }
+    for (Request r : inProgressRequests) {
+      if (r.name != Request.defaultName) {
+        r.addName(name);
+      }
+    }
+    return this;
+  }
 
-	@Override
-	public boolean isFinished() {
-		startRequestsIfAllowed();
-		inProgressRequests.removeIf(r -> r.isFinished());
+  @Override
+  public void act() {
+    startRequestsIfAllowed();
+  }
 
-		return idleRequests.isEmpty() && inProgressRequests.isEmpty();
-	}
+  @Override
+  public boolean isFinished() {
+    startRequestsIfAllowed();
+    inProgressRequests.removeIf(r -> r.isFinished());
 
-	@Override
-	public String toString() {
-		return String.format(
-				"ParallelRequest(inProgressRequests = %s, idleRequests = %s)", inProgressRequests, idleRequests);
-	}
+    return idleRequests.isEmpty() && inProgressRequests.isEmpty();
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "ParallelRequest(inProgressRequests = %s, idleRequests = %s)",
+        inProgressRequests, idleRequests);
+  }
 }

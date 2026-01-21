@@ -13,24 +13,24 @@
 
 package com.team5817.lib.swerve;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import org.littletonrobotics.junction.Logger;
 
 public class Module {
   private final ModuleIO io;
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final int index;
-  private final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants;
+  private final SwerveModuleConstants<
+          TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+      constants;
 
   private final Alert driveDisconnectedAlert;
   private final Alert turnDisconnectedAlert;
@@ -40,18 +40,22 @@ public class Module {
   public Module(
       ModuleIO io,
       int index,
-      SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants) {
+      SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+          constants) {
     this.io = io;
     this.index = index;
     this.constants = constants;
-    driveDisconnectedAlert = new Alert(
-        "Disconnected drive motor on module " + Integer.toString(index) + ".",
-        AlertType.kError);
-    turnDisconnectedAlert = new Alert(
-        "Disconnected turn motor on module " + Integer.toString(index) + ".", AlertType.kError);
-    turnEncoderDisconnectedAlert = new Alert(
-        "Disconnected turn encoder on module " + Integer.toString(index) + ".",
-        AlertType.kError);
+    driveDisconnectedAlert =
+        new Alert(
+            "Disconnected drive motor on module " + Integer.toString(index) + ".",
+            AlertType.kError);
+    turnDisconnectedAlert =
+        new Alert(
+            "Disconnected turn motor on module " + Integer.toString(index) + ".", AlertType.kError);
+    turnEncoderDisconnectedAlert =
+        new Alert(
+            "Disconnected turn encoder on module " + Integer.toString(index) + ".",
+            AlertType.kError);
   }
 
   public void periodic() {
@@ -73,10 +77,7 @@ public class Module {
     turnEncoderDisconnectedAlert.set(!inputs.turnEncoderConnected);
   }
 
-  /**
-   * Runs the module with the specified setpoint state. Mutates the state to
-   * optimize it.
-   */
+  /** Runs the module with the specified setpoint state. Mutates the state to optimize it. */
   public void runSetpoint(SwerveModuleState state) {
     // Optimize velocity setpoint
     state.optimize(getAngle());
@@ -87,9 +88,7 @@ public class Module {
     io.setTurnPosition(state.angle);
   }
 
-  /**
-   * Runs the module with the specified output while controlling to zero degrees.
-   */
+  /** Runs the module with the specified output while controlling to zero degrees. */
   public void runCharacterization(double output) {
     io.setDriveOpenLoop(output);
     io.setTurnPosition(new Rotation2d());

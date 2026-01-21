@@ -1,32 +1,5 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
-  "java.server.launchMode": "Standard",
-  "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/CVS": true,
-    "**/.DS_Store": true,
-    "bin/": true,
-    "**/.classpath": true,
-    "**/.project": true,
-    "**/.settings": true,
-    "**/.factorypath": true,
-    "**/*~": true
-  },
-  "java.test.config": [
-    {
-      "name": "WPIlibUnitTests",
-      "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
-      "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
-        "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
-      }
-    },
-  ],
-  "java.test.defaultConfig": "WPIlibUnitTests",
-  "java.import.gradle.annotationProcessing.enabled": false,
   "java.completion.favoriteStaticMembers": [
     "org.junit.Assert.*",
     "org.junit.Assume.*",
@@ -39,6 +12,32 @@
     "org.mockito.Answers.*",
     "edu.wpi.first.units.Units.*"
   ],
+  "java.test.defaultConfig": "WPIlibUnitTests",
+  "java.dependency.enableDependencyCheckup": false,
+  "java.test.config": [{
+    "workingDirectory": "${workspaceFolder}/build/jni/release",
+    "name": "WPIlibUnitTests",
+    "env": {
+      "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
+      "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
+    },
+    "vmargs": ["-Djava.library.path=${workspaceFolder}/build/jni/release"]
+  }],
+  "java.server.launchMode": "Standard",
+  "java.import.gradle.annotationProcessing.enabled": false,
+  "files.exclude": {
+    "**/CVS": true,
+    "**/*~": true,
+    "**/.svn": true,
+    "**/.project": true,
+    "**/.classpath": true,
+    "bin/": true,
+    "**/.settings": true,
+    "**/.factorypath": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true
+  },
   "java.completion.filteredTypes": [
     "java.awt.*",
     "com.sun.*",
@@ -55,7 +54,6 @@
     "javax.smartcardio.*",
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
-    "edu.wpi.first.math.**.struct.*",
-  ],
-  "java.dependency.enableDependencyCheckup": false
+    "edu.wpi.first.math.**.struct.*"
+  ]
 }

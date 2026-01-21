@@ -19,7 +19,6 @@ import com.team254.lib.drivers.CanDeviceId;
 import com.team254.lib.drivers.Phoenix6Util;
 import com.team254.lib.drivers.TalonFXFactory;
 import com.team5817.lib.util.PhoenixUtil;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -27,10 +26,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
-/**
- * Generic roller IO implementation for a roller or series of rollers using a
- * Kraken.
- */
+/** Generic roller IO implementation for a roller or series of rollers using a Kraken. */
 public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
   private final TalonFX mMain;
 
@@ -44,8 +40,8 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
   // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0);
-  private final MotionMagicVelocityTorqueCurrentFOC velocityOut = new MotionMagicVelocityTorqueCurrentFOC(0)
-      .withUpdateFreqHz(0).withSlot(0);
+  private final MotionMagicVelocityTorqueCurrentFOC velocityOut =
+      new MotionMagicVelocityTorqueCurrentFOC(0).withUpdateFreqHz(0).withSlot(0);
   private final TorqueCurrentFOC torqueCurrentOut = new TorqueCurrentFOC(0.0).withUpdateFreqHz(0);
 
   private final TalonFXConfiguration config;
@@ -87,9 +83,10 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
     config.MotorOutput.PeakForwardDutyCycle = mConstants.kMaxForwardOutput / 12.0;
     config.MotorOutput.PeakReverseDutyCycle = mConstants.kMaxReverseOutput / 12.0;
 
-    config.MotorOutput.Inverted = (mConstants.counterClockwisePositive
-        ? InvertedValue.CounterClockwise_Positive
-        : InvertedValue.Clockwise_Positive);
+    config.MotorOutput.Inverted =
+        (mConstants.counterClockwisePositive
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive);
 
     config.MotorOutput.NeutralMode = mConstants.kNeutralMode;
     PhoenixUtil.tryUntilOk(5, () -> mMain.getConfigurator().apply(config));
@@ -104,45 +101,41 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
     PhoenixUtil.tryUntilOk(
         5,
-        () -> BaseStatusSignal.setUpdateFrequencyForAll(
-            50.0,
-            position,
-            velocity,
-            appliedVoltage,
-            supplyCurrent,
-            torqueCurrent,
-            tempCelsius,
-            tempFault));
+        () ->
+            BaseStatusSignal.setUpdateFrequencyForAll(
+                50.0,
+                position,
+                velocity,
+                appliedVoltage,
+                supplyCurrent,
+                torqueCurrent,
+                tempCelsius,
+                tempFault));
     PhoenixUtil.tryUntilOk(5, () -> mMain.optimizeBusUtilization(0, 1.0));
   }
 
   @Override
   public void updateInputs(RollerSubsystemIOInputs inputs) {
     BaseStatusSignal.refreshAll(
-      position,
-      velocity,
-      appliedVoltage,
-      supplyCurrent,
-      torqueCurrent,
-      tempCelsius,
-      tempFault);
-      
-    inputs.data = new RollerSubsystemIOData(
-        Units.rotationsToRadians(position.getValueAsDouble()) / reduction,
-        Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction,
-        appliedVoltage.getValueAsDouble(),
-        supplyCurrent.getValueAsDouble(),
-        torqueCurrent.getValueAsDouble(),
-        tempCelsius.getValueAsDouble(),
-        tempFault.getValue(),
-        BaseStatusSignal.isAllGood(
-            position,
-            velocity,
-            appliedVoltage,
-            supplyCurrent,
-            torqueCurrent,
-            tempCelsius,
-            tempFault));
+        position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius, tempFault);
+
+    inputs.data =
+        new RollerSubsystemIOData(
+            Units.rotationsToRadians(position.getValueAsDouble()) / reduction,
+            Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction,
+            appliedVoltage.getValueAsDouble(),
+            supplyCurrent.getValueAsDouble(),
+            torqueCurrent.getValueAsDouble(),
+            tempCelsius.getValueAsDouble(),
+            tempFault.getValue(),
+            BaseStatusSignal.isAllGood(
+                position,
+                velocity,
+                appliedVoltage,
+                supplyCurrent,
+                torqueCurrent,
+                tempCelsius,
+                tempFault));
   }
 
   @Override

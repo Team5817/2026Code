@@ -2,12 +2,9 @@ package com.team5817.frc2026.autos.Actions;
 
 import com.team5817.frc2026.field.FieldLayout;
 import com.team5817.frc2026.subsystems.Drive.Drive;
-
 import edu.wpi.first.wpilibj.DriverStation;
 
-/**
- * An action that waits until the robot passes a specific X coordinate.
- */
+/** An action that waits until the robot passes a specific X coordinate. */
 public class WaitToPassXCoordinateAction implements Action {
   double startingXCoordinate;
   double targetXCoordinate;
@@ -30,35 +27,25 @@ public class WaitToPassXCoordinateAction implements Action {
   /**
    * Checks if the action is finished.
    *
-   * @return true if the robot has passed the target X coordinate, false
-   *         otherwise.
+   * @return true if the robot has passed the target X coordinate, false otherwise.
    */
   @Override
   public boolean isFinished() {
-    return Math.signum(startingXCoordinate - targetXCoordinate) != Math
-        .signum(mDrive.getPose().getTranslation().x() - targetXCoordinate);
+    return Math.signum(startingXCoordinate - targetXCoordinate)
+        != Math.signum(mDrive.getPose().getTranslation().x() - targetXCoordinate);
   }
 
-  /**
-   * Starts the action by recording the starting X coordinate.
-   */
+  /** Starts the action by recording the starting X coordinate. */
   @Override
   public void start() {
     startingXCoordinate = mDrive.getPose().getTranslation().x();
   }
 
-  /**
-   * Updates the action. This method is called periodically while the action is
-   * running.
-   */
+  /** Updates the action. This method is called periodically while the action is running. */
   @Override
-  public void update() {
-  }
+  public void update() {}
 
-  /**
-   * Called once when the action is finished.
-   */
+  /** Called once when the action is finished. */
   @Override
-  public void done() {
-  }
+  public void done() {}
 }

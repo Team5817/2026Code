@@ -1,20 +1,16 @@
 package com.team5817.frc2026;
 
 import com.team5817.lib.drivers.Subsystem;
-
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Used to reset, start, stop, and update all subsystems at once.
- */
+/** Used to reset, start, stop, and update all subsystems at once. */
 public class SubsystemManager {
   public static SubsystemManager mInstance = null;
 
   private List<Subsystem> mAllSubsystems;
 
-  private SubsystemManager() {
-  }
+  private SubsystemManager() {}
 
   /**
    * Returns the singleton instance of the SubsystemManager.
@@ -29,9 +25,7 @@ public class SubsystemManager {
     return mInstance;
   }
 
-  /**
-   * Outputs telemetry data for all subsystems.
-   */
+  /** Outputs telemetry data for all subsystems. */
   public void outputTelemetry() {
     if (RobotConstants.disableExtraTelemetry) {
       return;
@@ -54,9 +48,7 @@ public class SubsystemManager {
     return ret_val;
   }
 
-  /**
-   * Stops all subsystems.
-   */
+  /** Stops all subsystems. */
   public void stop() {
     mAllSubsystems.forEach(Subsystem::stop);
   }
@@ -79,19 +71,14 @@ public class SubsystemManager {
     mAllSubsystems = Arrays.asList(allSubsystems);
   }
 
-  public void updateSubsystems(){
-    for(Subsystem s:mAllSubsystems)
-      s.readPeriodicInputs();
-    for(Subsystem s:mAllSubsystems)
-      s.periodic();
-    for(Subsystem s:mAllSubsystems)
-      s.writePeriodicOutputs();
+  public void updateSubsystems() {
+    for (Subsystem s : mAllSubsystems) s.readPeriodicInputs();
+    for (Subsystem s : mAllSubsystems) s.periodic();
+    for (Subsystem s : mAllSubsystems) s.writePeriodicOutputs();
     outputTelemetry();
   }
 
-public void start() {
-    for(Subsystem s: mAllSubsystems)
-      s.start();
-}
-
+  public void start() {
+    for (Subsystem s : mAllSubsystems) s.start();
+  }
 }

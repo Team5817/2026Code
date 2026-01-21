@@ -5,7 +5,7 @@ public interface ServoState {
 
   boolean isDisabled();
 
-  default public double getAllowableError() {
+  public default double getAllowableError() {
     return Double.POSITIVE_INFINITY;
   }
 

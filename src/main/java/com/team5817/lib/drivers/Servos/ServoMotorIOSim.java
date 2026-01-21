@@ -1,8 +1,6 @@
 package com.team5817.lib.drivers.Servos;
 
-
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.ControlState;
-
 import edu.wpi.first.wpilibj.Timer;
 
 public class ServoMotorIOSim implements ServoMotorIO {
@@ -37,7 +35,7 @@ public class ServoMotorIOSim implements ServoMotorIO {
     inputs.error_rotations = (demand - inputs.position_rots);
     switch (mControlState) {
       case POSITION:
-        inputs.position_rots += inputs.error_rotations * dt / tau;// bad guess at motion for sim
+        inputs.position_rots += inputs.error_rotations * dt / tau; // bad guess at motion for sim
         break;
       case VOLTAGE:
         inputs.position_rots += demand / dt / 1000;
@@ -53,7 +51,6 @@ public class ServoMotorIOSim implements ServoMotorIO {
 
     inputs.position_units = mConstants.rotationsToHomedUnits(inputs.position_rots);
     inputs.velocity_unitspS = mConstants.rotationsToHomedUnits(inputs.velocity_rps);
-
   }
 
   @Override

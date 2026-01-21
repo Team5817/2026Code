@@ -1,14 +1,12 @@
 package com.team5817.lib.swerve;
 
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.util.SynchronousPIDF;
-
 import edu.wpi.first.wpilibj.Timer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class SwerveHeadingController {
   public Rotation2d targetHeadingRadians;
@@ -19,6 +17,7 @@ public class SwerveHeadingController {
     SNAP,
     STABILIZE
   }
+
   @AutoLogOutput(key = "Drive/HeadingController State")
   @Getter
   @Setter
@@ -61,7 +60,6 @@ public class SwerveHeadingController {
     snapPID.setOutputRange(-10 * Math.PI, 10 * Math.PI);
     targetHeadingRadians = Rotation2d.identity();
     lastUpdatedTimestamp = Timer.getFPGATimestamp();
-
   }
 
   public double update(Rotation2d heading, double timestamp) {

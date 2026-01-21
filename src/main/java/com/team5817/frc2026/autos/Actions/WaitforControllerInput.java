@@ -2,45 +2,36 @@ package com.team5817.frc2026.autos.Actions;
 
 import com.team5817.frc2026.controlboard.CustomXboxController;
 
-/**
- * Action that waits for a specific input from the controller.
- */
-public class WaitforControllerInput implements Action{
+/** Action that waits for a specific input from the controller. */
+public class WaitforControllerInput implements Action {
 
-    CustomXboxController mController;
+  CustomXboxController mController;
 
-    /**
-     * Initializes the controller.
-     */
-    @Override
-    public void start() {
-        mController = new CustomXboxController(0);
-    }
+  /** Initializes the controller. */
+  @Override
+  public void start() {
+    mController = new CustomXboxController(0);
+  }
 
-    /**
-     * Updates the controller state.
-     */
-    @Override
-    public void update() {
-        mController.update();
-    }
+  /** Updates the controller state. */
+  @Override
+  public void update() {
+    mController.update();
+  }
 
-    /**
-     * Cleans up the controller.
-     */
-    @Override
-    public void done() {
-        mController = null;
-    }
+  /** Cleans up the controller. */
+  @Override
+  public void done() {
+    mController = null;
+  }
 
-    /**
-     * Checks if the A button has been pressed.
-     * 
-     * @return true if the A button is pressed, false otherwise.
-     */
-    @Override
-    public boolean isFinished() {
-        return mController.getAButtonPressed();
-    }
-
+  /**
+   * Checks if the A button has been pressed.
+   *
+   * @return true if the A button is pressed, false otherwise.
+   */
+  @Override
+  public boolean isFinished() {
+    return mController.getAButtonPressed();
+  }
 }

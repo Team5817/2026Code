@@ -8,7 +8,6 @@
 package com.team5817.lib.drivers.Rollers;
 
 import com.team5817.frc2026.RobotConstants;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
@@ -22,7 +21,8 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
 
   public RollerSubsystemIOSim(DCMotor motorModel, double reduction, double moi) {
     gearbox = motorModel;
-    sim = new DCMotorSim(LinearSystemId.createDCMotorSystem(motorModel, moi, reduction), motorModel);
+    sim =
+        new DCMotorSim(LinearSystemId.createDCMotorSystem(motorModel, moi, reduction), motorModel);
   }
 
   @Override
@@ -32,15 +32,16 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
     }
 
     sim.update(RobotConstants.kLooperDt);
-    inputs.data = new RollerSubsystemIOData(
-        sim.getAngularPositionRad(),
-        this.rps,
-        appliedVoltage,
-        sim.getCurrentDrawAmps(),
-        gearbox.getCurrent(sim.getAngularVelocityRadPerSec(), appliedVoltage),
-        0.0,
-        false,
-        true);
+    inputs.data =
+        new RollerSubsystemIOData(
+            sim.getAngularPositionRad(),
+            this.rps,
+            appliedVoltage,
+            sim.getCurrentDrawAmps(),
+            gearbox.getCurrent(sim.getAngularVelocityRadPerSec(), appliedVoltage),
+            0.0,
+            false,
+            true);
   }
 
   @Override
@@ -53,7 +54,9 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
   public void runTorqueCurrent(double amps) {
     runVolts(gearbox.getVoltage(gearbox.getTorque(amps), sim.getAngularVelocityRadPerSec()));
   }
-  private double rps =0;
+
+  private double rps = 0;
+
   @Override
   public void runVelocity(double rps) {
     this.rps = rps;

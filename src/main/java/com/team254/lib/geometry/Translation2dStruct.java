@@ -4,9 +4,9 @@
 
 package com.team254.lib.geometry;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.struct.Struct;
 import java.nio.ByteBuffer;
-import edu.wpi.first.math.geometry.Translation2d;
 
 public class Translation2dStruct implements Struct<com.team254.lib.geometry.Translation2d> {
   @Override
@@ -38,6 +38,7 @@ public class Translation2dStruct implements Struct<com.team254.lib.geometry.Tran
   public void pack(ByteBuffer bb, com.team254.lib.geometry.Translation2d value) {
     Translation2d.struct.pack(bb, value.wpi());
   }
+
   @Override
   public boolean isImmutable() {
     return true;

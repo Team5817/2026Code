@@ -2,19 +2,16 @@ package com.team254.lib.geometry;
 
 import com.team254.lib.util.Interpolable;
 import com.team254.lib.util.Util;
-
 import edu.wpi.first.util.struct.StructSerializable;
-
 import java.text.DecimalFormat;
 import java.util.Optional;
 
 /**
- * A movement along an arc at constant curvature and velocity. We can use ideas
- * from "differential calculus" to create
- * new RigidTransform2d's from a Twist2d and visa versa.
- * <p>
- * A Twist can be used to represent a difference between two poses, a velocity,
- * an acceleration, etc.
+ * A movement along an arc at constant curvature and velocity. We can use ideas from "differential
+ * calculus" to create new RigidTransform2d's from a Twist2d and visa versa.
+ *
+ * <p>A Twist can be used to represent a difference between two poses, a velocity, an acceleration,
+ * etc.
  */
 public class Twist2d implements Interpolable<Twist2d>, ICourse2d<Twist2d>, StructSerializable {
   protected static final Twist2d kIdentity = new Twist2d(0.0, 0.0, 0.0);
@@ -57,8 +54,7 @@ public class Twist2d implements Interpolable<Twist2d>, ICourse2d<Twist2d>, Struc
 
   public double norm() {
     // Common case of dy == 0
-    if (dy == 0.0)
-      return Math.abs(dx);
+    if (dy == 0.0) return Math.abs(dx);
     return Math.hypot(dx, dy);
   }
 
@@ -95,20 +91,27 @@ public class Twist2d implements Interpolable<Twist2d>, ICourse2d<Twist2d>, Struc
    */
 
   public boolean epsilonEquals(final Twist2d other, double epsilon) {
-    return Util.epsilonEquals(dx, other.dx, epsilon) &&
-        Util.epsilonEquals(dy, other.dy, epsilon) &&
-        Util.epsilonEquals(dtheta, other.dtheta, epsilon);
+    return Util.epsilonEquals(dx, other.dx, epsilon)
+        && Util.epsilonEquals(dy, other.dy, epsilon)
+        && Util.epsilonEquals(dtheta, other.dtheta, epsilon);
   }
 
   @Override
   public String toString() {
     final DecimalFormat fmt = new DecimalFormat("#0.000");
-    return "(" + fmt.format(dx) + "," + fmt.format(dy) + "," + fmt.format(Math.toDegrees(dtheta)) + " deg)";
+    return "("
+        + fmt.format(dx)
+        + ","
+        + fmt.format(dy)
+        + ","
+        + fmt.format(Math.toDegrees(dtheta))
+        + " deg)";
   }
 
   @Override
   public Twist2d interpolate(Twist2d other, double x) {
-    return new Twist2d(Util.interpolate(dx, other.dx, x),
+    return new Twist2d(
+        Util.interpolate(dx, other.dx, x),
         Util.interpolate(dy, other.dy, x),
         Util.interpolate(dtheta, other.dtheta, x));
   }

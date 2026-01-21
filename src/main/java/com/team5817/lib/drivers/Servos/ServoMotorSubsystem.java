@@ -6,18 +6,13 @@ import com.team254.lib.util.DelayedBoolean;
 import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.Request;
-
 import edu.wpi.first.wpilibj.Timer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
 import org.littletonrobotics.junction.Logger;
 
-/**
- * Abstract base class for a subsystem with a single sensored servo-mechanism.
- * spotless:off
- */
+/** Abstract base class for a subsystem with a single sensored servo-mechanism. spotless:off */
 public abstract class ServoMotorSubsystem extends Subsystem {
 
   // Recommend initializing in a static block!
@@ -33,6 +28,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   @Setter
   @Accessors(prefix = "m")
   protected boolean mHoming = false;
+
   protected DelayedBoolean mHomingDebounce;
 
   protected double demand = 0;
@@ -59,34 +55,29 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   }
 
   protected ServoMotorIOInputsAutoLogged mServoInputs = new ServoMotorIOInputsAutoLogged();
+
   @Getter
   @Accessors(prefix = "m")
   protected ControlState mControlState = ControlState.VOLTAGE;
 
-  /**
-   * Reads the periodic inputs from the Talon.
-   */
+  /** Reads the periodic inputs from the Talon. */
   @Override
   public void readPeriodicInputs() {
     io.updateInputs(mServoInputs);
     Logger.processInputs(mConstants.kName, mServoInputs);
   }
 
-  /**
-   * Writes the periodic outputs to the Talon.
-   */
+  /** Writes the periodic outputs to the Talon. */
   @Override
   public void writePeriodicOutputs() {
-    if (mHoming)
-      handleHoming();
+    if (mHoming) handleHoming();
     io.setControl(mControlState, demand);
   }
 
   public void handleHoming() {
     applyVoltage(mConstants.kHomingOutput * 12);
     if (mHomingDebounce.update(
-        Timer.getFPGATimestamp(),
-        Math.abs(getVelocity()) < mConstants.kHomingVelocityWindow)) {
+        Timer.getFPGATimestamp(), Math.abs(getVelocity()) < mConstants.kHomingVelocityWindow)) {
       forceZero();
       mHomingDebounce = new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
       setPositionSetpoint(mConstants.kHomePosition);
@@ -197,7 +188,8 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The constrained rotations.
    */
   protected double constrainRotations(double rotations) {
-    return Util.limit(rotations, mConstants.mReverseSoftLimitRotations, mConstants.mForwardSoftLimitRotations);
+    return Util.limit(
+        rotations, mConstants.mReverseSoftLimitRotations, mConstants.mForwardSoftLimitRotations);
   }
 
   /**
@@ -228,9 +220,10 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The predicted position in units.
    */
   public double getPredictedPositionUnits(double lookahead_secs) {
-    double predicted_units = mServoInputs.active_trajectory_position
-        + lookahead_secs * mServoInputs.active_trajectory_velocity
-        + 0.5 * mServoInputs.active_trajectory_acceleration * lookahead_secs * lookahead_secs;
+    double predicted_units =
+        mServoInputs.active_trajectory_position
+            + lookahead_secs * mServoInputs.active_trajectory_velocity
+            + 0.5 * mServoInputs.active_trajectory_acceleration * lookahead_secs * lookahead_secs;
     if (demand >= mServoInputs.active_trajectory_position) {
       return Math.min(predicted_units, demand);
     } else {
@@ -240,15 +233,14 @@ public abstract class ServoMotorSubsystem extends Subsystem {
 
   /**
    * Returns a request to wait for the elevator to extend to the given position.
-   * 
+   *
    * @param position the position to wait for
    * @return a request to wait for the elevator to extend
    */
   public Request waitToBeOverRequest(double position) {
     return new Request() {
       @Override
-      public void act() {
-      }
+      public void act() {}
 
       @Override
       public boolean isFinished() {
@@ -257,24 +249,18 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     };
   }
 
-  /**
-   * Zeros the sensors.
-   */
+  /** Zeros the sensors. */
   @Override
   public void zeroSensors() {
     io.zeroSensors();
   }
 
-  /**
-   * Forces the sensors to zero.
-   */
+  /** Forces the sensors to zero. */
   public void forceZero() {
     io.forceZeroSensors();
   }
 
-  /**
-   * Outputs telemetry data.
-   */
+  /** Outputs telemetry data. */
   @Override
   public void outputTelemetry() {
     Logger.recordOutput(mConstants.kName + "/Control Mode", mControlState);
@@ -282,9 +268,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     Logger.recordOutput(mConstants.kName + "/Homing", mHoming);
   }
 
-  /**
-   * Rewrites the device configuration.
-   */
+  /** Rewrites the device configuration. */
   @Override
   public void rewriteDeviceConfiguration() {
     io.writeConfigs();

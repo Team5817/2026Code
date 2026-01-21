@@ -8,7 +8,6 @@
 package com.team5817.lib.util;
 
 import com.team5817.frc2026.field.FieldLayout;
-
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -48,15 +47,12 @@ public class AllianceFlipUtil {
     return new Pose3d(apply(pose.getTranslation()), apply(pose.getRotation()));
   }
 
-
   public static boolean shouldFlip() {
     return DriverStation.getAlliance().isPresent()
         && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
   }
 
-    /**
-   * Explicitly flip a pose across the X and/or Y axis of the field, regardless of alliance.
-   */
+  /** Explicitly flip a pose across the X and/or Y axis of the field, regardless of alliance. */
   public static Pose3d apply(Pose3d pose, boolean flipX, boolean flipY) {
     double x = flipX ? FieldLayout.kFieldLength - pose.getX() : pose.getX();
     double y = flipY ? FieldLayout.kFieldWidth - pose.getY() : pose.getY();

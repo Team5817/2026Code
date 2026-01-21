@@ -4,12 +4,9 @@
 
 package com.team254.lib.swerve;
 
-import edu.wpi.first.util.struct.Struct;
-
-
-import java.nio.ByteBuffer;
-
 import com.team254.lib.geometry.Rotation2d;
+import edu.wpi.first.util.struct.Struct;
+import java.nio.ByteBuffer;
 
 public class SwerveModuleStateStruct implements Struct<SwerveModuleState> {
   @Override
@@ -37,7 +34,7 @@ public class SwerveModuleStateStruct implements Struct<SwerveModuleState> {
     double speedMetersPerSecond = bb.getDouble();
     double distanceMeters = bb.getDouble();
     Rotation2d angle = Rotation2d.struct.unpack(bb);
-    return new SwerveModuleState(speedMetersPerSecond,distanceMeters,angle);
+    return new SwerveModuleState(speedMetersPerSecond, distanceMeters, angle);
   }
 
   @Override
@@ -45,5 +42,5 @@ public class SwerveModuleStateStruct implements Struct<SwerveModuleState> {
     bb.putDouble(value.speedMetersPerSecond);
     bb.putDouble(value.distanceMeters);
     Rotation2d.struct.pack(bb, value.angle);
-}
+  }
 }

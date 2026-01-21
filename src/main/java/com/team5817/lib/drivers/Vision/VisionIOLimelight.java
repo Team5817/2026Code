@@ -1,5 +1,7 @@
 package com.team5817.lib.drivers.Vision;
 
+import com.team254.lib.geometry.Rotation2d;
+import com.team5817.lib.vision.LimelightHelpers;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
@@ -14,9 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import com.team254.lib.geometry.Rotation2d;
-import com.team5817.lib.vision.LimelightHelpers;
-
 /** IO implementation for real Limelight hardware. */
 public class VisionIOLimelight implements VisionIO {
   private final Supplier<Rotation2d> rotationSupplier;
@@ -28,6 +27,7 @@ public class VisionIOLimelight implements VisionIO {
   private final DoubleArraySubscriber megatag1Subscriber;
   private final DoubleArraySubscriber megatag2Subscriber;
   private final String kName;
+
   /**
    * Creates a new VisionIOLimelight.
    *
@@ -144,10 +144,12 @@ public class VisionIOLimelight implements VisionIO {
             Units.degreesToRadians(rawLLArray[4]),
             Units.degreesToRadians(rawLLArray[5])));
   }
+
   @Override
-  public void stop(){
+  public void stop() {
     LimelightHelpers.setPipelineIndex(kName, 1);
-  } 
+  }
+
   @Override
   public void start() {
     LimelightHelpers.setPipelineIndex(kName, 0);

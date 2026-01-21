@@ -2,52 +2,40 @@ package com.team5817.frc2026.autos.Actions;
 
 import java.util.function.BooleanSupplier;
 
+/** Action that waits for a specific input from the controller. */
+public class WaitForBooleanAction implements Action {
 
-/**
- * Action that waits for a specific input from the controller.
- */
-public class WaitForBooleanAction implements Action{
+  public WaitForBooleanAction(BooleanSupplier supplier, boolean target) {
+    this.supplier = supplier;
+  }
 
-    public WaitForBooleanAction(BooleanSupplier supplier, boolean target){
-        this.supplier = supplier;
-    }
-    public WaitForBooleanAction(BooleanSupplier supplier){
-        this(supplier,true);
-    }
-    BooleanSupplier supplier;
-    boolean target;
-    /**
-     * Initializes the controller.
-     */
-    @Override
-    public void start() {
-    }
+  public WaitForBooleanAction(BooleanSupplier supplier) {
+    this(supplier, true);
+  }
 
-    /**
-     * Updates the controller state.
-     */
-    @Override
-    public void update() {
-    }
+  BooleanSupplier supplier;
+  boolean target;
 
-    /**
-     * Cleans up the controller.
-     */
-    @Override
-    public void done() {
-    }
+  /** Initializes the controller. */
+  @Override
+  public void start() {}
 
-    /**
-     * Checks if the A button has been pressed.
-     * 
-     * @return true if the A button is pressed, false otherwise.
-     */
-    @Override
-    public boolean isFinished() {
-        if(target)
-            return supplier.getAsBoolean();
-        else
-            return !supplier.getAsBoolean();
-    }
+  /** Updates the controller state. */
+  @Override
+  public void update() {}
 
+  /** Cleans up the controller. */
+  @Override
+  public void done() {}
+
+  /**
+   * Checks if the A button has been pressed.
+   *
+   * @return true if the A button is pressed, false otherwise.
+   */
+  @Override
+  public boolean isFinished() {
+    if (target) return supplier.getAsBoolean();
+    else return !supplier.getAsBoolean();
+  }
 }

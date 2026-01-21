@@ -15,12 +15,6 @@ package com.team5817.frc2026.subsystems.Drive;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
@@ -40,11 +34,10 @@ import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.swerve.DriveMotionPlanner;
 import com.team5817.lib.swerve.GyroIO;
 import com.team5817.lib.swerve.GyroIOInputsAutoLogged;
-import com.team5817.lib.swerve.ModuleIO;
 import com.team5817.lib.swerve.Module;
+import com.team5817.lib.swerve.ModuleIO;
 import com.team5817.lib.swerve.PhoenixOdometryThread;
 import com.team5817.lib.swerve.SwerveHeadingController;
-
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -60,22 +53,27 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 
 public class Drive extends Subsystem {
   boolean resetHeadingController = false;
   // TunerConstants doesn't include these constants, so they are declared locally
-  public static final double ODOMETRY_FREQUENCY = new CANBus(TunerConstants.DrivetrainConstants.CANBusName)
-      .isNetworkFD() ? 250.0 : 100.0;
-  public static final double DRIVE_BASE_RADIUS = Math.max(
+  public static final double ODOMETRY_FREQUENCY =
+      new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
+  public static final double DRIVE_BASE_RADIUS =
       Math.max(
-          Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
-          Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
-      Math.max(
-          Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
-          Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
+          Math.max(
+              Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+              Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
+          Math.max(
+              Math.hypot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+              Math.hypot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)));
 
   // PathPlanner config constants
   private static final double ROBOT_MASS_KG = 74.088;
@@ -83,18 +81,19 @@ public class Drive extends Subsystem {
   private static final double WHEEL_COF = 1.2;
 
   @Getter
-  static final RobotConfig PP_CONFIG = new RobotConfig(
-      ROBOT_MASS_KG,
-      ROBOT_MOI,
-      new ModuleConfig(
-          TunerConstants.FrontLeft.WheelRadius,
-          TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
-          WHEEL_COF,
-          DCMotor.getKrakenX60Foc(1)
-              .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
-          TunerConstants.FrontLeft.SlipCurrent,
-          1),
-      getModuleTranslations());
+  static final RobotConfig PP_CONFIG =
+      new RobotConfig(
+          ROBOT_MASS_KG,
+          ROBOT_MOI,
+          new ModuleConfig(
+              TunerConstants.FrontLeft.WheelRadius,
+              TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
+              WHEEL_COF,
+              DCMotor.getKrakenX60Foc(1)
+                  .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
+              TunerConstants.FrontLeft.SlipCurrent,
+              1),
+          getModuleTranslations());
 
   public enum DriveControlState {
     FORCE_ORIENT,
@@ -108,15 +107,18 @@ public class Drive extends Subsystem {
   @Getter
   @Accessors(prefix = "m")
   private DriveControlState mControlState = DriveControlState.OPEN_LOOP;
+
   private boolean mControlStateHasChanged = false;
   private double alignmentStartTimestamp = 0;
   private final DriveMotionPlanner mMotionPlanner;
   private final AutoAlignMotionPlanner mAutoAlignMotionPlanner;
 
   private final SwerveHeadingController mHeadingController;
+
   @Setter
   @Accessors(prefix = "m")
   private Rotation2d mTrackingAngle = Rotation2d.identity();
+
   @Setter
   @Accessors(prefix = "m")
   private boolean mOverrideHeading = false;
@@ -125,57 +127,58 @@ public class Drive extends Subsystem {
   @Getter
   @Accessors(prefix = "m")
   private AlignmentType mAlignment = AlignmentType.CORAL_SCORE;
-  @Setter
-  private boolean autoAlignFinishedOverride = false;
+
+  @Setter private boolean autoAlignFinishedOverride = false;
 
   public static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4]; // FL, FR, BL, BR
   // private final SysIdRoutine sysId;
-  private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
-      AlertType.kError);
+  private final Alert gyroDisconnectedAlert =
+      new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
       new SwerveModulePosition[] {
-          new SwerveModulePosition(),
-          new SwerveModulePosition(),
-          new SwerveModulePosition(),
-          new SwerveModulePosition()
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition()
       };
-  private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation.wpi(),
-      lastModulePositions, new Pose2d().wpi());
+  private SwerveDrivePoseEstimator poseEstimator =
+      new SwerveDrivePoseEstimator(
+          kinematics, rawGyroRotation.wpi(), lastModulePositions, new Pose2d().wpi());
 
-      public Drive(
-        GyroIO gyroIO,
-        ModuleIO flModuleIO,
-        ModuleIO frModuleIO,
-        ModuleIO blModuleIO,
-        ModuleIO brModuleIO,
-        SynchronousPIDF stabilizePID,
-        SynchronousPIDF snapPID
-    ) {
-        this.gyroIO = gyroIO;
-    
-        modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
-        modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
-        modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
-        modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
-    
-        mMotionPlanner = new DriveMotionPlanner();
-    
-        mHeadingController = new SwerveHeadingController(snapPID, stabilizePID);
-    
-        mAutoAlignMotionPlanner = new AutoAlignMotionPlanner( new SwerveHeadingController(snapPID, stabilizePID));
-        mAutoAlignMotionPlanner.reset();
-    
-        // Usage reporting for swerve template
-        HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
-    
-        // Start odometry thread
-        PhoenixOdometryThread.getInstance().start();
+  public Drive(
+      GyroIO gyroIO,
+      ModuleIO flModuleIO,
+      ModuleIO frModuleIO,
+      ModuleIO blModuleIO,
+      ModuleIO brModuleIO,
+      SynchronousPIDF stabilizePID,
+      SynchronousPIDF snapPID) {
+    this.gyroIO = gyroIO;
+
+    modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
+    modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
+    modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
+    modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
+
+    mMotionPlanner = new DriveMotionPlanner();
+
+    mHeadingController = new SwerveHeadingController(snapPID, stabilizePID);
+
+    mAutoAlignMotionPlanner =
+        new AutoAlignMotionPlanner(new SwerveHeadingController(snapPID, stabilizePID));
+    mAutoAlignMotionPlanner.reset();
+
+    // Usage reporting for swerve template
+    HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
+
+    // Start odometry thread
+    PhoenixOdometryThread.getInstance().start();
 
     // // Configure SysId
     // sysId = new SysIdRoutine(
@@ -211,35 +214,36 @@ public class Drive extends Subsystem {
 
     boolean userSlowingDown = Math.abs(speeds.omegaRadiansPerSecond) < 0.15;
     boolean robotRotatingSlowly = Math.abs(gyroInputs.yawVelocityRadPerSec) < 0.3;
-    
+
     if (!isStabilizing && userSlowingDown && robotRotatingSlowly && !resetHeadingController) {
       mHeadingController.setStabilizeTarget(getHeading());
       isStabilizing = true;
       resetHeadingController = false;
     }
     Logger.recordOutput("Drive/TargetHeading", mHeadingController.getTargetHeading().getDegrees());
-    
+
     if (!userSlowingDown) {
       isStabilizing = false;
     }
-    
-    double omega = isStabilizing
-        ? mHeadingController.update(getHeading(), timestamp)
-        : 0.0;
-    
+
+    double omega = isStabilizing ? mHeadingController.update(getHeading(), timestamp) : 0.0;
+
     switch (mControlState) {
       case PATH_FOLLOWING:
-        if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) <= TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.1) {
-        mControlStateHasChanged = false;
+        if (Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
+            <= TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.1) {
+          mControlStateHasChanged = false;
           return new ChassisSpeeds();
         }
         break;
-    
+
       case AUTOALIGN:
         if (mControlStateHasChanged) {
           alignmentStartTimestamp = timestamp;
         }
-        boolean movingFast = Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond) > TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.1;
+        boolean movingFast =
+            Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond)
+                > TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.1;
         boolean timeoutPassed = timestamp - alignmentStartTimestamp > 0.5;
         if (movingFast && timeoutPassed) {
           mControlStateHasChanged = false;
@@ -249,7 +253,7 @@ public class Drive extends Subsystem {
         ChassisSpeeds alignSpeeds = mAutoAlignMotionPlanner.updateAutoAlign(timestamp, getPose());
         mControlStateHasChanged = false;
         return alignSpeeds != null ? alignSpeeds : new ChassisSpeeds();
-    
+
       case OPEN_LOOP:
       case HEADING_SNAP:
         if (Math.abs(speeds.omegaRadiansPerSecond) > 0.1) {
@@ -259,20 +263,15 @@ public class Drive extends Subsystem {
           omega = 0.0;
         }
         mControlStateHasChanged = false;
-        return new ChassisSpeeds(
-            speeds.vxMetersPerSecond,
-            speeds.vyMetersPerSecond,
-            omega
-        );
-    
+        return new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, omega);
+
       default:
         setControlState(DriveControlState.OPEN_LOOP);
         break;
     }
-    
+
     mControlStateHasChanged = false;
     return speeds;
-    
   }
 
   public void autoAlign(AlignmentType type) {
@@ -320,8 +319,7 @@ public class Drive extends Subsystem {
    * @return True if auto alignment is complete, false otherwise.
    */
   public boolean getAutoAlignComplete() {
-    if (autoAlignFinishedOverride)
-      return true;
+    if (autoAlignFinishedOverride) return true;
     return mAutoAlignMotionPlanner.getAutoAlignComplete();
   }
 
@@ -331,15 +329,12 @@ public class Drive extends Subsystem {
    * @return True if auto alignment is complete, false otherwise.
    */
   public Translation2d getAutoAlignError() {
-    mAutoAlignMotionPlanner.updateAutoAlign(Timer.getTimestamp(),
-        getPose()
-            .withRotation(getHeading()));
+    mAutoAlignMotionPlanner.updateAutoAlign(
+        Timer.getTimestamp(), getPose().withRotation(getHeading()));
     return mAutoAlignMotionPlanner.getAutoAlignError();
   }
 
-  /**
-   * Updates the path follower.
-   */
+  /** Updates the path follower. */
   public void updatePathFollower() {
     final double now = Timer.getTimestamp();
     ChassisSpeeds output = mMotionPlanner.update(now, getPose());
@@ -357,7 +352,7 @@ public class Drive extends Subsystem {
     return mMotionPlanner.isPathFinished();
   }
 
-  public void updateAuto(){
+  public void updateAuto() {
     switch (mControlState) {
       case PATH_FOLLOWING:
         updatePathFollower();
@@ -368,17 +363,15 @@ public class Drive extends Subsystem {
         break;
 
       default:
-        System.out.println("Unsupported Drive Auto ControlState"); 
+        System.out.println("Unsupported Drive Auto ControlState");
         break;
     }
   }
 
-  
   @Override
   public void readPeriodicInputs() {
-    if(DriverStation.isAutonomous())
-      updateAuto();
-  
+    if (DriverStation.isAutonomous()) updateAuto();
+
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
@@ -389,7 +382,8 @@ public class Drive extends Subsystem {
     odometryLock.unlock();
 
     // Update odometry
-    double[] sampleTimestamps = modules[0].getOdometryTimestamps(); // All signals are sampled together
+    double[] sampleTimestamps =
+        modules[0].getOdometryTimestamps(); // All signals are sampled together
     int sampleCount = sampleTimestamps.length;
     for (int i = 0; i < sampleCount; i++) {
       // Read wheel positions and deltas from each module
@@ -397,10 +391,11 @@ public class Drive extends Subsystem {
       SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
       for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
         modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i];
-        moduleDeltas[moduleIndex] = new SwerveModulePosition(
-            modulePositions[moduleIndex].distanceMeters
-                - lastModulePositions[moduleIndex].distanceMeters,
-            modulePositions[moduleIndex].angle);
+        moduleDeltas[moduleIndex] =
+            new SwerveModulePosition(
+                modulePositions[moduleIndex].distanceMeters
+                    - lastModulePositions[moduleIndex].distanceMeters,
+                modulePositions[moduleIndex].angle);
         lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
       }
 
@@ -474,13 +469,12 @@ public class Drive extends Subsystem {
   }
 
   /**
-   * Stops the drive and turns the modules to an X arrangement to resist movement.
-   * The modules will
-   * return to their normal orientations the next time a nonzero velocity is
-   * requested.
+   * Stops the drive and turns the modules to an X arrangement to resist movement. The modules will
+   * return to their normal orientations the next time a nonzero velocity is requested.
    */
   public void stopWithX() {
-    edu.wpi.first.math.geometry.Rotation2d[] headings = new edu.wpi.first.math.geometry.Rotation2d[4];
+    edu.wpi.first.math.geometry.Rotation2d[] headings =
+        new edu.wpi.first.math.geometry.Rotation2d[4];
     for (int i = 0; i < 4; i++) {
       headings[i] = getModuleTranslations()[i].getAngle();
     }
@@ -502,10 +496,7 @@ public class Drive extends Subsystem {
   // runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
   // }
 
-  /**
-   * Returns the module states (turn angles and drive velocities) for all of the
-   * modules.
-   */
+  /** Returns the module states (turn angles and drive velocities) for all of the modules. */
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
     for (int i = 0; i < 4; i++) {
@@ -514,10 +505,7 @@ public class Drive extends Subsystem {
     return states;
   }
 
-  /**
-   * Returns the module positions (turn angles and drive positions) for all of the
-   * modules.
-   */
+  /** Returns the module positions (turn angles and drive positions) for all of the modules. */
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] states = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
@@ -540,10 +528,7 @@ public class Drive extends Subsystem {
     return values;
   }
 
-  /**
-   * Returns the average velocity of the modules in rotations/sec (Phoenix native
-   * units).
-   */
+  /** Returns the average velocity of the modules in rotations/sec (Phoenix native units). */
   public double getFFCharacterizationVelocity() {
     double output = 0.0;
     for (int i = 0; i < 4; i++) {
@@ -579,7 +564,8 @@ public class Drive extends Subsystem {
   public void setPose(Pose2d pose) {
     poseEstimator.resetPosition(rawGyroRotation.wpi(), getModulePositions(), pose.wpi());
   }
-  public void simResetWorldPose(Pose2d newPose){}
+
+  public void simResetWorldPose(Pose2d newPose) {}
 
   /** Adds a new timestamped vision measurement. */
   public void addVisionMeasurement(
@@ -587,7 +573,9 @@ public class Drive extends Subsystem {
       double timestampSeconds,
       Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimator.addVisionMeasurement(
-        visionRobotPoseMeters.withRotation(rawGyroRotation).wpi(), timestampSeconds, visionMeasurementStdDevs);
+        visionRobotPoseMeters.withRotation(rawGyroRotation).wpi(),
+        timestampSeconds,
+        visionMeasurementStdDevs);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
@@ -603,14 +591,14 @@ public class Drive extends Subsystem {
   /** Returns an array of module translations. */
   public static edu.wpi.first.math.geometry.Translation2d[] getModuleTranslations() {
     return new edu.wpi.first.math.geometry.Translation2d[] {
-        new edu.wpi.first.math.geometry.Translation2d(TunerConstants.FrontLeft.LocationX,
-            TunerConstants.FrontLeft.LocationY),
-        new edu.wpi.first.math.geometry.Translation2d(TunerConstants.FrontRight.LocationX,
-            TunerConstants.FrontRight.LocationY),
-        new edu.wpi.first.math.geometry.Translation2d(TunerConstants.BackLeft.LocationX,
-            TunerConstants.BackLeft.LocationY),
-        new edu.wpi.first.math.geometry.Translation2d(TunerConstants.BackRight.LocationX,
-            TunerConstants.BackRight.LocationY)
+      new edu.wpi.first.math.geometry.Translation2d(
+          TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+      new edu.wpi.first.math.geometry.Translation2d(
+          TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
+      new edu.wpi.first.math.geometry.Translation2d(
+          TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+      new edu.wpi.first.math.geometry.Translation2d(
+          TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
     };
   }
 }

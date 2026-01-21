@@ -1,6 +1,5 @@
 package com.team5817.lib.diagnostic;
 
-
 // Copyright (c) 2023 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
@@ -8,21 +7,16 @@ package com.team5817.lib.diagnostic;
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-
-import edu.wpi.first.wpilibj.Timer;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.team5817.frc2026.autos.Actions.Action;
 import com.team5817.lib.PolynomialRegression;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem;
+import edu.wpi.first.wpilibj.Timer;
+import java.util.LinkedList;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
-/**
- * Class for characterizing the feedforward gains of a subsystem.
- */
-public class FeedForwardCharacterization implements Action{
+/** Class for characterizing the feedforward gains of a subsystem. */
+public class FeedForwardCharacterization implements Action {
   private static final double startDelaySecs = 2.0;
   private static final double rampRateVoltsPerSec = 0.1;
 
@@ -43,49 +37,41 @@ public class FeedForwardCharacterization implements Action{
    * @param data The data object to store the characterization results.
    */
   public FeedForwardCharacterization(
-      ServoMotorSubsystem subsystem,
-      boolean forwards,
-      FeedForwardCharacterizationData data) {
-        this.mSubsystem = subsystem;
-        this.forwards = forwards;
-        this.dataPrimary = data;
+      ServoMotorSubsystem subsystem, boolean forwards, FeedForwardCharacterizationData data) {
+    this.mSubsystem = subsystem;
+    this.forwards = forwards;
+    this.dataPrimary = data;
   }
 
-  /**
-   * Called when the command is initially scheduled.
-   */
+  /** Called when the command is initially scheduled. */
   @Override
   public void start() {
     timer.reset();
     timer.start();
   }
 
-  /**
-   * Called every time the scheduler runs while the command is scheduled.
-   */
+  /** Called every time the scheduler runs while the command is scheduled. */
   @Override
   public void update() {
     if (timer.get() < startDelaySecs) {
-        mSubsystem.applyVoltage(0);
-        System.out.println("Nothing");
-   } else {
+      mSubsystem.applyVoltage(0);
+      System.out.println("Nothing");
+    } else {
       double voltage = ((timer.get() - startDelaySecs) * rampRateVoltsPerSec) * (forwards ? 1 : -1);
       done = voltage >= 1.4;
       Logger.recordOutput("Characterization/Voltage", voltage);
-        mSubsystem.applyVoltage(voltage+1.01);
+      mSubsystem.applyVoltage(voltage + 1.01);
       dataPrimary.add(mSubsystem.getVelocity(), voltage);
     }
   }
 
-  /**
-   * Called once the command ends or is interrupted.
-   */
+  /** Called once the command ends or is interrupted. */
   @Override
   public void done() {
     mSubsystem.applyVoltage(0);
     timer.stop();
     dataPrimary.print();
- }
+  }
 
   /**
    * Returns true when the command should end.
@@ -97,9 +83,7 @@ public class FeedForwardCharacterization implements Action{
     return done;
   }
 
-  /**
-   * Class to store and process feedforward characterization data.
-   */
+  /** Class to store and process feedforward characterization data. */
   public static class FeedForwardCharacterizationData {
     private final String name;
     private final List<Double> velocityData = new LinkedList<>();
@@ -127,9 +111,7 @@ public class FeedForwardCharacterization implements Action{
       }
     }
 
-    /**
-     * Prints the characterization results.
-     */
+    /** Prints the characterization results. */
     public void print() {
       if (velocityData.size() == 0 || voltageData.size() == 0) {
         Logger.recordOutput("Characterization/Worked", false);
@@ -141,15 +123,13 @@ public class FeedForwardCharacterization implements Action{
               velocityData.stream().mapToDouble(Double::doubleValue).toArray(),
               voltageData.stream().mapToDouble(Double::doubleValue).toArray(),
               1);
-        Logger.recordOutput("Characterization/Worked", true);
+      Logger.recordOutput("Characterization/Worked", true);
 
       Logger.recordOutput("Characterization/Name", name);
       Logger.recordOutput("Characterization/Count", velocityData.size());
       Logger.recordOutput("Characterization/R2", regression.R2());
       Logger.recordOutput("Characterization/Ks", regression.beta(0));
       Logger.recordOutput("Characterization/Kv", regression.beta(1));
-
-
     }
   }
 }

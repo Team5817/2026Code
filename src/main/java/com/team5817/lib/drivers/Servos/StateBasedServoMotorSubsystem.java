@@ -1,27 +1,28 @@
 package com.team5817.lib.drivers.Servos;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.team5817.lib.Util;
 import com.team5817.lib.requests.Request;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.littletonrobotics.junction.Logger;
 
-public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState> extends ServoMotorSubsystem {
+public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
+    extends ServoMotorSubsystem {
   @Getter
   @Setter
   @Accessors(prefix = "m")
   protected S mState;
+
   private final boolean allowAutoStateOutput;
   protected boolean atState = false;
+
   public boolean atState() {
     return atState;
   }
-  
-  public StateBasedServoMotorSubsystem(S initialState, ServoMotorIO io,
-      boolean enableAutoStateOutput) {
+
+  public StateBasedServoMotorSubsystem(
+      S initialState, ServoMotorIO io, boolean enableAutoStateOutput) {
     super(io);
     this.mState = initialState;
     this.allowAutoStateOutput = enableAutoStateOutput;
@@ -42,8 +43,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState> exten
           super.applyVoltage(mState.getDemand());
       }
 
-    if (mState.isDisabled())
-      super.applyVoltage(0);
+    if (mState.isDisabled()) super.applyVoltage(0);
 
     super.writePeriodicOutputs();
   }
@@ -51,9 +51,12 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState> exten
   @Override
   public void readPeriodicInputs() {
     super.readPeriodicInputs();
-    atState = Util.epsilonEquals(getPosition()-mConstants.kHomePosition, mConstants.rotationsToUnits(demand), mState.getAllowableError());
-    if (mState.isDisabled() || mControlState != ControlState.POSITION)
-      atState = true;
+    atState =
+        Util.epsilonEquals(
+            getPosition() - mConstants.kHomePosition,
+            mConstants.rotationsToUnits(demand),
+            mState.getAllowableError());
+    if (mState.isDisabled() || mControlState != ControlState.POSITION) atState = true;
   }
 
   @Override

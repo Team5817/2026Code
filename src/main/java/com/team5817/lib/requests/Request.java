@@ -4,47 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Request {
-	final static String defaultName = "DefaultName";
-	String name = defaultName;
-	public abstract void act();
+  static final String defaultName = "DefaultName";
+  String name = defaultName;
 
-	public boolean isFinished() {
-		return true;
-	}
+  public abstract void act();
 
-	private final List<Prerequisite> prerequisites = new ArrayList<>();
+  public boolean isFinished() {
+    return true;
+  }
 
-	public Request withPrerequisites(Prerequisite... prereqs) {
-		for (Prerequisite prereq : prereqs) {
-			prerequisites.add(prereq);
-		}
-		return this;
-	}
+  private final List<Prerequisite> prerequisites = new ArrayList<>();
 
-	public Request withPrerequisite(Prerequisite prereq) {
-		prerequisites.add(prereq);
-		return this;
-	}
+  public Request withPrerequisites(Prerequisite... prereqs) {
+    for (Prerequisite prereq : prereqs) {
+      prerequisites.add(prereq);
+    }
+    return this;
+  }
 
-	public boolean allowed() {
-		return prerequisites.stream().allMatch(p -> p.met());
-	}
+  public Request withPrerequisite(Prerequisite prereq) {
+    prerequisites.add(prereq);
+    return this;
+  }
 
-	private LambdaRequest.VoidInterface cleanupFunction = () -> {};
+  public boolean allowed() {
+    return prerequisites.stream().allMatch(p -> p.met());
+  }
 
-	public Request withCleanup(LambdaRequest.VoidInterface cleanupFunction) {
-		this.cleanupFunction = cleanupFunction;
-		return this;
-	}
+  private LambdaRequest.VoidInterface cleanupFunction = () -> {};
 
-	public void cleanup() {
-		cleanupFunction.f();
-	}
-	public Request addName(String name){
-		this.name = name;
-		return this;
-	}
-	public String getName(){
-		return this.name;
-	}
+  public Request withCleanup(LambdaRequest.VoidInterface cleanupFunction) {
+    this.cleanupFunction = cleanupFunction;
+    return this;
+  }
+
+  public void cleanup() {
+    cleanupFunction.f();
+  }
+
+  public Request addName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public String getName() {
+    return this.name;
+  }
 }

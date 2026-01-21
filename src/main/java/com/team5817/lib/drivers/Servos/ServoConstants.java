@@ -99,10 +99,8 @@ public class ServoConstants {
     return unitsToRotations(units - kHomePosition);
   }
 
-  public final double mForwardSoftLimitRotations = (((kMaxUnitsLimit - kHomePosition)
-      * kRotationsPerUnitDistance)
-      - kSoftLimitDeadband);
-  public final double mReverseSoftLimitRotations = (((kMinUnitsLimit - kHomePosition)
-      * kRotationsPerUnitDistance)
-      + kSoftLimitDeadband);
+  public final double mForwardSoftLimitRotations =
+      (((kMaxUnitsLimit - kHomePosition) * kRotationsPerUnitDistance) - kSoftLimitDeadband);
+  public final double mReverseSoftLimitRotations =
+      (((kMinUnitsLimit - kHomePosition) * kRotationsPerUnitDistance) + kSoftLimitDeadband);
 }

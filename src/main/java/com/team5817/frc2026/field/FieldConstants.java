@@ -16,7 +16,6 @@ import java.util.*;
  * have a blue alliance origin.
  */
 public class FieldConstants {
-  
 
   public static class Reef {
     public static final double faceLength = Units.inchesToMeters(36.792600);
@@ -32,7 +31,7 @@ public class FieldConstants {
     public static final List<Map<ReefLevel, Pose2d>> branchPositions2d = new ArrayList<>();
 
     static {
-        var AprilTagFieldLayout = FieldLayout.kTagMap;
+      var AprilTagFieldLayout = FieldLayout.kTagMap;
       // Initialize faces
       centerFaces[0] = AprilTagFieldLayout.getTagPose(18).get().toPose2d();
       centerFaces[1] = AprilTagFieldLayout.getTagPose(19).get().toPose2d();
@@ -93,7 +92,6 @@ public class FieldConstants {
       }
     }
   }
-
 
   public enum ReefLevel {
     L1(Units.inchesToMeters(25.0), 0),

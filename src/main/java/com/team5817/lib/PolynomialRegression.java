@@ -7,7 +7,6 @@ package com.team5817.lib;
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-
 import Jama.Matrix;
 import Jama.QRDecomposition;
 

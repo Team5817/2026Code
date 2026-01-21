@@ -5,7 +5,6 @@ package com.team5817.lib;
 // defined by the Elastic license:
 // https://github.com/Gold872/elastic-dashboard/blob/main/LICENSE
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

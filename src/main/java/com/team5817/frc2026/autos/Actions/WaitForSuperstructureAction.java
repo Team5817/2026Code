@@ -1,12 +1,10 @@
 package com.team5817.frc2026.autos.Actions;
 
 import com.team5817.frc2026.subsystems.Superstructure;
-
 import edu.wpi.first.wpilibj.Timer;
 
 /**
- * Action to wait for a specified amount of time or until the superstructure
- * requests are completed.
+ * Action to wait for a specified amount of time or until the superstructure requests are completed.
  */
 public class WaitForSuperstructureAction implements Action {
   private Superstructure mSuperstructure;
@@ -15,7 +13,7 @@ public class WaitForSuperstructureAction implements Action {
 
   /**
    * Constructor to wait for a specified amount of time.
-   * 
+   *
    * @param timeToWait The time to wait in seconds.
    */
   public WaitForSuperstructureAction(double timeToWait, Superstructure s) {
@@ -23,10 +21,7 @@ public class WaitForSuperstructureAction implements Action {
     mTimeToWait = timeToWait;
   }
 
-  /**
-   * Default constructor to wait indefinitely until the superstructure requests
-   * are completed.
-   */
+  /** Default constructor to wait indefinitely until the superstructure requests are completed. */
   public WaitForSuperstructureAction(Superstructure s) {
     mSuperstructure = s;
     mTimeToWait = Double.MAX_VALUE;
@@ -34,34 +29,27 @@ public class WaitForSuperstructureAction implements Action {
 
   /**
    * Checks if the action is finished.
-   * 
-   * @return true if the specified time has passed or the superstructure requests
-   *         are completed, false otherwise.
+   *
+   * @return true if the specified time has passed or the superstructure requests are completed,
+   *     false otherwise.
    */
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() - mStartTime >= mTimeToWait || mSuperstructure.requestsCompleted();
+    return Timer.getFPGATimestamp() - mStartTime >= mTimeToWait
+        || mSuperstructure.requestsCompleted();
   }
 
-  /**
-   * Starts the action by recording the start time.
-   */
+  /** Starts the action by recording the start time. */
   @Override
   public void start() {
     mStartTime = Timer.getFPGATimestamp();
   }
 
-  /**
-   * Updates the action. No operation needed for this action.
-   */
+  /** Updates the action. No operation needed for this action. */
   @Override
-  public void update() {
-  }
+  public void update() {}
 
-  /**
-   * Called once the action is done. No operation needed for this action.
-   */
+  /** Called once the action is done. No operation needed for this action. */
   @Override
-  public void done() {
-  }
+  public void done() {}
 }

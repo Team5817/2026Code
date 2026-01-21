@@ -1,8 +1,9 @@
 package com.team5817.lib.drivers.Servos;
 
-import java.util.function.UnaryOperator;
-
-import org.littletonrobotics.junction.Logger;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -17,17 +18,14 @@ import com.team254.lib.drivers.Phoenix6Util;
 import com.team254.lib.drivers.TalonFXFactory;
 import com.team254.lib.drivers.TalonUtil;
 import com.team254.lib.util.Util;
-
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import java.util.function.UnaryOperator;
+import org.littletonrobotics.junction.Logger;
 
 public class ServoMotorIOTalonFX implements ServoMotorIO {
 
@@ -81,18 +79,24 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopError.setUpdateFrequency(200, 0.05));
     Phoenix6Util.checkErrorAndRetry(() -> mMainStatorCurrentSignal.setUpdateFrequency(200, 0.05));
     Phoenix6Util.checkErrorAndRetry(() -> mMainOutputVoltageSignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainOutputPercentageSignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopReferenceSignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopOutputSignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopReferenceSlopeSignal.setUpdateFrequency(200, 0.05));
+    Phoenix6Util.checkErrorAndRetry(
+        () -> mMainOutputPercentageSignal.setUpdateFrequency(200, 0.05));
+    Phoenix6Util.checkErrorAndRetry(
+        () -> mMainClosedLoopReferenceSignal.setUpdateFrequency(200, 0.05));
+    Phoenix6Util.checkErrorAndRetry(
+        () -> mMainClosedLoopOutputSignal.setUpdateFrequency(200, 0.05));
+    Phoenix6Util.checkErrorAndRetry(
+        () -> mMainClosedLoopReferenceSlopeSignal.setUpdateFrequency(200, 0.05));
 
     mMainConfig = TalonFXFactory.getDefaultConfig();
 
     mMainConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    mMainConfig.Feedback.SensorToMechanismRatio = (mConstants.kMainConstants.invert_sensor_phase ? -1 : 1);
+    mMainConfig.Feedback.SensorToMechanismRatio =
+        (mConstants.kMainConstants.invert_sensor_phase ? -1 : 1);
 
     mMainConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = mForwardSoftLimitRotations;
-    mMainConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable =  false;//TODO Set to true and fix the value
+    mMainConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable =
+        false; // TODO Set to true and fix the value
 
     mMainConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = mReverseSoftLimitRotations;
     mMainConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
@@ -110,8 +114,10 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMainConfig.Slot1.kI = mConstants.kPositionKi;
     mMainConfig.Slot1.kD = mConstants.kPositionKd;
     mMainConfig.Slot1.kV = mConstants.kVelocityFeedforward;
-    mMainConfig.MotionMagic.MotionMagicCruiseVelocity = mConstants.unitsToRotations(mConstants.kCruiseVelocity);
-    mMainConfig.MotionMagic.MotionMagicAcceleration = mConstants.unitsToRotations(mConstants.kAcceleration);
+    mMainConfig.MotionMagic.MotionMagicCruiseVelocity =
+        mConstants.unitsToRotations(mConstants.kCruiseVelocity);
+    mMainConfig.MotionMagic.MotionMagicAcceleration =
+        mConstants.unitsToRotations(mConstants.kAcceleration);
     mMainConfig.MotionMagic.MotionMagicJerk = mConstants.kJerk;
 
     mMainConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = mConstants.kRampRate;
@@ -120,7 +126,7 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
 
     mMainConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = mConstants.kRampRate;
     mMainConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = mConstants.kRampRate;
-    mMainConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = mConstants.kRampRate; 
+    mMainConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = mConstants.kRampRate;
     mMainConfig.CurrentLimits.SupplyCurrentLimit = mConstants.kSupplyCurrentLimit;
     mMainConfig.CurrentLimits.SupplyCurrentLimitEnable = mConstants.kEnableSupplyCurrentLimit;
 
@@ -133,29 +139,36 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMainConfig.MotorOutput.PeakForwardDutyCycle = mConstants.kMaxForwardOutput / 12.0;
     mMainConfig.MotorOutput.PeakReverseDutyCycle = mConstants.kMaxReverseOutput / 12.0;
 
-    mMainConfig.MotorOutput.Inverted = (mConstants.kMainConstants.counterClockwisePositive
-        ? InvertedValue.CounterClockwise_Positive
-        : InvertedValue.Clockwise_Positive);
+    mMainConfig.MotorOutput.Inverted =
+        (mConstants.kMainConstants.counterClockwisePositive
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive);
 
     mMainConfig.MotorOutput.NeutralMode = mConstants.kNeutralMode;
 
     for (int i = 0; i < mFollowers.length; ++i) {
-      mFollowers[i] = TalonFXFactory.createPermanentFollowerTalon(
-          mConstants.kFollowerConstants[i].id, mConstants.kMainConstants.id, mConstants.kFollowerOpposeMasterDirection);
+      mFollowers[i] =
+          TalonFXFactory.createPermanentFollowerTalon(
+              mConstants.kFollowerConstants[i].id,
+              mConstants.kMainConstants.id,
+              mConstants.kFollowerOpposeMasterDirection);
 
       TalonFX follower = mFollowers[i];
       mFollowerConfigs[i] = new TalonFXConfiguration();
       TalonFXConfiguration followerConfig = mFollowerConfigs[i];
       Phoenix6Util.checkErrorAndRetry(() -> follower.getConfigurator().refresh(followerConfig));
 
-      followerConfig.MotorOutput.Inverted = (mConstants.kMainConstants.counterClockwisePositive
-          ? InvertedValue.CounterClockwise_Positive
-          : InvertedValue.Clockwise_Positive);
+      followerConfig.MotorOutput.Inverted =
+          (mConstants.kMainConstants.counterClockwisePositive
+              ? InvertedValue.CounterClockwise_Positive
+              : InvertedValue.Clockwise_Positive);
       followerConfig.MotorOutput.NeutralMode = mConstants.kNeutralMode;
       followerConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
       followerConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
       follower.setControl(
-          new Follower(mConstants.kMainConstants.id.getDeviceNumber(), mConstants.kFollowerOpposeMasterDirection));
+          new Follower(
+              mConstants.kMainConstants.id.getDeviceNumber(),
+              mConstants.kFollowerOpposeMasterDirection));
 
       TalonUtil.applyAndCheckConfiguration(follower, followerConfig);
     }
@@ -182,22 +195,27 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mServoInputs.output_voltage = mMainOutputVoltageSignal.asSupplier().get().in(Volts);
     mServoInputs.output_percent = mMainOutputPercentageSignal.asSupplier().get();
     mServoInputs.velocity_rps = mMainVelocitySignal.asSupplier().get().in(RotationsPerSecond);
-    mServoInputs.rotor_position = mConstants.rotationsToUnits(mMain.getPosition().getValue().in(Rotations));
+    mServoInputs.rotor_position =
+        mConstants.rotationsToUnits(mMain.getPosition().getValue().in(Rotations));
     mServoInputs.position_rots = mMainPositionSignal.asSupplier().get().in(Rotations);
     mServoInputs.position_units = mConstants.rotationsToHomedUnits(mServoInputs.position_rots);
     mServoInputs.velocity_unitspS = mConstants.rotationsToHomedUnits(mServoInputs.velocity_rps);
     mServoInputs.active_trajectory_position = mMainClosedLoopReferenceSignal.asSupplier().get();
 
     final double newVelocity = mMainClosedLoopReferenceSlopeSignal.asSupplier().get();
-    if (Util.epsilonEquals(newVelocity, mConstants.kCruiseVelocity, Math.max(1, mConstants.kDeadband))
+    if (Util.epsilonEquals(
+            newVelocity, mConstants.kCruiseVelocity, Math.max(1, mConstants.kDeadband))
         || Util.epsilonEquals(
-            newVelocity, mServoInputs.active_trajectory_velocity, Math.max(1, mConstants.kDeadband))) {
+            newVelocity,
+            mServoInputs.active_trajectory_velocity,
+            Math.max(1, mConstants.kDeadband))) {
       // Mechanism is ~constant velocity.
       mServoInputs.active_trajectory_acceleration = 0.0;
     } else {
       // Mechanism is accelerating.
-      mServoInputs.active_trajectory_acceleration = Math
-          .signum(newVelocity - mServoInputs.active_trajectory_velocity) * mConstants.kAcceleration;
+      mServoInputs.active_trajectory_acceleration =
+          Math.signum(newVelocity - mServoInputs.active_trajectory_velocity)
+              * mConstants.kAcceleration;
     }
     mServoInputs.active_trajectory_velocity = newVelocity;
   }
@@ -205,16 +223,17 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
   /**
    * Sets the stator current limit.
    *
-   * @param limit  The current limit in amps.
+   * @param limit The current limit in amps.
    * @param enable Whether to enable the current limit.
    */
   @Override
   public void setStatorCurrentLimit(double limit, boolean enable) {
-    changeTalonConfig((conf) -> {
-      conf.CurrentLimits.StatorCurrentLimit = limit;
-      conf.CurrentLimits.StatorCurrentLimitEnable = enable;
-      return conf;
-    });
+    changeTalonConfig(
+        (conf) -> {
+          conf.CurrentLimits.StatorCurrentLimit = limit;
+          conf.CurrentLimits.StatorCurrentLimitEnable = enable;
+          return conf;
+        });
   }
 
   /**
@@ -224,10 +243,11 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
    */
   @Override
   public void setNeutralMode(NeutralModeValue mode) {
-    changeTalonConfig((conf) -> {
-      conf.MotorOutput.NeutralMode = mode;
-      return conf;
-    });
+    changeTalonConfig(
+        (conf) -> {
+          conf.MotorOutput.NeutralMode = mode;
+          return conf;
+        });
   }
 
   @Override
@@ -240,20 +260,16 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMain.setControl(positionControl.withPosition(demand));
   }
 
-  /**
-   * Zeros the sensors.
-   */
+  /** Zeros the sensors. */
   @Override
   public void zeroSensors(double newPos) {
     mMain.setPosition(newPos, mConstants.kCANTimeout);
   }
 
-  /**
-   * Forces the sensors to zero.
-   */
+  /** Forces the sensors to zero. */
   @Override
   public void forceZeroSensors() {
-    Logger.recordOutput(mConstants.kName+" Status Cosde", mMain.setPosition(0));
+    Logger.recordOutput(mConstants.kName + " Status Cosde", mMain.setPosition(0));
   }
 
   @Override
@@ -264,7 +280,7 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
   /**
    * Sets the motion magic configurations.
    *
-   * @param accel    The acceleration.
+   * @param accel The acceleration.
    * @param velocity The cruise velocity.
    */
   public void setMotionMagicConfigs(double accel, double velocity) {
@@ -306,9 +322,7 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     writeConfigs();
   }
 
-  /**
-   * Writes the configurations to the Talon.
-   */
+  /** Writes the configurations to the Talon. */
   @Override
   public void writeConfigs() {
     for (int i = 0; i < mFollowers.length; ++i) {

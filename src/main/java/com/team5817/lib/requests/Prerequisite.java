@@ -7,10 +7,8 @@
 
 package com.team5817.lib.requests;
 
-/**
- * A state which must be met before a Request can be acted upon
- */
+/** A state which must be met before a Request can be acted upon */
 @FunctionalInterface
 public interface Prerequisite {
-	public abstract boolean met();
+  public abstract boolean met();
 }

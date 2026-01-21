@@ -7,22 +7,22 @@
 
 package com.team5817.lib.drivers.Rollers;
 
+import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.requests.Request;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.Alert;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
 import org.littletonrobotics.junction.Logger;
-
-import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.requests.Request;
 
 public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem {
   private final String inputsName;
   private final RollerSubsystemIO io;
-  protected final RollerSubsystemIOInputsAutoLogged inputs = new RollerSubsystemIOInputsAutoLogged();
-  private final Debouncer motorConnectedDebouncer = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
+  protected final RollerSubsystemIOInputsAutoLogged inputs =
+      new RollerSubsystemIOInputsAutoLogged();
+  private final Debouncer motorConnectedDebouncer =
+      new Debouncer(0.5, Debouncer.DebounceType.kFalling);
   private final Alert disconnected;
   private final Alert tempFault;
 
@@ -32,7 +32,9 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   @Setter
   @Accessors(prefix = "m")
   private S mState;
+
   protected boolean atState = true;
+
   public boolean atState() {
     return atState;
   }
@@ -55,13 +57,14 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   public void readPeriodicInputs() {
     io.updateInputs(inputs);
     Logger.processInputs(inputsName, inputs);
-    if(mState.getControlMode() == RollerControlMode.VELOCITY){
-      atState = Math.abs(inputs.data.velocityRotsPerSec() - mState.getDemand()) < mState.getToleranceRadsPerSec();
+    if (mState.getControlMode() == RollerControlMode.VELOCITY) {
+      atState =
+          Math.abs(inputs.data.velocityRotsPerSec() - mState.getDemand())
+              < mState.getToleranceRadsPerSec();
     } else {
       atState = true;
     }
-    disconnected.set(
-        !motorConnectedDebouncer.calculate(inputs.data.connected()));
+    disconnected.set(!motorConnectedDebouncer.calculate(inputs.data.connected()));
     tempFault.set(inputs.data.tempFault());
   }
 
@@ -77,11 +80,12 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
         io.runVolts(mState.getDemand());
         break;
     }
-    
+
     Logger.recordOutput(inputsName + "/State", mState);
     Logger.recordOutput(inputsName + "/Control Mode", mState.getControlMode());
-    Logger.recordOutput(inputsName+ "/Desired", mState.getDemand());
-    Logger.recordOutput(inputsName + "/Error", mState.getDemand()- inputs.data.velocityRotsPerSec());
+    Logger.recordOutput(inputsName + "/Desired", mState.getDemand());
+    Logger.recordOutput(
+        inputsName + "/Error", mState.getDemand() - inputs.data.velocityRotsPerSec());
     Logger.recordOutput(inputsName + "/BrakeModeEnabled", brakeModeEnabled);
     Logger.recordOutput(inputsName + "/atState", atState);
   }
@@ -91,8 +95,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   }
 
   public void setBrakeMode(boolean enabled) {
-    if (brakeModeEnabled == enabled)
-      return;
+    if (brakeModeEnabled == enabled) return;
     brakeModeEnabled = enabled;
     io.setBrakeMode(enabled);
   }

@@ -8,9 +8,7 @@ import com.team5817.lib.requests.NeverEndingRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
 import com.team5817.lib.requests.SequentialRequest;
-
 import lombok.Setter;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends Subsystem {
@@ -23,8 +21,7 @@ public class Superstructure extends Subsystem {
   public Shooter mShooter;
   public Climb mClimb;
 
-  @Setter
-  private boolean allowAutoShoot = true;
+  @Setter private boolean allowAutoShoot = true;
 
   public Superstructure(Drive drive, Shooter shooter, Climb climb) {
     mDrive = drive;
@@ -33,24 +30,23 @@ public class Superstructure extends Subsystem {
     this.requestExecutor = new RequestExecutor();
   }
 
-
-  public Request CloseShotRequest(){
+  public Request CloseShotRequest() {
     return new SequentialRequest(
-      mShooter.stateRequest(Shooter.State.CLOSE),
-      //indexer on
-      new NeverEndingRequest()
-    ).addName("Close Shot");
+            mShooter.stateRequest(Shooter.State.CLOSE),
+            // indexer on
+            new NeverEndingRequest())
+        .addName("Close Shot");
     // .withCleanup(
     //   () -> mIndexer.conformToState(Indexer.State.OFF)
     // );
   }
 
-  public Request FarShotRequest(){
+  public Request FarShotRequest() {
     return new SequentialRequest(
-      mShooter.stateRequest(Shooter.State.FAR),
-      //indexer on
-      new NeverEndingRequest()
-    ).addName("FarShot");
+            mShooter.stateRequest(Shooter.State.FAR),
+            // indexer on
+            new NeverEndingRequest())
+        .addName("FarShot");
     // .withCleanup(
     //   () -> mIndexer.conformToState(Indexer.State.OFF)
     // );
@@ -71,9 +67,8 @@ public class Superstructure extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    if(!requestsCompleted())
+    if (!requestsCompleted())
       Logger.recordOutput("Active Request", requestExecutor.getCurrentRequest().getName());
-    else
-      Logger.recordOutput("Active Request", "null");
+    else Logger.recordOutput("Active Request", "null");
   }
 }

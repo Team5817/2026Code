@@ -5,32 +5,26 @@ import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
-
 import lombok.Getter;
 
-/**
- * The IntakeDeploy class controls the deployment mechanism of the intake
- * system.
- */
+/** The IntakeDeploy class controls the deployment mechanism of the intake system. */
 public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.State> {
 
   /**
    * Constructs a new IntakeDeploy subsystem.
    *
-   * @param constants         The constants for the servo motor subsystem.
+   * @param constants The constants for the servo motor subsystem.
    * @param encoder_constants The constants for the absolute encoder.
    */
   public IntakeDeploy(final ServoConstants constants, ServoMotorIO io) {
     super(IntakeDeploy.State.GROUND, io);
   }
 
-  final static double kStrictError = 20;
-  final static double kMediumError = 50;
-  final static double kLenientError = 80;
+  static final double kStrictError = 20;
+  static final double kMediumError = 50;
+  static final double kLenientError = 80;
 
-  /**
-   * Represents the different states of the intake deployment.
-   */
+  /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
     GROUND(-144, kStrictError),
     STOW(0, kMediumError),
@@ -38,18 +32,14 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
     ZERO(0, kStrictError),
     DISABLE();
 
-    @Getter
-    private double demand = 0;
-    @Getter
-    private double allowableError = 0;
-    @Getter
-    private boolean disabled = false;
+    @Getter private double demand = 0;
+    @Getter private double allowableError = 0;
+    @Getter private boolean disabled = false;
 
     /**
-     * p
-     * Constructs a new State.
+     * p Constructs a new State.
      *
-     * @param output          The output value for the state.
+     * @param output The output value for the state.
      * @param allowable_error The allowable error for the state.
      */
     State(double output, double allowable_error) {
@@ -67,9 +57,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
     }
   }
 
-  /**
-   * Outputs telemetry data for the subsystem.
-   */
+  /** Outputs telemetry data for the subsystem. */
   @Override
   public void outputTelemetry() {
     RobotVisualizer.updateIntakeAngle(getPosition());

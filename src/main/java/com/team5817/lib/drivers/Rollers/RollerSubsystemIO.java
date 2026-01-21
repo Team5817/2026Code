@@ -23,26 +23,19 @@ public interface RollerSubsystemIO {
       double torqueCurrentAmps,
       double tempCelsius,
       boolean tempFault,
-      boolean connected) {
-  }
+      boolean connected) {}
 
-  default void updateInputs(RollerSubsystemIOInputs inputs) {
-  }
+  default void updateInputs(RollerSubsystemIOInputs inputs) {}
 
   /* Run rollers at volts */
-  default void runVolts(double volts) {
-  }
+  default void runVolts(double volts) {}
 
   /* Run rollers at velocity */
-  default void runVelocity(double rps) {
-  }
+  default void runVelocity(double rps) {}
 
-  default void runTorqueCurrent(double amps) {
-  }
+  default void runTorqueCurrent(double amps) {}
 
-  default void setCurrentLimit(double currentLimit) {
-  }
+  default void setCurrentLimit(double currentLimit) {}
 
-  default void setBrakeMode(boolean enabled) {
-  }
+  default void setBrakeMode(boolean enabled) {}
 }

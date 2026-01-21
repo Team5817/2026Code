@@ -1,19 +1,6 @@
 package com.team5817.frc2026.subsystems.Vision;
 
-
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Alert;
-import edu.wpi.first.wpilibj.Alert.AlertType;
-
 import static com.team5817.frc2026.subsystems.Vision.VisionConstants.*;
-
-import java.util.LinkedList;
-import java.util.List;
-import org.littletonrobotics.junction.Logger;
 
 import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
@@ -21,6 +8,16 @@ import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Vision.VisionIO;
 import com.team5817.lib.drivers.Vision.VisionIO.PoseObservationType;
 import com.team5817.lib.drivers.Vision.VisionIOInputsAutoLogged;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import java.util.LinkedList;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class Vision extends Subsystem {
   private final VisionConsumer consumer;
@@ -166,25 +163,25 @@ public class Vision extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-       // Log summary data
+    // Log summary data
     Logger.recordOutput(
-      "Vision/Summary/TagPoses", allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
-  Logger.recordOutput(
-      "Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
-  Logger.recordOutput(
-      "Vision/Summary/RobotPosesAccepted",
-      allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
-  Logger.recordOutput(
-      "Vision/Summary/RobotPosesRejected",
-      allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
+        "Vision/Summary/TagPoses", allTagPoses.toArray(new Pose3d[allTagPoses.size()]));
+    Logger.recordOutput(
+        "Vision/Summary/RobotPoses", allRobotPoses.toArray(new Pose3d[allRobotPoses.size()]));
+    Logger.recordOutput(
+        "Vision/Summary/RobotPosesAccepted",
+        allRobotPosesAccepted.toArray(new Pose3d[allRobotPosesAccepted.size()]));
+    Logger.recordOutput(
+        "Vision/Summary/RobotPosesRejected",
+        allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
   }
-  public double timeSinceUpdate(){
+
+  public double timeSinceUpdate() {
     double minTimeSince = Double.MAX_VALUE;
-    for(int i =0; i < io.length; i++){
-      if((inputs[i].poseObservations.length == 0))
-        continue;
-      double timeSince = inputs[i].poseObservations[0].timestamp();//TODO test
-      if(timeSince < minTimeSince){
+    for (int i = 0; i < io.length; i++) {
+      if ((inputs[i].poseObservations.length == 0)) continue;
+      double timeSince = inputs[i].poseObservations[0].timestamp(); // TODO test
+      if (timeSince < minTimeSince) {
         minTimeSince = timeSince;
       }
     }
@@ -198,12 +195,14 @@ public class Vision extends Subsystem {
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs);
   }
+
   @Override
   public void stop() {
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {
       io[cameraIndex].stop();
     }
   }
+
   @Override
   public void start() {
     for (int cameraIndex = 0; cameraIndex < io.length; cameraIndex++) {

@@ -1,16 +1,15 @@
 package com.team5817.lib.requests;
 
-import com.team5817.lib.drivers.BeamBreak;
 import com.team254.lib.util.TimeDelayedBoolean;
 import com.team5817.lib.RobotMode;
+import com.team5817.lib.drivers.BeamBreak;
 
 public class BreakWait {
   /**
    * BeamBreak Sensor reading.
-   * 
-   * @param mBreak       BeamBreak Sensor.
+   *
+   * @param mBreak BeamBreak Sensor.
    * @param target_state If wanted reading is true (broken) or false (not broken).
-   * 
    * @return Boolean for if target state is acheived.
    */
   @SuppressWarnings("unused")
@@ -18,8 +17,7 @@ public class BreakWait {
     return new Request() {
 
       @Override
-      public void act() {
-      }
+      public void act() {}
 
       @Override
       public boolean isFinished() {
@@ -33,12 +31,10 @@ public class BreakWait {
 
   /**
    * Debounced BeamBreak Sensor reading.
-   * 
-   * @param mBreak               BeamBreak Sensor.
-   * @param target_state         If wanted reading is true (broken) or false (not
-   *                             broken).
+   *
+   * @param mBreak BeamBreak Sensor.
+   * @param target_state If wanted reading is true (broken) or false (not broken).
    * @param delayed_wait_seconds Debounces time from a BeamBreak Sensor.
-   * 
    * @return Boolean for if target state is acheived after debouncing the signal.
    */
   @SuppressWarnings("unused")
@@ -48,8 +44,7 @@ public class BreakWait {
       TimeDelayedBoolean timeout = new TimeDelayedBoolean();
 
       @Override
-      public void act() {
-      }
+      public void act() {}
 
       @Override
       public boolean isFinished() {

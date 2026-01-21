@@ -1,14 +1,13 @@
 package com.team5817.frc2026.controlboard;
 
 import com.team5817.frc2026.ActiveTracker;
-import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 
 /**
- * The DriverControls class handles the input from the driver and co-driver
- * controllers
- * and translates them into actions for the robot's subsystems.
+ * The DriverControls class handles the input from the driver and co-driver controllers and
+ * translates them into actions for the robot's subsystems.
  */
 public class DriverControls {
 
@@ -18,9 +17,8 @@ public class DriverControls {
   Drive d;
 
   /**
-   * Constructor for the DriverControls class.
-   * Initializes the Drive and Superstructure instances and sets the initial goal
-   * state.
+   * Constructor for the DriverControls class. Initializes the Drive and Superstructure instances
+   * and sets the initial goal state.
    */
   public DriverControls(Drive d, Superstructure s) {
     this.d = d;
@@ -33,13 +31,12 @@ public class DriverControls {
   /* ONE CONTROLLER */
 
   /**
-   * Handles the input for the one controller mode.
-   * This mode is used when only one controller is available for the driver.
+   * Handles the input for the one controller mode. This mode is used when only one controller is
+   * available for the driver.
    */
   public void oneControllerMode() {
     // mDrive.overrideHeading(true);
-    if (driver.getStartButton())
-      d.allianceZeroGyro();
+    if (driver.getStartButton()) d.allianceZeroGyro();
 
     // //LT intake
     // if(driver.leftTrigger.wasActivated()){
@@ -52,44 +49,46 @@ public class DriverControls {
     // if(driver.getLeftBumperButton()){
     //   s.mIndexer.conformToState(Superstructure.IndexerState.REVERSE);
     // }
-    //RB don't Shoot
+    // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
-    //RT Slow mode
-    mControlBoard.setSwerveScalar(1-driver.getRightTriggerAxis()*.7);//coefficient is percent to reduce speed by
-    
-    //Y Close
-    if(driver.getYButtonPressed()){
+    // RT Slow mode
+    mControlBoard.setSwerveScalar(
+        1 - driver.getRightTriggerAxis() * .7); // coefficient is percent to reduce speed by
+
+    // Y Close
+    if (driver.getYButtonPressed()) {
       s.request(s.CloseShotRequest());
     }
-    if(driver.getYButtonReleased()){
+    if (driver.getYButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
-    //A Far
-    if(driver.getAButtonPressed()){
+    // A Far
+    if (driver.getAButtonPressed()) {
       s.request(s.FarShotRequest());
     }
-    if(driver.getAButtonReleased()){
+    if (driver.getAButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
-    //B Force Hood
-    if(driver.getBButtonPressed()){
+    // B Force Hood
+    if (driver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
     }
-    if(driver.getBButtonReleased()){
+    if (driver.getBButtonReleased()) {
       s.mShooter.forceStow(false);
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
-    //Down Climb
-    if(driver.POV180.wasActivated()){
+    // Down Climb
+    if (driver.POV180.wasActivated()) {
       s.mClimb.advanceClimbRequest().act();
     }
-    //Up Unclimb
-    if(driver.POV0.wasActivated()){
+    // Up Unclimb
+    if (driver.POV0.wasActivated()) {
       s.mClimb.resetClimbStages();
     }
-    //Controller Shake
-    if(ActiveTracker.shouldShakeController()){
-      driver.rumble(0.3, 1);;
+    // Controller Shake
+    if (ActiveTracker.shouldShakeController()) {
+      driver.rumble(0.3, 1);
+      ;
     }
   }
 
@@ -99,11 +98,11 @@ public class DriverControls {
   double lastTime = 0;
 
   /**
-   * Handles the input for the two controller mode.
-   * This mode is used when both driver and co-driver controllers are available.
+   * Handles the input for the two controller mode. This mode is used when both driver and co-driver
+   * controllers are available.
    */
   public void twoControllerMode() {
-    if (driver.getStartButton()){
+    if (driver.getStartButton()) {
       d.allianceZeroGyro();
     }
   }

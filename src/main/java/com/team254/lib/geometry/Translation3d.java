@@ -26,8 +26,7 @@ import java.util.Objects;
  * origin facing in the positive X direction, forward is positive X, left is positive Y, and up is
  * positive Z.
  */
-
-public class Translation3d implements ITranslation3d<Translation3d>{
+public class Translation3d implements ITranslation3d<Translation3d> {
   private final double m_x;
   private final double m_y;
   private final double m_z;
@@ -92,7 +91,6 @@ public class Translation3d implements ITranslation3d<Translation3d>{
 
   /**
    * Calculates the distance between two translations in 3D space.
-   *
    *
    * @param other The translation to compute the distance to.
    * @return The distance between the two translations.
@@ -164,8 +162,9 @@ public class Translation3d implements ITranslation3d<Translation3d>{
     final var qprime = other.getQuaternion().times(p).times(other.getQuaternion().inverse());
     return new Translation3d(qprime.getX(), qprime.getY(), qprime.getZ());
   }
-  public double dot(Translation3d other){
-   return m_x*other.m_x+m_y*other.m_y+m_z*other.m_z;
+
+  public double dot(Translation3d other) {
+    return m_x * other.m_x + m_y * other.m_y + m_z * other.m_z;
   }
 
   /**
@@ -279,24 +278,24 @@ public class Translation3d implements ITranslation3d<Translation3d>{
 
   @Override
   public double distance(Translation3d other) {
-      double dx = other.m_x - this.m_x;
-      double dy = other.m_y - this.m_y;
-      double dz = other.m_z - this.m_z;
-      return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    double dx = other.m_x - this.m_x;
+    double dy = other.m_y - this.m_y;
+    double dz = other.m_z - this.m_z;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
-  
+
   @Override
   public Translation3d add(Translation3d other) {
-      return new Translation3d(this.m_x + other.m_x, this.m_y + other.m_y, this.m_z + other.m_z);
+    return new Translation3d(this.m_x + other.m_x, this.m_y + other.m_y, this.m_z + other.m_z);
   }
-  
+
   @Override
   public String toCSV() {
-      return String.format("%f,%f,%f", this.m_x, this.m_y, this.m_z);
+    return String.format("%f,%f,%f", this.m_x, this.m_y, this.m_z);
   }
-  
+
   @Override
   public Translation3d getTranslation() {
-      return this; // Simply return the current instance.
+    return this; // Simply return the current instance.
   }
 }

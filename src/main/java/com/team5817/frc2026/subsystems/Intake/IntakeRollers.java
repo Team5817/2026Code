@@ -1,35 +1,38 @@
 package com.team5817.frc2026.subsystems.Intake;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants.RollerConstants.FeederState;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants.RollerConstants.LowIndexerState;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants.RollerConstants.SideIndexerState;
-import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
+import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.littletonrobotics.junction.Logger;
 
 public class IntakeRollers extends Subsystem {
 
   private final RollerSubsystem<FeederState> feeder;
   private final RollerSubsystem<LowIndexerState> lowIndexer;
   private final RollerSubsystem<SideIndexerState> sideIndexer;
-  @Setter @Getter @Accessors(prefix = "m")
+
+  @Setter
+  @Getter
+  @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
   public IntakeRollers(
-      RollerSubsystemIO FeederIO,
-      RollerSubsystemIO LowIndexerIO,
-      RollerSubsystemIO SideIndexerIO) {
+      RollerSubsystemIO FeederIO, RollerSubsystemIO LowIndexerIO, RollerSubsystemIO SideIndexerIO) {
     this.feeder = new RollerSubsystem<FeederState>(FeederState.IDLE, "Intake/Feeder", FeederIO);
-    this.lowIndexer = new RollerSubsystem<LowIndexerState>(LowIndexerState.IDLE, "Intake/Bottom Indexer", LowIndexerIO);
-    this.sideIndexer = new RollerSubsystem<SideIndexerState>(SideIndexerState.IDLE, "Intake/Side Indexer", SideIndexerIO);
+    this.lowIndexer =
+        new RollerSubsystem<LowIndexerState>(
+            LowIndexerState.IDLE, "Intake/Bottom Indexer", LowIndexerIO);
+    this.sideIndexer =
+        new RollerSubsystem<SideIndexerState>(
+            SideIndexerState.IDLE, "Intake/Side Indexer", SideIndexerIO);
   }
 
   public enum State {
@@ -39,14 +42,14 @@ public class IntakeRollers extends Subsystem {
     EXHAUST(FeederState.EXHAUST, LowIndexerState.EXHAUST, SideIndexerState.EXHAUST),
     IDLE_EXAUST(FeederState.IDLE, LowIndexerState.SLOW_EXAUST, SideIndexerState.SLOW_EXAUST);
 
-    @Getter
-    private final FeederState feederState;
-    @Getter
-    private final LowIndexerState lowIndexerState;
-    @Getter
-    private final SideIndexerState sideIndexerState;
+    @Getter private final FeederState feederState;
+    @Getter private final LowIndexerState lowIndexerState;
+    @Getter private final SideIndexerState sideIndexerState;
 
-    State(FeederState feederState, LowIndexerState lowIndexerState, SideIndexerState sideIndexerState) {
+    State(
+        FeederState feederState,
+        LowIndexerState lowIndexerState,
+        SideIndexerState sideIndexerState) {
       this.feederState = feederState;
       this.lowIndexerState = lowIndexerState;
       this.sideIndexerState = sideIndexerState;
@@ -75,12 +78,13 @@ public class IntakeRollers extends Subsystem {
   public Request stateRequest(State state) {
     setState(state);
     return new ParallelRequest(
-      feeder.stateRequest(state.feederState), 
-      sideIndexer.stateRequest(state.sideIndexerState),
-      lowIndexer.stateRequest(state.lowIndexerState));
+        feeder.stateRequest(state.feederState),
+        sideIndexer.stateRequest(state.sideIndexerState),
+        lowIndexer.stateRequest(state.lowIndexerState));
   }
+
   @Override
   public void outputTelemetry() {
-      Logger.recordOutput("Intake/RollerState", getState());
+    Logger.recordOutput("Intake/RollerState", getState());
   }
 }

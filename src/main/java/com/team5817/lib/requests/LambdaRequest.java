@@ -7,28 +7,26 @@
 
 package com.team5817.lib.requests;
 
-/**
- * Add your docs here.
- */
+/** Add your docs here. */
 public class LambdaRequest extends Request {
 
-	public interface VoidInterface {
-		void f();
-	}
+  public interface VoidInterface {
+    void f();
+  }
 
-	VoidInterface mF;
+  VoidInterface mF;
 
-	public LambdaRequest(VoidInterface f) {
-		mF = f;
-	}
+  public LambdaRequest(VoidInterface f) {
+    mF = f;
+  }
 
-	@Override
-	public void act() {
-		mF.f();
-	}
+  @Override
+  public void act() {
+    mF.f();
+  }
 
-	@Override
-	public String toString() {
-		return "LambdaRequest()";
-	}
+  @Override
+  public String toString() {
+    return "LambdaRequest()";
+  }
 }

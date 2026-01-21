@@ -28,8 +28,10 @@ public final class ClimbConstants {
     kClimbServoConstants.kKv = .1;
     kClimbServoConstants.kKg = 7;
 
-    kClimbServoConstants.kCruiseVelocity = 9999.0 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s
-    kClimbServoConstants.kAcceleration = 300 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s^2
+    kClimbServoConstants.kCruiseVelocity =
+        9999.0 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s
+    kClimbServoConstants.kAcceleration =
+        300 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s^2
 
     kClimbServoConstants.kMaxForwardOutput = 12.0;
     kClimbServoConstants.kMaxReverseOutput = -12.0;
@@ -47,6 +49,5 @@ public final class ClimbConstants {
     kClimbServoConstants.kHomingTimeout = 0.5;
     kClimbServoConstants.kHomingOutput = -.25;
     kClimbServoConstants.kHomingVelocityWindow = 0.1;
-
   }
 }

@@ -22,19 +22,16 @@ import com.team254.lib.geometry.Rotation2d;
 import com.team5817.frc2026.generated.TunerConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.lib.util.PhoenixUtil;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import java.util.Queue;
-
 import org.littletonrobotics.junction.Logger;
 
 /** IO implementation for Pigeon 2. */
 public class GyroIOPigeon2 implements GyroIO {
-  private final Pigeon2 pigeon = new Pigeon2(
-      TunerConstants.DrivetrainConstants.Pigeon2Id,
-      TunerConstants.Pigeon2Bus);
+  private final Pigeon2 pigeon =
+      new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id, TunerConstants.Pigeon2Bus);
   private final StatusSignal<Angle> yaw = pigeon.getYaw();
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
@@ -57,16 +54,19 @@ public class GyroIOPigeon2 implements GyroIO {
     inputs.yawPosition = Rotation2d.fromDegrees(yaw.getValueAsDouble());
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(yawVelocity.getValueAsDouble());
 
-    inputs.odometryYawTimestamps = yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
-    inputs.odometryYawPositions = yawPositionQueue.stream()
-        .map((Double value) -> Rotation2d.fromDegrees(value))
-        .toArray(Rotation2d[]::new);
+    inputs.odometryYawTimestamps =
+        yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
+    inputs.odometryYawPositions =
+        yawPositionQueue.stream()
+            .map((Double value) -> Rotation2d.fromDegrees(value))
+            .toArray(Rotation2d[]::new);
     yawTimestampQueue.clear();
     yawPositionQueue.clear();
   }
 
   @Override
   public void resetYaw(Rotation2d newYaw) {
-    Logger.recordOutput("GyroResetCode", PhoenixUtil.tryUntilOk(5, () -> pigeon.setYaw(newYaw.getDegrees(), 0.25)));
+    Logger.recordOutput(
+        "GyroResetCode", PhoenixUtil.tryUntilOk(5, () -> pigeon.setYaw(newYaw.getDegrees(), 0.25)));
   }
 }

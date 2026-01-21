@@ -1,7 +1,5 @@
 package com.team5817.lib.swerve;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
@@ -11,8 +9,8 @@ import com.team254.lib.swerve.ChassisSpeeds;
 import com.team254.lib.trajectory.TrajectoryIterator;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
 import com.team5817.lib.motion.PPPathPointState;
-
 import edu.wpi.first.wpilibj.Timer;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveMotionPlanner {
   // Pure Pursuit Constants
@@ -54,8 +52,7 @@ public class DriveMotionPlanner {
   // PID controllers for path following
   double mDt = 0.0;
 
-  public DriveMotionPlanner() {
-  }
+  public DriveMotionPlanner() {}
 
   public void setTrajectory(final TrajectoryIterator trajectory, double timeout) {
     mCurrentTrajectory = trajectory;
@@ -80,18 +77,17 @@ public class DriveMotionPlanner {
     chassisSpeeds.vxMetersPerSecond = (chassisSpeeds.vxMetersPerSecond) + kPathk * pid_error.dx;
     chassisSpeeds.vyMetersPerSecond = (chassisSpeeds.vyMetersPerSecond) + kPathk * pid_error.dy;
 
-    chassisSpeeds.omegaRadiansPerSecond = chassisSpeeds.omegaRadiansPerSecond + kPathk * pid_error.dtheta;
+    chassisSpeeds.omegaRadiansPerSecond =
+        chassisSpeeds.omegaRadiansPerSecond + kPathk * pid_error.dtheta;
 
     return chassisSpeeds;
   }
 
   public ChassisSpeeds update(double timestamp, Pose2d current_state) {
 
-    if (mCurrentTrajectory == null)
-      return null;
+    if (mCurrentTrajectory == null) return null;
 
-    if (!Double.isFinite(mLastTime))
-      mLastTime = timestamp;
+    if (!Double.isFinite(mLastTime)) mLastTime = timestamp;
 
     mDt = timestamp - mLastTime;
     mLastTime = timestamp;
@@ -101,36 +97,34 @@ public class DriveMotionPlanner {
     // Compute error in robot frame
     mPrevHeadingError = mError.getRotation();
 
-    var translationalError = mCurrentState.getTranslation().inverse().translateBy(mSetpoint.getPose().getTranslation());
-    var rotationalError = mSetpoint.getPose().getRotation().rotateBy(mCurrentState.getRotation().inverse());
+    var translationalError =
+        mCurrentState.getTranslation().inverse().translateBy(mSetpoint.getPose().getTranslation());
+    var rotationalError =
+        mSetpoint.getPose().getRotation().rotateBy(mCurrentState.getRotation().inverse());
     mError = new Pose2d(translationalError, rotationalError);
 
     sample_point = mCurrentTrajectory.advance(mDt);
     mSetpoint = sample_point;
     Logger.recordOutput("Following Pose", (mSetpoint.getPose().wpi()));
-    var chassis_speeds = new ChassisSpeeds(
-        sample_point.getXVel(),
-        sample_point.getYVel(),
-        sample_point.getThetaVel());
+    var chassis_speeds =
+        new ChassisSpeeds(
+            sample_point.getXVel(), sample_point.getYVel(), sample_point.getThetaVel());
     mOutput = updatePIDChassis(chassis_speeds);
     double distanceToEnd = distance(current_state, mCurrentTrajectoryLength);
-    mPathIsFinished = distanceToEnd < SwerveConstants.kTrajectoryDeadband ||
-        Timer.getTimestamp() - startTime > timeout;
+    mPathIsFinished =
+        distanceToEnd < SwerveConstants.kTrajectoryDeadband
+            || Timer.getTimestamp() - startTime > timeout;
     mOutput = ChassisSpeeds.fromFieldRelativeSpeeds(mOutput, current_state.getRotation());
-    Logger.recordOutput("Auto/Distance to End",distanceToEnd);
+    Logger.recordOutput("Auto/Distance to End", distanceToEnd);
     return mOutput;
   }
 
   private double distance(Pose2d current_state, double additional_progress) {
-    return mCurrentTrajectory
-        .preview(additional_progress)
-        .getPose()
-        .distance(current_state);
+    return mCurrentTrajectory.preview(additional_progress).getPose().distance(current_state);
   }
 
   public PathPlannerPath getPath() {
-    if (mCurrentTrajectory == null)
-      return null;
+    if (mCurrentTrajectory == null) return null;
     return mCurrentTrajectory.getPath();
   }
 
@@ -139,8 +133,7 @@ public class DriveMotionPlanner {
   }
 
   public Translation2d getTranslationalError() {
-    return new Translation2d(
-        mError.getTranslation().x(), mError.getTranslation().y());
+    return new Translation2d(mError.getTranslation().x(), mError.getTranslation().y());
   }
 
   public Rotation2d getHeadingError() {
@@ -154,5 +147,4 @@ public class DriveMotionPlanner {
   public PPPathPointState getSetpoint() {
     return mSetpoint;
   }
-
 }
