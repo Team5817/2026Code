@@ -1,5 +1,8 @@
 name: Auto Format Code
 
+permissions:
+  contents: write
+
 on:
   pull_request:
   push:
@@ -23,10 +26,18 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Run Spotless
+      # Check formatting on PRs (red X if bad)
+      - name: Check formatting (PR)
+        if: github.event_name == 'pull_request'
+        run: ./gradlew spotlessCheck
+
+      # Auto-fix formatting on main
+      - name: Auto-fix formatting (main)
+        if: github.event_name == 'push'
         run: ./gradlew spotlessApply
 
       - name: Commit formatting changes
+        if: github.event_name == 'push'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: auto-format code"
