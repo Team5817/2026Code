@@ -59,7 +59,6 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   /** Outputs telemetry data for the subsystem. */
   @Override
   public void outputTelemetry() {
-    RobotVisualizer.updateIntakeAngle(getPosition());
 
     super.outputTelemetry();
   }

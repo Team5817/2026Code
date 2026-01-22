@@ -9,26 +9,16 @@ import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotVisualizer {
-  public static Pose3d[] mechanismPoses = new Pose3d[6];
+  public static Pose3d[] mechanismPoses = new Pose3d[5];
 
   static {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
       mechanismPoses[i] = new Pose3d();
     }
   }
 
   public static void outputTelemetry() {
     Logger.recordOutput("Mechs", mechanismPoses);
-  }
-
-  public static void updateIntakeAngle(double position) {
-    mechanismPoses[0] =
-        new Pose3d(
-            new Translation3d(-.314, 0, .272),
-            new Rotation3d(
-                Units.degreesToRadians(0),
-                Units.degreesToRadians(position),
-                Units.degreesToRadians(0)));
   }
 
   public static void updateTurretPose(double position) {
@@ -50,11 +40,14 @@ public class RobotVisualizer {
     mechanismPoses[1] = hoodPose;
   }
 
-  public static void updateFlyWheel(double position) {
+  private static double lastFlywheelTime = 0;
+  public static void updateFlyWheel(double velocity) {
+    double dt = Timer.getTimestamp() - lastFlywheelTime;
     Pose3d flywheelPose =
         mechanismPoses[0].transformBy(
-            new Transform3d(0.044 - (-.0322), 0.0, 0.456 - 0.373, new Rotation3d()));
+            new Transform3d(0.044 - (-.0322), 0.0, 0.456 - 0.373, new Rotation3d(0, Units.radiansToRotations(velocity * dt),0)));
     mechanismPoses[2] = flywheelPose;
+    lastFlywheelTime = Timer.getTimestamp();
   }
 
   private static double lastLeftTime = 0;

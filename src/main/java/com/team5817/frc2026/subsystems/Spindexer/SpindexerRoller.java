@@ -22,9 +22,9 @@ public class SpindexerRoller extends Subsystem {
 
   private String name;
 
-  public SpindexerRoller(RollerSubsystemIO SpindexerIO, String name) {
+  public SpindexerRoller(RollerSubsystemIO RollerIO, String name) {
     this.name = name;
-    this.spindexer = new RollerSubsystem<State>(State.IDLE, "Spindexer" + name, SpindexerIO);
+    this.spindexer = new RollerSubsystem<State>(State.IDLE, "Spindexer" + name, RollerIO);
   }
 
   public enum State implements IRollerState {

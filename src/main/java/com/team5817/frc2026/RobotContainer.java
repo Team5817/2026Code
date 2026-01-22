@@ -13,6 +13,8 @@ import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
+import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+import com.team5817.frc2026.subsystems.Spindexer.SpindexerRoller;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
@@ -42,6 +44,7 @@ public class RobotContainer {
   public Drive mDrive = null;
   public Intake mIntake = null;
   public Shooter mShooter = null;
+  public SpindexerGroup mSpindexer = null;
   public Vision mVision = null;
   public Climb mClimb = null;
   public Superstructure mSuperstructure = null;
@@ -66,7 +69,7 @@ public class RobotContainer {
 
     mSuperstructure = new Superstructure(mDrive, mShooter, mClimb);
 
-    mSubsystemManager.setSubsystems(mDrive, mSuperstructure, mVision, mShooter, mIntake, mClimb);
+    mSubsystemManager.setSubsystems(mDrive, mSuperstructure, mVision, mShooter, mIntake, mClimb, mSpindexer);
   }
 
   public void makeRealRobot() {
@@ -122,6 +125,9 @@ public class RobotContainer {
         new Intake(
             new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
             new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
+    mSpindexer = new SpindexerGroup(
+      new SpindexerRoller(new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10), "Spindexer/Left"), 
+      new SpindexerRoller(new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10), "Spindexer/Right"));
 
     mDrive =
         new Drive(
