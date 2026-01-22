@@ -1,6 +1,5 @@
 package com.team5817.frc2026.subsystems.Intake;
 
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants.SpindexerState;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Subsystem;
@@ -22,19 +21,18 @@ public class Intake extends Subsystem {
   }
 
   public enum State {
-    IDLE(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW, SpindexerState.IDLE),
-    HUMAN(IntakeRollers.State.IDLE, IntakeDeploy.State.HUMAN, SpindexerState.IDLE),
-    INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.GROUND, SpindexerState.IDLE),
-    EXHAUSTING(IntakeRollers.State.EXHAUST, IntakeDeploy.State.GROUND, SpindexerState.EXHAUST),
-    STOW(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW, SpindexerState.IDLE);
+    IDLE(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW),
+    HUMAN(IntakeRollers.State.IDLE, IntakeDeploy.State.HUMAN),
+    INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.GROUND),
+    EXHAUSTING(IntakeRollers.State.EXHAUST, IntakeDeploy.State.GROUND),
+    STOW(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW);
 
     final IntakeRollers.State rollerState;
     final IntakeDeploy.State deployState;
 
     State(
         IntakeRollers.State rollerState,
-        IntakeDeploy.State deployState,
-        SpindexerState spindexerState) {
+        IntakeDeploy.State deployState) {
       this.rollerState = rollerState;
       this.deployState = deployState;
     }

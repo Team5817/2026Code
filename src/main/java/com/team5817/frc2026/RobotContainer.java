@@ -34,6 +34,7 @@ import com.team5817.lib.swerve.ModuleIOSim;
 import com.team5817.lib.swerve.ModuleIOTalonFX;
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -73,13 +74,8 @@ public class RobotContainer {
     mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
     mIntake =
         new Intake(
-            new RollerSubsystemIOTalonFX(
-                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 1),
-            new RollerSubsystemIOTalonFX(
-                Ports.INTAKE_CANCODER, IntakeConstants.RollerConstants.motorConstants, 1),
-            new RollerSubsystemIOTalonFX(
-                Ports.SPINDEXER_1, IntakeConstants.RollerConstants.motorConstants, 1),
-            new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
+          new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
+          new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
 
     mDrive =
         new Drive(
@@ -124,8 +120,6 @@ public class RobotContainer {
     mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
     mIntake =
         new Intake(
-            new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
-            new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
             new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
             new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
 
@@ -172,8 +166,6 @@ public class RobotContainer {
     if (mIntake == null)
       mIntake =
           new Intake(
-              new RollerSubsystemIO() {},
-              new RollerSubsystemIO() {},
               new RollerSubsystemIO() {},
               new ServoMotorIO() {});
 

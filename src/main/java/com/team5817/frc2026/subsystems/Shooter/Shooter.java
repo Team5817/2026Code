@@ -3,6 +3,7 @@ package com.team5817.frc2026.subsystems.Shooter;
 import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.swerve.ChassisSpeeds;
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.planners.ShootingPlannerI;
 import com.team5817.frc2026.planners.ShootingTarget;
@@ -113,6 +114,9 @@ public class Shooter extends Subsystem {
     turret.outputTelemetry();
     hood.outputTelemetry();
     flywheel.outputTelemetry();
+    RobotVisualizer.updateIntakeAngle(turret.getPosition());
+
+    super.outputTelemetry();
   }
 
   public Request stateRequest(State state) {
@@ -152,4 +156,5 @@ public class Shooter extends Subsystem {
   public void followPlan(boolean followPlan) {
     this.followPlan = followPlan;
   }
+  
 }

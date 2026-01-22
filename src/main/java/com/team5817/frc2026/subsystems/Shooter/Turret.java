@@ -1,6 +1,7 @@
 package com.team5817.frc2026.subsystems.Shooter;
 
 import com.team254.lib.geometry.Rotation2d;
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
@@ -71,5 +72,11 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
     public boolean isDisabled() {
       return false;
     }
+  }
+    @Override
+  public void outputTelemetry() {
+    RobotVisualizer.updateTurretPose(getPosition());
+
+    super.outputTelemetry();
   }
 }

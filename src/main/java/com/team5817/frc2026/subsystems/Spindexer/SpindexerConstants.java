@@ -1,9 +1,8 @@
 package com.team5817.frc2026.subsystems.Spindexer;
 
 import com.team5817.frc2026.Ports;
-import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
-import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
+import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
 public class SpindexerConstants {
 
@@ -17,6 +16,13 @@ public class SpindexerConstants {
     leftRoller.kStatorCurrentLimit = 80;
     leftRoller.kEnableSupplyCurrentLimit = true;
     leftRoller.kEnableStatorCurrentLimit = true;
+    TalonFXConstants followerConstants = new TalonFXConstants();
+    followerConstants.id = Ports.TUNNEL_1;
+    followerConstants.counterClockwisePositive = false;
+    followerConstants.invert_sensor_phase = false;
+    leftRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
+
+    leftRoller.kFollowerOpposeMasterDirection = false;
 
     // Right
     rightRoller.kMainConstants.id = Ports.SPINDEXER_2;
@@ -24,33 +30,13 @@ public class SpindexerConstants {
     rightRoller.kStatorCurrentLimit = 80;
     rightRoller.kEnableSupplyCurrentLimit = true;
     rightRoller.kEnableStatorCurrentLimit = true;
+    followerConstants = new TalonFXConstants();
+    followerConstants.id = Ports.TUNNEL_2;
+    followerConstants.counterClockwisePositive = false;
+    followerConstants.invert_sensor_phase = false;
+    rightRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
+
+    rightRoller.kFollowerOpposeMasterDirection = false;
   }
 
-  public enum SpindexerState implements IRollerState {
-    IDLE(0),
-    CLOCKWISE(10),
-    COUNTERCLOCKWISE(-10),
-    EXHAUST(-12);
-
-    private final double demand;
-
-    SpindexerState(double demand) {
-      this.demand = demand;
-    }
-
-    @Override
-    public double getDemand() {
-      return demand;
-    }
-
-    @Override
-    public RollerControlMode getControlMode() {
-      return RollerControlMode.VOLTAGE;
-    }
-
-    @Override
-    public double getToleranceRadsPerSec() {
-      return 0.0;
-    }
-  }
 }

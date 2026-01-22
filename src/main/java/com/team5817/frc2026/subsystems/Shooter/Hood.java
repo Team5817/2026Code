@@ -1,5 +1,6 @@
 package com.team5817.frc2026.subsystems.Shooter;
 
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
@@ -56,5 +57,11 @@ public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
     public ControlState getControlState() {
       return ControlState.POSITION;
     }
+  }
+    @Override
+  public void outputTelemetry() {
+    RobotVisualizer.updateHoodAngle(getPosition());
+
+    super.outputTelemetry();
   }
 }
