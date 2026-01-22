@@ -30,11 +30,7 @@ public class SpindexerRollers extends Subsystem {
     CLOCKWISE(SpindexerState.CLOCKWISE),
     COUNTERCLOCKWISE(SpindexerState.COUNTERCLOCKWISE);
 
-    
-   
-    @Getter
-    private final SpindexerState spindexerState;
-    
+    @Getter private final SpindexerState spindexerState;
 
     State(SpindexerState SpindexerState) {
       this.spindexerState = SpindexerState;

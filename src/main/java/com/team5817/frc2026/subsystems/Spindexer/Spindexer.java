@@ -14,11 +14,16 @@ public class Spindexer extends Subsystem {
     this.rollers = rollers;
   }
 
-    public enum State {
-        IDLE(SpindexerConstants.SpindexerState.IDLE, SpindexerConstants.SpindexerState.IDLE),
-        FEED_TURRET(SpindexerConstants.SpindexerState.COUNTERCLOCKWISE, SpindexerConstants.SpindexerState.COUNTERCLOCKWISE),
-        FEED_SHOOTER(SpindexerConstants.SpindexerState.CLOCKWISE, SpindexerConstants.SpindexerState.CLOCKWISE),
-        EXHAUST(SpindexerConstants.SpindexerState.CLOCKWISE, SpindexerConstants.SpindexerState.COUNTERCLOCKWISE);
+  public enum State {
+    IDLE(SpindexerConstants.SpindexerState.IDLE, SpindexerConstants.SpindexerState.IDLE),
+    FEED_TURRET(
+        SpindexerConstants.SpindexerState.COUNTERCLOCKWISE,
+        SpindexerConstants.SpindexerState.COUNTERCLOCKWISE),
+    FEED_SHOOTER(
+        SpindexerConstants.SpindexerState.CLOCKWISE, SpindexerConstants.SpindexerState.CLOCKWISE),
+    EXHAUST(
+        SpindexerConstants.SpindexerState.CLOCKWISE,
+        SpindexerConstants.SpindexerState.COUNTERCLOCKWISE);
 
     public final SpindexerConstants.SpindexerState leftState;
     public final SpindexerConstants.SpindexerState rightState;
@@ -43,26 +48,28 @@ public class Spindexer extends Subsystem {
         rollers.stateRequest(mapToRollerState(state.leftState, state.rightState)));
   }
 
-    private SpindexerRollers.State mapToRollerState(
-        SpindexerConstants.SpindexerState left, 
-        SpindexerConstants.SpindexerState right
-    ) 
-    
-    {
-        if (left == right) {
-            switch (left) {
-                case IDLE: return SpindexerRollers.State.IDLE;
-                case CLOCKWISE: return SpindexerRollers.State.CLOCKWISE;
-                case COUNTERCLOCKWISE: return SpindexerRollers.State.COUNTERCLOCKWISE;
-            }
-        }
-        if (left == SpindexerConstants.SpindexerState.CLOCKWISE || right == SpindexerConstants.SpindexerState.CLOCKWISE) {
-            return SpindexerRollers.State.CLOCKWISE;
-        } else if (left == SpindexerConstants.SpindexerState.COUNTERCLOCKWISE || right == SpindexerConstants.SpindexerState.COUNTERCLOCKWISE) {
-            return SpindexerRollers.State.COUNTERCLOCKWISE;
-        }
-        return SpindexerRollers.State.IDLE;
+  private SpindexerRollers.State mapToRollerState(
+      SpindexerConstants.SpindexerState left, SpindexerConstants.SpindexerState right) {
+
+    if (left == right) {
+      switch (left) {
+        case IDLE:
+          return SpindexerRollers.State.IDLE;
+        case CLOCKWISE:
+          return SpindexerRollers.State.CLOCKWISE;
+        case COUNTERCLOCKWISE:
+          return SpindexerRollers.State.COUNTERCLOCKWISE;
+      }
     }
+    if (left == SpindexerConstants.SpindexerState.CLOCKWISE
+        || right == SpindexerConstants.SpindexerState.CLOCKWISE) {
+      return SpindexerRollers.State.CLOCKWISE;
+    } else if (left == SpindexerConstants.SpindexerState.COUNTERCLOCKWISE
+        || right == SpindexerConstants.SpindexerState.COUNTERCLOCKWISE) {
+      return SpindexerRollers.State.COUNTERCLOCKWISE;
+    }
+    return SpindexerRollers.State.IDLE;
+  }
 
   @Override
   public void readPeriodicInputs() {

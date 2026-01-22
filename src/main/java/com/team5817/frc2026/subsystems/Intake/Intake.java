@@ -19,7 +19,6 @@ public class Intake extends Subsystem {
   public Intake(RollerSubsystemIO FeederIO, ServoMotorIO DeployIO) {
     mIntakeRollers = new IntakeRollers(FeederIO);
     mIntakeDeploy = new IntakeDeploy(DeployIO.getConstants(), DeployIO);
-    
   }
 
   public enum State {
