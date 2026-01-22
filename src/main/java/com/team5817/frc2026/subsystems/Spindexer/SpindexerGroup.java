@@ -4,7 +4,6 @@ import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -25,18 +24,10 @@ public class SpindexerGroup extends Subsystem {
   }
 
   public enum State {
-    IDLE(
-        SpindexerRoller.State.IDLE,
-        SpindexerRoller.State.IDLE),
-    FEED_TURRET(
-        SpindexerRoller.State.COUNTERCLOCKWISE,
-        SpindexerRoller.State.COUNTERCLOCKWISE),
-    FEED_SHOOTER(
-        SpindexerRoller.State.CLOCKWISE,
-        SpindexerRoller.State.CLOCKWISE),
-    EXHAUST(
-        SpindexerRoller.State.CLOCKWISE,
-        SpindexerRoller.State.COUNTERCLOCKWISE);
+    IDLE(SpindexerRoller.State.IDLE, SpindexerRoller.State.IDLE),
+    FEED_TURRET(SpindexerRoller.State.COUNTERCLOCKWISE, SpindexerRoller.State.COUNTERCLOCKWISE),
+    FEED_SHOOTER(SpindexerRoller.State.CLOCKWISE, SpindexerRoller.State.CLOCKWISE),
+    EXHAUST(SpindexerRoller.State.CLOCKWISE, SpindexerRoller.State.COUNTERCLOCKWISE);
 
     public final SpindexerRoller.State leftState;
     public final SpindexerRoller.State rightState;
@@ -49,8 +40,7 @@ public class SpindexerGroup extends Subsystem {
 
   public Request stateRequest(State state) {
     return new ParallelRequest(
-        leftRoller.stateRequest(state.leftState),
-        rightRoller.stateRequest(state.rightState));
+        leftRoller.stateRequest(state.leftState), rightRoller.stateRequest(state.rightState));
   }
 
   @Override
@@ -76,7 +66,8 @@ public class SpindexerGroup extends Subsystem {
   public void stop() {
     setState(State.IDLE);
   }
-    @Override
+
+  @Override
   public void outputTelemetry() {
     RobotVisualizer.updateSpindexerLeft(leftRoller.spindexer.getVelocity());
     RobotVisualizer.updateSpindexerRight(rightRoller.spindexer.getVelocity());

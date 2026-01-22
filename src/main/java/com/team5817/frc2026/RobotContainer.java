@@ -34,7 +34,6 @@ import com.team5817.lib.swerve.ModuleIOSim;
 import com.team5817.lib.swerve.ModuleIOTalonFX;
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
-
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -74,8 +73,9 @@ public class RobotContainer {
     mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
     mIntake =
         new Intake(
-          new RollerSubsystemIOTalonFX(Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
-          new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
+            new RollerSubsystemIOTalonFX(
+                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
+            new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
 
     mDrive =
         new Drive(
@@ -163,11 +163,7 @@ public class RobotContainer {
 
   public void makeEmptyRobot() {
     if (mClimb == null) mClimb = new Climb(new ServoMotorIO() {});
-    if (mIntake == null)
-      mIntake =
-          new Intake(
-              new RollerSubsystemIO() {},
-              new ServoMotorIO() {});
+    if (mIntake == null) mIntake = new Intake(new RollerSubsystemIO() {}, new ServoMotorIO() {});
 
     if (mDrive == null)
       mDrive =

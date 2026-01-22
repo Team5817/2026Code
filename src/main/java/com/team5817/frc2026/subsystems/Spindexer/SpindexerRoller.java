@@ -19,11 +19,12 @@ public class SpindexerRoller extends Subsystem {
   @Getter
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
+
   private String name;
+
   public SpindexerRoller(RollerSubsystemIO SpindexerIO, String name) {
     this.name = name;
-    this.spindexer =
-        new RollerSubsystem<State>(State.IDLE, "Spindexer" + name, SpindexerIO);
+    this.spindexer = new RollerSubsystem<State>(State.IDLE, "Spindexer" + name, SpindexerIO);
   }
 
   public enum State implements IRollerState {
@@ -76,6 +77,6 @@ public class SpindexerRoller extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    Logger.recordOutput("Spindexer "+name+"/RollerState", getState());
+    Logger.recordOutput("Spindexer " + name + "/RollerState", getState());
   }
 }

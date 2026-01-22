@@ -58,7 +58,8 @@ public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
       return ControlState.POSITION;
     }
   }
-    @Override
+
+  @Override
   public void outputTelemetry() {
     RobotVisualizer.updateHoodAngle(getPosition());
 

@@ -156,5 +156,4 @@ public class Shooter extends Subsystem {
   public void followPlan(boolean followPlan) {
     this.followPlan = followPlan;
   }
-  
 }

@@ -73,7 +73,8 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
       return false;
     }
   }
-    @Override
+
+  @Override
   public void outputTelemetry() {
     RobotVisualizer.updateTurretPose(getPosition());
 

@@ -30,9 +30,7 @@ public class Intake extends Subsystem {
     final IntakeRollers.State rollerState;
     final IntakeDeploy.State deployState;
 
-    State(
-        IntakeRollers.State rollerState,
-        IntakeDeploy.State deployState) {
+    State(IntakeRollers.State rollerState, IntakeDeploy.State deployState) {
       this.rollerState = rollerState;
       this.deployState = deployState;
     }

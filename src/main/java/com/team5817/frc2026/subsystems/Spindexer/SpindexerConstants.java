@@ -38,5 +38,4 @@ public class SpindexerConstants {
 
     rightRoller.kFollowerOpposeMasterDirection = false;
   }
-
 }
