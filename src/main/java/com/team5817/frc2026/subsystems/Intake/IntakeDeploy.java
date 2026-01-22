@@ -1,6 +1,5 @@
 package com.team5817.frc2026.subsystems.Intake;
 
-import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
