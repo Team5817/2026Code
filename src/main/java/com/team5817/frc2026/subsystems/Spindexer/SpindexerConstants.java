@@ -3,65 +3,54 @@ package com.team5817.frc2026.subsystems.Spindexer;
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
-import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
-
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
-
 
 public class SpindexerConstants {
 
-  /** Spindexer Constants */
-public static final RollerConstantsTalonFX spindexerConstants = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX leftRoller = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX rightRoller = new RollerConstantsTalonFX();
 
-static {
-    spindexerConstants.kMainConstants.id = Ports.SPINDEXER_1;
-    spindexerConstants.kMainConstants.counterClockwisePositive = true;
+  static {
+    // Left
+    leftRoller.kMainConstants.id = Ports.SPINDEXER_1;
+    leftRoller.kSupplyCurrentLimit = 40;
+    leftRoller.kStatorCurrentLimit = 80;
+    leftRoller.kEnableSupplyCurrentLimit = true;
+    leftRoller.kEnableStatorCurrentLimit = true;
 
-    spindexerConstants.kSupplyCurrentLimit = 40;
-    spindexerConstants.kStatorCurrentLimit = 80;
-    spindexerConstants.kEnableSupplyCurrentLimit = true;
-    spindexerConstants.kEnableStatorCurrentLimit = true;
-    spindexerConstants.kMaxForwardOutput = 12.0;
-    spindexerConstants.kMaxReverseOutput = -12.0;
+    // Right
+    rightRoller.kMainConstants.id = Ports.SPINDEXER_2;
+    rightRoller.kSupplyCurrentLimit = 40;
+    rightRoller.kStatorCurrentLimit = 80;
+    rightRoller.kEnableSupplyCurrentLimit = true;
+    rightRoller.kEnableStatorCurrentLimit = true;
+  }
 
-    // Follower
-    TalonFXConstants follower = new TalonFXConstants();
-    follower.id = Ports.SPINDEXER_2;
-    follower.counterClockwisePositive = false;
-
-    spindexerConstants.kFollowerConstants = new TalonFXConstants[] {follower};
-    spindexerConstants.kFollowerOpposeMasterDirection = false;
-}
-
-
-   
-  public static enum SpindexerState implements IRollerState {
-    IDLE(0.0, RollerControlMode.VOLTAGE),
-    INTAKING(-10.0, RollerControlMode.VOLTAGE),
-    EXHAUST(6.0, RollerControlMode.VOLTAGE);
+  public enum SpindexerState implements IRollerState {
+    IDLE(0),
+    CLOCKWISE(10),
+    COUNTERCLOCKWISE(-10),
+    EXHAUST(-12);
 
     private final double demand;
-    private final RollerControlMode controlMode;
 
-    SpindexerState(double demand, RollerControlMode controlMode) {
-        this.demand = demand;
-        this.controlMode = controlMode;
+    SpindexerState(double demand) {
+      this.demand = demand;
     }
 
     @Override
     public double getDemand() {
-        return demand;
+      return demand;
     }
 
     @Override
     public RollerControlMode getControlMode() {
-        return controlMode;
+      return RollerControlMode.VOLTAGE;
     }
 
     @Override
     public double getToleranceRadsPerSec() {
-        return 0.0;
+      return 0.0;
     }
-}
-
   }
+}

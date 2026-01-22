@@ -27,9 +27,10 @@ public class SpindexerRollers extends Subsystem {
 
   public enum State {
     IDLE(SpindexerState.IDLE),
-    INTAKING(SpindexerState.INTAKING),
-    EXHAUST(SpindexerState.EXHAUST);
+    CLOCKWISE(SpindexerState.CLOCKWISE),
+    COUNTERCLOCKWISE(SpindexerState.COUNTERCLOCKWISE);
 
+    
    
     @Getter
     private final SpindexerState spindexerState;
