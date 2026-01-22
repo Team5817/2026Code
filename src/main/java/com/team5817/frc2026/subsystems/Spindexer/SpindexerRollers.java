@@ -1,28 +1,28 @@
 package com.team5817.frc2026.subsystems.Spindexer;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants.SpindexerState;
-
-import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
+import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.littletonrobotics.junction.Logger;
 
 public class SpindexerRollers extends Subsystem {
 
   private final RollerSubsystem<SpindexerState> Spindexer;
-  @Setter @Getter @Accessors(prefix = "m")
+
+  @Setter
+  @Getter
+  @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
-  public SpindexerRollers(
-      RollerSubsystemIO SpindexerIO) {
-    this.Spindexer = new RollerSubsystem<SpindexerState>(SpindexerState.IDLE, "Intake/Spindexer",SpindexerIO);
+  public SpindexerRollers(RollerSubsystemIO SpindexerIO) {
+    this.Spindexer =
+        new RollerSubsystem<SpindexerState>(SpindexerState.IDLE, "Intake/Spindexer", SpindexerIO);
   }
 
   public enum State {
@@ -58,11 +58,11 @@ public class SpindexerRollers extends Subsystem {
 
   public Request stateRequest(State state) {
     setState(state);
-    return new ParallelRequest(
-      Spindexer.stateRequest(state.spindexerState));
+    return new ParallelRequest(Spindexer.stateRequest(state.spindexerState));
   }
+
   @Override
   public void outputTelemetry() {
-      Logger.recordOutput("Spindexer/RollerState", getState());
+    Logger.recordOutput("Spindexer/RollerState", getState());
   }
 }

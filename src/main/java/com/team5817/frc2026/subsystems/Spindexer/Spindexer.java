@@ -1,18 +1,18 @@
 package com.team5817.frc2026.subsystems.Spindexer;
 
 import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.ParallelRequest;
+import com.team5817.lib.requests.Request;
 
 public class Spindexer extends Subsystem {
 
-    private final SpindexerRollers rollers;
+  private final SpindexerRollers rollers;
 
-    private State mState = State.IDLE;
+  private State mState = State.IDLE;
 
-    public Spindexer(SpindexerRollers rollers) {
-        this.rollers = rollers;
-    }
+  public Spindexer(SpindexerRollers rollers) {
+    this.rollers = rollers;
+  }
 
     public enum State {
         IDLE(SpindexerConstants.SpindexerState.IDLE, SpindexerConstants.SpindexerState.IDLE),
@@ -20,29 +20,28 @@ public class Spindexer extends Subsystem {
         FEED_SHOOTER(SpindexerConstants.SpindexerState.CLOCKWISE, SpindexerConstants.SpindexerState.CLOCKWISE),
         EXHAUST(SpindexerConstants.SpindexerState.CLOCKWISE, SpindexerConstants.SpindexerState.COUNTERCLOCKWISE);
 
-        public final SpindexerConstants.SpindexerState leftState;
-        public final SpindexerConstants.SpindexerState rightState;
+    public final SpindexerConstants.SpindexerState leftState;
+    public final SpindexerConstants.SpindexerState rightState;
 
-        State(SpindexerConstants.SpindexerState left, SpindexerConstants.SpindexerState right) {
-            this.leftState = left;
-            this.rightState = right;
-        }
+    State(SpindexerConstants.SpindexerState left, SpindexerConstants.SpindexerState right) {
+      this.leftState = left;
+      this.rightState = right;
     }
+  }
 
-    public void setState(State state) {
-        mState = state;
-        stateRequest(state).act();
-    }
+  public void setState(State state) {
+    mState = state;
+    stateRequest(state).act();
+  }
 
-    public State getState() {
-        return mState;
-    }
+  public State getState() {
+    return mState;
+  }
 
-    public Request stateRequest(State state) {
-        return new ParallelRequest(
-            rollers.stateRequest(mapToRollerState(state.leftState, state.rightState))
-        );
-    }
+  public Request stateRequest(State state) {
+    return new ParallelRequest(
+        rollers.stateRequest(mapToRollerState(state.leftState, state.rightState)));
+  }
 
     private SpindexerRollers.State mapToRollerState(
         SpindexerConstants.SpindexerState left, 
@@ -65,23 +64,23 @@ public class Spindexer extends Subsystem {
         return SpindexerRollers.State.IDLE;
     }
 
-    @Override
-    public void readPeriodicInputs() {
-        rollers.readPeriodicInputs();
-    }
+  @Override
+  public void readPeriodicInputs() {
+    rollers.readPeriodicInputs();
+  }
 
-    @Override
-    public void writePeriodicOutputs() {
-        rollers.writePeriodicOutputs();
-    }
+  @Override
+  public void writePeriodicOutputs() {
+    rollers.writePeriodicOutputs();
+  }
 
-    @Override
-    public boolean checkSystem() {
-        return rollers.checkSystem();
-    }
+  @Override
+  public boolean checkSystem() {
+    return rollers.checkSystem();
+  }
 
-    @Override
-    public void stop() {
-        setState(State.IDLE);
-    }
+  @Override
+  public void stop() {
+    setState(State.IDLE);
+  }
 }

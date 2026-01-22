@@ -13,38 +13,32 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   /**
    * Constructs a new IntakeDeploy subsystem.
    *
-   * @param constants         The constants for the servo motor subsystem.
+   * @param constants The constants for the servo motor subsystem.
    * @param encoder_constants The constants for the absolute encoder.
    */
   public IntakeDeploy(final ServoConstants constants, ServoMotorIO io) {
     super(IntakeDeploy.State.GROUND, io);
   }
-  
-  final static double kStrictError = 20;
-  final static double kMediumError = 50;
-  final static double kLenientError = 80;
 
-  /**
-   * Represents the different states of the intake deployment.
-   */
+  static final double kStrictError = 20;
+  static final double kMediumError = 50;
+  static final double kLenientError = 80;
+
+  /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
-    STOW(0, kMediumError), //placeholder values
+    STOW(0, kMediumError), // placeholder values
     HUMAN(-100, kMediumError),
     GROUND(-144, kStrictError),
     ZERO(0, kStrictError);
 
-    @Getter
-    private double demand = 0;
-    @Getter
-    private double allowableError = 0;
-    @Getter
-    private boolean disabled = false;
+    @Getter private double demand = 0;
+    @Getter private double allowableError = 0;
+    @Getter private boolean disabled = false;
 
     /**
-     * p
-     * Constructs a new State.
+     * p Constructs a new State.
      *
-     * @param output          The output value for the state.
+     * @param output The output value for the state.
      * @param allowable_error The allowable error for the state.
      */
     State(double output, double allowable_error) {
@@ -62,9 +56,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
     }
   }
 
-  /**
-   * Outputs telemetry data for the subsystem.
-   */
+  /** Outputs telemetry data for the subsystem. */
   @Override
   public void outputTelemetry() {
     RobotVisualizer.updateIntakeAngle(getPosition());
