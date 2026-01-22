@@ -3,7 +3,6 @@ package com.team5817.frc2026;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
@@ -41,11 +40,16 @@ public class RobotVisualizer {
   }
 
   private static double lastFlywheelTime = 0;
+
   public static void updateFlyWheel(double velocity) {
     double dt = Timer.getTimestamp() - lastFlywheelTime;
     Pose3d flywheelPose =
         mechanismPoses[0].transformBy(
-            new Transform3d(0.044 - (-.0322), 0.0, 0.456 - 0.373, new Rotation3d(0, Units.radiansToRotations(velocity * dt),0)));
+            new Transform3d(
+                0.044 - (-.0322),
+                0.0,
+                0.456 - 0.373,
+                new Rotation3d(0, Units.radiansToRotations(velocity * dt), 0)));
     mechanismPoses[2] = flywheelPose;
     lastFlywheelTime = Timer.getTimestamp();
   }
