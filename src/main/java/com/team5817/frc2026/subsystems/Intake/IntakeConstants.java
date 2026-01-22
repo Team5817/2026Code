@@ -6,14 +6,18 @@ import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
+
 import lombok.Getter;
 
 public class IntakeConstants {
-  /** Constants related to the Intake Deploy subsystem. */
+  /**
+   * Constants related to the Intake Deploy subsystem.
+   */
   public static final class DeployConstants {
     public static final ServoConstants kDeployServoConstants = new ServoConstants();
 
     static {
+
       kDeployServoConstants.kName = "Intake/Deploy";
 
       kDeployServoConstants.kMainConstants.id = Ports.INTAKE_PIVOT;
@@ -51,12 +55,12 @@ public class IntakeConstants {
       kDeployServoConstants.kHomingTimeout = 0.2;
       kDeployServoConstants.kHomingVelocityWindow = 5;
     }
+
   }
 
   public static final class RollerConstants {
 
     public static RollerConstantsTalonFX motorConstants = new RollerConstantsTalonFX();
-
     static {
       motorConstants.kSupplyCurrentLimit = 40;
       motorConstants.kStatorCurrentLimit = 80;
@@ -69,59 +73,16 @@ public class IntakeConstants {
     public enum FeederState implements IRollerState {
       IDLE(0),
       INTAKING(10),
-      EXHAUST(-6);
+      EXHAUST(-10);
 
-      @Getter private final double demand;
-      @Getter private final RollerControlMode controlMode;
+      @Getter
+      private final double demand;
+      @Getter
+      private final RollerControlMode controlMode;
 
       FeederState(double demand) {
         this.demand = demand;
         this.controlMode = RollerControlMode.VOLTAGE;
-      }
-
-      @Override
-      public double getToleranceRadsPerSec() {
-        return 0;
-      }
-    }
-
-    public enum SideIndexerState implements IRollerState {
-      IDLE(0),
-      INTAKING(-8),
-      EXHAUST(6),
-      SLOW_EXAUST(2);
-
-      @Getter private final double demand;
-      @Getter private final RollerControlMode controlMode;
-
-      SideIndexerState(double demand) {
-        this.demand = demand;
-        this.controlMode = RollerControlMode.VOLTAGE;
-      }
-
-      @Override
-      public double getToleranceRadsPerSec() {
-        return 0;
-      }
-    }
-
-    public enum LowIndexerState implements IRollerState {
-      IDLE(0),
-      INTAKING(-2),
-      EXHAUST(6),
-      SLOW_EXAUST(2);
-
-      @Getter private final double demand;
-      @Getter private final RollerControlMode controlMode;
-
-      LowIndexerState(double demand) {
-        this.demand = demand;
-        this.controlMode = RollerControlMode.VOLTAGE;
-      }
-
-      @Override
-      public double getToleranceRadsPerSec() {
-        return 0;
       }
     }
   }
