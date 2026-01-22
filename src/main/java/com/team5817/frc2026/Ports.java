@@ -37,7 +37,6 @@ public class Ports {
   public static final CanDeviceId SPINDEXER_1 = new CanDeviceId(11);
   public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(12);
 
-
   public static final CanDeviceId TURRET = new CanDeviceId(13);
   public static final CanDeviceId HOOD = new CanDeviceId(14);
   public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(15);

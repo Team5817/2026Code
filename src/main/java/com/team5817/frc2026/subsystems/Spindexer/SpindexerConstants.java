@@ -3,17 +3,15 @@ package com.team5817.frc2026.subsystems.Spindexer;
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
-import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
-
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
-
+import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
 public class SpindexerConstants {
 
   /** Spindexer Constants */
-public static final RollerConstantsTalonFX spindexerConstants = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX spindexerConstants = new RollerConstantsTalonFX();
 
-static {
+  static {
     spindexerConstants.kMainConstants.id = Ports.SPINDEXER_1;
     spindexerConstants.kMainConstants.counterClockwisePositive = true;
 
@@ -31,10 +29,8 @@ static {
 
     spindexerConstants.kFollowerConstants = new TalonFXConstants[] {follower};
     spindexerConstants.kFollowerOpposeMasterDirection = false;
-}
+  }
 
-
-   
   public static enum SpindexerState implements IRollerState {
     IDLE(0.0, RollerControlMode.VOLTAGE),
     INTAKING(-10.0, RollerControlMode.VOLTAGE),
@@ -44,24 +40,23 @@ static {
     private final RollerControlMode controlMode;
 
     SpindexerState(double demand, RollerControlMode controlMode) {
-        this.demand = demand;
-        this.controlMode = controlMode;
+      this.demand = demand;
+      this.controlMode = controlMode;
     }
 
     @Override
     public double getDemand() {
-        return demand;
+      return demand;
     }
 
     @Override
     public RollerControlMode getControlMode() {
-        return controlMode;
+      return controlMode;
     }
 
     @Override
     public double getToleranceRadsPerSec() {
-        return 0.0;
+      return 0.0;
     }
-}
-
   }
+}

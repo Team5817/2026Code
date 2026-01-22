@@ -1,8 +1,8 @@
 package com.team5817.frc2026.subsystems.Intake;
 
+import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants.SpindexerState;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants.SpindexerState;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.ParallelRequest;
@@ -13,13 +13,10 @@ public class Intake extends Subsystem {
 
   private static IntakeRollers mIntakeRollers;
   private static IntakeDeploy mIntakeDeploy;
- 
 
   private State mState = State.IDLE;
 
-  public Intake(
-      RollerSubsystemIO FeederIO,
-      ServoMotorIO DeployIO) {
+  public Intake(RollerSubsystemIO FeederIO, ServoMotorIO DeployIO) {
     mIntakeRollers = new IntakeRollers(FeederIO);
     mIntakeDeploy = new IntakeDeploy(DeployIO.getConstants(), DeployIO);
   }
@@ -34,7 +31,10 @@ public class Intake extends Subsystem {
     final IntakeRollers.State rollerState;
     final IntakeDeploy.State deployState;
 
-    State(IntakeRollers.State rollerState, IntakeDeploy.State deployState, SpindexerState spindexerState) {
+    State(
+        IntakeRollers.State rollerState,
+        IntakeDeploy.State deployState,
+        SpindexerState spindexerState) {
       this.rollerState = rollerState;
       this.deployState = deployState;
     }
@@ -85,4 +85,5 @@ public class Intake extends Subsystem {
         mIntakeRollers.stateRequest(state.rollerState),
         mIntakeDeploy.stateRequest(state.deployState));
   }
-};
+}
+;

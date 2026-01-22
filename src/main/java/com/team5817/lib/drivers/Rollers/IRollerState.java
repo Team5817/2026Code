@@ -8,6 +8,6 @@ public interface IRollerState {
   default double getToleranceRadsPerSec() {
     return 0.0;
   }
+
   public RollerControlMode getControlMode();
-  
 }

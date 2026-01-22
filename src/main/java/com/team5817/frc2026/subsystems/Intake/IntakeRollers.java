@@ -14,11 +14,13 @@ import org.littletonrobotics.junction.Logger;
 public class IntakeRollers extends Subsystem {
 
   private final RollerSubsystem<FeederState> feeder;
-  @Setter @Getter @Accessors(prefix = "m")
+
+  @Setter
+  @Getter
+  @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
-  public IntakeRollers(
-      RollerSubsystemIO FeederIO) {
+  public IntakeRollers(RollerSubsystemIO FeederIO) {
     this.feeder = new RollerSubsystem<FeederState>(FeederState.IDLE, "Intake/Feeder", FeederIO);
   }
 
@@ -27,9 +29,7 @@ public class IntakeRollers extends Subsystem {
     INTAKING(FeederState.INTAKING),
     EXHAUST(FeederState.EXHAUST);
 
-    @Getter
-    private final FeederState feederState;
-    
+    @Getter private final FeederState feederState;
 
     State(FeederState feederState) {
       this.feederState = feederState;
@@ -53,11 +53,11 @@ public class IntakeRollers extends Subsystem {
 
   public Request stateRequest(State state) {
     setState(state);
-    return new ParallelRequest(
-      feeder.stateRequest(state.feederState));
+    return new ParallelRequest(feeder.stateRequest(state.feederState));
   }
+
   @Override
   public void outputTelemetry() {
-      Logger.recordOutput("Intake/RollerState", getState());
+    Logger.recordOutput("Intake/RollerState", getState());
   }
 }
