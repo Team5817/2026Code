@@ -41,7 +41,6 @@ public class SpindexerConstants {
     @Override
     public double getDemand() {
       return demand;
-      return demand;
     }
 
     @Override
@@ -52,9 +51,8 @@ public class SpindexerConstants {
     @Override
     public double getToleranceRadsPerSec() {
       return 0.0;
-      return 0.0;
     }
   }
 }
-  }
-}
+  
+
