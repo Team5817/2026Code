@@ -18,9 +18,12 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
   private final DCMotorSim sim;
   private final DCMotor gearbox;
   private double appliedVoltage = 0.0;
+  private boolean runningVelocity = false;
+  private double reduction;
 
   public RollerSubsystemIOSim(DCMotor motorModel, double reduction, double moi) {
     gearbox = motorModel;
+    this.reduction = reduction;
     sim =
         new DCMotorSim(LinearSystemId.createDCMotorSystem(motorModel, moi, reduction), motorModel);
   }
@@ -35,7 +38,7 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
     inputs.data =
         new RollerSubsystemIOData(
             sim.getAngularPositionRad(),
-            this.rps,
+            this.runningVelocity ? this.rps : sim.getInputVoltage() / reduction*20,
             appliedVoltage,
             sim.getCurrentDrawAmps(),
             gearbox.getCurrent(sim.getAngularVelocityRadPerSec(), appliedVoltage),
@@ -46,12 +49,14 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
 
   @Override
   public void runVolts(double volts) {
+    runningVelocity = false;
     appliedVoltage = MathUtil.clamp(volts, -12.0, 12.0);
     sim.setInputVoltage(appliedVoltage);
   }
 
   @Override
   public void runTorqueCurrent(double amps) {
+    runningVelocity = false;
     runVolts(gearbox.getVoltage(gearbox.getTorque(amps), sim.getAngularVelocityRadPerSec()));
   }
 
@@ -59,6 +64,7 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
 
   @Override
   public void runVelocity(double rps) {
+    runningVelocity = true;
     this.rps = rps;
   }
 }

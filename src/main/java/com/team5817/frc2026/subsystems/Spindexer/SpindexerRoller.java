@@ -6,19 +6,11 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.Request;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.littletonrobotics.junction.Logger;
 
 public class SpindexerRoller extends Subsystem {
 
   public final RollerSubsystem<State> spindexer;
-
-  @Setter
-  @Getter
-  @Accessors(prefix = "m")
-  private State mState = State.IDLE;
 
   private String name;
 
@@ -70,13 +62,8 @@ public class SpindexerRoller extends Subsystem {
     return spindexer.allOK();
   }
 
-  public Request stateRequest(State state) {
-    setState(state);
-    return spindexer.stateRequest(state);
-  }
-
   @Override
   public void outputTelemetry() {
-    Logger.recordOutput("Spindexer " + name + "/RollerState", getState());
+    super.outputTelemetry();
   }
 }

@@ -20,60 +20,76 @@ public class RobotVisualizer {
     Logger.recordOutput("Mechs", mechanismPoses);
   }
 
+  /* ================= TURRET ================= */
   public static void updateTurretPose(double position) {
-    Pose3d current = new Pose3d(-0.032, 0.1, 0.373, new Rotation3d(0, 0, 0));
+    Pose3d current =
+        new Pose3d(
+            -0.032,
+            0.1,
+            0.373,
+            new Rotation3d(0, 0, Units.degreesToRadians(position)));
 
     mechanismPoses[0] = current;
   }
 
+  /* ================= HOOD ================= */
   public static void updateHoodAngle(double position) {
     Pose3d hoodPose =
         mechanismPoses[0].transformBy(
             new Transform3d(
-                0.044 - (-0.032), // relative X
+                0.044 - (-0.032),
                 0.0,
-                0.456 - 0.373, // relative Z
-                new Rotation3d(0, 0, 0) //  z for pitch
-                ));
+                0.456 - 0.373,
+                new Rotation3d(0, Units.degreesToRadians(position), 0)));
 
     mechanismPoses[1] = hoodPose;
   }
 
-  private static double lastFlywheelTime = 0;
+  /* ================= FLYWHEEL ================= */
+  private static double lastFlywheelTime = Timer.getTimestamp();
 
   public static void updateFlyWheel(double velocity) {
     double dt = Timer.getTimestamp() - lastFlywheelTime;
+
     Pose3d flywheelPose =
         mechanismPoses[0].transformBy(
             new Transform3d(
                 0.044 - (-.0322),
                 0.0,
                 0.456 - 0.373,
-                new Rotation3d(0, Units.radiansToRotations(velocity * dt), 0)));
+                new Rotation3d(Units.radiansToRotations(0), velocity * dt, 0)));
+
     mechanismPoses[2] = flywheelPose;
     lastFlywheelTime = Timer.getTimestamp();
   }
 
-  private static double lastLeftTime = 0;
+  /* ================= SPINDEXER LEFT ================= */
+  private static double lastLeftTime = Timer.getTimestamp();
 
-  public static void updateSpindexerLeft(double velocity) { // 1
+  public static void updateSpindexerLeft(double velocity) {
     double dt = Timer.getTimestamp() - lastLeftTime;
+
     Pose3d spindexer1Pose =
         new Pose3d(
             0.048,
             -.15,
-            -0.013,
+            .02,
             mechanismPoses[3]
                 .getRotation()
-                .rotateBy(new Rotation3d(0, 0, Units.radiansToRotations(dt * velocity))));
+                .rotateBy(new Rotation3d(0, 0, dt * velocity)));
+
+    Logger.recordOutput("SpindexerLeft/velocity", velocity);
+
     mechanismPoses[3] = spindexer1Pose;
     lastLeftTime = Timer.getTimestamp();
   }
 
-  private static double lastRightTime = 0;
+  /* ================= SPINDEXER RIGHT ================= */
+  private static double lastRightTime = Timer.getTimestamp();
 
-  public static void updateSpindexerRight(double velocity) { // 2
+  public static void updateSpindexerRight(double velocity) {
     double dt = Timer.getTimestamp() - lastRightTime;
+
     Pose3d spindexer2Pose =
         new Pose3d(
             0.135,
@@ -81,7 +97,8 @@ public class RobotVisualizer {
             0.013,
             mechanismPoses[4]
                 .getRotation()
-                .rotateBy(new Rotation3d(0, 0, Units.radiansToRotations(velocity * dt))));
+                .rotateBy(new Rotation3d(0, 0, dt * velocity)));
+
     mechanismPoses[4] = spindexer2Pose;
     lastRightTime = Timer.getTimestamp();
   }

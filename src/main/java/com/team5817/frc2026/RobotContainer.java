@@ -67,10 +67,10 @@ public class RobotContainer {
 
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mShooter, mClimb);
+    mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mShooter, mIntake, mClimb, mSpindexer);
+        mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb);
   }
 
   public void makeRealRobot() {
@@ -124,14 +124,14 @@ public class RobotContainer {
     mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
     mIntake =
         new Intake(
-            new RollerSubsystemIOSim(DCMotor.getKrakenX60(1), 1, 0.01),
+            new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
             new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
     mSpindexer =
         new SpindexerGroup(
             new SpindexerRoller(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10), "Spindexer/Left"),
+                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
             new SpindexerRoller(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10), "Spindexer/Right"));
+                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
 
     mDrive =
         new Drive(

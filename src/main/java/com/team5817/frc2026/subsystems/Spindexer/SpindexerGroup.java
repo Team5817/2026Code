@@ -2,6 +2,7 @@ package com.team5817.frc2026.subsystems.Spindexer;
 
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import lombok.Getter;
@@ -39,8 +40,7 @@ public class SpindexerGroup extends Subsystem {
   }
 
   public Request stateRequest(State state) {
-    return new ParallelRequest(
-        leftRoller.stateRequest(state.leftState), rightRoller.stateRequest(state.rightState));
+    return new LambdaRequest(() -> setState(state));
   }
 
   @Override
@@ -51,10 +51,10 @@ public class SpindexerGroup extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    stateRequest(mState).act();
-
+    leftRoller.spindexer.setState(mState.leftState);
+    rightRoller.spindexer.setState(mState.rightState);
     leftRoller.writePeriodicOutputs();
-    leftRoller.writePeriodicOutputs();
+    rightRoller.writePeriodicOutputs();
   }
 
   @Override
@@ -71,6 +71,8 @@ public class SpindexerGroup extends Subsystem {
   public void outputTelemetry() {
     RobotVisualizer.updateSpindexerLeft(leftRoller.spindexer.getVelocity());
     RobotVisualizer.updateSpindexerRight(rightRoller.spindexer.getVelocity());
+    rightRoller.outputTelemetry();
+    leftRoller.outputTelemetry();
     super.outputTelemetry();
   }
 }
