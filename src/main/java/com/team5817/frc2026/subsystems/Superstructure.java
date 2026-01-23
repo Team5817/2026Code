@@ -2,6 +2,7 @@ package com.team5817.frc2026.subsystems;
 
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.NeverEndingRequest;
@@ -20,13 +21,15 @@ public class Superstructure extends Subsystem {
   public Drive mDrive;
   public Shooter mShooter;
   public Climb mClimb;
+  public Intake mIntake;
 
   @Setter private boolean allowAutoShoot = true;
 
-  public Superstructure(Drive drive, Shooter shooter, Climb climb) {
+  public Superstructure(Drive drive, Shooter shooter, Climb climb , Intake intake) {
     mDrive = drive;
     mShooter = shooter;
     mClimb = climb;
+    mIntake = intake;
     this.requestExecutor = new RequestExecutor();
   }
 

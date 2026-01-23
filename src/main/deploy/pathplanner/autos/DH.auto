@@ -15,6 +15,18 @@
           "data": {
             "pathName": "DTToH"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HToC0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C0ToC"
+          }
         }
       ]
     }
