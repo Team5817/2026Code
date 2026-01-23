@@ -27,7 +27,8 @@ public class Superstructure extends Subsystem {
 
   @Setter private boolean allowAutoShoot = true;
 
-  public Superstructure(Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb) {
+  public Superstructure(
+      Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb) {
     mDrive = drive;
     mShooter = shooter;
     mIntake = intake;

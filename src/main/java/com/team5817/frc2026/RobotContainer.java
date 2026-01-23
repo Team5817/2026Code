@@ -128,8 +128,7 @@ public class RobotContainer {
             new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
     mSpindexer =
         new SpindexerGroup(
-            new SpindexerRoller(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
+            new SpindexerRoller(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
             new SpindexerRoller(
                 new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
 

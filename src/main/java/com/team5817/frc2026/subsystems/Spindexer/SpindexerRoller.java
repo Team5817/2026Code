@@ -5,8 +5,6 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.requests.Request;
-import org.littletonrobotics.junction.Logger;
 
 public class SpindexerRoller extends Subsystem {
 

@@ -3,7 +3,6 @@ package com.team5817.frc2026.subsystems.Spindexer;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.LambdaRequest;
-import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import lombok.Getter;
 import lombok.Setter;

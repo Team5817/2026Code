@@ -23,11 +23,7 @@ public class RobotVisualizer {
   /* ================= TURRET ================= */
   public static void updateTurretPose(double position) {
     Pose3d current =
-        new Pose3d(
-            -0.032,
-            0.1,
-            0.373,
-            new Rotation3d(0, 0, Units.degreesToRadians(position)));
+        new Pose3d(-0.032, 0.1, 0.373, new Rotation3d(0, 0, Units.degreesToRadians(position)));
 
     mechanismPoses[0] = current;
   }
@@ -74,9 +70,7 @@ public class RobotVisualizer {
             0.048,
             -.15,
             .02,
-            mechanismPoses[3]
-                .getRotation()
-                .rotateBy(new Rotation3d(0, 0, dt * velocity)));
+            mechanismPoses[3].getRotation().rotateBy(new Rotation3d(0, 0, dt * velocity)));
 
     Logger.recordOutput("SpindexerLeft/velocity", velocity);
 
@@ -95,9 +89,7 @@ public class RobotVisualizer {
             0.135,
             0.15,
             0.013,
-            mechanismPoses[4]
-                .getRotation()
-                .rotateBy(new Rotation3d(0, 0, dt * velocity)));
+            mechanismPoses[4].getRotation().rotateBy(new Rotation3d(0, 0, dt * velocity)));
 
     mechanismPoses[4] = spindexer2Pose;
     lastRightTime = Timer.getTimestamp();

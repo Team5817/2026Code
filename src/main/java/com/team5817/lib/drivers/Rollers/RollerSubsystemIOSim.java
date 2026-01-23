@@ -38,7 +38,7 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
     inputs.data =
         new RollerSubsystemIOData(
             sim.getAngularPositionRad(),
-            this.runningVelocity ? this.rps : sim.getInputVoltage() / reduction*20,
+            this.runningVelocity ? this.rps : sim.getInputVoltage() / reduction * 20,
             appliedVoltage,
             sim.getCurrentDrawAmps(),
             gearbox.getCurrent(sim.getAngularVelocityRadPerSec(), appliedVoltage),
