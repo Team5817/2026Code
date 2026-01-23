@@ -24,7 +24,6 @@ public class Superstructure extends Subsystem {
   public Intake mIntake;
   public SpindexerGroup mSpindexerGroup;
   public Climb mClimb;
-  public Intake mIntake;
 
   @Setter private boolean allowAutoShoot = true;
 
@@ -34,7 +33,6 @@ public class Superstructure extends Subsystem {
     mIntake = intake;
     mSpindexerGroup = spindexerGroup;
     mClimb = climb;
-    mIntake = intake;
     this.requestExecutor = new RequestExecutor();
   }
 
