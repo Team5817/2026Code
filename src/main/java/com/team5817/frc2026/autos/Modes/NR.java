@@ -37,7 +37,7 @@ public class NR extends AutoBase {
     Trajectory N1ToC0;
 
     SHTToN1 = l.trajectories.get("SHTToN1");
-    N1ToC0   = l.trajectories.get("N1ToC0");
+    N1ToC0 = l.trajectories.get("N1ToC0");
 
     t = new TrajectorySet(false, SHTToN1, N1ToC0);
   }
