@@ -1,22 +1,17 @@
 package com.team5817.frc2026.autos;
 
-
+import com.team5817.frc2026.autos.Modes.D;
+import com.team5817.frc2026.autos.Modes.DoNothingMode;
+import com.team5817.frc2026.autos.Modes.H;
+import com.team5817.frc2026.autos.Modes.NR;
+import com.team5817.frc2026.autos.Modes.NRHT;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
-
-import com.team5817.frc2026.autos.Modes.DoNothingMode;
-import com.team5817.frc2026.autos.Modes.H;
-import com.team5817.frc2026.autos.Modes.D;
-import com.team5817.frc2026.autos.Modes.NR;
-import com.team5817.frc2026.autos.Modes.NRHT;
-
-
 
 /** This class is responsible for selecting the autonomous mode for the robot. */
 public class AutoModeFactory {
@@ -119,11 +114,11 @@ public class AutoModeFactory {
       case H:
         return Optional.of(new H(s, mCachedClimbSelection));
       case D:
-         return Optional.of(new D(s, mCachedClimbSelection));
+        return Optional.of(new D(s, mCachedClimbSelection));
       case NR:
-         return Optional.of(new NR(s, mCachedClimbSelection));
+        return Optional.of(new NR(s, mCachedClimbSelection));
       case NRHT:
-         return Optional.of(new NRHT(s, mCachedClimbSelection));
+        return Optional.of(new NRHT(s, mCachedClimbSelection));
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;
