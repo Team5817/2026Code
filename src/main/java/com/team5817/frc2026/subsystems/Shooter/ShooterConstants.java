@@ -90,8 +90,8 @@ public class ShooterConstants {
       kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0;
 
       // Soft limits
-      kTurretServoConstants.kMinUnitsLimit = -180.0;
-      kTurretServoConstants.kMaxUnitsLimit = 180.0;
+      kTurretServoConstants.kMinUnitsLimit = -120.0;
+      kTurretServoConstants.kMaxUnitsLimit = 120.0;
 
       // PID (placeholder)
       kTurretServoConstants.kKp = 2.0;
