@@ -8,8 +8,6 @@ import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import org.littletonrobotics.junction.Logger;
-
 public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
   private static final double kTightError = 1.0;
@@ -56,11 +54,12 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
     @Override
     public double getDemand() {
-      if (worldOriented){ 
-        double worldOrientedDemand = demand.getAsDouble() - mRobotHeadingSupplier.get().getDegrees();
-        if (worldOrientedDemand > 180) return worldOrientedDemand -360;
-        else if (worldOrientedDemand < -180) return worldOrientedDemand +360;
-          //return worldOrientedDemand -(180 * Math.signum(worldOrientedDemand));
+      if (worldOriented) {
+        double worldOrientedDemand =
+            demand.getAsDouble() - mRobotHeadingSupplier.get().getDegrees();
+        if (worldOrientedDemand > 180) return worldOrientedDemand - 360;
+        else if (worldOrientedDemand < -180) return worldOrientedDemand + 360;
+        // return worldOrientedDemand -(180 * Math.signum(worldOrientedDemand));
         return worldOrientedDemand;
       }
       return demand.getAsDouble();
@@ -85,7 +84,7 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   @Override
   public void outputTelemetry() {
     RobotVisualizer.updateTurretPose(getPosition());
-    
+
     super.outputTelemetry();
   }
 }
