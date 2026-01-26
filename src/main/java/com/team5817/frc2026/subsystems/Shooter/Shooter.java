@@ -15,6 +15,7 @@ import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.Request;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -40,7 +41,7 @@ public class Shooter extends Subsystem {
         () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
     this.planner =
         new ShootingPlanner(
-            shooterPoseSupplier, robotVelocitySupplier, () -> atState, timeSinceVision);
+            shooterPoseSupplier, robotVelocitySupplier, this::isAtState, timeSinceVision);
     this.turret =
         new Turret(
             turretIO,
@@ -57,6 +58,12 @@ public class Shooter extends Subsystem {
     this.flywheel =
         new RollerSubsystem<ShooterConstants.FlywheelState>(
             FlywheelState.IDLE, "Shooter/Flywheel", flywheelIO);
+
+  // Provide planner with a live supplier that checks the actual component states.
+  // This avoids stale/lagging values when the planner is asked whether we are at state
+  // before the Shooter's internal `atState` field has been updated by periodic().
+  ((ShootingPlanner) this.planner)
+    .setAtStateSupplier(() -> turret.atState() && hood.atState() && flywheel.atState() && !forcedStow && mState != State.STOW);
   }
 
   @Getter
@@ -64,6 +71,9 @@ public class Shooter extends Subsystem {
   private State mState = State.STOW;
 
   @Getter @Setter private State desiredState = State.HUB;
+  public boolean isAtState() {
+    return atState;
+  }
   private boolean atState = false;
   private boolean forcedStow = false;
 
@@ -94,7 +104,17 @@ public class Shooter extends Subsystem {
     if (forcedStow) {
       desiredState = State.STOW;
     }
+    
     atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
+    
+    Logger.recordOutput(
+    "Shooter/AtStateDetails",
+    "Turret: " + turret.atState()
+    + ", Hood: " + hood.atState()
+    + ", Flywheel: " + flywheel.atState()
+    + ", ForcedStow: " + forcedStow
+    + ", Not Stowing: " + (mState != State.STOW));
+
     if (mState != desiredState) {
       turret.setState(desiredState.turretState);
       hood.setState(desiredState.hoodState);
