@@ -159,27 +159,24 @@ public class ShootingPlanner implements ShootingPlannerI {
     return Shooter.State.LOB;
   }
 
-  
-
- @Override
+  @Override
   public Boolean shouldShoot() {
     if (!atStateSupplier.getAsBoolean()) return false;
-   
+
     // Compute once to avoid repeated supplier calls and potential side-effects
     Shooter.State recommended = recommendedShooterState();
-  
+
     // Cache the velocity/rotation supplier result to avoid multiple supplier.get() calls
     Pose2d vel = shooterPosVelocitySupplier.get().toPose2d();
-  
-    if (vel == null){
+
+    if (vel == null) {
       Logger.recordOutput("Shooter/ShouldShoot", "Missing shooter velocity");
       return false;
     }
 
     switch (recommended) {
       case HUB:
-      
-      {
+        {
           ShootingTarget target = ShootingTarget.HUB;
           if (vel.getTranslation().norm()
               > target.getVelocityThreshold()) // TODO tune velocity threshold
@@ -191,8 +188,7 @@ public class ShootingPlanner implements ShootingPlannerI {
         }
 
       case LOB:
-       
-      {
+        {
           ShootingTarget target = ShootingTarget.LOB;
           if (vel.getTranslation().norm()
               > target.getVelocityThreshold()) // TODO tune velocity threshold
@@ -202,11 +198,11 @@ public class ShootingPlanner implements ShootingPlannerI {
           return false;
           break;
         }
-      
-        case STOW:
+
+      case STOW:
         return false;
-     
-        default:
+
+      default:
         Logger.recordOutput(
             "ShootingPlanner/UnknownState",
             "Unknown shooter state: " + String.valueOf(recommended));
@@ -214,14 +210,13 @@ public class ShootingPlanner implements ShootingPlannerI {
     }
 
     // Use the threshold for the current recommended target
-    ShootingTarget currentTarget = recommended == Shooter.State.HUB ? ShootingTarget.HUB : ShootingTarget.LOB;
+    ShootingTarget currentTarget =
+        recommended == Shooter.State.HUB ? ShootingTarget.HUB : ShootingTarget.LOB;
     if (timeSinceVision.getAsDouble()
         > currentTarget.getTimeSinceVisionThreshold()) // TODO tune time since vision threshold
     return false;
     return true;
   }
-
-
 
   @Override
   public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {

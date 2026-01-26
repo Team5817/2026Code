@@ -15,10 +15,10 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.Timer;
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
-import edu.wpi.first.wpilibj.Timer;
 
 public class Vision extends Subsystem {
   private final VisionConsumer consumer;
@@ -138,12 +138,12 @@ public class Vision extends Subsystem {
         }
 
         // Send vision observation
-    // Record the time we received a valid vision observation according to robot clock.
-    lastVisionUpdateTime = Timer.getFPGATimestamp();
-    consumer.accept(
-      new Pose2d(observation.pose().toPose2d()),
-      observation.timestamp(),
-      VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+        // Record the time we received a valid vision observation according to robot clock.
+        lastVisionUpdateTime = Timer.getFPGATimestamp();
+        consumer.accept(
+            new Pose2d(observation.pose().toPose2d()),
+            observation.timestamp(),
+            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
       }
 
       // Log camera datadata
