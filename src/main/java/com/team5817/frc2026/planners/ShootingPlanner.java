@@ -49,6 +49,10 @@ public class ShootingPlanner implements ShootingPlannerI {
           return val != null ? val : 0.0;
         };
 
+    // atStateSupplier may be overridden later if caller needs to provide a supplier that
+    // depends on components which are created after this planner (see Shooter).
+    this.atStateSupplier = atStateSupplier;
+
     Supplier<Translation2d> futureShooterToHub =
         () -> {
           Pose2d current = this.shooterPoseSupplier.get();
@@ -130,6 +134,14 @@ public class ShootingPlanner implements ShootingPlannerI {
     }
   }
 
+  /**
+   * Override the at-state supplier. Useful when the caller can't provide a supplier in the
+   * constructor because subsystem components are created after the planner (circular deps).
+   */
+  public void setAtStateSupplier(BooleanSupplier atStateSupplier) {
+    this.atStateSupplier = atStateSupplier;
+  }
+
   @AutoLogOutput(key = "Shooter/Recomended State")
   public Shooter.State recommendedShooterState() {
     Pose2d current = this.shooterPoseSupplier.get();
@@ -150,12 +162,14 @@ public class ShootingPlanner implements ShootingPlannerI {
   @Override
   public Boolean shouldShoot() {
     if (!atStateSupplier.getAsBoolean()) return false;
+
     // Compute once to avoid repeated supplier calls and potential side-effects
     Shooter.State recommended = recommendedShooterState();
+
     // Cache the velocity/rotation supplier result to avoid multiple supplier.get() calls
     Pose2d vel = shooterPosVelocitySupplier.get().toPose2d();
+
     if (vel == null) {
-      // Missing velocity measurement — refuse to shoot and record telemetry for debugging.
       Logger.recordOutput("Shooter/ShouldShoot", "Missing shooter velocity");
       return false;
     }
@@ -184,8 +198,10 @@ public class ShootingPlanner implements ShootingPlannerI {
           return false;
           break;
         }
+
       case STOW:
         return false;
+
       default:
         Logger.recordOutput(
             "ShootingPlanner/UnknownState",

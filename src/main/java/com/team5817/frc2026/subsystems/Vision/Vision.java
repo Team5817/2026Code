@@ -15,6 +15,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.Timer;
 import java.util.LinkedList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
@@ -30,6 +31,8 @@ public class Vision extends Subsystem {
   private List<Pose3d> allRobotPoses = new LinkedList<>();
   private List<Pose3d> allRobotPosesAccepted = new LinkedList<>();
   private List<Pose3d> allRobotPosesRejected = new LinkedList<>();
+  // Timestamp (FPGA seconds) of the last accepted vision observation. POSITIVE_INFINITY if none.
+  private double lastVisionUpdateTime = Double.POSITIVE_INFINITY;
 
   public Vision(VisionConsumer consumer, VisionIO... io) {
     this.consumer = consumer;
@@ -135,6 +138,8 @@ public class Vision extends Subsystem {
         }
 
         // Send vision observation
+        // Record the time we received a valid vision observation according to robot clock.
+        lastVisionUpdateTime = Timer.getFPGATimestamp();
         consumer.accept(
             new Pose2d(observation.pose().toPose2d()),
             observation.timestamp(),
@@ -177,15 +182,8 @@ public class Vision extends Subsystem {
   }
 
   public double timeSinceUpdate() {
-    double minTimeSince = Double.MAX_VALUE;
-    for (int i = 0; i < io.length; i++) {
-      if ((inputs[i].poseObservations.length == 0)) continue;
-      double timeSince = inputs[i].poseObservations[0].timestamp(); // TODO test
-      if (timeSince < minTimeSince) {
-        minTimeSince = timeSince;
-      }
-    }
-    return minTimeSince;
+    if (lastVisionUpdateTime == Double.POSITIVE_INFINITY) return Double.POSITIVE_INFINITY;
+    return Timer.getFPGATimestamp() - lastVisionUpdateTime;
   }
 
   @FunctionalInterface
