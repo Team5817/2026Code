@@ -14,7 +14,7 @@ public class AutoShootRequest extends Request {
   }
 
   @Override
-  public void act() {
+  public void update() {
     s.mShooter.followPlan(true);
     Logger.recordOutput("Shooter/Should Shoot", planner.shouldShoot());
     // if(planner.shouldShoot())
@@ -32,4 +32,7 @@ public class AutoShootRequest extends Request {
   public boolean isFinished() {
     return false; // runs until interrupted
   }
+
+  @Override
+  public void act() {}
 }

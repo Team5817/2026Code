@@ -23,7 +23,9 @@ public class RequestExecutor {
       currentRequest.act();
       startedCurrentRequest = true;
     }
-
+    if(currentRequest.allowed()){
+      currentRequest.update();
+    }
     if (startedCurrentRequest && currentRequest.isFinished()) {
       currentRequest = null;
     }

@@ -6,6 +6,9 @@ import com.team254.lib.geometry.Translation2d;
 import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
+
+import edu.wpi.first.wpilibj.Timer;
+
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -142,14 +145,14 @@ public class ShootingPlanner implements ShootingPlannerI {
     this.atStateSupplier = atStateSupplier;
   }
 
-  @AutoLogOutput(key = "Shooter/Recomended State")
+  @AutoLogOutput(key = "Shooter/Planner/Recomended State")
   public Shooter.State recommendedShooterState() {
     Pose2d current = this.shooterPoseSupplier.get();
     Translation2d shooterToHub = ShootingTarget.HUB.getLocation().minus(current.getTranslation());
     double hubDist = shooterToHub.norm();
     Pose2d futureHub = predictFuturePose(hubDist);
 
-    Logger.recordOutput("Shooter/FuturePose", futureHub.wpi());
+    Logger.recordOutput("Shooter/Planner/FuturePose", futureHub.wpi());
 
     if (current.getTranslation().inBounds(config.dangerBounds)) return Shooter.State.STOW;
 
@@ -158,65 +161,90 @@ public class ShootingPlanner implements ShootingPlannerI {
 
     return Shooter.State.LOB;
   }
+@Override
+public Boolean shouldShoot() {
+  boolean atState = atStateSupplier.getAsBoolean();
+  Logger.recordOutput("Shooter/Planner/AtStateSupplier", atState);
 
-  @Override
-  public Boolean shouldShoot() {
-    if (!atStateSupplier.getAsBoolean()) return false;
-
-    // Compute once to avoid repeated supplier calls and potential side-effects
-    Shooter.State recommended = recommendedShooterState();
-
-    // Cache the velocity/rotation supplier result to avoid multiple supplier.get() calls
-    Pose2d vel = shooterPosVelocitySupplier.get().toPose2d();
-
-    if (vel == null) {
-      Logger.recordOutput("Shooter/ShouldShoot", "Missing shooter velocity");
-      return false;
-    }
-
-    switch (recommended) {
-      case HUB:
-        {
-          ShootingTarget target = ShootingTarget.HUB;
-          if (vel.getTranslation().norm()
-              > target.getVelocityThreshold()) // TODO tune velocity threshold
-          return false;
-          if (Math.abs(vel.getRotation().getDegrees())
-              > target.getRotationThreshold()) // TODO tune rotation threshold
-          return false;
-          break;
-        }
-
-      case LOB:
-        {
-          ShootingTarget target = ShootingTarget.LOB;
-          if (vel.getTranslation().norm()
-              > target.getVelocityThreshold()) // TODO tune velocity threshold
-          return false;
-          if (Math.abs(vel.getRotation().getDegrees())
-              > target.getRotationThreshold()) // TODO tune rotation threshold
-          return false;
-          break;
-        }
-
-      case STOW:
-        return false;
-
-      default:
-        Logger.recordOutput(
-            "ShootingPlanner/UnknownState",
-            "Unknown shooter state: " + String.valueOf(recommended));
-        return false;
-    }
-
-    // Use the threshold for the current recommended target
-    ShootingTarget currentTarget =
-        recommended == Shooter.State.HUB ? ShootingTarget.HUB : ShootingTarget.LOB;
-    if (timeSinceVision.getAsDouble()
-        > currentTarget.getTimeSinceVisionThreshold()) // TODO tune time since vision threshold
+  if (!atState) {
+    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+    Logger.recordOutput("Shooter/Planner/FailReason", "Not at state");
     return false;
-    return true;
   }
+
+  Shooter.State recommended = recommendedShooterState();
+  Logger.recordOutput("Shooter/Planner/RecommendedState", recommended.toString());
+
+  Pose2d vel = shooterPosVelocitySupplier.get().toPose2d();
+  if (vel == null) {
+    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+    Logger.recordOutput("Shooter/Planner/FailReason", "Missing shooter velocity");
+    return false;
+  }
+
+  double linearVel = vel.getTranslation().norm();
+  double angularVelDeg = vel.getRotation().getDegrees();
+
+  Logger.recordOutput("Shooter/Planner/Velocity/Linear", linearVel);
+  Logger.recordOutput("Shooter/Planner/Velocity/AngularDeg", angularVelDeg);
+
+  ShootingTarget target = null;
+
+  switch (recommended) {
+    case HUB:
+      target = ShootingTarget.HUB;
+      break;
+
+    case LOB:
+      target = ShootingTarget.LOB;
+      break;
+
+    case STOW:
+      Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+      Logger.recordOutput("Shooter/Planner/FailReason", "Recommended STOW");
+      return false;
+
+    default:
+      Logger.recordOutput(
+          "ShootingPlanner/UnknownState",
+          "Unknown shooter state: " + recommended);
+      Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+      return false;
+  }
+
+  Logger.recordOutput("Shooter/Planner/Target", target.toString());
+  Logger.recordOutput("Shooter/Planner/Thresholds/Velocity", target.getVelocityThreshold());
+  Logger.recordOutput("Shooter/Planner/Thresholds/RotationDeg", target.getRotationThreshold());
+
+  if (linearVel > target.getVelocityThreshold()) {
+    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+    Logger.recordOutput("Shooter/Planner/FailReason", "Linear velocity too high");
+    return false;
+  }
+
+  if (Math.abs(angularVelDeg) > target.getRotationThreshold()) {
+    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+    Logger.recordOutput("Shooter/Planner/FailReason", "Angular velocity too high");
+    return false;
+  }
+
+  double timeSinceVisionVal = timeSinceVision.getAsDouble();
+  Logger.recordOutput("Shooter/Planner/TimeSinceVision", timeSinceVisionVal);
+  Logger.recordOutput(
+      "Shooter/Planner/Thresholds/TimeSinceVision",
+      target.getTimeSinceVisionThreshold());
+
+  if (timeSinceVisionVal > target.getTimeSinceVisionThreshold()) {
+    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
+    Logger.recordOutput("Shooter/Planner/FailReason", "Vision too old");
+    return false;
+  }
+
+  Logger.recordOutput("Shooter/Planner/ShouldShoot", true);
+  Logger.recordOutput("Shooter/Planner/FailReason", "None");
+  Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
+  return true;
+}
 
   @Override
   public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
