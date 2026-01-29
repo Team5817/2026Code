@@ -40,7 +40,7 @@ public class Shooter extends Subsystem {
         () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
     this.planner =
         new ShootingPlanner(
-            shooterPoseSupplier, robotVelocitySupplier, this::isAtState, timeSinceVision);
+            shooterPoseSupplier, robotVelocitySupplier, () -> atState&& !forcedStow, timeSinceVision);
     this.turret =
         new Turret(
             turretIO,
@@ -57,18 +57,6 @@ public class Shooter extends Subsystem {
     this.flywheel =
         new RollerSubsystem<ShooterConstants.FlywheelState>(
             FlywheelState.IDLE, "Shooter/Flywheel", flywheelIO);
-
-    // Provide planner with a live supplier that checks the actual component states.
-    // This avoids stale/lagging values when the planner is asked whether we are at state
-    // before the Shooter's internal `atState` field has been updated by periodic().
-    ((ShootingPlanner) this.planner)
-        .setAtStateSupplier(
-            () ->
-                turret.atState()
-                    && hood.atState()
-                    && flywheel.atState()
-                    && !forcedStow
-                    && mState != State.STOW);
   }
 
   @Getter
@@ -76,10 +64,6 @@ public class Shooter extends Subsystem {
   private State mState = State.STOW;
 
   @Getter @Setter private State desiredState = State.HUB;
-
-  public boolean isAtState() {
-    return atState;
-  }
 
   private boolean atState = false;
   private boolean forcedStow = false;

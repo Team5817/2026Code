@@ -1,13 +1,13 @@
 package com.team5817.frc2026.planners;
 
-import com.team254.lib.geometry.Pose2d;
-import com.team254.lib.geometry.Rotation2d;
-import com.team254.lib.geometry.Translation2d;
-import com.team254.lib.swerve.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Timer;
+
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
-
-import edu.wpi.first.wpilibj.Timer;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -15,11 +15,18 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-/** Shooting planner that provides target-keyed suppliers for hood, turret and flywheel. */
+/**
+ * Shooting planner using WPILib geometry.
+ * NaN-safe and pose-estimator friendly.
+ */
 public class ShootingPlanner implements ShootingPlannerI {
+
+  private static final int CONVERGENCE_ITERS = 5;
+  private static final double MIN_NORM = 1e-4;
 
   private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers =
       new EnumMap<>(ShootingTarget.class);
@@ -28,223 +35,203 @@ public class ShootingPlanner implements ShootingPlannerI {
   private final Map<ShootingTarget, DoubleSupplier> flywheelSpeedSuppliers =
       new EnumMap<>(ShootingTarget.class);
 
-  private Supplier<Pose2d> shooterPoseSupplier;
-  private Supplier<ChassisSpeeds> shooterPosVelocitySupplier;
+  private final Supplier<Pose2d> shooterPoseSupplier;
+  private final Supplier<ChassisSpeeds> shooterVelocitySupplier;
   private BooleanSupplier atStateSupplier;
-  private DoubleSupplier timeSinceVision;
-  private DoubleUnaryOperator timeForDistance;
+  private final DoubleSupplier timeSinceVision;
+  private final DoubleUnaryOperator timeForDistance;
   private final ShootingConfig config;
 
   public ShootingPlanner(
-      Supplier<Pose2d> shooterPoseSupplier,
-      Supplier<ChassisSpeeds> shooterVelocitySupplier,
+      Supplier<com.team254.lib.geometry.Pose2d> shooterPoseSupplier,
+      Supplier<com.team254.lib.swerve.ChassisSpeeds> shooterVelocitySupplier,
       BooleanSupplier atStateSupplier,
       DoubleSupplier timeSinceVision) {
-    this.shooterPoseSupplier = shooterPoseSupplier;
-    this.shooterPosVelocitySupplier = shooterVelocitySupplier;
+
+    this.shooterPoseSupplier = () -> shooterPoseSupplier.get().wpi();
+    this.shooterVelocitySupplier =() -> shooterVelocitySupplier.get().wpi();
     this.atStateSupplier = atStateSupplier;
     this.timeSinceVision = timeSinceVision;
     this.config = ShootingConfig.defaultConfig();
 
     this.timeForDistance =
-        (distance) -> {
-          Double val = (Double) config.timeMap.get(distance);
-          return val != null ? val : 0.0;
+        d -> {
+          Double v = (Double) config.timeMap.get(d);
+          return (v != null && Double.isFinite(v)) ? v : 0.0;
         };
 
-    // atStateSupplier may be overridden later if caller needs to provide a supplier that
-    // depends on components which are created after this planner (see Shooter).
-    this.atStateSupplier = atStateSupplier;
+    /* ---------------- Future-to-target suppliers ---------------- */
 
-    Supplier<Translation2d> futureShooterToHub =
-        () -> {
-          Pose2d current = this.shooterPoseSupplier.get();
-          double distance = ShootingTarget.HUB.getLocation().minus(current.getTranslation()).norm();
-          Pose2d future = predictFuturePose(distance);
-          return ShootingTarget.HUB.getLocation().minus(future.getTranslation());
-        };
-
-    Supplier<Translation2d> futureShooterToLobL =
-        () -> {
-          Pose2d current = this.shooterPoseSupplier.get();
-          double distance =
-              ShootingTarget.LOBL.getLocation().minus(current.getTranslation()).norm();
-          Pose2d future = predictFuturePose(distance);
-          return ShootingTarget.LOBL.getLocation().minus(future.getTranslation());
-        };
-
-    Supplier<Translation2d> futureShooterToLobR =
-        () -> {
-          Pose2d current = this.shooterPoseSupplier.get();
-          double distance =
-              ShootingTarget.LOBR.getLocation().minus(current.getTranslation()).norm();
-          Pose2d future = predictFuturePose(distance);
-          return ShootingTarget.LOBR.getLocation().minus(future.getTranslation());
-        };
-
-    Supplier<ShootingTarget> futureClosestLob =
-        () ->
-            futureShooterToLobR.get().norm() < futureShooterToLobL.get().norm()
-                ? ShootingTarget.LOBR
-                : ShootingTarget.LOBL;
-
-    Map<ShootingTarget, Supplier<Translation2d>> futureToTarget =
+    Map<ShootingTarget, Supplier<Translation2d>> futureTo =
         new EnumMap<>(ShootingTarget.class);
-    futureToTarget.put(ShootingTarget.HUB, futureShooterToHub);
-    futureToTarget.put(ShootingTarget.LOBL, futureShooterToLobL);
-    futureToTarget.put(ShootingTarget.LOBR, futureShooterToLobR);
-    // For the generic LOB key, point to whichever lob is predicted to be closest using that lob's
-    // own horizon.
-    futureToTarget.put(
+
+    futureTo.put(ShootingTarget.HUB, () -> computeFutureVector(ShootingTarget.HUB));
+    futureTo.put(ShootingTarget.LOBL, () -> computeFutureVector(ShootingTarget.LOBL));
+    futureTo.put(ShootingTarget.LOBR, () -> computeFutureVector(ShootingTarget.LOBR));
+    futureTo.put(
         ShootingTarget.LOB,
         () -> {
-          ShootingTarget chosen = futureClosestLob.get();
-          Pose2d current = this.shooterPoseSupplier.get();
-          double distance = chosen.getLocation().minus(current.getTranslation()).norm();
-          Pose2d future = predictFuturePose(distance);
-          return chosen.getLocation().minus(future.getTranslation());
+          Translation2d l = computeFutureVector(ShootingTarget.LOBL);
+          Translation2d r = computeFutureVector(ShootingTarget.LOBR);
+          return l.getNorm() < r.getNorm() ? l : r;
         });
 
+    /* ---------------- Output suppliers (NaN SAFE) ---------------- */
+
     for (ShootingTarget t : ShootingTarget.values()) {
-      Supplier<Translation2d> futureTo = futureToTarget.get(t);
+      Supplier<Translation2d> vec = futureTo.get(t);
 
       hoodAngleSuppliers.put(
           t,
           () -> {
-            Translation2d to = futureTo.get();
+            double d = vec.get().getNorm();
+            if (!Double.isFinite(d) || d < MIN_NORM) return 0.0;
 
-            double distance = to.norm();
-            Double val = t.getHoodMap().get(distance);
-            return val;
+            Double val = t.getHoodMap().get(d);
+            return val != null && Double.isFinite(val) ? val : 0.0;
           });
 
       flywheelSpeedSuppliers.put(
           t,
           () -> {
-            Translation2d to = futureTo.get();
+            double d = vec.get().getNorm();
+            if (!Double.isFinite(d) || d < MIN_NORM) return 0.0;
 
-            double distance = to.norm();
-            Double val = t.getFlywheelMap().get(distance);
-            return val;
+            Double val = t.getFlywheelMap().get(d);
+            return val != null && Double.isFinite(val) ? val : 0.0;
           });
 
       turretAngleSuppliers.put(
           t,
           () -> {
-            Translation2d to = futureTo.get();
-            return to.direction().getDegrees();
+            Translation2d v = vec.get();
+            double x = v.getX();
+            double y = v.getY();
+
+            if (!Double.isFinite(x) || !Double.isFinite(y)) return 0.0;
+            if (Math.hypot(x, y) < MIN_NORM) return 0.0;
+
+            return Math.toDegrees(Math.atan2(y, x));
           });
     }
   }
 
-  /**
-   * Override the at-state supplier. Useful when the caller can't provide a supplier in the
-   * constructor because subsystem components are created after the planner (circular deps).
-   */
-  public void setAtStateSupplier(BooleanSupplier atStateSupplier) {
-    this.atStateSupplier = atStateSupplier;
+  /* -------------------------------------------------------------------------- */
+  /*                                Core Math                                   */
+  /* -------------------------------------------------------------------------- */
+
+  private Translation2d computeFutureVector(ShootingTarget target) {
+    Pose2d pose = shooterPoseSupplier.get();
+    ChassisSpeeds speeds = shooterVelocitySupplier.get();
+
+    if (pose == null || speeds == null) {
+      return new Translation2d(MIN_NORM, 0.0);
+    }
+
+    Pose2d futurePose = pose;
+    Translation2d targetPos = target.getLocation().wpi();
+
+    double distance =
+        targetPos.minus(futurePose.getTranslation()).getNorm();
+
+    for (int i = 0; i < CONVERGENCE_ITERS; i++) {
+      double tof = timeForDistance.applyAsDouble(distance);
+      if (!Double.isFinite(tof) || tof <= 0.0) break;
+
+      double vx = Double.isFinite(speeds.vxMetersPerSecond)
+          ? speeds.vxMetersPerSecond
+          : 0.0;
+      double vy = Double.isFinite(speeds.vyMetersPerSecond)
+          ? speeds.vyMetersPerSecond
+          : 0.0;
+      double omega = Double.isFinite(speeds.omegaRadiansPerSecond)
+          ? speeds.omegaRadiansPerSecond
+          : 0.0;
+
+      Twist2d twist = new Twist2d(
+          vx * tof,
+          vy * tof,
+          omega * tof);
+
+      futurePose = futurePose.exp(twist);
+
+      distance =
+          targetPos.minus(futurePose.getTranslation()).getNorm();
+    }
+
+    Translation2d result =
+        targetPos.minus(futurePose.getTranslation());
+
+    if (!Double.isFinite(result.getX())
+        || !Double.isFinite(result.getY())
+        || result.getNorm() < MIN_NORM) {
+      return new Translation2d(MIN_NORM, 0.0);
+    }
+
+    return result;
   }
 
-  @AutoLogOutput(key = "Shooter/Planner/Recomended State")
+  /* -------------------------------------------------------------------------- */
+
+  @AutoLogOutput(key = "Shooter/Planner/RecommendedState")
   public Shooter.State recommendedShooterState() {
-    Pose2d current = this.shooterPoseSupplier.get();
-    Translation2d shooterToHub = ShootingTarget.HUB.getLocation().minus(current.getTranslation());
-    double hubDist = shooterToHub.norm();
-    Pose2d futureHub = predictFuturePose(hubDist);
+    Pose2d current = shooterPoseSupplier.get();
+    ChassisSpeeds speeds = shooterVelocitySupplier.get();
 
-    Logger.recordOutput("Shooter/Planner/FuturePose", futureHub.wpi());
+    if (current == null || speeds == null) {
+      return Shooter.State.STOW;
+    }
 
-    if (current.getTranslation().inBounds(config.dangerBounds)) return Shooter.State.STOW;
+    Translation2d toHub =
+        ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
 
-    if (futureHub.getTranslation().inBounds(config.hubBounds) && ActiveTracker.isActive())
+    double tof = timeForDistance.applyAsDouble(toHub.getNorm());
+
+    Twist2d twist = new Twist2d(
+        speeds.vxMetersPerSecond * tof,
+        speeds.vyMetersPerSecond * tof,
+        speeds.omegaRadiansPerSecond * tof);
+
+    Pose2d futureHub = current.exp(twist);
+
+    Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
+
+    if (new com.team254.lib.geometry.Translation2d(current.getTranslation()).inBounds(config.dangerBounds))
+      return Shooter.State.STOW;
+
+    if (new com.team254.lib.geometry.Translation2d(futureHub.getTranslation()).inBounds(config.hubBounds)
+        && ActiveTracker.isActive())
       return Shooter.State.HUB;
 
     return Shooter.State.LOB;
   }
-@Override
-public Boolean shouldShoot() {
-  boolean atState = atStateSupplier.getAsBoolean();
-  Logger.recordOutput("Shooter/Planner/AtStateSupplier", atState);
 
-  if (!atState) {
-    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-    Logger.recordOutput("Shooter/Planner/FailReason", "Not at state");
-    return false;
-  }
+  @Override
+  public Boolean shouldShoot() {
+    if (!atStateSupplier.getAsBoolean()) return false;
 
-  Shooter.State recommended = recommendedShooterState();
-  Logger.recordOutput("Shooter/Planner/RecommendedState", recommended.toString());
+    Shooter.State state = recommendedShooterState();
+    ChassisSpeeds speeds = shooterVelocitySupplier.get();
+    if (speeds == null) return false;
 
-  Pose2d vel = shooterPosVelocitySupplier.get().toPose2d();
-  if (vel == null) {
-    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-    Logger.recordOutput("Shooter/Planner/FailReason", "Missing shooter velocity");
-    return false;
-  }
+    double linearVel =
+        Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    double angularVelDeg =
+        Math.toDegrees(speeds.omegaRadiansPerSecond);
 
-  double linearVel = vel.getTranslation().norm();
-  double angularVelDeg = vel.getRotation().getDegrees();
+    ShootingTarget target =
+        state == Shooter.State.HUB ? ShootingTarget.HUB :
+        state == Shooter.State.LOB ? ShootingTarget.LOB : null;
 
-  Logger.recordOutput("Shooter/Planner/Velocity/Linear", linearVel);
-  Logger.recordOutput("Shooter/Planner/Velocity/AngularDeg", angularVelDeg);
-
-  ShootingTarget target = null;
-
-  switch (recommended) {
-    case HUB:
-      target = ShootingTarget.HUB;
-      break;
-
-    case LOB:
-      target = ShootingTarget.LOB;
-      break;
-
-    case STOW:
-      Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-      Logger.recordOutput("Shooter/Planner/FailReason", "Recommended STOW");
+    if (target == null) return false;
+    if (linearVel > target.getVelocityThreshold()) return false;
+    if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
+    if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold())
       return false;
 
-    default:
-      Logger.recordOutput(
-          "ShootingPlanner/UnknownState",
-          "Unknown shooter state: " + recommended);
-      Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-      return false;
+    Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
+    return true;
   }
-
-  Logger.recordOutput("Shooter/Planner/Target", target.toString());
-  Logger.recordOutput("Shooter/Planner/Thresholds/Velocity", target.getVelocityThreshold());
-  Logger.recordOutput("Shooter/Planner/Thresholds/RotationDeg", target.getRotationThreshold());
-
-  if (linearVel > target.getVelocityThreshold()) {
-    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-    Logger.recordOutput("Shooter/Planner/FailReason", "Linear velocity too high");
-    return false;
-  }
-
-  if (Math.abs(angularVelDeg) > target.getRotationThreshold()) {
-    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-    Logger.recordOutput("Shooter/Planner/FailReason", "Angular velocity too high");
-    return false;
-  }
-
-  double timeSinceVisionVal = timeSinceVision.getAsDouble();
-  Logger.recordOutput("Shooter/Planner/TimeSinceVision", timeSinceVisionVal);
-  Logger.recordOutput(
-      "Shooter/Planner/Thresholds/TimeSinceVision",
-      target.getTimeSinceVisionThreshold());
-
-  if (timeSinceVisionVal > target.getTimeSinceVisionThreshold()) {
-    Logger.recordOutput("Shooter/Planner/ShouldShoot", false);
-    Logger.recordOutput("Shooter/Planner/FailReason", "Vision too old");
-    return false;
-  }
-
-  Logger.recordOutput("Shooter/Planner/ShouldShoot", true);
-  Logger.recordOutput("Shooter/Planner/FailReason", "None");
-  Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
-  return true;
-}
 
   @Override
   public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
@@ -259,18 +246,5 @@ public Boolean shouldShoot() {
   @Override
   public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget target) {
     return flywheelSpeedSuppliers.get(target);
-  }
-
-  private Pose2d predictFuturePose(double distance) {
-    Pose2d current = this.shooterPoseSupplier.get();
-    Pose2d vel = this.shooterPosVelocitySupplier.get().toPose2d();
-    if (current == null) {
-      return new Pose2d();
-    }
-    if (vel == null) {
-      return current;
-    }
-    double dt = this.timeForDistance.applyAsDouble(distance);
-    return current.transformBy(new Pose2d(vel.getTranslation().times(dt), Rotation2d.identity()));
   }
 }
