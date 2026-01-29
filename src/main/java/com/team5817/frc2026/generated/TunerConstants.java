@@ -142,20 +142,20 @@ public class TunerConstants {
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
       ConstantCreator.createModuleConstants(
           5, 1, 1, Rotations.of(-0.250244140625+0.5),
-          kX, kY, kInvertLeftSide, false, false);
+          kX, kY, kInvertLeftSide, true, false);
 
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontRight =
       ConstantCreator.createModuleConstants(
           6, 2, 2, Rotations.of(0.338623046875+0.5),
-          kX, kY.unaryMinus(), kInvertRightSide, false, false);
+          kX, kY.unaryMinus(), kInvertRightSide, true, false);
 
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackLeft =
       ConstantCreator.createModuleConstants(
           7, 3, 3, Rotations.of(0-0.349609375+0.5),
-          kX.unaryMinus(), kY, kInvertLeftSide, false, false);
+          kX.unaryMinus(), kY, kInvertLeftSide, true, false);
 
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackRight =
       ConstantCreator.createModuleConstants(
           8, 4, 4, Rotations.of(0.281005859375+0.5),
-          kX.unaryMinus(), kY.unaryMinus(), kInvertRightSide, false, false);
+          kX.unaryMinus(), kY.unaryMinus(), kInvertRightSide, true, false);
 }

@@ -39,10 +39,10 @@ public class Ports {
   public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(12);
   public static final CanDeviceId TUNNEL_2 = new CanDeviceId(11);
 
-  public static final CanDeviceId TURRET = new CanDeviceId(13);
-  public static final CanDeviceId HOOD = new CanDeviceId(14);
-  public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(15);
-  public static final CanDeviceId FLYWHEEL_2 = new CanDeviceId(16);
+  public static final CanDeviceId TURRET = new CanDeviceId(13,"canivore1");
+  public static final CanDeviceId HOOD = new CanDeviceId(14, "canivore1");
+  public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(15, "canivore1");
+  public static final CanDeviceId FLYWHEEL_2 = new CanDeviceId(16, "canivore1");
 
   public static final CanDeviceId CLIMB = new CanDeviceId(17);
 

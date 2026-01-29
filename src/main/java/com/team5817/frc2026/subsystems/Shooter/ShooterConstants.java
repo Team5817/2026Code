@@ -87,14 +87,14 @@ public class ShooterConstants {
       kTurretServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0;
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100/3*1.19444444444444;
 
       // Soft limits
       kTurretServoConstants.kMinUnitsLimit = -180.0;
       kTurretServoConstants.kMaxUnitsLimit = 180.0;
 
       // PID (placeholder)
-      kTurretServoConstants.kKp = 2.0;
+      kTurretServoConstants.kKp = 0.0;
       kTurretServoConstants.kKi = 0.0;
       kTurretServoConstants.kKd = 0.0;
 
@@ -133,17 +133,17 @@ public class ShooterConstants {
       kHoodServoConstants.kName = "Shooter/Hood";
 
       kHoodServoConstants.kMainConstants.id = Ports.HOOD;
-      kHoodServoConstants.kMainConstants.counterClockwisePositive = true;
+      kHoodServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kHoodServoConstants.kHomePosition = 0.0;
-      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0;
+      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100/1;
 
       // Soft limits
-      kHoodServoConstants.kMinUnitsLimit = -180.0;
-      kHoodServoConstants.kMaxUnitsLimit = 180.0;
+      kHoodServoConstants.kMinUnitsLimit = 0.0;
+      kHoodServoConstants.kMaxUnitsLimit = 43.0;
 
       // PID (placeholder)
-      kHoodServoConstants.kKp = 1.5;
+      kHoodServoConstants.kKp = 0.0;
       kHoodServoConstants.kKi = 0.0;
       kHoodServoConstants.kKd = 0.0;
 
