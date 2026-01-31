@@ -81,15 +81,15 @@ public class TunerConstants {
   private static final double kCoupleRatio = 0;
 
   // Gear ratios (from module config)
-  private static final double kDriveGearRatio = 6.394736842105262;
-  private static final double kSteerGearRatio = 12.1;
+  private static final double kDriveGearRatio = 7.1328671328671325;
+  private static final double kSteerGearRatio = 11.314285714285715;
 
   // Radius of the wheel
-  private static final Distance kWheelRadius = Inches.of(2.0);
+  private static final Distance kWheelRadius = Inches.of(2);
 
   // Inversion settings for drivetrain sides
-  private static final boolean kInvertLeftSide = false;
-  private static final boolean kInvertRightSide = true;
+  private static final boolean kInvertLeftSide = true;
+  private static final boolean kInvertRightSide = false;
 
   // CAN ID for the Pigeon 2
   private static final int kPigeonId = 23;
@@ -141,21 +141,21 @@ public class TunerConstants {
   // === Module constants ===
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
       ConstantCreator.createModuleConstants(
-          5, 1, 1, Rotations.of(-0.250244140625+0.5),
+          5, 1, 1, Rotations.of(0.368408203125),
           kX, kY, kInvertLeftSide, true, false);
 
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontRight =
       ConstantCreator.createModuleConstants(
-          6, 2, 2, Rotations.of(0.338623046875+0.5),
+          6, 2, 2, Rotations.of(0.125732421875),
           kX, kY.unaryMinus(), kInvertRightSide, true, false);
 
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackLeft =
       ConstantCreator.createModuleConstants(
-          7, 3, 3, Rotations.of(0-0.349609375+0.5),
+          7, 3, 3, Rotations.of(-0.335693359375),
           kX.unaryMinus(), kY, kInvertLeftSide, true, false);
 
   public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackRight =
       ConstantCreator.createModuleConstants(
-          8, 4, 4, Rotations.of(0.281005859375+0.5),
+          8, 4, 4, Rotations.of(0.159423828125),
           kX.unaryMinus(), kY.unaryMinus(), kInvertRightSide, true, false);
 }
