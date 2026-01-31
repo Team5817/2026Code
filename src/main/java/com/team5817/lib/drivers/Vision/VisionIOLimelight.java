@@ -43,7 +43,6 @@ public class VisionIOLimelight implements VisionIO {
       txSubscriber = table.getDoubleTopic("tx").subscribe(0.0);
       tySubscriber = table.getDoubleTopic("ty").subscribe(0.0);
       megatag1Subscriber = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
-      LimelightHelpers.setPipelineIndex(name, 0);
       megatag2Subscriber =
           table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
       kName = name;
@@ -156,11 +155,9 @@ public class VisionIOLimelight implements VisionIO {
 
   @Override
   public void stop() {
-    LimelightHelpers.setPipelineIndex(kName, 1);
   }
 
   @Override
   public void start() {
-    LimelightHelpers.setPipelineIndex(kName, 0);
   }
 }

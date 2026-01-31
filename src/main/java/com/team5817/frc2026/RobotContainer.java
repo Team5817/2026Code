@@ -34,6 +34,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -58,7 +61,7 @@ public class RobotContainer {
         break;
     }
 
-    makeSimulatedRobot();
+    fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
     mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb);
@@ -68,77 +71,89 @@ public class RobotContainer {
   }
 
   public void makeRealRobot() {
-    // mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
-    mIntake =
-        new Intake(
-            new RollerSubsystemIOTalonFX(
-                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
-            new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants)
-            // new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
-            );
+  // ---------------- DRIVE ----------------
+  mDrive =
+      new Drive(
+          new GyroIOPigeon2(),
+          new ModuleIOTalonFX(TunerConstants.FrontLeft),
+          new ModuleIOTalonFX(TunerConstants.FrontRight),
+          new ModuleIOTalonFX(TunerConstants.BackLeft),
+          new ModuleIOTalonFX(TunerConstants.BackRight),
+          SwerveConstants.stabilizePID,
+          SwerveConstants.snapPID);
 
-    mDrive =
-        new Drive(
-            new GyroIOPigeon2(),
-            new ModuleIOTalonFX(TunerConstants.FrontLeft),
-            new ModuleIOTalonFX(TunerConstants.FrontRight),
-            new ModuleIOTalonFX(TunerConstants.BackLeft),
-            new ModuleIOTalonFX(TunerConstants.BackRight),
-            SwerveConstants.stabilizePID,
-            SwerveConstants.snapPID);
+  // ---------------- INTAKE ----------------
+  mIntake =
+      new Intake(
+          new RollerSubsystemIOTalonFX(
+              Ports.INTAKE_ROLLERS,
+              IntakeConstants.RollerConstants.motorConstants,
+              2.5),
+          new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants)
+          // new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
+          );
 
-    Rotation2d turretYaw =
-        Rotation2d.fromDegrees(mShooter.getTurret().getPosition());
+  // ---------------- SHOOTER (Vision dependency patched later) ----------------
+  mShooter =
+      new Shooter(
+          new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
+          new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
+          new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
+          mDrive::getPose,
+          mDrive::getChassisSpeeds,
+          () -> 0.0 // placeholder for vision timing supplier
+          );
 
-    Rotation2d fieldYaw = mDrive.getHeading().add(turretYaw);
+  // ---------------- VISION ----------------
+  // Dynamic suppliers for turret yaw and camera pose
+  Supplier<Rotation2d> turretYawSupplier = () -> Rotation2d.fromDegrees(mShooter.getTurret().getPosition());
+  Supplier<Rotation2d> fieldYawSupplier = () -> mDrive.getHeading().add(turretYawSupplier.get());
 
-    Translation3d turretToCamRotated =
-        ShooterConstants.TurretToCam.rotateBy(
-            new Rotation3d(0.0, 0.0, turretYaw.getRadians())
-        );
-    Translation3d cameraTranslation =
-        ShooterConstants.robotToTurret.plus(turretToCamRotated);
+  Supplier<Translation3d> turretToCamRotatedSupplier = () ->
+      ShooterConstants.TurretToCam.rotateBy(
+          new Rotation3d(0.0, 0.0, turretYawSupplier.get().getRadians())
+      );
 
-    Pose3d turretCamPose =
-        new Pose3d(
-            cameraTranslation,
-            new Rotation3d(
-                0.0,
-                Math.toRadians(45.0),     // camera pitch (radians)
-                turretYaw.getRadians()    // robot-relative yaw ONLY
-            )
-        );
-    Logger.recordOutput("Shooter/LL Pose", turretCamPose);
-    mVision =
-        new Vision(
-            mDrive::addVisionMeasurement,
-            new VisionIOLimelight(
-                "limelight-turret",
-                () -> fieldYaw,         // field-relative yaw
-                () -> turretCamPose     // robot-relative camera pose
-            )
-        );
+  Supplier<Translation3d> cameraTranslationSupplier = () ->
+      ShooterConstants.robotToTurret.plus(turretToCamRotatedSupplier.get());
 
-    // mSpindexer =
-    // new SpindexerGroup(
-    //     new SpindexerRoller(new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1,
-    // SpindexerConstants.leftRoller, 0), "Left"),
-    //     new SpindexerRoller(new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2,
-    // SpindexerConstants.rightRoller, 0), "Right"));
+  Supplier<Pose3d> turretCamPoseSupplier = () -> new Pose3d(
+      cameraTranslationSupplier.get(),
+      new Rotation3d(
+          0.0,
+          Math.toRadians(45.0),          // camera pitch (fixed)
+          turretYawSupplier.get().getRadians()  // robot-relative yaw ONLY
+      )
+  );
 
-    mShooter =
-        new Shooter(
-            new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
-            new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
-            new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
-            mDrive::getPose,
-            mDrive::getChassisSpeeds,
-            mVision::timeSinceUpdate);
-  }
+  // Optional logging on pose fetch
+  Supplier<Pose3d> loggingTurretCamPoseSupplier = () -> {
+    Pose3d pose = turretCamPoseSupplier.get();
+    Logger.recordOutput("Shooter/LL Pose", pose);
+    return pose;
+  };
+
+  mVision =
+      new Vision(
+          mDrive::addVisionMeasurement,
+          new VisionIOLimelight(
+              "limelight-turret",
+              mDrive::getHeading,           // field-relative yaw (dynamic)
+              loggingTurretCamPoseSupplier // robot-relative camera pose (dynamic)
+          )
+      );
+
+  // Patch vision timing supplier into Shooter now that Vision exists
+  mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
+
+  // ---------------- CLIMB ----------------
+  mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
+}
+
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
 
-  public void makeSimulatedRobot() {
+  public void fillInSimulatedSubsytems() {
     if (RobotMode.isSim()) {
       driveSimulation =
           new SwerveDriveSimulation(

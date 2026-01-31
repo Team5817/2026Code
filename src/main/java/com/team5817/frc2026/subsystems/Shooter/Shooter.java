@@ -5,7 +5,6 @@ import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.frc2026.planners.ShootingPlanner;
-import com.team5817.frc2026.planners.ShootingPlannerI;
 import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants.FlywheelState;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
@@ -26,7 +25,7 @@ public class Shooter extends Subsystem {
   @Getter private final Hood hood;
   @Getter private final RollerSubsystem<ShooterConstants.FlywheelState> flywheel;
 
-  @Getter private ShootingPlannerI planner;
+  @Getter private ShootingPlanner planner;
 
   public Shooter(
       ServoMotorIO turretIO,
@@ -38,12 +37,16 @@ public class Shooter extends Subsystem {
     Supplier<Rotation2d> robotHeadingSupplier = () -> robotPoseSupplier.get().getRotation();
     Supplier<Pose2d> shooterPoseSupplier =
         () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
+
+    // Use builder pattern to create ShootingPlanner
     this.planner =
-        new ShootingPlanner(
-            shooterPoseSupplier,
-            robotVelocitySupplier,
-            () -> atState && !forcedStow,
-            timeSinceVision);
+        ShootingPlanner.builder()
+            .shooterPoseSupplier(shooterPoseSupplier)
+            .shooterVelocitySupplier(robotVelocitySupplier)
+            .atStateSupplier(() -> atState && !forcedStow)
+            .timeSinceVisionSupplier(timeSinceVision)
+            .build();
+
     this.turret =
         new Turret(
             turretIO,
@@ -55,8 +58,10 @@ public class Shooter extends Subsystem {
             hoodIO,
             planner.getHoodAngleSupplier(ShootingTarget.HUB),
             planner.getHoodAngleSupplier(ShootingTarget.LOB));
+
     FlywheelState.HUB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
     FlywheelState.LOBBING.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
+
     this.flywheel =
         new RollerSubsystem<ShooterConstants.FlywheelState>(
             FlywheelState.IDLE, "Shooter/Flywheel", flywheelIO);

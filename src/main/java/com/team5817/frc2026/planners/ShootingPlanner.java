@@ -16,36 +16,28 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-/** Shooting planner using WPILib geometry. NaN-safe and pose-estimator friendly. */
-public class ShootingPlanner implements ShootingPlannerI {
+public class ShootingPlanner {
 
   private static final int CONVERGENCE_ITERS = 5;
   private static final double MIN_NORM = 1e-4;
 
-  private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers =
-      new EnumMap<>(ShootingTarget.class);
-  private final Map<ShootingTarget, DoubleSupplier> turretAngleSuppliers =
-      new EnumMap<>(ShootingTarget.class);
-  private final Map<ShootingTarget, DoubleSupplier> flywheelSpeedSuppliers =
-      new EnumMap<>(ShootingTarget.class);
+  private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers = new EnumMap<>(ShootingTarget.class);
+  private final Map<ShootingTarget, DoubleSupplier> turretAngleSuppliers = new EnumMap<>(ShootingTarget.class);
+  private final Map<ShootingTarget, DoubleSupplier> flywheelSpeedSuppliers = new EnumMap<>(ShootingTarget.class);
 
   private final Supplier<Pose2d> shooterPoseSupplier;
   private final Supplier<ChassisSpeeds> shooterVelocitySupplier;
   private BooleanSupplier atStateSupplier;
-  private final DoubleSupplier timeSinceVision;
+  private DoubleSupplier timeSinceVision;
+
   private final DoubleUnaryOperator timeForDistance;
   private final ShootingConfig config;
 
-  public ShootingPlanner(
-      Supplier<com.team254.lib.geometry.Pose2d> shooterPoseSupplier,
-      Supplier<com.team254.lib.swerve.ChassisSpeeds> shooterVelocitySupplier,
-      BooleanSupplier atStateSupplier,
-      DoubleSupplier timeSinceVision) {
-
-    this.shooterPoseSupplier = () -> shooterPoseSupplier.get().wpi();
-    this.shooterVelocitySupplier = () -> shooterVelocitySupplier.get().wpi();
-    this.atStateSupplier = atStateSupplier;
-    this.timeSinceVision = timeSinceVision;
+  private ShootingPlanner(Builder builder) {
+    this.shooterPoseSupplier = () -> builder.shooterPoseSupplier.get().wpi();
+    this.shooterVelocitySupplier = () -> builder.shooterVelocitySupplier.get().wpi();
+    this.atStateSupplier = builder.atStateSupplier;
+    this.timeSinceVision = builder.timeSinceVision != null ? builder.timeSinceVision : () -> Double.POSITIVE_INFINITY; // default if not set
     this.config = ShootingConfig.defaultConfig();
 
     this.timeForDistance =
@@ -54,8 +46,7 @@ public class ShootingPlanner implements ShootingPlannerI {
           return (v != null && Double.isFinite(v)) ? v : 0.0;
         };
 
-    /* ---------------- Future-to-target suppliers ---------------- */
-
+    // Setup future-to-target suppliers
     Map<ShootingTarget, Supplier<Translation2d>> futureTo = new EnumMap<>(ShootingTarget.class);
 
     futureTo.put(ShootingTarget.HUB, () -> computeFutureVector(ShootingTarget.HUB));
@@ -69,8 +60,7 @@ public class ShootingPlanner implements ShootingPlannerI {
           return l.getNorm() < r.getNorm() ? l : r;
         });
 
-    /* ---------------- Output suppliers (NaN SAFE) ---------------- */
-
+    // Output suppliers (NaN-safe)
     for (ShootingTarget t : ShootingTarget.values()) {
       Supplier<Translation2d> vec = futureTo.get(t);
 
@@ -107,6 +97,57 @@ public class ShootingPlanner implements ShootingPlannerI {
             return Math.toDegrees(Math.atan2(y, x));
           });
     }
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder {
+    private Supplier<com.team254.lib.geometry.Pose2d> shooterPoseSupplier;
+    private Supplier<com.team254.lib.swerve.ChassisSpeeds> shooterVelocitySupplier;
+    private BooleanSupplier atStateSupplier;
+    private DoubleSupplier timeSinceVision;
+
+    public Builder shooterPoseSupplier(Supplier<com.team254.lib.geometry.Pose2d> shooterPoseSupplier) {
+      this.shooterPoseSupplier = shooterPoseSupplier;
+      return this;
+    }
+
+    public Builder shooterVelocitySupplier(Supplier<com.team254.lib.swerve.ChassisSpeeds> shooterVelocitySupplier) {
+      this.shooterVelocitySupplier = shooterVelocitySupplier;
+      return this;
+    }
+
+    public Builder atStateSupplier(BooleanSupplier atStateSupplier) {
+      this.atStateSupplier = atStateSupplier;
+      return this;
+    }
+
+    public Builder timeSinceVisionSupplier(DoubleSupplier timeSinceVision) {
+      this.timeSinceVision = timeSinceVision;
+      return this;
+    }
+
+    public ShootingPlanner build() {
+      if (shooterPoseSupplier == null) {
+        throw new IllegalStateException("shooterPoseSupplier must be set");
+      }
+      if (shooterVelocitySupplier == null) {
+        throw new IllegalStateException("shooterVelocitySupplier must be set");
+      }
+      if (atStateSupplier == null) {
+        throw new IllegalStateException("atStateSupplier must be set");
+      }
+      // timeSinceVision is optional; default is positive infinity
+
+      return new ShootingPlanner(this);
+    }
+  }
+
+  /* Setter for updating vision timing supplier after construction */
+  public void setTimeSinceVisionSupplier(DoubleSupplier timeSinceVision) {
+    this.timeSinceVision = timeSinceVision;
   }
 
   /* -------------------------------------------------------------------------- */
@@ -188,7 +229,6 @@ public class ShootingPlanner implements ShootingPlannerI {
     return Shooter.State.LOB;
   }
 
-  @Override
   public Boolean shouldShoot() {
     if (!atStateSupplier.getAsBoolean()) return false;
 
@@ -213,17 +253,15 @@ public class ShootingPlanner implements ShootingPlannerI {
     return true;
   }
 
-  @Override
   public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
     return hoodAngleSuppliers.get(target);
   }
 
-  @Override
+
   public DoubleSupplier getTurretAngleSupplier(ShootingTarget target) {
     return turretAngleSuppliers.get(target);
   }
 
-  @Override
   public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget target) {
     return flywheelSpeedSuppliers.get(target);
   }

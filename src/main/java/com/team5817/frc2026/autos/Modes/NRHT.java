@@ -7,7 +7,7 @@ import com.team5817.frc2026.autos.Actions.WaitAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
-import com.team5817.frc2026.planners.ShootingPlannerI;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -24,7 +24,7 @@ public class NRHT extends AutoBase {
   private Climb c;
   private Shooter sh;
   private ClimbSelection climbSelection;
-  private ShootingPlannerI p;
+  private ShootingPlanner p;
 
   public NRHT(Superstructure s, ClimbSelection climbSelection) {
     this.d = s.mDrive;

@@ -1,14 +1,14 @@
 package com.team5817.lib.requests;
 
-import com.team5817.frc2026.planners.ShootingPlannerI;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Superstructure;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoShootRequest extends Request {
-  ShootingPlannerI planner;
+  ShootingPlanner planner;
   Superstructure s;
 
-  public AutoShootRequest(ShootingPlannerI planner, Superstructure s) {
+  public AutoShootRequest(ShootingPlanner planner, Superstructure s) {
     this.planner = planner;
     this.s = s;
   }

@@ -32,7 +32,7 @@ public class ShooterConstants {
     0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
     
     static {
-    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,0);
+    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(24));
     TurretToCam = new Translation3d(Units.inchesToMeters(8),0,0);
 
     // Basic flywheel/talon defaults
