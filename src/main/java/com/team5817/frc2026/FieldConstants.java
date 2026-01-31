@@ -334,10 +334,10 @@ public class FieldConstants {
             try {
               Path p =
                   Path.of(
-                          Filesystem.getDeployDirectory().getPath(),
-                          "apriltags",
-                          fieldType.getJsonFolder(),
-                          name + ".json");
+                      Filesystem.getDeployDirectory().getPath(),
+                      "apriltags",
+                      fieldType.getJsonFolder(),
+                      name + ".json");
               layout = new AprilTagFieldLayout(p);
               layoutString = new ObjectMapper().writeValueAsString(layout);
             } catch (IOException e) {

@@ -10,23 +10,31 @@ import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
+
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.util.Units;
+
 import java.util.function.DoubleSupplier;
 
 public class ShooterConstants {
 
   public static final RollerConstantsTalonFX flywheelConstants = new RollerConstantsTalonFX();
-
+  public static final Translation3d TurretToCam;
+  public static final Translation3d robotToTurret;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-
+  
   public static Pose2d shooterTransform =
-      new Pose2d(
-          0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
+  new Pose2d(
+    0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
+    
+    static {
+    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,0);
+    TurretToCam = new Translation3d(Units.inchesToMeters(8),0,0);
 
-  static {
     // Basic flywheel/talon defaults
     flywheelConstants.kMaxForwardOutput = 12.0;
     flywheelConstants.kMaxReverseOutput = -12.0;
@@ -91,7 +99,7 @@ public class ShooterConstants {
       kTurretServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100/3*1.19444444444444;
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100 / 3 * 1.19444444444444;
 
       // Soft limits
       kTurretServoConstants.kMinUnitsLimit = -180.0;
@@ -140,7 +148,7 @@ public class ShooterConstants {
       kHoodServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kHoodServoConstants.kHomePosition = 0.0;
-      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100/1;
+      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100 / 1;
 
       // Soft limits
       kHoodServoConstants.kMinUnitsLimit = 0.0;

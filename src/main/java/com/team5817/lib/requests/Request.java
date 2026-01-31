@@ -8,7 +8,9 @@ public abstract class Request {
   String name = defaultName;
 
   public abstract void act();
-  public void update() {};
+
+  public void update() {}
+  ;
 
   public boolean isFinished() {
     return true;

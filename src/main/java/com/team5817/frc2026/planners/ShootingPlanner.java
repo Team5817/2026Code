@@ -1,28 +1,22 @@
 package com.team5817.frc2026.planners;
 
+import com.team5817.frc2026.ActiveTracker;
+import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
-
-import com.team5817.frc2026.ActiveTracker;
-import com.team5817.frc2026.subsystems.Shooter.Shooter;
-
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-/**
- * Shooting planner using WPILib geometry.
- * NaN-safe and pose-estimator friendly.
- */
+/** Shooting planner using WPILib geometry. NaN-safe and pose-estimator friendly. */
 public class ShootingPlanner implements ShootingPlannerI {
 
   private static final int CONVERGENCE_ITERS = 5;
@@ -49,7 +43,7 @@ public class ShootingPlanner implements ShootingPlannerI {
       DoubleSupplier timeSinceVision) {
 
     this.shooterPoseSupplier = () -> shooterPoseSupplier.get().wpi();
-    this.shooterVelocitySupplier =() -> shooterVelocitySupplier.get().wpi();
+    this.shooterVelocitySupplier = () -> shooterVelocitySupplier.get().wpi();
     this.atStateSupplier = atStateSupplier;
     this.timeSinceVision = timeSinceVision;
     this.config = ShootingConfig.defaultConfig();
@@ -62,8 +56,7 @@ public class ShootingPlanner implements ShootingPlannerI {
 
     /* ---------------- Future-to-target suppliers ---------------- */
 
-    Map<ShootingTarget, Supplier<Translation2d>> futureTo =
-        new EnumMap<>(ShootingTarget.class);
+    Map<ShootingTarget, Supplier<Translation2d>> futureTo = new EnumMap<>(ShootingTarget.class);
 
     futureTo.put(ShootingTarget.HUB, () -> computeFutureVector(ShootingTarget.HUB));
     futureTo.put(ShootingTarget.LOBL, () -> computeFutureVector(ShootingTarget.LOBL));
@@ -131,36 +124,25 @@ public class ShootingPlanner implements ShootingPlannerI {
     Pose2d futurePose = pose;
     Translation2d targetPos = target.getLocation().wpi();
 
-    double distance =
-        targetPos.minus(futurePose.getTranslation()).getNorm();
+    double distance = targetPos.minus(futurePose.getTranslation()).getNorm();
 
     for (int i = 0; i < CONVERGENCE_ITERS; i++) {
       double tof = timeForDistance.applyAsDouble(distance);
       if (!Double.isFinite(tof) || tof <= 0.0) break;
 
-      double vx = Double.isFinite(speeds.vxMetersPerSecond)
-          ? speeds.vxMetersPerSecond
-          : 0.0;
-      double vy = Double.isFinite(speeds.vyMetersPerSecond)
-          ? speeds.vyMetersPerSecond
-          : 0.0;
-      double omega = Double.isFinite(speeds.omegaRadiansPerSecond)
-          ? speeds.omegaRadiansPerSecond
-          : 0.0;
+      double vx = Double.isFinite(speeds.vxMetersPerSecond) ? speeds.vxMetersPerSecond : 0.0;
+      double vy = Double.isFinite(speeds.vyMetersPerSecond) ? speeds.vyMetersPerSecond : 0.0;
+      double omega =
+          Double.isFinite(speeds.omegaRadiansPerSecond) ? speeds.omegaRadiansPerSecond : 0.0;
 
-      Twist2d twist = new Twist2d(
-          vx * tof,
-          vy * tof,
-          omega * tof);
+      Twist2d twist = new Twist2d(vx * tof, vy * tof, omega * tof);
 
       futurePose = futurePose.exp(twist);
 
-      distance =
-          targetPos.minus(futurePose.getTranslation()).getNorm();
+      distance = targetPos.minus(futurePose.getTranslation()).getNorm();
     }
 
-    Translation2d result =
-        targetPos.minus(futurePose.getTranslation());
+    Translation2d result = targetPos.minus(futurePose.getTranslation());
 
     if (!Double.isFinite(result.getX())
         || !Double.isFinite(result.getY())
@@ -182,26 +164,26 @@ public class ShootingPlanner implements ShootingPlannerI {
       return Shooter.State.STOW;
     }
 
-    Translation2d toHub =
-        ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
+    Translation2d toHub = ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
 
     double tof = timeForDistance.applyAsDouble(toHub.getNorm());
 
-    Twist2d twist = new Twist2d(
-        speeds.vxMetersPerSecond * tof,
-        speeds.vyMetersPerSecond * tof,
-        speeds.omegaRadiansPerSecond * tof);
+    Twist2d twist =
+        new Twist2d(
+            speeds.vxMetersPerSecond * tof,
+            speeds.vyMetersPerSecond * tof,
+            speeds.omegaRadiansPerSecond * tof);
 
     Pose2d futureHub = current.exp(twist);
 
     Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
 
-    if (new com.team254.lib.geometry.Translation2d(current.getTranslation()).inBounds(config.dangerBounds))
-      return Shooter.State.STOW;
+    if (new com.team254.lib.geometry.Translation2d(current.getTranslation())
+        .inBounds(config.dangerBounds)) return Shooter.State.STOW;
 
-    if (new com.team254.lib.geometry.Translation2d(futureHub.getTranslation()).inBounds(config.hubBounds)
-        && ActiveTracker.isActive())
-      return Shooter.State.HUB;
+    if (new com.team254.lib.geometry.Translation2d(futureHub.getTranslation())
+            .inBounds(config.hubBounds)
+        && ActiveTracker.isActive()) return Shooter.State.HUB;
 
     return Shooter.State.LOB;
   }
@@ -214,20 +196,18 @@ public class ShootingPlanner implements ShootingPlannerI {
     ChassisSpeeds speeds = shooterVelocitySupplier.get();
     if (speeds == null) return false;
 
-    double linearVel =
-        Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-    double angularVelDeg =
-        Math.toDegrees(speeds.omegaRadiansPerSecond);
+    double linearVel = Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    double angularVelDeg = Math.toDegrees(speeds.omegaRadiansPerSecond);
 
     ShootingTarget target =
-        state == Shooter.State.HUB ? ShootingTarget.HUB :
-        state == Shooter.State.LOB ? ShootingTarget.LOB : null;
+        state == Shooter.State.HUB
+            ? ShootingTarget.HUB
+            : state == Shooter.State.LOB ? ShootingTarget.LOB : null;
 
     if (target == null) return false;
     if (linearVel > target.getVelocityThreshold()) return false;
     if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
-    if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold())
-      return false;
+    if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold()) return false;
 
     Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
     return true;

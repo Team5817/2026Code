@@ -40,7 +40,10 @@ public class Shooter extends Subsystem {
         () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
     this.planner =
         new ShootingPlanner(
-            shooterPoseSupplier, robotVelocitySupplier, () -> atState&& !forcedStow, timeSinceVision);
+            shooterPoseSupplier,
+            robotVelocitySupplier,
+            () -> atState && !forcedStow,
+            timeSinceVision);
     this.turret =
         new Turret(
             turretIO,
