@@ -65,11 +65,13 @@ public class RobotContainer {
 
   public void makeRealRobot() {
     // mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
-    // mIntake =
-    //     new Intake(
-    //         new RollerSubsystemIOTalonFX(
-    //             Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
-    //         new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
+    mIntake =
+        new Intake(
+            new RollerSubsystemIOTalonFX(
+                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
+                new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants)
+            // new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
+            );
 
     mDrive =
         new Drive(
@@ -84,14 +86,12 @@ public class RobotContainer {
     mVision =
         new Vision(
             mDrive::addVisionMeasurement,
-            new VisionIOLimelight("limelight-front", mDrive::getHeading),
-            new VisionIOLimelight("limelight-back", mDrive::getHeading),
             new VisionIOLimelight(
                 "limelight-turret",
                 () ->
                     mDrive
                         .getHeading()
-                        .add(Rotation2d.fromDegrees(mShooter.getTurret().getPosition()))));
+                        .add(Rotation2d.fromDegrees(mShooter.getTurret().getPosition())).minus(Rotation2d.kHalfPi)));
 
     // mSpindexer =
     // new SpindexerGroup(

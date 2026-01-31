@@ -10,8 +10,8 @@ package com.team5817.lib.drivers.Rollers;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -40,8 +40,8 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
   // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0);
-  private final MotionMagicVelocityTorqueCurrentFOC velocityOut =
-      new MotionMagicVelocityTorqueCurrentFOC(0).withUpdateFreqHz(0).withSlot(0);
+  private final VelocityVoltage velocityOut =
+      new VelocityVoltage(0).withUpdateFreqHz(0).withSlot(0);
   private final TorqueCurrentFOC torqueCurrentOut = new TorqueCurrentFOC(0.0).withUpdateFreqHz(0);
 
   private final TalonFXConfiguration config;

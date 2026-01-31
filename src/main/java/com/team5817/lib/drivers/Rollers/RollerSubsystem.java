@@ -84,6 +84,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
     Logger.recordOutput(inputsName + "/State", mState);
     Logger.recordOutput(inputsName + "/Control Mode", mState.getControlMode());
     Logger.recordOutput(inputsName + "/Desired", mState.getDemand());
+    Logger.recordOutput(inputsName + "/Current", Math.toDegrees(inputs.data.positionRads()));
     Logger.recordOutput(
         inputsName + "/Error", mState.getDemand() - inputs.data.velocityRotsPerSec());
     Logger.recordOutput(inputsName + "/BrakeModeEnabled", brakeModeEnabled);

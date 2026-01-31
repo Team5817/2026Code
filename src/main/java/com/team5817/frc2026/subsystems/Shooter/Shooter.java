@@ -98,19 +98,6 @@ public class Shooter extends Subsystem {
 
     atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
 
-    Logger.recordOutput(
-        "Shooter/AtStateDetails",
-        "Turret: "
-            + turret.atState()
-            + ", Hood: "
-            + hood.atState()
-            + ", Flywheel: "
-            + flywheel.atState()
-            + ", ForcedStow: "
-            + forcedStow
-            + ", Not Stowing: "
-            + (mState != State.STOW));
-
     if (mState != desiredState) {
       turret.setState(desiredState.turretState);
       hood.setState(desiredState.hoodState);

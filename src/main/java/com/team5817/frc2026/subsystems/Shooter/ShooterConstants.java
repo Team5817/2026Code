@@ -35,10 +35,14 @@ public class ShooterConstants {
     flywheelConstants.kSupplyCurrentLimit = 40;
     flywheelConstants.kStatorCurrentLimit = 80;
 
+    flywheelConstants.kKp = 0.3;
+    flywheelConstants.kKs = 0.7;
+    flywheelConstants.kKv = 0.109;
+
     flywheelConstants.kEnableSupplyCurrentLimit = true;
     flywheelConstants.kEnableStatorCurrentLimit = true;
 
-    flywheelConstants.counterClockwisePositive = false;
+    flywheelConstants.counterClockwisePositive = true;
 
     // Follower Motor
     TalonFXConstants followerConstants = new TalonFXConstants();
@@ -94,9 +98,9 @@ public class ShooterConstants {
       kTurretServoConstants.kMaxUnitsLimit = 180.0;
 
       // PID (placeholder)
-      kTurretServoConstants.kKp = 0.0;
-      kTurretServoConstants.kKi = 0.0;
-      kTurretServoConstants.kKd = 0.0;
+      kTurretServoConstants.kKp = 4.0;
+      kTurretServoConstants.kKi = 5.0;
+      kTurretServoConstants.kKd = 0.1;
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
@@ -115,7 +119,7 @@ public class ShooterConstants {
       kTurretServoConstants.kSupplyCurrentLimit = 30;
 
       kTurretServoConstants.kEnableStatorCurrentLimit = true;
-      kTurretServoConstants.kStatorCurrentLimit = 10;
+      kTurretServoConstants.kStatorCurrentLimit = 30;
 
       kTurretServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
@@ -143,11 +147,11 @@ public class ShooterConstants {
       kHoodServoConstants.kMaxUnitsLimit = 43.0;
 
       // PID (placeholder)
-      kHoodServoConstants.kKp = 0.0;
-      kHoodServoConstants.kKi = 0.0;
-      kHoodServoConstants.kKd = 0.0;
+      kHoodServoConstants.kKp = 20.0;
+      kHoodServoConstants.kKi = 9.5;
+      kHoodServoConstants.kKd = 0.4;
 
-      kHoodServoConstants.kKs = 0.0;
+      kHoodServoConstants.kKs = 0.9;
       kHoodServoConstants.kKv = 0.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;

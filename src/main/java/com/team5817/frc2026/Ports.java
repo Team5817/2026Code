@@ -32,7 +32,7 @@ public class Ports {
 
   /* SUBSYSTEM CAN DEVICE IDS*/
   public static final CanDeviceId INTAKE_PIVOT = new CanDeviceId(9);
-  public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10);
+  public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10,"canivore1");
 
   public static final CanDeviceId SPINDEXER_1 = new CanDeviceId(11);
   public static final CanDeviceId TUNNEL_1 = new CanDeviceId(11);

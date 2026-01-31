@@ -40,34 +40,45 @@ public class DriverControls {
     // mDrive.overrideHeading(true);
     if (driver.getStartButton()) d.allianceZeroGyro();
 
-    // //LT intake
+    //LT intake
     if(driver.leftTrigger.wasActivated()){
     s.mIntake.conformToState(Intake.State.INTAKING);
     }
+
     if(driver.leftTrigger.wasReleased()){
     s.mIntake.conformToState(Intake.State.IDLE);
     }
-    // //LB Reverse spindexer
+
+    // LB Reverse Intake & Spindexer
     if(driver.getLeftBumperButtonPressed()){
     s.mSpindexerGroup.setState(SpindexerGroup.State.EXHAUST);
+    s.mIntake.conformToState(Intake.State.EXHAUSTING);
     }
+
      if(driver.getLeftBumperButtonReleased()){
     s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
+        s.mIntake.conformToState(Intake.State.IDLE);
+
     }
+
     // //LeftStick Spindexer Feed Shooter
      if(driver.getLeftStickButtonPressed()){
     s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_SHOOTER);
     }
+
      if(driver.getLeftStickButtonReleased()){
     s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
     }
+
      // //RightStick Spindexer Feed Turret
      if(driver.getRightStickButtonPressed()){
     s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_TURRET);
     }
+
      if(driver.getRightStickButtonReleased()){
     s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
     }
+
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
     // RT Slow mode
@@ -80,37 +91,46 @@ public class DriverControls {
     if (driver.getYButtonPressed()) {
       s.request(s.CloseShotRequest());
     }
+
     if (driver.getYButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
+
     // A Far
     if (driver.getAButtonPressed()) {
       s.request(s.FarShotRequest());
     }
+
     if (driver.getAButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
+
     // B Force Hood
     if (driver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
     }
+
     if (driver.getBButtonReleased()) {
       s.mShooter.forceStow(false);
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
+
     // Down Climb
     if (driver.POV180.wasActivated()) {
       s.mClimb.advanceClimbRequest().act();
     }
+
     // Up Unclimb
     if (driver.POV0.wasActivated()) {
       s.mClimb.resetClimbStages();
     }
+
     // Controller Shake
     if (ActiveTracker.shouldShakeController()) {
       driver.rumble(0.3, 1);
       ;
     }
+    
   }
 
   CustomXboxController driver;
