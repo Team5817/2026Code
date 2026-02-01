@@ -22,20 +22,16 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
 import com.team5817.lib.drivers.Servos.ServoMotorIOSim;
 import com.team5817.lib.drivers.Servos.ServoMotorIOTalonFX;
-import com.team5817.lib.drivers.Vision.VisionIOLimelight;
+import com.team5817.lib.drivers.Vision.ManualVisionIOLimelight;
 import com.team5817.lib.drivers.Vision.VisionIOPhotonVisionSim;
 import com.team5817.lib.swerve.GyroIOPigeon2;
 import com.team5817.lib.swerve.GyroIOSim;
 import com.team5817.lib.swerve.ModuleIOSim;
 import com.team5817.lib.swerve.ModuleIOTalonFX;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+// camera pose handled by Shooter.getTurretCameraPoseSupplier()
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
 
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -105,49 +101,23 @@ public class RobotContainer {
           );
 
   // ---------------- VISION ----------------
-  // Dynamic suppliers for turret yaw and camera pose
-  Supplier<Rotation2d> turretYawSupplier = () -> Rotation2d.fromDegrees(mShooter.getTurret().getPosition());
-  Supplier<Rotation2d> fieldYawSupplier = () -> mDrive.getHeading().add(turretYawSupplier.get());
-
-  Supplier<Translation3d> turretToCamRotatedSupplier = () ->
-      ShooterConstants.TurretToCam.rotateBy(
-          new Rotation3d(0.0, 0.0, turretYawSupplier.get().getRadians())
-      );
-
-  Supplier<Translation3d> cameraTranslationSupplier = () ->
-      ShooterConstants.robotToTurret.plus(turretToCamRotatedSupplier.get());
-
-  Supplier<Pose3d> turretCamPoseSupplier = () -> new Pose3d(
-      cameraTranslationSupplier.get(),
-      new Rotation3d(
-          0.0,
-          Math.toRadians(45.0),          // camera pitch (fixed)
-          turretYawSupplier.get().getRadians()  // robot-relative yaw ONLY
-      )
-  );
-
-  // Optional logging on pose fetch
-  Supplier<Pose3d> loggingTurretCamPoseSupplier = () -> {
-    Pose3d pose = turretCamPoseSupplier.get();
-    Logger.recordOutput("Shooter/LL Pose", pose);
-    return pose;
-  };
-
+  // Use Shooter-provided turret camera pose supplier
   mVision =
-      new Vision(
-          mDrive::addVisionMeasurement,
-          new VisionIOLimelight(
-              "limelight-turret",
-              mDrive::getHeading,           // field-relative yaw (dynamic)
-              loggingTurretCamPoseSupplier // robot-relative camera pose (dynamic)
-          )
-      );
+    new Vision(
+      mDrive::addVisionMeasurement,
+      new ManualVisionIOLimelight(
+        "limelight-turret",
+        mShooter.getTurretCameraPoseSupplier(), // robot-relative camera pose (dynamic)
+        () -> mDrive.getHeading().flip(), // field-relative yaw (dynamic)
+        false // incoming NT botpose arrays are robot poses (don't re-transform)
+      )
+    );
 
   // Patch vision timing supplier into Shooter now that Vision exists
   mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
   // ---------------- CLIMB ----------------
-  mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
+  // mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
 }
 
 

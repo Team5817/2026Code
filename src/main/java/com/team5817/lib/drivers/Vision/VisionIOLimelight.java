@@ -19,7 +19,6 @@ import java.util.function.Supplier;
 /** IO implementation for real Limelight hardware. */
 public class VisionIOLimelight implements VisionIO {
   private final Supplier<Rotation2d> rotationSupplier;
-  private Supplier<Pose3d> poseSupplier = null;
     private final DoubleArrayPublisher orientationPublisher;
 
     private final DoubleSubscriber latencySubscriber;
@@ -48,20 +47,12 @@ public class VisionIOLimelight implements VisionIO {
       kName = name;
     }
 
-    public VisionIOLimelight(String name, Supplier<Rotation2d> rotationSupplier, Supplier<Pose3d> poseSupplier) {
-      this(name, rotationSupplier);
-      this.poseSupplier = poseSupplier;
-  }
-
   @Override
   public void updateInputs(VisionIOInputs inputs) {
     // Update connection status based on whether an update has been seen in the last 250ms
     inputs.connected =
         ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 250;
-    if(poseSupplier != null){
-      Pose3d pose = poseSupplier.get();
-      LimelightHelpers.setCameraPose_RobotSpace(kName, pose.getX(),pose.getY(),pose.getZ(),pose.getRotation().getX(),pose.getRotation().getY(),pose.getZ());
-    }
+
     // Update target observation
     inputs.latestTargetObservation =
         new TargetObservation(

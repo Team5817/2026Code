@@ -22,6 +22,10 @@ public class ShooterConstants {
   public static final RollerConstantsTalonFX flywheelConstants = new RollerConstantsTalonFX();
   public static final Translation3d TurretToCam;
   public static final Translation3d robotToTurret;
+  // Allows quick sign flip when turret yaw axis convention differs (1.0 or -1.0)
+  public static double TURRET_YAW_SIGN = 1.0;
+  // Camera pitch in degrees (positive = nose-up). Adjust to match the physical mount.
+  public static double CAMERA_PITCH_DEGREES = -45;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
@@ -32,8 +36,8 @@ public class ShooterConstants {
     0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
     
     static {
-    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(24));
-    TurretToCam = new Translation3d(Units.inchesToMeters(8),0,0);
+    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(21.5));
+    TurretToCam = new Translation3d(Units.inchesToMeters(6.5),0,0);
 
     // Basic flywheel/talon defaults
     flywheelConstants.kMaxForwardOutput = 12.0;
