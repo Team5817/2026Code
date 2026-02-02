@@ -149,7 +149,7 @@ public class Robot extends LoggedRobot {
     mDrive.stop();
     mRobotContainer.mIntake.conformToState(Intake.State.IDLE);
     mRobotContainer.mSuperstructure.request(
-        new AutoShootRequest(mRobotContainer.mShooter.getPlanner(), mRobotContainer.mSuperstructure)
+        new AutoShootRequest(mRobotContainer.mSuperstructure)
             .addName("AutoShoot"));
   }
 

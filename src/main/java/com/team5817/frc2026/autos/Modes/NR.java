@@ -6,7 +6,6 @@ import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
-import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -23,13 +22,12 @@ public class NR extends AutoBase {
   private Climb c;
   private Shooter sh;
   private ClimbSelection climbSelection;
-  private ShootingPlanner p;
 
   public NR(Superstructure s, ClimbSelection climbSelection) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
-    this.p = sh.getPlanner();
+    
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
     Trajectory SHToN1;
@@ -45,11 +43,11 @@ public class NR extends AutoBase {
   public void routine() {
     d.simResetWorldPose(t.initalPose());
 
-    r(new AutoShootAction(3, p, su));
+    r(new AutoShootAction(3, su));
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new AutoShootAction(5, p, su));
+    r(new AutoShootAction(5, su));
     r(new TrajectoryAction(t.next(), d));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {

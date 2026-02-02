@@ -8,6 +8,9 @@ public interface ServoState {
   public default double getAllowableError() {
     return Double.POSITIVE_INFINITY;
   }
+  public default double getVelocityFF(){
+    return 0;
+  }
 
   ServoMotorSubsystem.ControlState getControlState();
 }

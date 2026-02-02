@@ -34,6 +34,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
 
   @Override
   public void writePeriodicOutputs() {
+    
     if (allowAutoStateOutput)
       switch (mState.getControlState()) {
         case POSITION:

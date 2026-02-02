@@ -4,6 +4,7 @@ import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
 import com.team5817.frc2026.generated.TunerConstants;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Climb.ClimbConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
@@ -32,6 +33,7 @@ import com.team5817.lib.swerve.ModuleIOTalonFX;
 // camera pose handled by Shooter.getTurretCameraPoseSupplier()
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -60,10 +62,12 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
+    ShootingPlanner.configure(() ->mDrive.getPose().wpi(), () -> mDrive.getChassisSpeeds().wpi(), mShooter::isAtState, () -> 0);
     mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb);
 
     mSubsystemManager.setSubsystems(
         mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb);
+    
   }
 
   public void makeRealRobot() {
@@ -95,13 +99,38 @@ public class RobotContainer {
           new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
           new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
           new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
-          mDrive::getPose,
-          mDrive::getChassisSpeeds,
-          () -> 0.0 // placeholder for vision timing supplier
+          mDrive::getHeading
           );
 
   // ---------------- VISION ----------------
-  // Use Shooter-provided turret camera pose supplier
+  // Dynamic suppliers for turret yaw and camera pose
+  Supplier<Rotation2d> turretYawSupplier = () -> Rotation2d.fromDegrees(mShooter.getTurret().getPosition());
+  Supplier<Rotation2d> fieldYawSupplier = () -> mDrive.getHeading().add(turretYawSupplier.get());
+
+  Supplier<Translation3d> turretToCamRotatedSupplier = () ->
+      ShooterConstants.TurretToCam.rotateBy(
+          new Rotation3d(0.0, 0.0, turretYawSupplier.get().getRadians())
+      );
+
+  Supplier<Translation3d> cameraTranslationSupplier = () ->
+      ShooterConstants.robotToTurret.plus(turretToCamRotatedSupplier.get());
+
+  Supplier<Pose3d> turretCamPoseSupplier = () -> new Pose3d(
+      cameraTranslationSupplier.get(),
+      new Rotation3d(
+          0.0,
+          Math.toRadians(45.0),         // camera pitch (fixed)
+          turretYawSupplier.get().getRadians()  // robot-relative yaw ONLY
+      )
+  );
+
+  // Optional logging on pose fetch
+  Supplier<Pose3d> loggingTurretCamPoseSupplier = () -> {
+    Pose3d pose = turretCamPoseSupplier.get();
+    Logger.recordOutput("Shooter/LL Pose", pose);
+    return pose;
+  };
+
   mVision =
     new Vision(
       mDrive::addVisionMeasurement,
@@ -112,9 +141,6 @@ public class RobotContainer {
         false // incoming NT botpose arrays are robot poses (don't re-transform)
       )
     );
-
-  // Patch vision timing supplier into Shooter now that Vision exists
-  mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
   // ---------------- CLIMB ----------------
   // mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
@@ -176,9 +202,7 @@ public class RobotContainer {
               new ServoMotorIOSim(ShooterConstants.TurretConstants.kTurretServoConstants),
               new ServoMotorIOSim(ShooterConstants.HoodConstants.kHoodServoConstants),
               new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
-              mDrive::getPose,
-              mDrive::getChassisSpeeds,
-              mVision::timeSinceUpdate);
+              mDrive::getHeading);
   }
 
   private Pose2d getMapleSimPose() {

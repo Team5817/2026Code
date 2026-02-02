@@ -7,6 +7,7 @@ import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
 public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
@@ -19,56 +20,66 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   public Turret(
       ServoMotorIO io,
       DoubleSupplier hubAngleSupplier,
+      DoubleSupplier hubVelocityFFSupplier,
       DoubleSupplier lobAngleSupplier,
+      DoubleSupplier lobVelocityFFSupplier,
       Supplier<Rotation2d> robotHeadingSupplier) {
     super(State.STOW, io);
     Turret.mRobotHeadingSupplier = robotHeadingSupplier;
-    State.HUB.setSupplier(hubAngleSupplier);
-    State.LOBBING.setSupplier(lobAngleSupplier);
+
+    State.HUB.setDemandSupplier(hubAngleSupplier);
+    State.HUB.setFFSupplier(hubVelocityFFSupplier);
+    State.LOBBING.setDemandSupplier(lobAngleSupplier);
+    State.LOBBING.setFFSupplier(lobVelocityFFSupplier);
   }
 
   public enum State implements ServoState {
     HEADINGTEST(kTightError),
     STOW(0.0, kLooseError),
-    HUB(kTightError), // set in constructor
-    LOBBING(kTightError); // set in constructor
+    HUB(kTightError), // demand and ff suppliers set in constructor
+    LOBBING(kTightError); // demand and ff suppliers set in constructor
 
-    private DoubleSupplier demand;
-    private final double allowableError;
+    private DoubleSupplier demandSupplier;
+    private DoubleSupplier ffSupplier;
+    @Getter private final double allowableError;
     private final boolean worldOriented;
 
     State(double allowableError) {
-      this.demand = () -> 0.0;
+      this.demandSupplier = () -> 0.0;
+      this.ffSupplier = () -> 0.0;
       this.allowableError = allowableError;
       this.worldOriented = true;
     }
 
-    State(double supplier, double allowableError) {
-      this.demand = () -> supplier;
+    State(double fixedDemand, double allowableError) {
+      this.demandSupplier = () -> fixedDemand;
+      this.ffSupplier = () -> 0.0;
       this.allowableError = allowableError;
       this.worldOriented = false;
     }
 
-    void setSupplier(DoubleSupplier supplier) {
-      this.demand = supplier;
+    public void setDemandSupplier(DoubleSupplier supplier) {
+      if (supplier != null) this.demandSupplier = supplier;
+    }
+
+    public void setFFSupplier(DoubleSupplier supplier) {
+      if (supplier != null) this.ffSupplier = supplier;
     }
 
     @Override
     public double getDemand() {
       if (worldOriented) {
         double worldOrientedDemand =
-            demand.getAsDouble() - mRobotHeadingSupplier.get().getDegrees();
+            demandSupplier.getAsDouble() - mRobotHeadingSupplier.get().getDegrees();
         if (worldOrientedDemand > 180) return worldOrientedDemand - 360;
         else if (worldOrientedDemand < -180) return worldOrientedDemand + 360;
-        // return worldOrientedDemand -(180 * Math.signum(worldOrientedDemand));
         return worldOrientedDemand;
       }
-      return demand.getAsDouble();
+      return demandSupplier.getAsDouble();
     }
-
     @Override
-    public double getAllowableError() {
-      return allowableError;
+    public double getVelocityFF() {
+      return ffSupplier.getAsDouble();
     }
 
     @Override
@@ -85,13 +96,15 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   @Override
   public void outputTelemetry() {
     RobotVisualizer.updateTurretPose(getPosition());
+
     double demand = getState().getDemand();
     double position = getPosition();
     boolean atState = atState();
+    double diff = Math.abs(position - demand);
+
     Logger.recordOutput("Turret/Position", position);
     Logger.recordOutput("Turret/Demand", demand);
     Logger.recordOutput("Turret/AtStateCheck", atState);
-    double diff = Math.abs(getPosition() - getState().getDemand());
     Logger.recordOutput("Turret/AtStateDiff", diff);
 
     super.outputTelemetry();

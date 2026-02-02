@@ -1,6 +1,5 @@
 package com.team5817.frc2026.subsystems.Shooter;
 
-import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.swerve.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -15,7 +14,6 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.Request;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 import lombok.Getter;
@@ -27,47 +25,40 @@ public class Shooter extends Subsystem {
 
   @Getter private final Turret turret;
   @Getter private final Hood hood;
-  @Getter private final RollerSubsystem<ShooterConstants.FlywheelState> flywheel;
-
-  @Getter private ShootingPlanner planner;
+  @Getter private final RollerSubsystem<FlywheelState> flywheel;
 
   public Shooter(
       ServoMotorIO turretIO,
       ServoMotorIO hoodIO,
       RollerSubsystemIO flywheelIO,
-      Supplier<Pose2d> robotPoseSupplier,
-      Supplier<ChassisSpeeds> robotVelocitySupplier,
-      DoubleSupplier timeSinceVision) {
-    Supplier<Rotation2d> robotHeadingSupplier = () -> robotPoseSupplier.get().getRotation();
-    Supplier<Pose2d> shooterPoseSupplier =
-        () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
+      Supplier<Rotation2d> robotHeadingSupplier) {
 
-    // Use builder pattern to create ShootingPlanner
-    this.planner =
-        ShootingPlanner.builder()
-            .shooterPoseSupplier(shooterPoseSupplier)
-            .shooterVelocitySupplier(robotVelocitySupplier)
-            .atStateSupplier(() -> atState && !forcedStow)
-            .timeSinceVisionSupplier(timeSinceVision)
-            .build();
+   this.turret =
+    new Turret(
+        turretIO,
+        () -> ShootingPlanner.getTurretAngle(ShootingTarget.HUB),
+        () -> ShootingPlanner.getTurretVelocityFF(ShootingTarget.HUB),
+        () -> ShootingPlanner.getTurretAngle(ShootingTarget.LOB),
+        () -> ShootingPlanner.getTurretVelocityFF(ShootingTarget.LOB),
+        robotHeadingSupplier);
 
-    this.turret =
-        new Turret(
-            turretIO,
-            planner.getTurretAngleSupplier(ShootingTarget.HUB),
-            planner.getTurretAngleSupplier(ShootingTarget.LOB),
-            robotHeadingSupplier);
-    this.hood =
-        new Hood(
-            hoodIO,
-            planner.getHoodAngleSupplier(ShootingTarget.HUB),
-            planner.getHoodAngleSupplier(ShootingTarget.LOB));
+this.hood =
+    new Hood(
+        hoodIO,
+        () -> ShootingPlanner.getHoodAngle(ShootingTarget.HUB),
+        () -> ShootingPlanner.getHoodVelocityFF(ShootingTarget.HUB),
+        () -> ShootingPlanner.getHoodAngle(ShootingTarget.LOB),
+        () -> ShootingPlanner.getHoodVelocityFF(ShootingTarget.LOB));
 
-    FlywheelState.HUB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
-    FlywheelState.LOBBING.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
 
-    this.flywheel =
-        new RollerSubsystem<ShooterConstants.FlywheelState>(
+    FlywheelState.HUB.setSupplier(
+        () -> ShootingPlanner.getFlywheelSpeed(ShootingTarget.HUB));
+
+    FlywheelState.LOBBING.setSupplier(
+        () -> ShootingPlanner.getFlywheelSpeed(ShootingTarget.LOB));
+
+    flywheel =
+        new RollerSubsystem<>(
             FlywheelState.IDLE, "Shooter/Flywheel", flywheelIO);
   }
 
@@ -100,26 +91,27 @@ public class Shooter extends Subsystem {
   @Accessors(prefix = "m")
   private State mState = State.STOW;
 
-  @Getter @Setter private State desiredState = State.HUB;
+  @Getter @Setter
+  private State desiredState = State.STOW;
 
-  private boolean atState = false;
   private boolean forcedStow = false;
+  private boolean followPlan = false;
 
   public enum State {
-    STOW(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
-    CLOSE(Turret.State.STOW, Hood.State.CLOSE, ShooterConstants.FlywheelState.CLOSE),
-    FAR(Turret.State.STOW, Hood.State.FAR, ShooterConstants.FlywheelState.FAR),
-    HUB(Turret.State.HUB, Hood.State.HUB, ShooterConstants.FlywheelState.HUB),
-    LOB(Turret.State.LOBBING, Hood.State.LOBBING, ShooterConstants.FlywheelState.LOBBING);
+    STOW(Turret.State.STOW, Hood.State.STOW, FlywheelState.IDLE),
+    CLOSE(Turret.State.STOW, Hood.State.CLOSE, FlywheelState.CLOSE),
+    FAR(Turret.State.STOW, Hood.State.FAR, FlywheelState.FAR),
+    HUB(Turret.State.HUB, Hood.State.HUB, FlywheelState.HUB),
+    LOB(Turret.State.LOBBING, Hood.State.LOBBING, FlywheelState.LOBBING);
 
     final Turret.State turretState;
     final Hood.State hoodState;
-    final ShooterConstants.FlywheelState flywheelState;
+    final FlywheelState flywheelState;
 
     State(
         Turret.State turretState,
         Hood.State hoodState,
-        ShooterConstants.FlywheelState flywheelState) {
+        FlywheelState flywheelState) {
       this.turretState = turretState;
       this.hoodState = hoodState;
       this.flywheelState = flywheelState;
@@ -128,32 +120,32 @@ public class Shooter extends Subsystem {
 
   @Override
   public void periodic() {
-    if (followPlan) setDesiredState(planner.recommendedShooterState());
     if (forcedStow) {
       desiredState = State.STOW;
+    } else if (followPlan) {
+      desiredState = ShootingPlanner.recommendedShooterState();
     }
 
-    atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
+    turret.setState(desiredState.turretState);
+    hood.setState(desiredState.hoodState);
+    flywheel.setState(desiredState.flywheelState);
 
-    if (mState != desiredState) {
-      turret.setState(desiredState.turretState);
-      hood.setState(desiredState.hoodState);
-      flywheel.setState(desiredState.flywheelState);
-      if (atState) {
-        mState = desiredState;
-      }
+    if (isAtState() && !forcedStow) {
+      mState = desiredState;
     }
   }
 
   @Override
   public void outputTelemetry() {
-    Logger.recordOutput("Shooter/Current State", mState);
-    Logger.recordOutput("Shooter/Desired State", desiredState);
-    Logger.recordOutput("Shooter/Forced Stow", forcedStow);
-    Logger.recordOutput("Shooter/Follow Plan", followPlan);
+    Logger.recordOutput("Shooter/CurrentState", mState);
+    Logger.recordOutput("Shooter/DesiredState", desiredState);
+    Logger.recordOutput("Shooter/ForcedStow", forcedStow);
+    Logger.recordOutput("Shooter/FollowPlan", followPlan);
+
     turret.outputTelemetry();
     hood.outputTelemetry();
     flywheel.outputTelemetry();
+
     RobotVisualizer.updateFlyWheel(flywheel.getVelocity());
     super.outputTelemetry();
   }
@@ -167,32 +159,33 @@ public class Shooter extends Subsystem {
 
       @Override
       public boolean isFinished() {
-        return atState;
+        return mState == state;
       }
     };
   }
 
+  public boolean isAtState(){
+    return turret.atState() && hood.atState() && flywheel.atState();
+  }
   @Override
   public void readPeriodicInputs() {
-    flywheel.readPeriodicInputs();
     turret.readPeriodicInputs();
     hood.readPeriodicInputs();
+    flywheel.readPeriodicInputs();
   }
 
   @Override
   public void writePeriodicOutputs() {
-    flywheel.writePeriodicOutputs();
     turret.writePeriodicOutputs();
     hood.writePeriodicOutputs();
+    flywheel.writePeriodicOutputs();
   }
 
   public void forceStow(boolean forced) {
     forcedStow = forced;
   }
 
-  private boolean followPlan = false;
-
-  public void followPlan(boolean followPlan) {
-    this.followPlan = followPlan;
+  public void followPlan(boolean enable) {
+    followPlan = enable;
   }
 }

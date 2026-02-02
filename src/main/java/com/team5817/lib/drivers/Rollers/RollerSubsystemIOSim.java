@@ -63,7 +63,7 @@ public class RollerSubsystemIOSim implements RollerSubsystemIO {
   private double rps = 0;
 
   @Override
-  public void runVelocity(double rps) {
+  public void runVelocity(double rps, double ffVolts) {
     runningVelocity = true;
     this.rps = rps;
   }

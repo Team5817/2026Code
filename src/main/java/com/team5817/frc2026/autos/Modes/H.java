@@ -6,7 +6,6 @@ import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
-import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
@@ -21,13 +20,12 @@ public class H extends AutoBase {
   private Climb c;
   private Shooter sh;
   private ClimbSelection climbSelection;
-  private ShootingPlanner p;
 
   public H(Superstructure s, ClimbSelection climbSelection) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
-    this.p = sh.getPlanner();
+    
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
     Trajectory SHFToH;
@@ -47,7 +45,7 @@ public class H extends AutoBase {
 
     sh.followPlan(true);
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(4, p, su));
+    r(new AutoShootAction(4, su));
     sh.setDesiredState(Shooter.State.STOW);
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));

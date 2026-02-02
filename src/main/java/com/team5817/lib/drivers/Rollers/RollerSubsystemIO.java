@@ -31,7 +31,8 @@ public interface RollerSubsystemIO {
   default void runVolts(double volts) {}
 
   /* Run rollers at velocity */
-  default void runVelocity(double rps) {}
+  default void runVelocity(double rps, double ffVolts) {}
+  default void runVelocity(double rps) { runVelocity(rps,0);}
 
   default void runTorqueCurrent(double amps) {}
 

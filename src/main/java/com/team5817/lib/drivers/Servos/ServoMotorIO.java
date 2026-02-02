@@ -32,15 +32,18 @@ public interface ServoMotorIO {
 
   public default void updateInputs(ServoMotorIOInputs inputs) {}
 
-  public default void setControl(ServoMotorSubsystem.ControlState mControlState, double demand) {
+  public default void setControl(ServoMotorSubsystem.ControlState mControlState, double demand, double ffVolts) {
     if (mControlState == ControlState.POSITION) {
-      runPosition(demand);
+      runPosition(demand, ffVolts);
     } else if (mControlState == ControlState.VOLTAGE) {
       runVoltage(demand);
     }
   }
+  public default void setControl(ServoMotorSubsystem.ControlState mControlState, double demand){
+    setControl(mControlState, demand,0);
+  }
 
-  public default void runPosition(double units) {}
+  public default void runPosition(double units, double ffVolts) {}
 
   public default void runVoltage(double volts) {}
 

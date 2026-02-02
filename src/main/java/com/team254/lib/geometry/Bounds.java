@@ -20,6 +20,15 @@ public class Bounds {
     this.b = new Translation2d(b.getX(), b.getY());
   }
 
+  public boolean contains(Translation2d translation){
+    return withinX(translation) && withinY(translation);
+  }
+  public boolean withinX(Translation2d translation){
+    return translation.getX()<maxX() && translation.getX()>minX();
+  }
+  public boolean withinY(Translation2d translation){
+    return translation.getY()<maxY() && translation.getY()>minY();
+  }
   public Translation2d getA() {
     return new Translation2d(a.getX(), a.getY());
   }

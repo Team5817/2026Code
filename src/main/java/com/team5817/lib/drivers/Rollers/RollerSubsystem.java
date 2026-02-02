@@ -74,7 +74,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
         io.runTorqueCurrent(mState.getDemand());
         break;
       case VELOCITY:
-        io.runVelocity(mState.getDemand());
+        io.runVelocity(mState.getDemand(), mState.getFFVolts());
         break;
       case VOLTAGE:
         io.runVolts(mState.getDemand());

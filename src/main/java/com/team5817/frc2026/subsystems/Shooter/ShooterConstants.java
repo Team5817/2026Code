@@ -115,7 +115,7 @@ public class ShooterConstants {
       kTurretServoConstants.kKd = 0.1;
 
       kTurretServoConstants.kKs = 0.0;
-      kTurretServoConstants.kKv = 0.0;
+      kTurretServoConstants.kKv = 1.0;
       kTurretServoConstants.kKa = 0.0;
       kTurretServoConstants.kKg = 0.0;
 
@@ -164,7 +164,7 @@ public class ShooterConstants {
       kHoodServoConstants.kKd = 0.4;
 
       kHoodServoConstants.kKs = 0.9;
-      kHoodServoConstants.kKv = 0.0;
+      kHoodServoConstants.kKv = 1.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;
 

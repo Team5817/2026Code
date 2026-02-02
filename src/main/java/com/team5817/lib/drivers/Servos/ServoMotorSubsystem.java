@@ -12,18 +12,22 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.littletonrobotics.junction.Logger;
 
-/** Abstract base class for a subsystem with a single sensored servo-mechanism. spotless:off */
+/** Abstract base class for a subsystem with a single sensored servo-mechanism. */
 public abstract class ServoMotorSubsystem extends Subsystem {
-
-  // Recommend initializing in a static block!
+  
+  /* ===================== Constants ===================== */
+  
   public static class TalonFXConstants {
     public CanDeviceId id = new CanDeviceId(-1);
     public boolean counterClockwisePositive = true;
     public boolean invert_sensor_phase = false;
   }
-
-  // Recommend initializing in a static block!
+  
   protected ServoConstants mConstants;
+  protected ServoMotorIO io;
+  double ffVolts = 0.0;
+
+  /* ===================== State ===================== */
 
   @Setter
   @Accessors(prefix = "m")
@@ -31,55 +35,67 @@ public abstract class ServoMotorSubsystem extends Subsystem {
 
   protected DelayedBoolean mHomingDebounce;
 
-  protected double demand = 0;
-
+  protected double demand = 0.0;
+  protected double velFF = 0.0;
   protected MotionState mMotionStateSetpoint = null;
 
-  ServoMotorIO io;
+  protected ServoMotorIOInputsAutoLogged mServoInputs =
+      new ServoMotorIOInputsAutoLogged();
 
-  /**
-   * Constructor for ServoMotorSubsystem.
-   *
-   * @param constants The constants for the subsystem.
-   */
+  @Getter
+  @Accessors(prefix = "m")
+  protected ControlState mControlState = ControlState.VOLTAGE;
+
+  /* ===================== Constructor ===================== */
+
   protected ServoMotorSubsystem(ServoMotorIO io) {
     this.io = io;
     mConstants = io.getConstants();
-    mHomingDebounce = new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
+    mHomingDebounce =
+        new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
     forceZero();
   }
+
+  /* ===================== Control ===================== */
 
   public enum ControlState {
     POSITION,
     VOLTAGE
   }
 
-  protected ServoMotorIOInputsAutoLogged mServoInputs = new ServoMotorIOInputsAutoLogged();
-
-  @Getter
-  @Accessors(prefix = "m")
-  protected ControlState mControlState = ControlState.VOLTAGE;
-
-  /** Reads the periodic inputs from the Talon. */
   @Override
   public void readPeriodicInputs() {
     io.updateInputs(mServoInputs);
     Logger.processInputs(mConstants.kName, mServoInputs);
   }
 
-  /** Writes the periodic outputs to the Talon. */
   @Override
   public void writePeriodicOutputs() {
-    if (mHoming) handleHoming();
-    io.setControl(mControlState, demand);
+    if (mHoming) {
+      handleHoming();
+      return;
+    }
+
+
+    if (mControlState == ControlState.POSITION) {
+
+      ffVolts = mConstants.kKv * velFF;
+    }
+
+    io.setControl(mControlState, demand, ffVolts);
   }
+  /* ===================== Homing ===================== */
 
   public void handleHoming() {
-    applyVoltage(mConstants.kHomingOutput * 12);
+    applyVoltage(mConstants.kHomingOutput * 12.0);
+
     if (mHomingDebounce.update(
-        Timer.getFPGATimestamp(), Math.abs(getVelocity()) < mConstants.kHomingVelocityWindow)) {
+        Timer.getFPGATimestamp(),
+        Math.abs(getVelocity()) < mConstants.kHomingVelocityWindow)) {
+
       forceZero();
-      mHomingDebounce = new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
+      mHomingDebounce =
+          new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
       setPositionSetpoint(mConstants.kHomePosition);
       mHoming = false;
     }
@@ -89,154 +105,89 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     setHoming(true);
   }
 
-  /**
-   * Gets the position in rotations.
-   *
-   * @return The position in rotations.
-   */
+  /* ===================== Accessors ===================== */
+
   public double getPositionRotations() {
     return mServoInputs.position_rots;
   }
 
-  /**
-   * Gets the position in units.
-   *
-   * @return The position in units.
-   */
   public double getPosition() {
     return mServoInputs.position_units;
   }
 
-  /**
-   * Gets the velocity in units per second.
-   *
-   * @return The velocity in units per second.
-   */
   public double getVelocity() {
     return mConstants.rotationsToUnits(mServoInputs.velocity_rps);
   }
 
-  /**
-   * Gets the pure velocity in rotations per second.
-   *
-   * @return The pure velocity in rotations per second.
-   */
   public double getPureVelocity() {
     return mServoInputs.velocity_rps;
   }
 
-  /**
-   * Gets the velocity error.
-   *
-   * @return The velocity error.
-   */
   public double getVelError() {
-    if (mMotionStateSetpoint == null) {
-      return 0.0;
-    }
-    return mConstants.rotationsToUnits(mMotionStateSetpoint.vel() - mServoInputs.velocity_rps);
+    if (mMotionStateSetpoint == null) return 0.0;
+    return mConstants.rotationsToUnits(
+        mMotionStateSetpoint.vel() - mServoInputs.velocity_rps);
   }
 
-  /**
-   * Checks if the trajectory has finished.
-   *
-   * @return True if the trajectory has finished, false otherwise.
-   */
   public boolean hasFinishedTrajectory() {
     return Util.epsilonEquals(
-        mServoInputs.active_trajectory_position, getSetpoint(), Math.max(1, mConstants.kDeadband));
+        mServoInputs.active_trajectory_position,
+        getSetpoint(),
+        Math.max(1, mConstants.kDeadband));
   }
 
-  /**
-   * Gets the setpoint in units.
-   *
-   * @return The setpoint in units.
-   */
   public double getSetpoint() {
     return mControlState == ControlState.POSITION
         ? mConstants.rotationsToHomedUnits(demand)
         : Double.NaN;
   }
 
-  /**
-   * Gets the setpoint in homed units.
-   *
-   * @return The setpoint in homed units.
-   */
   public double getSetpointHomed() {
-    return (mControlState == ControlState.POSITION)
-        ? mConstants.rotationsToHomedUnits(demand)
-        : Double.NaN;
+    return getSetpoint();
   }
 
-  /**
-   * Sets the setpoint for motion magic.
-   *
-   * @param units The setpoint in units.
-   */
+  /* ===================== Commands ===================== */
+
   public void setPositionSetpoint(double units) {
-    demand = constrainRotations(mConstants.homeAwareUnitsToRotations(units));
-    if (mControlState != ControlState.POSITION) {
-      mControlState = ControlState.POSITION;
-    }
+    demand = constrainRotations(
+        mConstants.homeAwareUnitsToRotations(units));
+    mControlState = ControlState.POSITION;
   }
 
-  /**
-   * Constrains the rotations within the soft limits.
-   *
-   * @param rotations The rotations.
-   * @return The constrained rotations.
-   */
   protected double constrainRotations(double rotations) {
     return Util.limit(
-        rotations, mConstants.mReverseSoftLimitRotations, mConstants.mForwardSoftLimitRotations);
+        rotations,
+        mConstants.mReverseSoftLimitRotations,
+        mConstants.mForwardSoftLimitRotations);
   }
 
-  /**
-   * Applies a voltage to the motor.
-   *
-   * @param voltage The voltage.
-   */
   public void applyVoltage(double voltage) {
-    if (mControlState != ControlState.VOLTAGE) {
-      mControlState = ControlState.VOLTAGE;
-    }
+    mControlState = ControlState.VOLTAGE;
     demand = voltage;
   }
 
-  /**
-   * Gets the active trajectory position.
-   *
-   * @return The active trajectory position.
-   */
+  /* ===================== Utilities ===================== */
+
   public double getActiveTrajectoryPosition() {
-    return mConstants.rotationsToHomedUnits((mServoInputs.active_trajectory_position));
+    return mConstants.rotationsToHomedUnits(
+        mServoInputs.active_trajectory_position);
   }
 
-  /**
-   * Gets the predicted position in units after a lookahead time.
-   *
-   * @param lookahead_secs The lookahead time in seconds.
-   * @return The predicted position in units.
-   */
-  public double getPredictedPositionUnits(double lookahead_secs) {
-    double predicted_units =
+  public double getPredictedPositionUnits(double lookaheadSecs) {
+    double predicted =
         mServoInputs.active_trajectory_position
-            + lookahead_secs * mServoInputs.active_trajectory_velocity
-            + 0.5 * mServoInputs.active_trajectory_acceleration * lookahead_secs * lookahead_secs;
+            + lookaheadSecs * mServoInputs.active_trajectory_velocity
+            + 0.5
+                * mServoInputs.active_trajectory_acceleration
+                * lookaheadSecs
+                * lookaheadSecs;
+
     if (demand >= mServoInputs.active_trajectory_position) {
-      return Math.min(predicted_units, demand);
-    } else {
-      return Math.max(predicted_units, demand);
+      return Math.min(predicted, demand);
     }
+    return Math.max(predicted, demand);
   }
 
-  /**
-   * Returns a request to wait for the elevator to extend to the given position.
-   *
-   * @param position the position to wait for
-   * @return a request to wait for the elevator to extend
-   */
   public Request waitToBeOverRequest(double position) {
     return new Request() {
       @Override
@@ -249,36 +200,31 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     };
   }
 
-  /** Zeros the sensors. */
+  /* ===================== Housekeeping ===================== */
+
   @Override
   public void zeroSensors() {
     io.zeroSensors();
   }
 
-  /** Forces the sensors to zero. */
   public void forceZero() {
     io.forceZeroSensors();
   }
 
-  /** Outputs telemetry data. */
   @Override
   public void outputTelemetry() {
-    Logger.recordOutput(mConstants.kName + "/Control Mode", mControlState);
-    Logger.recordOutput(mConstants.kName + "/Demand", mConstants.rotationsToUnits(demand));
+    Logger.recordOutput(mConstants.kName + "/ControlMode", mControlState);
+    Logger.recordOutput(mConstants.kName + "/DemandUnits",
+        mConstants.rotationsToUnits(demand));
     Logger.recordOutput(mConstants.kName + "/Homing", mHoming);
+    Logger.recordOutput(mConstants.kName + "/Feed Forward Volts", ffVolts);
   }
 
-  /** Rewrites the device configuration. */
   @Override
   public void rewriteDeviceConfiguration() {
     io.writeConfigs();
   }
 
-  /**
-   * Checks the device configuration.
-   *
-   * @return True if the configuration is correct, false otherwise.
-   */
   @Override
   public boolean checkDeviceConfiguration() {
     return io.checkDeviceConfiguration();

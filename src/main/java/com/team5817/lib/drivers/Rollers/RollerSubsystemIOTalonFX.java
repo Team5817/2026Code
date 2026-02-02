@@ -149,8 +149,8 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
   }
 
   @Override
-  public void runVelocity(double velocity) {
-    mMain.setControl(velocityOut.withVelocity(velocity));
+  public void runVelocity(double velocity, double ffVolts) {
+    mMain.setControl(velocityOut.withVelocity(velocity).withFeedForward(ffVolts));
   }
 
   @Override

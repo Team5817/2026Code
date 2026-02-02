@@ -90,7 +90,7 @@ public class DriverControls {
     }
 
     if (driver.getYButtonReleased()) {
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+      s.request(new AutoShootRequest(s).addName("AutoShoot"));
     }
 
     // A Far
@@ -99,7 +99,7 @@ public class DriverControls {
     }
 
     if (driver.getAButtonReleased()) {
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+      s.request(new AutoShootRequest(s).addName("AutoShoot"));
     }
 
     // B Force Hood
@@ -109,7 +109,7 @@ public class DriverControls {
 
     if (driver.getBButtonReleased()) {
       s.mShooter.forceStow(false);
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+      s.request(new AutoShootRequest(s).addName("AutoShoot"));
     }
 
     // Down Climb

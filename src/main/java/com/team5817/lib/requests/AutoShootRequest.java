@@ -5,18 +5,16 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoShootRequest extends Request {
-  ShootingPlanner planner;
   Superstructure s;
 
-  public AutoShootRequest(ShootingPlanner planner, Superstructure s) {
-    this.planner = planner;
+  public AutoShootRequest(Superstructure s) {
     this.s = s;
   }
 
   @Override
   public void update() {
     s.mShooter.followPlan(true);
-    Logger.recordOutput("Shooter/Should Shoot", planner.shouldShoot());
+    Logger.recordOutput("Shooter/Should Shoot", ShootingPlanner.shouldShoot());
     // if(planner.shouldShoot())
     // 	s.mIndexer.setDesiredState(Superstructure.IndexerState.INDEX);
     // else

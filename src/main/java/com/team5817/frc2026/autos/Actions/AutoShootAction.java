@@ -1,16 +1,19 @@
 package com.team5817.frc2026.autos.Actions;
 
-import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup.State;
+
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoShootAction implements Action {
   Timer timer;
   double durationSeconds;
+  Superstructure s;
 
-  public AutoShootAction(double durationSeconds, ShootingPlanner p, Superstructure s) {
+  public AutoShootAction(double durationSeconds , Superstructure s) {
     this.durationSeconds = durationSeconds;
+    this.s = s;
     timer = new Timer();
   }
 
@@ -25,13 +28,13 @@ public class AutoShootAction implements Action {
 
   @Override
   public void done() {
-    // indexer off
+    s.mSpindexerGroup.setState(State.IDLE);
   }
 
   @Override
   public void start() {
     timer.reset();
     timer.start();
-    // indexer on
+    s.mSpindexerGroup.setState(State.FEED_TURRET);
   }
 }
