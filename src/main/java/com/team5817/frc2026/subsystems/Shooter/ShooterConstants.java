@@ -25,7 +25,7 @@ public class ShooterConstants {
   // Allows quick sign flip when turret yaw axis convention differs (1.0 or -1.0)
   public static double TURRET_YAW_SIGN = 1.0;
   // Camera pitch in degrees (positive = nose-up). Adjust to match the physical mount.
-  public static double CAMERA_PITCH_DEGREES = -45;
+  public static double CAMERA_PITCH_DEGREES = -50;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
@@ -37,7 +37,7 @@ public class ShooterConstants {
     
     static {
     robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(21.5));
-    TurretToCam = new Translation3d(Units.inchesToMeters(6.5),0,0);
+    TurretToCam = new Translation3d(.1414213562,0,0);
 
     // Basic flywheel/talon defaults
     flywheelConstants.kMaxForwardOutput = 12.0;

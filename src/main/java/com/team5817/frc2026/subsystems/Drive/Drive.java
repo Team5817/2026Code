@@ -557,7 +557,7 @@ public class Drive extends Subsystem {
   public void allianceZeroGyro() {
     Boolean isRed = Util.isRed().get();
     Logger.recordOutput("Drive/Alliance", isRed ? "Red" : "Blue");
-    zeroGyro(isRed ? 0 : 180);
+    zeroGyro(isRed ? 180 : 0);
   }
 
   /** Resets the current odometry pose. */

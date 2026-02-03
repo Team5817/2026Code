@@ -108,7 +108,7 @@ public class RobotContainer {
       new ManualVisionIOLimelight(
         "limelight-turret",
         mShooter.getTurretCameraPoseSupplier(), // robot-relative camera pose (dynamic)
-        () -> mDrive.getHeading().flip(), // field-relative yaw (dynamic)
+        () -> mDrive.getHeading(), // field-relative yaw (dynamic)
         false // incoming NT botpose arrays are robot poses (don't re-transform)
       )
     );
