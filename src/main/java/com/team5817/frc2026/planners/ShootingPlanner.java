@@ -1,6 +1,5 @@
 package com.team5817.frc2026.planners;
 
-import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -222,9 +221,7 @@ public class ShootingPlanner {
     if (new com.team254.lib.geometry.Translation2d(current.getTranslation())
         .inBounds(config.dangerBounds)) return Shooter.State.STOW;
 
-    if (new com.team254.lib.geometry.Translation2d(futureHub.getTranslation())
-            .inBounds(config.hubBounds)
-        && ActiveTracker.isActive()) return Shooter.State.HUB;
+    if (futureHub.getTranslation().getX() < config.hubBounds.maxX()) return Shooter.State.HUB;
 
     return Shooter.State.LOB;
   }
@@ -248,6 +245,8 @@ public class ShootingPlanner {
     if (linearVel > target.getVelocityThreshold()) return false;
     if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
     if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold()) return false;
+    if(state == Shooter.State.STOW) return false;
+    if(new com.team254.lib.geometry.Translation2d(shooterPoseSupplier.get().getTranslation()).inBounds(config.blockedBounds)) return false;
 
     Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
     return true;
