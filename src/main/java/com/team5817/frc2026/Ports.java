@@ -46,12 +46,14 @@ public class Ports {
 
   public static final CanDeviceId CLIMB = new CanDeviceId(17);
 
+  //public static final CanDeviceId CANDLE = new CanDeviceId(00000, "canivore1");
+
   public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(18);
 
   public static final CanDeviceId PIGEON = new CanDeviceId(19, "canivore1");
 
   // initally meant for rev blinkin, switch to candl?
-  public static final CanDeviceId LEDS = new CanDeviceId(20, "rio");
+  public static final CanDeviceId LEDS = new CanDeviceId(20);
 
   /* BEAM BREAK DIO CHANNELS */
   // public static final int INDEXER_BEAM_BREAK = 0;
