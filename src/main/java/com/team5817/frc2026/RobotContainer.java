@@ -10,6 +10,7 @@ import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
+import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
@@ -44,6 +45,7 @@ public class RobotContainer {
   public SpindexerGroup mSpindexer = null;
   public Vision mVision = null;
   public Climb mClimb = null;
+  public Lights mLight = null;
   public Superstructure mSuperstructure = null;
 
   public SwerveDriveSimulation driveSimulation = null;
@@ -113,6 +115,10 @@ public class RobotContainer {
       )
     );
 
+    mLight = new Lights(
+      null
+    );
+
   // Patch vision timing supplier into Shooter now that Vision exists
   mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
@@ -179,6 +185,10 @@ public class RobotContainer {
               mDrive::getPose,
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
+
+    if (mLight == null)
+          mLight = new Lights(
+            null);
   }
 
   private Pose2d getMapleSimPose() {
