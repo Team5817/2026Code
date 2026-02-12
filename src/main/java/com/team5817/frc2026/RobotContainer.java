@@ -14,6 +14,8 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerRoller;
+import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
+import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
@@ -41,6 +43,7 @@ public class RobotContainer {
   public Drive mDrive = null;
   public Intake mIntake = null;
   public Shooter mShooter = null;
+  public FixedShooter mFixedShooter = null;
   public SpindexerGroup mSpindexer = null;
   public Vision mVision = null;
   public Climb mClimb = null;
@@ -60,10 +63,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb);
+    mSuperstructure = new Superstructure(mDrive, mShooter, mFixedShooter, mIntake, mSpindexer, mClimb);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb);
+        mDrive, mSuperstructure, mVision, mShooter, mFixedShooter, mIntake, mSpindexer, mClimb);
   }
 
   public void makeRealRobot() {
@@ -99,6 +102,19 @@ public class RobotContainer {
           mDrive::getChassisSpeeds,
           () -> 0.0 // placeholder for vision timing supplier
           );
+          
+// ---------------- FIXED SHOOTER ----------------
+  mFixedShooter =
+      new FixedShooter(
+          new ServoMotorIOTalonFX(
+              FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
+          new RollerSubsystemIOTalonFX(
+              Ports.FLYWHEEL_1,
+              FixedShooterConstants.flywheelConstants,
+              1),
+          () -> 35.0, // close,  replace with real supplier later
+          () -> 55.0  // far, replace with real supplier later
+    );
 
   // ---------------- VISION ----------------
   // Use Shooter-provided turret camera pose supplier
@@ -133,19 +149,22 @@ public class RobotContainer {
 
     if (mClimb == null)
       mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
-    if (mIntake == null)
+   
+      if (mIntake == null)
       mIntake =
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
-    if (mSpindexer == null)
-      mSpindexer =
+   
+      if (mSpindexer == null)
+        mSpindexer =
           new SpindexerGroup(
               new SpindexerRoller(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
               new SpindexerRoller(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
-    if (mDrive == null)
+  
+                  if (mDrive == null)
       mDrive =
           new Drive(
               new GyroIOSim(driveSimulation.getGyroSimulation()),
@@ -160,6 +179,7 @@ public class RobotContainer {
               driveSimulation.setSimulationWorldPose(newPose.wpi());
             }
           };
+   
     if (mVision == null)
       mVision =
           new Vision(
@@ -179,6 +199,16 @@ public class RobotContainer {
               mDrive::getPose,
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
+              
+    if (mFixedShooter == null)
+      mFixedShooter =
+          new FixedShooter(
+              new ServoMotorIOSim(
+                  FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
+              new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
+             () -> 35.0,
+             () -> 55.0
+      );
   }
 
   private Pose2d getMapleSimPose() {

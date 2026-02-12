@@ -53,12 +53,7 @@ public class Ports {
   public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(23);
   public static final CanDeviceId PIGEON = new CanDeviceId(24, "canivore1");
 
-<<<<<<< Updated upstream
-  // initally meant for rev blinkin, switch to candl?
-  public static final CanDeviceId LEDS = new CanDeviceId(20, "canivore1");
-=======
   public static final CanDeviceId LEDS = new CanDeviceId(25, "rio");
->>>>>>> Stashed changes
 
   /* BEAM BREAK DIO CHANNELS */
   // public static final int INDEXER_BEAM_BREAK = 0;

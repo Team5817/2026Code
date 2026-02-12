@@ -9,6 +9,7 @@ import com.team5817.lib.requests.Request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class FixedShooter extends Subsystem {
@@ -19,8 +20,8 @@ public class FixedShooter extends Subsystem {
   public FixedShooter(
       ServoMotorIO hoodIO,
       RollerSubsystemIO flywheelIO,
-      java.util.function.DoubleSupplier closeAngleSupplier,
-      java.util.function.DoubleSupplier farAngleSupplier) {
+      DoubleSupplier closeAngleSupplier,
+      DoubleSupplier farAngleSupplier) {
 
     hood = new FixedShooterHood(hoodIO, closeAngleSupplier, farAngleSupplier);
 
@@ -34,14 +35,14 @@ public class FixedShooter extends Subsystem {
   private State mState = State.IDLE;
 
   @Getter @Setter private State desiredState = State.IDLE;
-
   private boolean atState = false;
 
   public enum State {
     IDLE(FixedShooterHood.State.STOW, FlywheelState.IDLE),
     CLOSE(FixedShooterHood.State.CLOSE, FlywheelState.CLOSE),
     FAR(FixedShooterHood.State.FAR, FlywheelState.FAR),
-    SHOOT(FixedShooterHood.State.FAR, FlywheelState.SHOOT);
+    HUB(FixedShooterHood.State.FAR, FlywheelState.HUB),
+    LOBBING(FixedShooterHood.State.FAR, FlywheelState.LOBBING);
 
     final FixedShooterHood.State hoodState;
     final FlywheelState flywheelState;

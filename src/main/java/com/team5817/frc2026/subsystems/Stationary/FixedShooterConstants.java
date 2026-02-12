@@ -36,38 +36,44 @@ public class FixedShooterConstants {
     flywheelConstants.kFollowerOpposeMasterDirection = false;
   }
 
-  public enum FlywheelState implements IRollerState {
-    IDLE(() -> 0.0),
-    CLOSE(() -> 60.0),
-    FAR(() -> 80.0),
-    SHOOT(() -> 95.0);
+public enum FlywheelState implements IRollerState {
+  IDLE(0.0, RollerControlMode.VOLTAGE),
+  CLOSE(60.0, RollerControlMode.VELOCITY),
+  FAR(80.0, RollerControlMode.VELOCITY),
+  HUB(70.0, RollerControlMode.VELOCITY), // Placeholder
+  LOBBING(90.0, RollerControlMode.VELOCITY); // Placeholder
 
-    private DoubleSupplier demand;
+  private final RollerControlMode controlMode;
+  private final double toleranceRadsPerSec = 1.0;
+  private DoubleSupplier supplier;
 
-    FlywheelState(DoubleSupplier supplier) {
-      this.demand = supplier;
-    }
-
-    public void setSupplier(DoubleSupplier supplier) {
-      this.demand = supplier;
-    }
-
-    @Override
-    public double getDemand() {
-      return demand.getAsDouble();
-    }
-
-    @Override
-    public double getToleranceRadsPerSec() {
-      return 1.0;
-    }
-
-    @Override
-    public RollerControlMode getControlMode() {
-      return RollerControlMode.VELOCITY;
-    }
+  FlywheelState(double demand, RollerControlMode controlMode) {
+    this.controlMode = controlMode;
+    this.supplier = () -> demand;
   }
 
+  public void setSupplier(DoubleSupplier supplier) {
+    this.supplier = supplier == null ? () -> 0.0 : supplier;
+  }
+
+  @Override
+  public double getDemand() {
+    return supplier.getAsDouble();
+  }
+
+  @Override
+  public double getToleranceRadsPerSec() {
+    return toleranceRadsPerSec;
+  }
+
+  @Override
+  public RollerControlMode getControlMode() {
+    return controlMode;
+  }
+}
+
+
+  /* ================= HOOD ================= */
 
   public static final class FixedShooterHoodConstants {
     public static final ServoConstants kHoodServoConstants = new ServoConstants();

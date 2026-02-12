@@ -7,7 +7,6 @@ import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
@@ -85,15 +84,6 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   @Override
   public void outputTelemetry() {
     RobotVisualizer.updateTurretPose(getPosition());
-    double demand = getState().getDemand();
-    double position = getPosition();
-    boolean atState = atState();
-    Logger.recordOutput("Turret/Position", position);
-    Logger.recordOutput("Turret/Demand", demand);
-    Logger.recordOutput("Turret/AtStateCheck", atState);
-    double diff = Math.abs(getPosition() - getState().getDemand());
-    Logger.recordOutput("Turret/AtStateDiff", diff);
-
     super.outputTelemetry();
   }
 }
