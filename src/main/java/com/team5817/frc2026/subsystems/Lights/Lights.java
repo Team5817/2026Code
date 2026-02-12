@@ -11,17 +11,21 @@ import edu.wpi.first.wpilibj.util.Color;
 import org.littletonrobotics.junction.Logger;
 
 public class Lights extends Subsystem {
+  LEDState mState;
   LightsIO io;
   public Lights(LightsIO io) {
     this.io = io;
+    setLeds(LEDState.RED);
   }
 
   public void setLeds(LEDState state){
+    mState = state;
     io.setControl(state, LightsConstants.defaultFrameRate, 0, LightsConstants.maxSlot);
   }
   @Override
   public void outputTelemetry() {
-      Logger.recordOutput("Lights/Main State", io.getState());
+      Logger.recordOutput("Lights/Main State", io.getState(mState));
+
   }
 
   public Request setState(LEDState state){

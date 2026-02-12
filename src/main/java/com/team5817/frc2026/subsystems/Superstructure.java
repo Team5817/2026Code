@@ -1,11 +1,15 @@
 package com.team5817.frc2026.subsystems;
 
+import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.drivers.Lights.LightsState;
+import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.requests.NeverEndingRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
@@ -24,16 +28,18 @@ public class Superstructure extends Subsystem {
   public Intake mIntake;
   public SpindexerGroup mSpindexerGroup;
   public Climb mClimb;
+  public Lights mLights;
 
   @Setter private boolean allowAutoShoot = true;
 
   public Superstructure(
-      Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb) {
+      Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb, Lights lights) {
     mDrive = drive;
     mShooter = shooter;
     mIntake = intake;
     mSpindexerGroup = spindexerGroup;
     mClimb = climb;
+    mLights = lights;
     this.requestExecutor = new RequestExecutor();
   }
 
@@ -59,10 +65,38 @@ public class Superstructure extends Subsystem {
     // );
   }
 
+  /*
+Alliance shift: Red or Blue */
+
   @Override
   public void periodic() {
     requestExecutor.update();
-  }
+    if (ActiveTracker.getTimeToActive() % 2 == 0){
+      mLights.setLeds(LEDState.ORANGE);
+    }
+    else if (mClimb.getState() != Climb.State.ZERO){
+      mLights.setLeds(LEDState.PURPLE);
+    }
+    else if (){
+      mLights.setLeds(LEDState.GREEN);
+    }
+    else if (){
+      mLights.setLeds(LEDState.FIRE);
+    }
+    else if (){
+      mLights.setLeds(LEDState.STROBEORANGE);
+    }
+    else if (){
+      mLights.setLeds(LEDState.YELLOW);
+    }
+    else if (){
+      mLights.setLeds(LEDState.RED);
+      }
+    else{
+      mLights.setLeds(LEDState.WHITE);
+    }
+   }
+  
 
   public boolean requestsCompleted() {
     return this.requestExecutor.isFinished();

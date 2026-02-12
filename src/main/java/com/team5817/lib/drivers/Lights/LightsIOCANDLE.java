@@ -1,18 +1,14 @@
 package com.team5817.lib.drivers.Lights;
 
-import com.ctre.phoenix.led.TwinkleAnimation;
 import com.ctre.phoenix6.controls.ColorFlowAnimation;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.FireAnimation;
 import com.ctre.phoenix6.controls.LarsonAnimation;
-import com.ctre.phoenix6.controls.ModulateVBatOut;
 import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.RgbFadeAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
-import com.team5817.frc2026.subsystems.Lights.LightsConstants;
-import com.team5817.lib.drivers.Lights.LightsState.LEDState;
+import com.ctre.phoenix6.signals.RGBWColor;
 
 public class LightsIOCANDLE implements LightsIO{
   CANdle mCandle;
@@ -52,18 +48,18 @@ public class LightsIOCANDLE implements LightsIO{
       );
         break;
 
-      case SOLID:
-      mCandle.setControl(new SolidColor(minSlot, maxSlot)
-      );
-        break;
         
-      case STROBE:
+      case STROBEORANGE:
       mCandle.setControl(new StrobeAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
-
+      default:
+        if(state.color!=null)
+          mCandle.setControl(new SolidColor(minSlot, maxSlot).withColor(new RGBWColor(state.color)));
+        break;
     
     }
   }
+
 }

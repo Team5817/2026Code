@@ -25,9 +25,30 @@ public class LightsState {
     LARSON,
     RAINBOW,
     FIRE,
-    SOLID,
+    RED(Color.kRed),
+    YELLOW(Color.kYellow),
+    WHITE(Color.kWhite),
+    GREEN(Color.kGreen),
+    PURPLE(Color.kPurple),
+    BLUE(Color.kBlue),
+    ORANGE(Color.kOrange),
     FLOW,
     RGBFADE,
-    STROBE
+    STROBEORANGE(Color.kOrange); // deal with later
+    private LEDState(){
+
+    }
+    Color color = null;
+    private LEDState(Color color){
+      this.color = color;
+    }
   }
 }
+
+/*Idle: White
+Not Locked: Yellow
+Locked: Green
+Dual mode: Fire
+Climb: Purple 
+Hopper empty: Flash Orange
+Alliance shift: Red or Blue */

@@ -19,6 +19,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
+import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
 import com.team5817.lib.drivers.Servos.ServoMotorIOSim;
@@ -62,10 +63,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb);
+    mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb);
+        mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb, mLight);
   }
 
   public void makeRealRobot() {
@@ -188,7 +189,8 @@ public class RobotContainer {
 
     if (mLight == null)
           mLight = new Lights(
-            null);
+            new LightsIOSim()
+          );
   }
 
   private Pose2d getMapleSimPose() {

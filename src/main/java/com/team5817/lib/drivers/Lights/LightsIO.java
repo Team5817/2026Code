@@ -11,13 +11,12 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public interface LightsIO {
 
-  public default void setControl(LightsState.LEDState state, double frameRate, int minSlot, int maxSlot){}
+  default void setControl(LightsState.LEDState state, double frameRate, int minSlot, int maxSlot){}
   
-  public default LEDState getState(){return  LEDState.SOLID;}
+  default LEDState getState(LEDState state){return state;}
 
-  public default void stop() {}
+  default void stop() {}
 
-  public default void start() {}
+  default void start() {}
 
-  
 }
