@@ -1,9 +1,9 @@
 package com.team5817.frc2026.controlboard;
 
 import com.team5817.frc2026.ActiveTracker;
+import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
-import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 
@@ -41,32 +41,32 @@ public class DriverControls {
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // //LT intake
-    if(driver.leftTrigger.wasActivated()){
-    s.mIntake.conformToState(Intake.State.INTAKING);
+    if (driver.leftTrigger.wasActivated()) {
+      s.mIntake.conformToState(Intake.State.INTAKING);
     }
-    if(driver.leftTrigger.wasReleased()){
-    s.mIntake.conformToState(Intake.State.IDLE);
+    if (driver.leftTrigger.wasReleased()) {
+      s.mIntake.conformToState(Intake.State.IDLE);
     }
     // //LB Reverse spindexer
-    if(driver.getLeftBumperButtonPressed()){
-    s.mSpindexerGroup.setState(SpindexerGroup.State.EXHAUST);
+    if (driver.getLeftBumperButtonPressed()) {
+      s.mSpindexerGroup.setState(SpindexerGroup.State.EXHAUST);
     }
-     if(driver.getLeftBumperButtonReleased()){
-    s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
+    if (driver.getLeftBumperButtonReleased()) {
+      s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
     }
     // //LeftStick Spindexer Feed Shooter
-     if(driver.getLeftStickButtonPressed()){
-    s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_SHOOTER);
+    if (driver.getLeftStickButtonPressed()) {
+      s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_SHOOTER);
     }
-     if(driver.getLeftStickButtonReleased()){
-    s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
+    if (driver.getLeftStickButtonReleased()) {
+      s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
     }
-     // //RightStick Spindexer Feed Turret
-     if(driver.getRightStickButtonPressed()){
-    s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_TURRET);
+    // //RightStick Spindexer Feed Turret
+    if (driver.getRightStickButtonPressed()) {
+      s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_TURRET);
     }
-     if(driver.getRightStickButtonReleased()){
-    s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
+    if (driver.getRightStickButtonReleased()) {
+      s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
     }
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
@@ -74,9 +74,7 @@ public class DriverControls {
     mControlBoard.setSwerveScalar(
         1 - driver.getRightTriggerAxis() * .7); // coefficient is percent to reduce speed by
 
-    
-    
-        // Y Close
+    // Y Close
     if (driver.getYButtonPressed()) {
       s.request(s.CloseShotRequest());
     }
