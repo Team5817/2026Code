@@ -5,7 +5,7 @@ package com.team5817;
  */
 public final class BuildConstants {
   public static final String MAVEN_GROUP = "";
-  public static final String MAVEN_NAME = "2026Code-2";
+  public static final String MAVEN_NAME = "2026Code-6";
   public static final String VERSION = "unspecified";
   public static final int GIT_REVISION = 68;
   public static final String GIT_SHA = "9b6928e627ba500e231acd3c905729af3084fbae";

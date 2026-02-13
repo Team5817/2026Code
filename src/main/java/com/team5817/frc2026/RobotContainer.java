@@ -10,6 +10,7 @@ import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
+import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
@@ -20,6 +21,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
+import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
 import com.team5817.lib.drivers.Servos.ServoMotorIOSim;
@@ -47,6 +49,7 @@ public class RobotContainer {
   public SpindexerGroup mSpindexer = null;
   public Vision mVision = null;
   public Climb mClimb = null;
+  public Lights mLight = null;
   public Superstructure mSuperstructure = null;
 
   public SwerveDriveSimulation driveSimulation = null;
@@ -63,10 +66,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mShooter, mFixedShooter, mIntake, mSpindexer, mClimb);
+    mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mShooter, mFixedShooter, mIntake, mSpindexer, mClimb);
+        mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb, mLight);
   }
 
   public void makeRealRobot() {
@@ -127,6 +130,11 @@ public class RobotContainer {
       )
     );
 
+    mLight = new Lights(
+      null
+    );
+
+  // Patch vision timing supplier into Shooter now that Vision exists
   mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
   // ---------------- CLIMB ----------------
@@ -197,6 +205,12 @@ public class RobotContainer {
               mDrive::getPose,
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
+
+    if (mLight == null)
+          mLight = new Lights(
+            new LightsIOSim()
+          );
+  }
               
     if (mFixedShooter == null)
       mFixedShooter =
