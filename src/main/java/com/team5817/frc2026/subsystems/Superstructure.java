@@ -1,7 +1,6 @@
 package com.team5817.frc2026.subsystems;
 
 import com.team5817.frc2026.ActiveTracker;
-import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -10,7 +9,6 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.drivers.Lights.LightsState;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.requests.NeverEndingRequest;
 import com.team5817.lib.requests.Request;
@@ -35,12 +33,12 @@ public class Superstructure extends Subsystem {
 
   @Setter private boolean allowAutoShoot = true;
 
-  public Superstructure(Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb, Lights lights) {
+  public Superstructure(Drive drive, Intake intake, SpindexerGroup spindexerGroup, Shooter shooter, FixedShooter fixedShooter,  Climb climb, Lights lights) {
     mDrive = drive;
-    mShooter = shooter;
-    mFixedShooter = fixedShooter;
     mIntake = intake;
     mSpindexerGroup = spindexerGroup;
+    mShooter = shooter;
+    mFixedShooter = fixedShooter;
     mClimb = climb;
     mLights = lights;
     this.requestExecutor = new RequestExecutor();
@@ -93,18 +91,18 @@ public class Superstructure extends Subsystem {
     else if (!mShooter.getPlanner().shouldShoot()){
       mLights.setLeds(LEDState.YELLOW);
     }
-    else if (){
-      mLights.setLeds(LEDState.FIRE);
-    }
-    else if (){
-      mLights.setLeds(LEDState.STROBEORANGE);
-    }
-    else if (){ // alliance red
-      mLights.setLeds(LEDState.RED);
-    }
-    else if (){ // alliance blue
-      mLights.setLeds(LEDState.BLUE);
-    }
+    // else if (){
+    //   mLights.setLeds(LEDState.FIRE);
+    // }
+    // else if (){
+    //   mLights.setLeds(LEDState.STROBEORANGE);
+    // }
+    // else if (){ // alliance red
+    //   mLights.setLeds(LEDState.RED);
+    // }
+    // else if (){ // alliance blue
+    //   mLights.setLeds(LEDState.BLUE);
+    // }
     else{
       mLights.setLeds(LEDState.WHITE);
     }

@@ -1,10 +1,6 @@
 package com.team5817.frc2026.subsystems.Lights;
 
-import com.team254.lib.drivers.CanDeviceId;
-import com.team5817.frc2026.Ports;
-import com.team5817.lib.drivers.Lights.LightsState;
 
-import edu.wpi.first.wpilibj.util.Color;
 
 public class LightsConstants {
 

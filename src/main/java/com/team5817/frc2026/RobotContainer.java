@@ -33,7 +33,6 @@ import com.team5817.lib.swerve.GyroIOSim;
 import com.team5817.lib.swerve.ModuleIOSim;
 import com.team5817.lib.swerve.ModuleIOTalonFX;
 
-// camera pose handled by Shooter.getTurretCameraPoseSupplier()
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
 
@@ -44,9 +43,9 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
   public Drive mDrive = null;
   public Intake mIntake = null;
+  public SpindexerGroup mSpindexer = null;
   public Shooter mShooter = null;
   public FixedShooter mFixedShooter = null;
-  public SpindexerGroup mSpindexer = null;
   public Vision mVision = null;
   public Climb mClimb = null;
   public Lights mLight = null;
@@ -59,21 +58,22 @@ public class RobotContainer {
       case REAL:
         makeRealRobot();
         break;
-      default:
+      
+    default:
         break;
     }
 
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mShooter, mIntake, mSpindexer, mClimb, mLight);
+    mSuperstructure = new Superstructure(mDrive,mIntake, mSpindexer, mShooter, mFixedShooter,  mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mShooter, mIntake, mSpindexer, mClimb, mLight);
+        mDrive, mSuperstructure, mVision, mShooter, mFixedShooter, mIntake, mSpindexer, mClimb, mLight);
   }
 
   public void makeRealRobot() {
-  // ---------------- DRIVE ----------------
+
   mDrive =
       new Drive(
           new GyroIOPigeon2(),
@@ -84,7 +84,6 @@ public class RobotContainer {
           SwerveConstants.stabilizePID,
           SwerveConstants.snapPID);
 
-  // ---------------- INTAKE ----------------
   mIntake =
       new Intake(
           new RollerSubsystemIOTalonFX(
@@ -95,7 +94,6 @@ public class RobotContainer {
           // new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
           );
 
-  // ---------------- SHOOTER (Vision dependency patched later) ----------------
   mShooter =
       new Shooter(
           new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
@@ -106,7 +104,6 @@ public class RobotContainer {
           () -> 0.0 // placeholder for vision timing supplier
           );
           
-// ---------------- FIXED SHOOTER ----------------
   mFixedShooter =
       new FixedShooter(
           new ServoMotorIOTalonFX(
@@ -118,7 +115,6 @@ public class RobotContainer {
           mShooter.getPlanner()
       );
 
-  // ---------------- VISION ----------------
   mVision =
     new Vision(
       mDrive::addVisionMeasurement,
@@ -126,7 +122,7 @@ public class RobotContainer {
         "limelight-turret",
         mShooter.getTurretCameraPoseSupplier(), 
         () -> mDrive.getHeading(), 
-        false // incoming NT botpose arrays are robot poses (don't re-transform)
+        false 
       )
     );
 
@@ -134,41 +130,24 @@ public class RobotContainer {
       null
     );
 
-  // Patch vision timing supplier into Shooter now that Vision exists
   mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-  // ---------------- CLIMB ----------------
-   mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
+  mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
+
 }
 
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
 
   public void fillInSimulatedSubsytems() {
+  
     if (RobotMode.isSim()) {
       driveSimulation =
           new SwerveDriveSimulation(
               SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
       SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
     }
-
-    if (mClimb == null)
-      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
-   
-    if (mIntake == null)
-      mIntake =
-          new Intake(
-              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-              new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
-   
-    if (mSpindexer == null)
-        mSpindexer =
-          new SpindexerGroup(
-              new SpindexerRoller(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
-              new SpindexerRoller(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
-  
+    
     if (mDrive == null)
       mDrive =
           new Drive(
@@ -184,6 +163,21 @@ public class RobotContainer {
               driveSimulation.setSimulationWorldPose(newPose.wpi());
             }
           };
+
+    if (mIntake == null)
+      mIntake =
+          new Intake(
+              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
+   
+    if (mSpindexer == null)
+        mSpindexer =
+          new SpindexerGroup(
+              new SpindexerRoller(
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
+              new SpindexerRoller(
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
+  
    
     if (mVision == null)
       mVision =
@@ -206,12 +200,6 @@ public class RobotContainer {
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
 
-    if (mLight == null)
-          mLight = new Lights(
-            new LightsIOSim()
-          );
-  }
-              
     if (mFixedShooter == null)
       mFixedShooter =
           new FixedShooter(
@@ -219,6 +207,16 @@ public class RobotContainer {
               FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
           new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
           mShooter.getPlanner());
+          
+    if (mClimb == null)
+      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
+
+    if (mLight == null)
+          mLight = new Lights(
+            new LightsIOSim()
+          );
+  
+                     
 }
 
   private Pose2d getMapleSimPose() {

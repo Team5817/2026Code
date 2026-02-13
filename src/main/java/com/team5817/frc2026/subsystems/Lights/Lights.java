@@ -2,11 +2,9 @@ package com.team5817.frc2026.subsystems.Lights;
 
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Lights.LightsIO;
-import com.team5817.lib.drivers.Lights.LightsState;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.requests.Request;
 
-import edu.wpi.first.wpilibj.util.Color;
 
 import org.littletonrobotics.junction.Logger;
 
