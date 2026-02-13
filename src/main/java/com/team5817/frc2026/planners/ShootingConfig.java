@@ -14,11 +14,13 @@ public class ShootingConfig {
 
   public final Bounds dangerBounds;
   public final Bounds hubBounds;
+  public final Bounds blockedBounds;
 
-  public ShootingConfig(InterpolatingDoubleTreeMap timeMap, Bounds dangerBounds, Bounds hubBounds) {
+  public ShootingConfig(InterpolatingDoubleTreeMap timeMap, Bounds dangerBounds, Bounds hubBounds,Bounds blockedBounds) {
     this.timeMap = timeMap;
     this.dangerBounds = dangerBounds;
     this.hubBounds = hubBounds;
+    this.blockedBounds = blockedBounds;
   }
 
   public static ShootingConfig defaultConfig() {
@@ -26,7 +28,7 @@ public class ShootingConfig {
     timeMap.put(1.0, .2);
     Bounds hubBounds = new Bounds(0.0, 0.0, 5.0, 9.0);
     Bounds dangerBounds = new Bounds(4.0, 0.0, 5.3, 1.3);
-
-    return new ShootingConfig(timeMap, dangerBounds, hubBounds);
+    Bounds blockedBounds = new Bounds(5,3.5,6, 4.6);
+    return new ShootingConfig(timeMap, dangerBounds, hubBounds,blockedBounds);
   }
 }

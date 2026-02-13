@@ -8,6 +8,7 @@ import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Lights.LightsState;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
@@ -26,6 +27,7 @@ public class Superstructure extends Subsystem {
   // Subsystems
   public Drive mDrive;
   public Shooter mShooter;
+  public FixedShooter mFixedShooter;
   public Intake mIntake;
   public SpindexerGroup mSpindexerGroup;
   public Climb mClimb;
@@ -33,10 +35,10 @@ public class Superstructure extends Subsystem {
 
   @Setter private boolean allowAutoShoot = true;
 
-  public Superstructure(
-      Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb, Lights lights) {
+  public Superstructure(Drive drive, Shooter shooter, Intake intake, SpindexerGroup spindexerGroup, Climb climb, Lights lights) {
     mDrive = drive;
     mShooter = shooter;
+    mFixedShooter = fixedShooter;
     mIntake = intake;
     mSpindexerGroup = spindexerGroup;
     mClimb = climb;

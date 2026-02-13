@@ -35,25 +35,25 @@ public class Ports {
   public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10, "canivore1");
 
   public static final CanDeviceId SPINDEXER_1 = new CanDeviceId(11);
-  public static final CanDeviceId TUNNEL_1 = new CanDeviceId(11);
-  public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(12);
-  public static final CanDeviceId TUNNEL_2 = new CanDeviceId(11);
+  public static final CanDeviceId TUNNEL_1 = new CanDeviceId(12);
+  public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(13);
+  public static final CanDeviceId TUNNEL_2 = new CanDeviceId(14);
 
-  public static final CanDeviceId TURRET = new CanDeviceId(13, "canivore1");
-  public static final CanDeviceId HOOD = new CanDeviceId(14, "canivore1");
-  public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(15, "canivore1");
-  public static final CanDeviceId FLYWHEEL_2 = new CanDeviceId(16, "canivore1");
+  public static final CanDeviceId FIXED_HOOD = new CanDeviceId(15);
+  public static final CanDeviceId FIXED_FLYWHEEL_1 = new CanDeviceId(16);
+  public static final CanDeviceId FIXED_FLYWHEEL_2 = new CanDeviceId(17);
 
-  public static final CanDeviceId CLIMB = new CanDeviceId(17);
+  public static final CanDeviceId TURRET = new CanDeviceId(18);
+  public static final CanDeviceId HOOD = new CanDeviceId(19);
+  public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(20);
+  public static final CanDeviceId FLYWHEEL_2 = new CanDeviceId(21);
 
-  //public static final CanDeviceId CANDLE = new CanDeviceId(00000, "canivore1");
+  public static final CanDeviceId CLIMB = new CanDeviceId(22);
 
-  public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(18);
+  public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(23);
+  public static final CanDeviceId PIGEON = new CanDeviceId(24, "canivore1");
 
-  public static final CanDeviceId PIGEON = new CanDeviceId(19, "canivore1");
-
-  // initally meant for rev blinkin, switch to candl?
-  public static final CanDeviceId LEDS = new CanDeviceId(20);
+  public static final CanDeviceId LEDS = new CanDeviceId(25, "rio");
 
   /* BEAM BREAK DIO CHANNELS */
   // public static final int INDEXER_BEAM_BREAK = 0;

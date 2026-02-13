@@ -41,7 +41,7 @@ public final class SwerveConstants {
 
   public static final SynchronousPIDF simSnapPID = new SynchronousPIDF(6.0, 0.0, 0.8, 2.0);
 
-  public static final double kTrajectoryDeadband = .03;
+  public static final double kTrajectoryDeadband = .05;
 
   public static final SwerveModuleSimulationConfig moduleConfig =
       new SwerveModuleSimulationConfig(
@@ -59,7 +59,7 @@ public final class SwerveConstants {
       DriveTrainSimulationConfig.Default()
           .withGyro(COTS.ofPigeon2())
           .withSwerveModule(() -> new SwerveModuleSimulation(moduleConfig))
-          .withBumperSize(Meters.of(.89), Meters.of(.89))
+          .withBumperSize(Meters.of(.7), Meters.of(.7))
           .withCustomModuleTranslations(Drive.getModuleTranslations())
           .withRobotMass(Pounds.of(115));
 }
