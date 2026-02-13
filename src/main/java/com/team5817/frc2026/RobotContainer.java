@@ -112,28 +112,25 @@ public class RobotContainer {
               Ports.FLYWHEEL_1,
               FixedShooterConstants.flywheelConstants,
               1),
-          () -> 35.0, // close,  replace with real supplier later
-          () -> 55.0  // far, replace with real supplier later
-    );
+          mShooter.getPlanner()
+      );
 
   // ---------------- VISION ----------------
-  // Use Shooter-provided turret camera pose supplier
   mVision =
     new Vision(
       mDrive::addVisionMeasurement,
       new ManualVisionIOLimelight(
         "limelight-turret",
-        mShooter.getTurretCameraPoseSupplier(), // robot-relative camera pose (dynamic)
-        () -> mDrive.getHeading(), // field-relative yaw (dynamic)
+        mShooter.getTurretCameraPoseSupplier(), 
+        () -> mDrive.getHeading(), 
         false // incoming NT botpose arrays are robot poses (don't re-transform)
       )
     );
 
-  // Patch vision timing supplier into Shooter now that Vision exists
   mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
   // ---------------- CLIMB ----------------
-  // mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
+   mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
 }
 
 
@@ -150,13 +147,13 @@ public class RobotContainer {
     if (mClimb == null)
       mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
    
-      if (mIntake == null)
+    if (mIntake == null)
       mIntake =
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
    
-      if (mSpindexer == null)
+    if (mSpindexer == null)
         mSpindexer =
           new SpindexerGroup(
               new SpindexerRoller(
@@ -164,7 +161,7 @@ public class RobotContainer {
               new SpindexerRoller(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
   
-                  if (mDrive == null)
+    if (mDrive == null)
       mDrive =
           new Drive(
               new GyroIOSim(driveSimulation.getGyroSimulation()),
@@ -190,6 +187,7 @@ public class RobotContainer {
                   "limelight-right", VisionConstants.robotToCameraLeft, this::getMapleSimPose),
               new VisionIOPhotonVisionSim(
                   "limelight-left", VisionConstants.robotToCameraRight, this::getMapleSimPose));
+  
     if (mShooter == null)
       mShooter =
           new Shooter(
@@ -203,13 +201,11 @@ public class RobotContainer {
     if (mFixedShooter == null)
       mFixedShooter =
           new FixedShooter(
-              new ServoMotorIOSim(
-                  FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
-              new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
-             () -> 35.0,
-             () -> 55.0
-      );
-  }
+          new ServoMotorIOSim(
+              FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
+          new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
+          mShooter.getPlanner());
+}
 
   private Pose2d getMapleSimPose() {
     return new Pose2d(driveSimulation.getSimulatedDriveTrainPose());
@@ -224,7 +220,6 @@ public class RobotContainer {
   public void displaySimFieldToAdvantageScope() {
     if (RobotMode.mode != RobotMode.Mode.SIM) return;
 
-    Logger.recordOutput(
-        "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
+    Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
   }
 }

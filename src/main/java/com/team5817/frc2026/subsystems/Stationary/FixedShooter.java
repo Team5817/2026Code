@@ -1,5 +1,7 @@
 package com.team5817.frc2026.subsystems.Stationary;
 
+import com.team5817.frc2026.planners.ShootingPlanner;
+import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants.FlywheelState;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
@@ -9,25 +11,23 @@ import com.team5817.lib.requests.Request;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class FixedShooter extends Subsystem {
 
+  private final ShootingPlanner planner;   
   @Getter private final FixedShooterHood hood;
   @Getter private final RollerSubsystem<FlywheelState> flywheel;
-
+  
+  
   public FixedShooter(
       ServoMotorIO hoodIO,
       RollerSubsystemIO flywheelIO,
-      DoubleSupplier closeAngleSupplier,
-      DoubleSupplier farAngleSupplier) {
+      ShootingPlanner shootingPlanner) {
 
-    hood = new FixedShooterHood(hoodIO, closeAngleSupplier, farAngleSupplier);
-
-    flywheel =
-        new RollerSubsystem<>(
-            FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
+    this.planner = shootingPlanner;
+    hood = new FixedShooterHood(hoodIO);
+    flywheel = new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
   }
 
   @Getter
@@ -57,16 +57,38 @@ public class FixedShooter extends Subsystem {
 
   @Override
   public void periodic() {
-    atState = hood.atState() && flywheel.atState();
+  switch (desiredState) {
 
-    if (mState != desiredState) {
-      hood.setState(desiredState.hoodState);
-      flywheel.setState(desiredState.flywheelState);
-      if (atState) {
-        mState = desiredState;
-      }
+    case HUB:
+      hood.setDynamicSupplier(
+          planner.getHoodAngleSupplier(ShootingTarget.HUB));
+
+      FlywheelState.HUB.setSupplier(
+          planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
+      break;
+
+    case LOBBING:
+      hood.setDynamicSupplier(
+          planner.getHoodAngleSupplier(ShootingTarget.LOB));
+
+      FlywheelState.LOBBING.setSupplier(
+          planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
+      break;
+
+    default:
+      break;
+  }
+
+  atState = hood.atState() && flywheel.atState();
+
+  if (mState != desiredState) {
+    hood.setState(desiredState.hoodState);
+    flywheel.setState(desiredState.flywheelState);
+    if (atState) {
+      mState = desiredState;
     }
   }
+}
 
   public Request stateRequest(State state) {
     return new Request() {

@@ -7,6 +7,10 @@ import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
+
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+
+
 import java.util.function.DoubleSupplier;
 
 public class FixedShooterConstants {
@@ -16,6 +20,10 @@ public class FixedShooterConstants {
   public static final RollerConstantsTalonFX flywheelConstants =
       new RollerConstantsTalonFX();
 
+    public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
+    public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
+    public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
+    public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
   static {
     flywheelConstants.kMaxForwardOutput = 12.0;
     flywheelConstants.kMaxReverseOutput = -12.0;
@@ -34,6 +42,33 @@ public class FixedShooterConstants {
 
     flywheelConstants.kFollowerConstants = new TalonFXConstants[] {follower};
     flywheelConstants.kFollowerOpposeMasterDirection = false;
+    
+    // Default maps for LOB
+    InterpolatingDoubleTreeMap lobHood = new InterpolatingDoubleTreeMap();
+    lobHood.put(1.0, 12.0);
+    lobHood.put(2.0, 14.5);
+    lobHood.put(3.5, 17.0);
+    lobHood.put(5.0, 20.0);
+ 
+    InterpolatingDoubleTreeMap lobFly = new InterpolatingDoubleTreeMap();
+    lobFly.put(1.0, 85.0);
+    lobFly.put(5.0, 95.0);
+
+    InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
+    hubHood.put(1.0, 6.0);
+    hubHood.put(2.0, 8.0);
+    hubHood.put(3.5, 10.5);
+    hubHood.put(5.0, 13.0);
+
+    InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
+    hubFly.put(1.0, 55.0);
+    hubFly.put(5.0, 75.0);
+
+    HOOD_MAP_LOB = lobHood;
+    FLYWHEEL_MAP_LOB = lobFly;
+    HOOD_MAP_HUB = hubHood;
+    FLYWHEEL_MAP_HUB = hubFly;
+
   }
 
 public enum FlywheelState implements IRollerState {

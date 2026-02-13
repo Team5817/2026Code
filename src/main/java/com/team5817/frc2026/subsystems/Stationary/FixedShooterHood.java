@@ -12,15 +12,12 @@ public class FixedShooterHood
   private static final double kTightError = 1.5;
   private static final double kLooseError = 4.0;
 
-  public FixedShooterHood(
-      ServoMotorIO io,
-      DoubleSupplier closeAngleSupplier,
-      DoubleSupplier farAngleSupplier) {
-
+  public FixedShooterHood(ServoMotorIO io) {
     super(State.STOW, io);
-
-    State.CLOSE.setSupplier(closeAngleSupplier);
-    State.FAR.setSupplier(farAngleSupplier);
+  }
+  
+  public void setDynamicSupplier(DoubleSupplier supplier) {
+  State.FAR.setSupplier(supplier);
   }
 
   public enum State implements ServoState {
