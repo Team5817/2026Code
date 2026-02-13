@@ -1,6 +1,7 @@
 package com.team5817.frc2026.subsystems;
 
 import com.team5817.frc2026.ActiveTracker;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -65,8 +66,15 @@ public class Superstructure extends Subsystem {
     // );
   }
 
-  /*
-Alliance shift: Red or Blue */
+/*
+        Idle: White
+        Should Not Shoot: Yellow
+        Should Shoot: Green
+        Dual mode: Fire
+        Climb: Purple 
+        Hopper empty: Flash Orange
+        Alliance shift: Red or Blue 
+*/
 
   @Override
   public void periodic() {
@@ -77,8 +85,11 @@ Alliance shift: Red or Blue */
     else if (mClimb.getState() != Climb.State.ZERO){
       mLights.setLeds(LEDState.PURPLE);
     }
-    else if (){
+    else if (mShooter.getPlanner().shouldShoot()){
       mLights.setLeds(LEDState.GREEN);
+    }
+    else if (!mShooter.getPlanner().shouldShoot()){
+      mLights.setLeds(LEDState.YELLOW);
     }
     else if (){
       mLights.setLeds(LEDState.FIRE);
@@ -86,12 +97,12 @@ Alliance shift: Red or Blue */
     else if (){
       mLights.setLeds(LEDState.STROBEORANGE);
     }
-    else if (){
-      mLights.setLeds(LEDState.YELLOW);
-    }
-    else if (){
+    else if (){ // alliance red
       mLights.setLeds(LEDState.RED);
-      }
+    }
+    else if (){ // alliance blue
+      mLights.setLeds(LEDState.BLUE);
+    }
     else{
       mLights.setLeds(LEDState.WHITE);
     }
