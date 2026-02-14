@@ -1,5 +1,7 @@
 package com.team5817.frc2026.planners;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.team254.lib.geometry.Bounds;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
@@ -12,23 +14,38 @@ public class ShootingConfig {
   // adding an enum entry. ShootingConfig keeps shared maps (timeMap) and per-target thresholds.
   public final InterpolatingDoubleTreeMap timeMap;
 
-  public final Bounds dangerBounds;
   public final Bounds hubBounds;
-  public final Bounds blockedBounds;
+  public final Bounds dangerBounds;
+  public final Bounds dangerBoundsOpponent;
+  public final Bounds dangerBoundsFlipped;
+  public final Bounds dangerBoundsFlippedOpponent;
 
-  public ShootingConfig(InterpolatingDoubleTreeMap timeMap, Bounds dangerBounds, Bounds hubBounds,Bounds blockedBounds) {
+  public ShootingConfig(InterpolatingDoubleTreeMap timeMap, Bounds hubBounds,Bounds dangerBounds, Bounds dangerBoundsFlipped, 
+  Bounds dangerBoundsOpponent, Bounds dangerBoundsFlippedOpponent) {
     this.timeMap = timeMap;
-    this.dangerBounds = dangerBounds;
     this.hubBounds = hubBounds;
-    this.blockedBounds = blockedBounds;
+    this.dangerBounds = dangerBounds;
+    this.dangerBoundsOpponent = dangerBoundsOpponent;
+    this.dangerBoundsFlipped = dangerBoundsFlipped;
+    this.dangerBoundsFlippedOpponent = dangerBoundsFlippedOpponent;
   }
 
   public static ShootingConfig defaultConfig() {
     InterpolatingDoubleTreeMap timeMap = new InterpolatingDoubleTreeMap();
     timeMap.put(1.0, .2);
-    Bounds hubBounds = new Bounds(0.0, 0.0, 5.0, 9.0);
-    Bounds dangerBounds = new Bounds(4.0, 0.0, 5.3, 1.3);
-    Bounds blockedBounds = new Bounds(5,3.5,6, 4.6);
-    return new ShootingConfig(timeMap, dangerBounds, hubBounds,blockedBounds);
+    Bounds hubBounds = new Bounds(0.0, 0.0, 4.6, 8);
+    Bounds dangerBounds = new Bounds(4.6, 6.73, 5.8,8);
+    Bounds dangerBoundsOpponent = new Bounds(4.6, 6.73, 5.8,8).flippedAboutY();
+    Bounds dangerBoundsFlipped = new Bounds(4.6, 6.73, 5.8, 8).flippedAboutX();
+    Bounds dangerBoundsFlippedOpponent = new Bounds(4.6, 6.73, 5.8, 8).flippedAboutX().flippedAboutY();
+    Logger.recordOutput("Shooting/DangerBounds", 
+        new double[] { dangerBounds.minX(), dangerBounds.minY(), dangerBounds.maxX(), dangerBounds.maxY() });
+    Logger.recordOutput("Shooting/DangerBoundsOpponent", 
+        new double[] { dangerBoundsOpponent.minX(), dangerBoundsOpponent.minY(), dangerBoundsOpponent.maxX(), dangerBoundsOpponent.maxY() });
+        Logger.recordOutput("Shooting/DangerBoundsFlipped", 
+        new double[] { dangerBoundsFlipped.minX(), dangerBoundsFlipped.minY(), dangerBoundsFlipped.maxX(), dangerBoundsFlipped.maxY() });
+    Logger.recordOutput("Shooting/DangerBoundsFlippedOpponent", 
+        new double[] { dangerBoundsFlippedOpponent.minX(), dangerBoundsFlippedOpponent.minY(), dangerBoundsFlippedOpponent.maxX(), dangerBoundsFlippedOpponent.maxY() });
+    return new ShootingConfig(timeMap, hubBounds, dangerBounds, dangerBoundsOpponent, dangerBoundsFlipped, dangerBoundsFlippedOpponent);
   }
 }
