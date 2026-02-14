@@ -16,15 +16,17 @@ public class ShootingConfig {
 
   public final Bounds hubBounds;
   public final Bounds dangerBounds;
+  public final Bounds blockedBounds;
   public final Bounds dangerBoundsOpponent;
   public final Bounds dangerBoundsFlipped;
   public final Bounds dangerBoundsFlippedOpponent;
 
-  public ShootingConfig(InterpolatingDoubleTreeMap timeMap, Bounds hubBounds,Bounds dangerBounds, Bounds dangerBoundsFlipped, 
+  public ShootingConfig(InterpolatingDoubleTreeMap timeMap, Bounds hubBounds,Bounds dangerBounds, Bounds blockedBounds, Bounds dangerBoundsFlipped, 
   Bounds dangerBoundsOpponent, Bounds dangerBoundsFlippedOpponent) {
     this.timeMap = timeMap;
     this.hubBounds = hubBounds;
     this.dangerBounds = dangerBounds;
+    this.blockedBounds = blockedBounds;
     this.dangerBoundsOpponent = dangerBoundsOpponent;
     this.dangerBoundsFlipped = dangerBoundsFlipped;
     this.dangerBoundsFlippedOpponent = dangerBoundsFlippedOpponent;
@@ -35,6 +37,7 @@ public class ShootingConfig {
     timeMap.put(1.0, .2);
     Bounds hubBounds = new Bounds(0.0, 0.0, 4.6, 8);
     Bounds dangerBounds = new Bounds(4.6, 6.73, 5.8,8);
+        Bounds blockedBounds = new Bounds(5,3.5,6, 4.6);
     Bounds dangerBoundsOpponent = new Bounds(4.6, 6.73, 5.8,8).flippedAboutY();
     Bounds dangerBoundsFlipped = new Bounds(4.6, 6.73, 5.8, 8).flippedAboutX();
     Bounds dangerBoundsFlippedOpponent = new Bounds(4.6, 6.73, 5.8, 8).flippedAboutX().flippedAboutY();
@@ -46,6 +49,8 @@ public class ShootingConfig {
         new double[] { dangerBoundsFlipped.minX(), dangerBoundsFlipped.minY(), dangerBoundsFlipped.maxX(), dangerBoundsFlipped.maxY() });
     Logger.recordOutput("Shooting/DangerBoundsFlippedOpponent", 
         new double[] { dangerBoundsFlippedOpponent.minX(), dangerBoundsFlippedOpponent.minY(), dangerBoundsFlippedOpponent.maxX(), dangerBoundsFlippedOpponent.maxY() });
-    return new ShootingConfig(timeMap, hubBounds, dangerBounds, dangerBoundsOpponent, dangerBoundsFlipped, dangerBoundsFlippedOpponent);
+    Logger.recordOutput("Shooting/BlockedBounds", 
+        new double[] { blockedBounds.minX(), blockedBounds.minY(), blockedBounds.maxX(), blockedBounds.maxY() });
+    return new ShootingConfig(timeMap, hubBounds, dangerBounds, blockedBounds, dangerBoundsOpponent, dangerBoundsFlipped, dangerBoundsFlippedOpponent);
   }
 }

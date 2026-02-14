@@ -218,10 +218,12 @@ public class ShootingPlanner {
 
     Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
 
-    if (current.getTranslation().inBounds(config.dangerBounds)) return Shooter.State.STOW;
-    if (current.getTranslation().inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW;
-    if (current.getTranslation().inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW;
-    if (current.getTranslation().inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW;
+    com.team254.lib.geometry.Translation2d pos = new com.team254.lib.geometry.Translation2d(current.getTranslation());
+
+    if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW;
+    if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW;
+    if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW;
+    if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW;
 
 
     if (futureHub.getTranslation().getX() < config.hubBounds.maxX()) return Shooter.State.HUB;
