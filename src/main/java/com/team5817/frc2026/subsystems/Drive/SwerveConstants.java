@@ -52,7 +52,7 @@ public final class SwerveConstants {
           Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),
           Volts.of(TunerConstants.FrontLeft.SteerFrictionVoltage),
           Inches.of(2),
-          KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
+          KilogramSquareMeters.of(0.02),
           1.2);
 
   public static final DriveTrainSimulationConfig driveConfig =

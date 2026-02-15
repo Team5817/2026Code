@@ -46,6 +46,9 @@ public class Robot extends LoggedRobot {
   ControlBoard controlBoard;
 
   Drive mDrive;
+  public Robot() {
+    super(0.02);
+  }
 
   @SuppressWarnings("resource")
   /**

@@ -21,7 +21,7 @@ public class LightsIOSim implements LightsIO{
      this.state = state;
      this.frameRate = frameRate;
     Logger.recordOutput("Lights/Main State", this.state);
-    Logger.recordOutput("Lights/Main State", this.frameRate);
+    Logger.recordOutput("Lights/Frame Rate", this.frameRate);
   }
 
 }
