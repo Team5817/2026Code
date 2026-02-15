@@ -1,7 +1,11 @@
 package com.team5817.frc2026.planners;
 
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.FieldCentric;
 import com.team254.lib.geometry.Translation2d;
+import com.team5817.frc2026.field.FieldConstants;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
+import com.team5817.lib.Util;
+
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 /**
@@ -63,7 +67,10 @@ public enum ShootingTarget {
   }
 
   public Translation2d getLocation() {
-    return location;
+    if(Util.isRed().orElse(false))
+      return location.mirrorAboutX(FieldConstants.LinesVertical.center);
+    else
+      return location;
   }
 
   /** Return the hood lookup table for this target from ShooterConstants. */

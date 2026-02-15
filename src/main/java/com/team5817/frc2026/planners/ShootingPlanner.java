@@ -1,6 +1,9 @@
 package com.team5817.frc2026.planners;
 
+import com.team5817.frc2026.field.FieldConstants;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
+import com.team5817.lib.Util;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -219,14 +222,18 @@ public class ShootingPlanner {
     Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
 
     com.team254.lib.geometry.Translation2d pos = new com.team254.lib.geometry.Translation2d(current.getTranslation());
-
+    com.team254.lib.geometry.Translation2d futureHubPos = new com.team254.lib.geometry.Translation2d(futureHub.getTranslation());
+    if(Util.isRed().orElse(false)){
+        pos = pos.mirrorAboutX(FieldConstants.LinesVertical.center);
+        futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
+      }
     if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW;
     if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW;
     if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW;
     if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW;
 
 
-    if (futureHub.getTranslation().getX() < config.hubBounds.maxX()) return Shooter.State.HUB;
+    if (futureHubPos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
 
     return Shooter.State.LOB;
   }
