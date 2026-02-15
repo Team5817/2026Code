@@ -6,6 +6,7 @@ import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
+import com.team5817.lib.requests.EmptyRequest;
 
 /**
  * The DriverControls class handles the input from the driver and co-driver controllers and
@@ -105,6 +106,7 @@ public class DriverControls {
     // B Force Hood
     if (driver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
+      s.request(new EmptyRequest());
     }
 
     if (driver.getBButtonReleased()) {

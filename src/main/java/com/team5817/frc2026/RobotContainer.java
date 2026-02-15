@@ -13,8 +13,10 @@ import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
 import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
+import com.team5817.frc2026.subsystems.Spindexer.Spindexer;
+import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerRoller;
+import com.team5817.frc2026.subsystems.Spindexer.TunnelConstants;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -90,9 +92,17 @@ public class RobotContainer {
               Ports.INTAKE_ROLLERS,
               IntakeConstants.RollerConstants.motorConstants,
               2.5),
-          new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants)
-          // new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
+          new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
           );
+  mSpindexer = new SpindexerGroup(
+    new Spindexer(
+      new RollerSubsystemIOTalonFX(Ports.SPINDEXER_LEFT, SpindexerConstants.leftSpinner, 1),
+       new RollerSubsystemIOTalonFX(Ports.TUNNEL_LEFT, TunnelConstants.leftRoller, 1),
+       "Left"), 
+    new Spindexer(
+      new RollerSubsystemIOTalonFX(Ports.SPINDEXER_RIGHT, SpindexerConstants.rightSpinner, 1),
+       new RollerSubsystemIOTalonFX(Ports.TUNNEL_RIGHT, TunnelConstants.rightRoller, 1),
+       "Right"));
 
   mShooter =
       new Shooter(
@@ -147,6 +157,25 @@ public class RobotContainer {
               SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
       SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
     }
+
+    if (mClimb == null)
+      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
+    if (mIntake == null)
+      mIntake =
+          new Intake(
+              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
+    if (mSpindexer == null)
+      mSpindexer =
+          new SpindexerGroup(
+              new Spindexer(
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                   "Left"),
+              new Spindexer(
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                   "Right"));
     
     if (mDrive == null)
       mDrive =
@@ -173,10 +202,14 @@ public class RobotContainer {
     if (mSpindexer == null)
         mSpindexer =
           new SpindexerGroup(
-              new SpindexerRoller(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
-              new SpindexerRoller(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"));
+              new Spindexer(
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                  "Left"),
+              new Spindexer(
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                   "Right"));
   
    
     if (mVision == null)

@@ -34,10 +34,10 @@ public class Ports {
   public static final CanDeviceId INTAKE_PIVOT = new CanDeviceId(9);
   public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10, "canivore1");
 
-  public static final CanDeviceId SPINDEXER_1 = new CanDeviceId(11);
-  public static final CanDeviceId TUNNEL_1 = new CanDeviceId(12);
-  public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(13);
-  public static final CanDeviceId TUNNEL_2 = new CanDeviceId(14);
+  public static final CanDeviceId SPINDEXER_LEFT = new CanDeviceId(11);
+  public static final CanDeviceId TUNNEL_LEFT = new CanDeviceId(11);
+  public static final CanDeviceId SPINDEXER_RIGHT = new CanDeviceId(12);
+  public static final CanDeviceId TUNNEL_RIGHT = new CanDeviceId(11);
 
   public static final CanDeviceId FIXED_HOOD = new CanDeviceId(15);
   public static final CanDeviceId FIXED_FLYWHEEL_1 = new CanDeviceId(16);

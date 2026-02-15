@@ -6,36 +6,36 @@ import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
 public class SpindexerConstants {
 
-  public static final RollerConstantsTalonFX leftRoller = new RollerConstantsTalonFX();
-  public static final RollerConstantsTalonFX rightRoller = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX leftSpinner = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX rightSpinner = new RollerConstantsTalonFX();
 
   static {
     // Left
-    leftRoller.kMainConstants.id = Ports.SPINDEXER_1;
-    leftRoller.kSupplyCurrentLimit = 40;
-    leftRoller.kStatorCurrentLimit = 80;
-    leftRoller.kEnableSupplyCurrentLimit = true;
-    leftRoller.kEnableStatorCurrentLimit = true;
+    leftSpinner.kMainConstants.id = Ports.SPINDEXER_LEFT;
+    leftSpinner.kSupplyCurrentLimit = 40;
+    leftSpinner.kStatorCurrentLimit = 80;
+    leftSpinner.kEnableSupplyCurrentLimit = true;
+    leftSpinner.kEnableStatorCurrentLimit = true;
     TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_1;
+    followerConstants.id = Ports.TUNNEL_LEFT;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
-    leftRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
+    leftSpinner.kFollowerConstants = new TalonFXConstants[] {followerConstants};
 
-    leftRoller.kFollowerOpposeMasterDirection = false;
+    leftSpinner.kFollowerOpposeMasterDirection = false;
 
     // Right
-    rightRoller.kMainConstants.id = Ports.SPINDEXER_2;
-    rightRoller.kSupplyCurrentLimit = 40;
-    rightRoller.kStatorCurrentLimit = 80;
-    rightRoller.kEnableSupplyCurrentLimit = true;
-    rightRoller.kEnableStatorCurrentLimit = true;
+    rightSpinner.kMainConstants.id = Ports.SPINDEXER_RIGHT;
+    rightSpinner.kSupplyCurrentLimit = 40;
+    rightSpinner.kStatorCurrentLimit = 80;
+    rightSpinner.kEnableSupplyCurrentLimit = true;
+    rightSpinner.kEnableStatorCurrentLimit = true;
     followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_2;
+    followerConstants.id = Ports.TUNNEL_RIGHT;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
-    rightRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
+    rightSpinner.kFollowerConstants = new TalonFXConstants[] {followerConstants};
 
-    rightRoller.kFollowerOpposeMasterDirection = false;
+    rightSpinner.kFollowerOpposeMasterDirection = false;
   }
 }
