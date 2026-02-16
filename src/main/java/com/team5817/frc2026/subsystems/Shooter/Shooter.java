@@ -154,7 +154,7 @@ public class Shooter extends Subsystem {
     turret.outputTelemetry();
     hood.outputTelemetry();
     flywheel.outputTelemetry();
-    RobotVisualizer.updateFlyWheel(flywheel.getVelocity());
+    RobotVisualizer.updateTurretFlywheel(flywheel.getVelocity());
     super.outputTelemetry();
   }
 

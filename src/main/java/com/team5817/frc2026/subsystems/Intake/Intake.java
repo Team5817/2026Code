@@ -2,6 +2,7 @@ package com.team5817.frc2026.subsystems.Intake;
 
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.ParallelRequest;
@@ -22,9 +23,9 @@ public class Intake extends Subsystem {
 
   public enum State {
     IDLE(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW),
-    HUMAN(IntakeRollers.State.IDLE, IntakeDeploy.State.HUMAN),
-    INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.GROUND),
-    EXHAUSTING(IntakeRollers.State.EXHAUST, IntakeDeploy.State.GROUND),
+    HUMAN(IntakeRollers.State.IDLE, IntakeDeploy.State.OUT),
+    INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.OUT),
+    EXHAUSTING(IntakeRollers.State.EXHAUST, IntakeDeploy.State.OUT),
     STOW(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW);
 
     final IntakeRollers.State rollerState;
@@ -64,13 +65,6 @@ public class Intake extends Subsystem {
     return mIntakeRollers.checkSystem() && mIntakeDeploy.checkSystem();
   }
 
-  @Override
-  public void outputTelemetry() {
-    mIntakeDeploy.outputTelemetry();
-    mIntakeRollers.outputTelemetry();
-    Logger.recordOutput("Intake/Main State", mState);
-  }
-
   public void conformToState(State state) {
     stateRequest(state).act();
   }
@@ -80,6 +74,14 @@ public class Intake extends Subsystem {
         new LambdaRequest(() -> this.mState = state),
         mIntakeRollers.stateRequest(state.rollerState),
         mIntakeDeploy.stateRequest(state.deployState));
+  }
+
+  @Override
+  public void outputTelemetry() {
+    mIntakeDeploy.outputTelemetry();
+    mIntakeRollers.outputTelemetry();
+    RobotVisualizer.updateIntake(mIntakeDeploy.getPosition());  
+    Logger.recordOutput("Intake/Main State", mState);
   }
 }
 ;

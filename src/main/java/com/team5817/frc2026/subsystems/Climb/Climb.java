@@ -1,5 +1,6 @@
 package com.team5817.frc2026.subsystems.Climb;
 
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
@@ -24,9 +25,9 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   /** Enum representing the different states of the elevator. */
   public enum State implements ServoState {
     ZERO(0),
-    READY(.10),
-    RETRACT(.5),
-    EXTEND(.64);
+    READY(140),
+    RETRACT(30),
+    EXTEND(140);
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -36,10 +37,6 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
     }
 
     State(double output, double allowable_error) {
-      this(output, allowable_error, null);
-    }
-
-    State(double output, double allowable_error, InterpolatingDoubleTreeMap map) {
       this.demand = output;
       this.allowableError = allowable_error;
     }
@@ -86,8 +83,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   @Override
   public void outputTelemetry() {
-
-    // Robot Visualizer TODO
+    RobotVisualizer.updateClimb(getPosition());
     super.outputTelemetry();
   }
 }

@@ -1,5 +1,6 @@
 package com.team5817.frc2026.subsystems.Stationary;
 
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants.FlywheelState;
@@ -16,8 +17,8 @@ import org.littletonrobotics.junction.Logger;
 public class FixedShooter extends Subsystem {
 
   private final ShootingPlanner planner;   
-  @Getter private final FixedShooterHood hood;
-  @Getter private final RollerSubsystem<FlywheelState> flywheel;
+  @Getter private final FixedShooterHood fixedHood;
+  @Getter private final RollerSubsystem<FlywheelState> fixedFlywheel;
   
   
   public FixedShooter(
@@ -26,8 +27,8 @@ public class FixedShooter extends Subsystem {
       ShootingPlanner shootingPlanner) {
 
     this.planner = shootingPlanner;
-    hood = new FixedShooterHood(hoodIO);
-    flywheel = new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
+    fixedHood = new FixedShooterHood(hoodIO);
+    fixedFlywheel = new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
   }
 
   @Getter
@@ -60,7 +61,7 @@ public class FixedShooter extends Subsystem {
   switch (desiredState) {
 
     case HUB:
-      hood.setDynamicSupplier(
+      fixedHood.setDynamicSupplier(
           planner.getHoodAngleSupplier(ShootingTarget.HUB));
 
       FlywheelState.HUB.setSupplier(
@@ -68,7 +69,7 @@ public class FixedShooter extends Subsystem {
       break;
 
     case LOBBING:
-      hood.setDynamicSupplier(
+      fixedHood.setDynamicSupplier(
           planner.getHoodAngleSupplier(ShootingTarget.LOB));
 
       FlywheelState.LOBBING.setSupplier(
@@ -79,11 +80,11 @@ public class FixedShooter extends Subsystem {
       break;
   }
 
-  atState = hood.atState() && flywheel.atState();
+  atState = fixedHood.atState() && fixedFlywheel.atState();
 
   if (mState != desiredState) {
-    hood.setState(desiredState.hoodState);
-    flywheel.setState(desiredState.flywheelState);
+    fixedHood.setState(desiredState.hoodState);
+    fixedFlywheel.setState(desiredState.flywheelState);
     if (atState) {
       mState = desiredState;
     }
@@ -106,21 +107,24 @@ public class FixedShooter extends Subsystem {
 
   @Override
   public void readPeriodicInputs() {
-    hood.readPeriodicInputs();
-    flywheel.readPeriodicInputs();
+    fixedHood.readPeriodicInputs();
+    fixedFlywheel.readPeriodicInputs();
   }
 
   @Override
   public void writePeriodicOutputs() {
-    hood.writePeriodicOutputs();
-    flywheel.writePeriodicOutputs();
+    fixedHood.writePeriodicOutputs();
+    fixedFlywheel.writePeriodicOutputs();
   }
 
   @Override
   public void outputTelemetry() {
     Logger.recordOutput("FixedShooter/CurrentState", mState);
     Logger.recordOutput("FixedShooter/DesiredState", desiredState);
-    hood.outputTelemetry();
-    flywheel.outputTelemetry();
+    fixedHood.outputTelemetry();
+    fixedFlywheel.outputTelemetry();
+    RobotVisualizer.updateFixedFlywheel(fixedFlywheel.getVelocity());
+    RobotVisualizer.updateFixedHood(fixedHood.getPosition());
+    super.outputTelemetry();
   }
 }
