@@ -27,6 +27,7 @@ public class SpindexerGroup extends Subsystem {
     IDLE(Spindexer.SpinnerState.IDLE, Spindexer.SpinnerState.IDLE),
     FEED_TURRET(Spindexer.SpinnerState.AWAY, Spindexer.SpinnerState.AWAY),
     FEED_SHOOTER(Spindexer.SpinnerState.IN, Spindexer.SpinnerState.IN),
+    FEED_BOTH(Spindexer.SpinnerState.IN, Spindexer.SpinnerState.IN),
     EXHAUST(Spindexer.SpinnerState.IN, Spindexer.SpinnerState.AWAY);
 
     public final Spindexer.SpinnerState leftState;

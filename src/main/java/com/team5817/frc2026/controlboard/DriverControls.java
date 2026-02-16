@@ -4,6 +4,7 @@ import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -50,10 +51,10 @@ public class DriverControls {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 
-    // LB Reverse Intake & Spindexer
+    // LB Dump
     if (driver.getLeftBumperButtonPressed()) {
-      s.mSpindexerGroup.setState(SpindexerGroup.State.EXHAUST);
-      s.mIntake.conformToState(Intake.State.EXHAUSTING);
+      s.mFixedShooter.setDesiredState(FixedShooter.State.HUB);
+      s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_BOTH);
     }
 
     if (driver.getLeftBumperButtonReleased()) {

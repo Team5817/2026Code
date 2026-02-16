@@ -167,7 +167,7 @@ public class Shooter extends Subsystem {
 
       @Override
       public boolean isFinished() {
-        return atState;
+      return atState;
       }
     };
   }

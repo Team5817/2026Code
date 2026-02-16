@@ -7,7 +7,6 @@ import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.SequentialRequest;
 import com.team5817.lib.requests.WaitRequest;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import lombok.Getter;
 
 /** Elevator subsystem for controlling the elevator mechanism. */

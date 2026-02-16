@@ -12,49 +12,56 @@ public class FixedShooterHood
   private static final double kTightError = 1.5;
   private static final double kLooseError = 4.0;
 
-  public FixedShooterHood(ServoMotorIO io) {
-    super(State.STOW, io);
+public FixedShooterHood(
+    ServoMotorIO io,
+    DoubleSupplier hubAngleSupplier,
+    DoubleSupplier lobAngleSupplier) {
+
+  super(State.STOW, io);
+
+  if (hubAngleSupplier != null) {
+    State.HUB.setSupplier(hubAngleSupplier);
   }
-  
-  public void setDynamicSupplier(DoubleSupplier supplier) {
-  State.FAR.setSupplier(supplier);
+
+  if (lobAngleSupplier != null) {
+    State.LOB.setSupplier(lobAngleSupplier);
   }
+}
 
   public enum State implements ServoState {
-    STOW(() -> 0.0, kLooseError),
-    CLOSE(kTightError),
-    FAR(kTightError);
+  STOW(() -> 0.0, kLooseError),
+  CLOSE(() -> 10.0, kTightError),
+  FAR(() -> 18.0, kTightError),
+  HUB(() -> 0.0, kTightError),
+  LOB(() -> 0.0, kTightError);
 
-    private DoubleSupplier demand;
-    @Getter private final double allowableError;
+  private DoubleSupplier demand;
+  @Getter private final double allowableError;
 
-    State(double allowableError) {
-      this.demand = () -> 0.0;
-      this.allowableError = allowableError;
-    }
-
-    State(DoubleSupplier supplier, double allowableError) {
-      this.demand = supplier;
-      this.allowableError = allowableError;
-    }
-
-    void setSupplier(DoubleSupplier supplier) {
-      this.demand = supplier;
-    }
-
-    @Override
-    public double getDemand() {
-      return demand.getAsDouble();
-    }
-
-    @Override
-    public ControlState getControlState() {
-      return ControlState.POSITION;
-    }
-
-    @Override
-    public boolean isDisabled() {
-      return false;
-    }
+  State(DoubleSupplier supplier, double allowableError) {
+    this.demand = supplier;
+    this.allowableError = allowableError;
   }
+
+  void setSupplier(DoubleSupplier supplier) {
+    this.demand = supplier;
+  }
+
+  @Override
+  public double getDemand() {
+    return demand.getAsDouble();
+  }
+
+  @Override
+  public ControlState getControlState() {
+    return ControlState.POSITION;
+  }
+
+  @Override
+  public boolean isDisabled() {
+    return false;
+  }
+}
+
+  
 }

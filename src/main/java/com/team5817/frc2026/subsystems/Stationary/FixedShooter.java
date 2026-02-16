@@ -16,34 +16,48 @@ import org.littletonrobotics.junction.Logger;
 
 public class FixedShooter extends Subsystem {
 
-  private final ShootingPlanner planner;   
+  private final ShootingPlanner planner;
+
   @Getter private final FixedShooterHood fixedHood;
   @Getter private final RollerSubsystem<FlywheelState> fixedFlywheel;
-  
-  
-  public FixedShooter(
-      ServoMotorIO hoodIO,
-      RollerSubsystemIO flywheelIO,
-      ShootingPlanner shootingPlanner) {
 
-    this.planner = shootingPlanner;
-    fixedHood = new FixedShooterHood(hoodIO);
-    fixedFlywheel = new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
-  }
+public FixedShooter(
+    ServoMotorIO hoodIO,
+    RollerSubsystemIO flywheelIO,
+    ShootingPlanner shootingPlanner) {
+
+  this.planner = shootingPlanner;
+
+  fixedHood =
+      new FixedShooterHood(
+          hoodIO,
+          planner.getHoodAngleSupplier(ShootingTarget.HUB),
+          planner.getHoodAngleSupplier(ShootingTarget.LOB));
+
+  fixedFlywheel =
+      new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
+
+  FlywheelState.HUB.setSupplier(
+      planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
+
+  FlywheelState.LOBBING.setSupplier(
+      planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
+}
 
   @Getter
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
   @Getter @Setter private State desiredState = State.IDLE;
+
   private boolean atState = false;
 
   public enum State {
     IDLE(FixedShooterHood.State.STOW, FlywheelState.IDLE),
     CLOSE(FixedShooterHood.State.CLOSE, FlywheelState.CLOSE),
     FAR(FixedShooterHood.State.FAR, FlywheelState.FAR),
-    HUB(FixedShooterHood.State.FAR, FlywheelState.HUB),
-    LOBBING(FixedShooterHood.State.FAR, FlywheelState.LOBBING);
+    HUB(FixedShooterHood.State.HUB, FlywheelState.HUB),
+    LOBBING(FixedShooterHood.State.LOB, FlywheelState.LOBBING);
 
     final FixedShooterHood.State hoodState;
     final FlywheelState flywheelState;
@@ -58,38 +72,25 @@ public class FixedShooter extends Subsystem {
 
   @Override
   public void periodic() {
-  switch (desiredState) {
 
-    case HUB:
-      fixedHood.setDynamicSupplier(
-          planner.getHoodAngleSupplier(ShootingTarget.HUB));
+    atState = fixedHood.atState() && fixedFlywheel.atState();
 
-      FlywheelState.HUB.setSupplier(
-          planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
-      break;
+    if (mState != desiredState) {
+      fixedHood.setState(desiredState.hoodState);
+      fixedFlywheel.setState(desiredState.flywheelState);
 
-    case LOBBING:
-      fixedHood.setDynamicSupplier(
-          planner.getHoodAngleSupplier(ShootingTarget.LOB));
-
-      FlywheelState.LOBBING.setSupplier(
-          planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
-      break;
-
-    default:
-      break;
-  }
-
-  atState = fixedHood.atState() && fixedFlywheel.atState();
-
-  if (mState != desiredState) {
-    fixedHood.setState(desiredState.hoodState);
-    fixedFlywheel.setState(desiredState.flywheelState);
-    if (atState) {
-      mState = desiredState;
+      if (atState) {
+        mState = desiredState;
+      }
     }
+    Logger.recordOutput(
+    "FIXEDSHOOTERTEST/PlannerHood",
+    planner.getHoodAngleSupplier(ShootingTarget.HUB).getAsDouble());
+
+Logger.recordOutput(
+    "FIXEDSHOOTERTEST/PlannerFly",
+    planner.getFlywheelSpeedSupplier(ShootingTarget.HUB).getAsDouble());
   }
-}
 
   public Request stateRequest(State state) {
     return new Request() {
@@ -125,6 +126,7 @@ public class FixedShooter extends Subsystem {
     fixedFlywheel.outputTelemetry();
     RobotVisualizer.updateFixedFlywheel(fixedFlywheel.getVelocity());
     RobotVisualizer.updateFixedHood(fixedHood.getPosition());
+
     super.outputTelemetry();
   }
 }
