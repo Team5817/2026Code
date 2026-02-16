@@ -1,6 +1,7 @@
 package com.team5817.frc2026.subsystems.Climb;
 
 import com.team5817.frc2026.RobotVisualizer;
+import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
@@ -12,13 +13,10 @@ import lombok.Getter;
 /** Elevator subsystem for controlling the elevator mechanism. */
 public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
-  /**
-   * Constructs an Elevator with the given constants.
-   *
-   * @param constants the constants for the elevator
-   */
-  public Climb(ServoMotorIO io) {
+  LatchRelease latchRelease;
+  public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
+    this.latchRelease = new LatchRelease(latchIO);
   }
 
   /** Enum representing the different states of the elevator. */
@@ -54,6 +52,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   public Request advanceClimbRequest() {
     switch (mState) {
       case ZERO:
+        latchRelease.setState(LatchRelease.State.RELEASED);
         return stateRequest(State.READY);
       case READY:
         return stateRequest(State.RETRACT);
@@ -81,8 +80,20 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   }
 
   @Override
+  public void readPeriodicInputs() {
+      latchRelease.readPeriodicInputs();
+      super.readPeriodicInputs();
+  }
+  @Override
+  public void writePeriodicOutputs() {
+    latchRelease.writePeriodicOutputs();
+    super.writePeriodicOutputs();
+  }
+
+  @Override
   public void outputTelemetry() {
     RobotVisualizer.updateClimb(getPosition());
+    latchRelease.outputTelemetry();
     super.outputTelemetry();
   }
 }

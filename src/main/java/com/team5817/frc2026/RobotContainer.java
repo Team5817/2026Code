@@ -23,6 +23,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
+import com.team5817.lib.drivers.Actuator.ActuatorIOAxial;
 import com.team5817.lib.drivers.Actuator.ActuatorIOLinear;
 import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
@@ -143,7 +144,10 @@ public class RobotContainer {
 
   mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-  mClimb = new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants));
+  mClimb = new Climb(
+    new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants),
+    new ActuatorIOAxial(0)//TODO
+    );
 
 }
 
@@ -160,7 +164,10 @@ public class RobotContainer {
     }
 
     if (mClimb == null)
-      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
+      mClimb = new Climb(
+        new ServoMotorIOSim(ClimbConstants.kClimbServoConstants),
+        new ActuatorIOSim());
+
     if (mIntake == null)
       mIntake =
           new Intake(
@@ -242,7 +249,7 @@ public class RobotContainer {
           mShooter.getPlanner());
           
     if (mClimb == null)
-      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants));
+      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
 
     if (mLight == null)
           mLight = new Lights(
