@@ -83,13 +83,6 @@ public FixedShooter(
         mState = desiredState;
       }
     }
-    Logger.recordOutput(
-    "FIXEDSHOOTERTEST/PlannerHood",
-    planner.getHoodAngleSupplier(ShootingTarget.HUB).getAsDouble());
-
-Logger.recordOutput(
-    "FIXEDSHOOTERTEST/PlannerFly",
-    planner.getFlywheelSpeedSupplier(ShootingTarget.HUB).getAsDouble());
   }
 
   public Request stateRequest(State state) {
@@ -126,7 +119,6 @@ Logger.recordOutput(
     fixedFlywheel.outputTelemetry();
     RobotVisualizer.updateFixedFlywheel(fixedFlywheel.getVelocity());
     RobotVisualizer.updateFixedHood(fixedHood.getPosition());
-
     super.outputTelemetry();
   }
 }

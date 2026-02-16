@@ -9,7 +9,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class RobotVisualizer {
 
-  // Now matches your full mechanism count
   public static Pose3d[] mechanismPoses = new Pose3d[10];
 
   static {
@@ -44,7 +43,6 @@ public class RobotVisualizer {
               0.065,
               new Rotation3d(0, -pitchRad, 0)));
 }
-
 
   /* ================= TURRET FLYWHEEL ================= */
   private static double lastFlywheelTime = Timer.getTimestamp();
@@ -129,7 +127,7 @@ public class RobotVisualizer {
   }
 
 
-  /* ================= INTAKE ================= */
+  /* ================= INTAKE AND HOPPER ================= */
   public static void updateIntake(double posMeters) {
     mechanismPoses[7] = new Pose3d(-0.2667+posMeters,0, 0, new Rotation3d());
     mechanismPoses[8] = mechanismPoses[7].transformBy(new Transform3d( 0.414, 0.0, 0.1945, new Rotation3d(0,posMeters>.25? 0:Units.degreesToRadians(-66),0)));

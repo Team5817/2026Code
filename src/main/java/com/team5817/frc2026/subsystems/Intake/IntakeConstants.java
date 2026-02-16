@@ -16,7 +16,7 @@ public class IntakeConstants {
     static {
       kDeployServoConstants.kName = "Intake/Deploy";
 
-      kDeployServoConstants.kMainConstants.id = Ports.INTAKE_PIVOT;
+      kDeployServoConstants.kMainConstants.id = Ports.INTAKE_DEPLOY;
       kDeployServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kDeployServoConstants.kHomePosition = 0; // degrees

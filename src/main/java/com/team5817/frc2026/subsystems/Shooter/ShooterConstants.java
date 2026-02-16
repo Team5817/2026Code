@@ -39,7 +39,6 @@ public class ShooterConstants {
     robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(21.5));
     TurretToCam = new Translation3d(.1414213562,0,0);
 
-    // Basic flywheel/talon defaults
     flywheelConstants.kMaxForwardOutput = 12.0;
     flywheelConstants.kMaxReverseOutput = -12.0;
 
@@ -56,7 +55,6 @@ public class ShooterConstants {
 
     flywheelConstants.counterClockwisePositive = true;
 
-    // Follower Motor
     TalonFXConstants followerConstants = new TalonFXConstants();
     followerConstants.id = Ports.FLYWHEEL_2;
     followerConstants.counterClockwisePositive = false;
@@ -105,11 +103,9 @@ public class ShooterConstants {
       kTurretServoConstants.kHomePosition = 0.0;
       kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100 / 3 * 1.19444444444444;
 
-      // Soft limits
       kTurretServoConstants.kMinUnitsLimit = -180.0;
       kTurretServoConstants.kMaxUnitsLimit = 180.0;
 
-      // PID (placeholder)
       kTurretServoConstants.kKp = 4.0;
       kTurretServoConstants.kKi = 5.0;
       kTurretServoConstants.kKd = 0.1;
@@ -135,7 +131,6 @@ public class ShooterConstants {
 
       kTurretServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
-      // homing
       kTurretServoConstants.kHomingTimeout = 0.5;
       kTurretServoConstants.kHomingOutput = -0.25;
       kTurretServoConstants.kHomingVelocityWindow = 1.0;
@@ -154,11 +149,9 @@ public class ShooterConstants {
       kHoodServoConstants.kHomePosition = 0.0;
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100 / 1;
 
-      // Soft limits
       kHoodServoConstants.kMinUnitsLimit = 0.0;
       kHoodServoConstants.kMaxUnitsLimit = 43.0;
 
-      // PID (placeholder)
       kHoodServoConstants.kKp = 20.0;
       kHoodServoConstants.kKi = 9.5;
       kHoodServoConstants.kKd = 0.4;
@@ -194,8 +187,8 @@ public class ShooterConstants {
     IDLE(0.0, RollerControlMode.VOLTAGE),
     CLOSE(50.0, RollerControlMode.VELOCITY),
     FAR(80.0, RollerControlMode.VELOCITY),
-    HUB(70.0, RollerControlMode.VELOCITY), // Placeholder, set at runtime
-    LOBBING(80.0, RollerControlMode.VELOCITY); // Placeholder, set at runtime
+    HUB(70.0, RollerControlMode.VELOCITY), 
+    LOBBING(80.0, RollerControlMode.VELOCITY); 
 
     private final RollerControlMode controlMode;
     private final double toleranceRadsPerSec = 0.1;

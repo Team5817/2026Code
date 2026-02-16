@@ -36,7 +36,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-/** The main robot class that extends LoggedRobot and contains the robot's lifecycle methods. */
 public class Robot extends LoggedRobot {
   private RobotContainer mRobotContainer;
   private SubsystemManager mSubsystemManager;
@@ -95,8 +94,9 @@ public class Robot extends LoggedRobot {
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
     // be added.
     l.init();
+    
     mRobotContainer = new RobotContainer();
-
+    
     mDrive = mRobotContainer.mDrive;
     mAutoModeFactory = new AutoModeFactory(mRobotContainer.mSuperstructure, mDrive);
     mSubsystemManager = SubsystemManager.getInstance();
@@ -219,8 +219,6 @@ public class Robot extends LoggedRobot {
   /** This method is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    // mRobotContainer.mElevator.writePeriodicOutputs();
-    // mRobotContainer.mElevator.outputTelemetry();
 
     mLeftLimelightPoseCalibrator.update();
     mRightLimelightPoseCalibrator.update();
