@@ -1,67 +1,61 @@
 package com.team5817.frc2026.subsystems.Stationary;
 
-import com.team5817.lib.drivers.Servos.ServoMotorIO;
-import com.team5817.lib.drivers.Servos.ServoState;
-import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
+import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants.FixedShooterHoodConstants;
+import com.team5817.lib.drivers.Actuator.ActuatorIO;
+import com.team5817.lib.drivers.Actuator.ActuatorSystem;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-public class FixedShooterHood
-    extends StateBasedServoMotorSubsystem<FixedShooterHood.State> {
+public class FixedShooterHood extends ActuatorSystem {
 
   private static final double kTightError = 1.5;
   private static final double kLooseError = 4.0;
 
-public FixedShooterHood(
-    ServoMotorIO io,
-    DoubleSupplier hubAngleSupplier,
-    DoubleSupplier lobAngleSupplier) {
+  public FixedShooterHood(
+      ActuatorIO io,
+      DoubleSupplier hubAngleSupplier,
+      DoubleSupplier lobAngleSupplier) {
 
-  super(State.STOW, io);
+    super(io, FixedShooterHoodConstants.kSensorToDegrees,"FixedShooter/Hood");
 
-  if (hubAngleSupplier != null) {
     State.HUB.setSupplier(hubAngleSupplier);
-  }
-
-  if (lobAngleSupplier != null) {
     State.LOB.setSupplier(lobAngleSupplier);
   }
-}
 
-  public enum State implements ServoState {
-  STOW(() -> 0.0, kLooseError),
-  CLOSE(() -> 10.0, kTightError),
-  FAR(() -> 18.0, kTightError),
-  HUB(() -> 0.0, kTightError),
-  LOB(() -> 0.0, kTightError);
+  @Getter @Setter @Accessors(prefix = "m")
+  private State mState = State.STOW;
 
-  private DoubleSupplier demand;
-  @Getter private final double allowableError;
+  public enum State {
+    STOW(() -> 0.0, kLooseError),
+    CLOSE(() -> 10.0, kTightError),
+    FAR(() -> 18.0, kTightError),
+    HUB(() -> 0.0, kTightError),
+    LOB(() -> 0.0, kTightError);
 
-  State(DoubleSupplier supplier, double allowableError) {
-    this.demand = supplier;
-    this.allowableError = allowableError;
-  }
+    private DoubleSupplier demand;
+    @Getter private final double allowableError;
 
-  void setSupplier(DoubleSupplier supplier) {
-    this.demand = supplier;
-  }
+    State(DoubleSupplier supplier, double allowableError) {
+      this.demand = supplier;
+      this.allowableError = allowableError;
+    }
 
-  @Override
-  public double getDemand() {
-    return demand.getAsDouble();
-  }
+    void setSupplier(DoubleSupplier supplier) {
+      this.demand = supplier;
+    }
 
-  @Override
-  public ControlState getControlState() {
-    return ControlState.POSITION;
+    public double getDemand() {
+      return demand.getAsDouble();
+    }
   }
 
   @Override
-  public boolean isDisabled() {
-    return false;
+  public void writePeriodicOutputs() {
+    runPosition(mState.getDemand());
   }
-}
-
-  
+  public boolean atState() {
+    return Math.abs(getPosition() - mState.getDemand()) < mState.getAllowableError();
+  }
 }

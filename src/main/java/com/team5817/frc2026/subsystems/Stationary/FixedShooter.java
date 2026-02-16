@@ -6,8 +6,8 @@ import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants.FlywheelState;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
-import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.requests.Request;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ public class FixedShooter extends Subsystem {
   @Getter private final RollerSubsystem<FlywheelState> fixedFlywheel;
 
 public FixedShooter(
-    ServoMotorIO hoodIO,
+    ActuatorIO hoodIO,
     RollerSubsystemIO flywheelIO,
     ShootingPlanner shootingPlanner) {
 

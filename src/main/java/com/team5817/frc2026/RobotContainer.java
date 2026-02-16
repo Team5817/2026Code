@@ -23,6 +23,8 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
+import com.team5817.lib.drivers.Actuator.ActuatorIOLinear;
+import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
@@ -116,8 +118,7 @@ public class RobotContainer {
           
   mFixedShooter =
       new FixedShooter(
-          new ServoMotorIOTalonFX(
-              FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
+          new ActuatorIOLinear(0, 0, 0),
           new RollerSubsystemIOTalonFX(
               Ports.FLYWHEEL_1,
               FixedShooterConstants.flywheelConstants,
@@ -236,8 +237,7 @@ public class RobotContainer {
     if (mFixedShooter == null)
       mFixedShooter =
           new FixedShooter(
-          new ServoMotorIOSim(
-              FixedShooterConstants.FixedShooterHoodConstants.kHoodServoConstants),
+          new ActuatorIOSim(),
           new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
           mShooter.getPlanner());
           

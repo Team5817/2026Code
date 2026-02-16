@@ -5,7 +5,6 @@ import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
-import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -111,28 +110,6 @@ public enum FlywheelState implements IRollerState {
   /* ================= HOOD ================= */
 
   public static final class FixedShooterHoodConstants {
-    public static final ServoConstants kHoodServoConstants = new ServoConstants();
-
-    static {
-      kHoodServoConstants.kName = "FixedShooter/Hood";
-      kHoodServoConstants.kMainConstants.id = Ports.HOOD;
-      kHoodServoConstants.kMainConstants.counterClockwisePositive = true;
-
-      kHoodServoConstants.kRotationsPerUnitDistance = 1.0 / 360.0;
-      kHoodServoConstants.kMinUnitsLimit = 0.0;
-      kHoodServoConstants.kMaxUnitsLimit = 60.0;
-
-      kHoodServoConstants.kKp = 1.2;
-      kHoodServoConstants.kKi = 0.0;
-      kHoodServoConstants.kKd = 0.0;
-
-      kHoodServoConstants.kMaxForwardOutput = 12.0;
-      kHoodServoConstants.kMaxReverseOutput = -12.0;
-      kHoodServoConstants.kNeutralMode = NeutralModeValue.Brake;
-
-      kHoodServoConstants.kHomingTimeout = 0.5;
-      kHoodServoConstants.kHomingOutput = -0.2;
-      kHoodServoConstants.kHomingVelocityWindow = 1.0;
-    }
+    public static final double kSensorToDegrees = 360.0 / 4096.0;
   }
 }
