@@ -17,44 +17,44 @@ public class LightsIOCANDLE implements LightsIO{
   }
   @Override
   public void setControl(LightsState.LEDState state, double frameRate, int minSlot, int maxSlot) {
-    switch (state) {
-      case FLOW:
+    switch (state.animation) {
+      case "FLOW":
       mCandle.setControl(new ColorFlowAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
 
-      case FIRE:
+      case "FIRE":
       mCandle.setControl(new FireAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
 
-      case LARSON:
+      case "LARSON":
       mCandle.setControl(new LarsonAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
 
-      case RAINBOW:
+      case "RAINBOW":
       mCandle.setControl(new RainbowAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
 
-      case RGBFADE:
+      case "RGBFADE":
       mCandle.setControl(new RgbFadeAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
 
         
-      case STROBEORANGE:
+      case "STROBE":
       mCandle.setControl(new StrobeAnimation(minSlot, maxSlot)
       .withUpdateFreqHz(frameRate)
       );
         break;
-      default:
+      case "SOLID":
         if(state.color!=null)
           mCandle.setControl(new SolidColor(minSlot, maxSlot).withColor(new RGBWColor(state.color)));
         break;

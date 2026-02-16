@@ -3,8 +3,6 @@ package com.team5817.lib.drivers.Lights;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class LightsState {
-  public int blue;
-
 	public static final Color RED = new Color(255, 0, 0);
 	public static final Color PINK = new Color(255, 18, 143);
 	public static final Color GREEN = new Color(0, 255, 8);
@@ -21,26 +19,33 @@ public class LightsState {
 		return new Color(0, 0, 0);
 	}
 
-  public enum LEDState{
-    LARSON,
-    RAINBOW,
-    FIRE,
-    RED(Color.kRed),
-    YELLOW(Color.kYellow),
-    WHITE(Color.kWhite),
-    GREEN(Color.kGreen),
-    PURPLE(Color.kPurple),
-    BLUE(Color.kBlue),
-    ORANGE(Color.kOrange),
-    FLOW,
-    RGBFADE,
-    STROBEORANGE(Color.kOrange); // deal with later
+  public enum LEDState{ 
+   /* Animation List
+     * SOLID
+     * LARSON
+     * RGBFADE
+     * FIRE
+     * STROBE
+     * RAINBOW
+     * FLOW
+    */
+    ORANGE(Color.kOrange, "SOLID"),
+    DUALMODE(Color.kWhite, "SOLID"),
+    ALLIANCERED(Color.kRed, "SOLID"),
+    ALLIANCEBLUE(Color.kBlue, "SOLID"),
+    NOTLOCKED(Color.kYellow, "SOLID"),
+    LOCKED(Color.kGreen, "SOLID"),
+    CLIMBING(Color.kPurple, "SOLID"),
+    NONE(Color.kWhite, "SOLID"),
+    HOPPEREMPTY(Color.kOrange, "STROBE");
     private LEDState(){
 
     }
     Color color = null;
-    private LEDState(Color color){
+    String animation = null;
+    private LEDState(Color color, String animation){
       this.color = color;
+      this.animation = animation;
     }
   }
 }

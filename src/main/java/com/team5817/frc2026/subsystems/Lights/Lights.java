@@ -13,7 +13,7 @@ public class Lights extends Subsystem {
   LightsIO io;
   public Lights(LightsIO io) {
     this.io = io;
-    setLeds(LEDState.RED);
+    setLeds(LEDState.NONE);
   }
 
   public void setLeds(LEDState state){

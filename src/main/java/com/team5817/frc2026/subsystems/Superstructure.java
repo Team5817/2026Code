@@ -83,13 +83,13 @@ public class Superstructure extends Subsystem {
       mLights.setLeds(LEDState.ORANGE);
     }
     else if (mClimb.getState() != Climb.State.ZERO){
-      mLights.setLeds(LEDState.PURPLE);
+      mLights.setLeds(LEDState.CLIMBING);
     }
     else if (mShooter.getPlanner().shouldShoot()){
-      mLights.setLeds(LEDState.GREEN);
+      mLights.setLeds(LEDState.LOCKED);
     }
     else if (!mShooter.getPlanner().shouldShoot()){
-      mLights.setLeds(LEDState.YELLOW);
+      mLights.setLeds(LEDState.NOTLOCKED);
     }
     // else if (){
     //   mLights.setLeds(LEDState.FIRE);
@@ -104,7 +104,7 @@ public class Superstructure extends Subsystem {
     //   mLights.setLeds(LEDState.BLUE);
     // }
     else{
-      mLights.setLeds(LEDState.WHITE);
+      mLights.setLeds(LEDState.NONE);
     }
    }
   
