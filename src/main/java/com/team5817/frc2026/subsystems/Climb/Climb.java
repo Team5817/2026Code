@@ -1,32 +1,30 @@
 package com.team5817.frc2026.subsystems.Climb;
 
+import com.team5817.frc2026.RobotVisualizer;
+import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.SequentialRequest;
 import com.team5817.lib.requests.WaitRequest;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import lombok.Getter;
 
 /** Elevator subsystem for controlling the elevator mechanism. */
 public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
-  /**
-   * Constructs an Elevator with the given constants.
-   *
-   * @param constants the constants for the elevator
-   */
-  public Climb(ServoMotorIO io) {
+  LatchRelease latchRelease;
+  public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
+    this.latchRelease = new LatchRelease(latchIO);
   }
 
   /** Enum representing the different states of the elevator. */
   public enum State implements ServoState {
     ZERO(0),
-    READY(.10),
-    RETRACT(.5),
-    EXTEND(.64);
+    READY(140),
+    RETRACT(30),
+    EXTEND(140);
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -36,10 +34,6 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
     }
 
     State(double output, double allowable_error) {
-      this(output, allowable_error, null);
-    }
-
-    State(double output, double allowable_error, InterpolatingDoubleTreeMap map) {
       this.demand = output;
       this.allowableError = allowable_error;
     }
@@ -58,6 +52,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   public Request advanceClimbRequest() {
     switch (mState) {
       case ZERO:
+        latchRelease.setState(LatchRelease.State.RELEASED);
         return stateRequest(State.READY);
       case READY:
         return stateRequest(State.RETRACT);
@@ -85,9 +80,20 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   }
 
   @Override
-  public void outputTelemetry() {
+  public void readPeriodicInputs() {
+      latchRelease.readPeriodicInputs();
+      super.readPeriodicInputs();
+  }
+  @Override
+  public void writePeriodicOutputs() {
+    latchRelease.writePeriodicOutputs();
+    super.writePeriodicOutputs();
+  }
 
-    // Robot Visualizer TODO
+  @Override
+  public void outputTelemetry() {
+    RobotVisualizer.updateClimb(getPosition());
+    latchRelease.outputTelemetry();
     super.outputTelemetry();
   }
 }

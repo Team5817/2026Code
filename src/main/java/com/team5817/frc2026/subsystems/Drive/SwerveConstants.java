@@ -29,7 +29,7 @@ public final class SwerveConstants {
 
   /* Controller Invert */
   public static final boolean invertYAxis = false;
-  public static final boolean invertRAxis = false;
+  public static final boolean invertRAxis = true;
   public static final boolean invertXAxis = false;
 
   /* Heading Controller */
@@ -41,7 +41,7 @@ public final class SwerveConstants {
 
   public static final SynchronousPIDF simSnapPID = new SynchronousPIDF(6.0, 0.0, 0.8, 2.0);
 
-  public static final double kTrajectoryDeadband = .03;
+  public static final double kTrajectoryDeadband = .05;
 
   public static final SwerveModuleSimulationConfig moduleConfig =
       new SwerveModuleSimulationConfig(
@@ -52,14 +52,14 @@ public final class SwerveConstants {
           Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),
           Volts.of(TunerConstants.FrontLeft.SteerFrictionVoltage),
           Inches.of(2),
-          KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
+          KilogramSquareMeters.of(0.02),
           1.2);
 
   public static final DriveTrainSimulationConfig driveConfig =
       DriveTrainSimulationConfig.Default()
           .withGyro(COTS.ofPigeon2())
           .withSwerveModule(() -> new SwerveModuleSimulation(moduleConfig))
-          .withBumperSize(Meters.of(.89), Meters.of(.89))
+          .withBumperSize(Meters.of(.7), Meters.of(.7))
           .withCustomModuleTranslations(Drive.getModuleTranslations())
           .withRobotMass(Pounds.of(115));
 }

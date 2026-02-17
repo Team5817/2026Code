@@ -9,6 +9,9 @@ public abstract class Request {
 
   public abstract void act();
 
+  public void update() {}
+  ;
+
   public boolean isFinished() {
     return true;
   }

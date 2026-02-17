@@ -16,19 +16,15 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
    * @param encoder_constants The constants for the absolute encoder.
    */
   public IntakeDeploy(final ServoConstants constants, ServoMotorIO io) {
-    super(IntakeDeploy.State.GROUND, io);
+    super(IntakeDeploy.State.STOW, io);
   }
 
-  static final double kStrictError = 20;
-  static final double kMediumError = 50;
-  static final double kLenientError = 80;
 
   /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
-    STOW(0, kMediumError), // placeholder values
-    HUMAN(-100, kMediumError),
-    GROUND(-144, kStrictError),
-    ZERO(0, kStrictError);
+    STOW(0), 
+    OUT(0.2667), 
+    ZERO(0);
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -40,9 +36,9 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
      * @param output The output value for the state.
      * @param allowable_error The allowable error for the state.
      */
-    State(double output, double allowable_error) {
+    State(double output) {
       this.demand = output;
-      this.allowableError = allowable_error;
+      this.allowableError = .1;
     }
 
     State() {
@@ -58,7 +54,6 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   /** Outputs telemetry data for the subsystem. */
   @Override
   public void outputTelemetry() {
-
     super.outputTelemetry();
   }
 }

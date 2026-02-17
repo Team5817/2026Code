@@ -10,29 +10,30 @@ import lombok.experimental.Accessors;
 
 public class SpindexerGroup extends Subsystem {
 
-  private final SpindexerRoller leftRoller;
-  private final SpindexerRoller rightRoller;
+  private final Spindexer leftRoller;
+  private final Spindexer rightRoller;
 
   @Getter
   @Setter
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
-  public SpindexerGroup(SpindexerRoller leftRoller, SpindexerRoller rightRoller) {
+  public SpindexerGroup(Spindexer leftRoller, Spindexer rightRoller) {
     this.leftRoller = leftRoller;
     this.rightRoller = rightRoller;
   }
 
   public enum State {
-    IDLE(SpindexerRoller.State.IDLE, SpindexerRoller.State.IDLE),
-    FEED_TURRET(SpindexerRoller.State.COUNTERCLOCKWISE, SpindexerRoller.State.COUNTERCLOCKWISE),
-    FEED_SHOOTER(SpindexerRoller.State.CLOCKWISE, SpindexerRoller.State.CLOCKWISE),
-    EXHAUST(SpindexerRoller.State.CLOCKWISE, SpindexerRoller.State.COUNTERCLOCKWISE);
+    IDLE(Spindexer.SpinnerState.IDLE, Spindexer.SpinnerState.IDLE),
+    FEED_TURRET(Spindexer.SpinnerState.AWAY, Spindexer.SpinnerState.AWAY),
+    FEED_SHOOTER(Spindexer.SpinnerState.IN, Spindexer.SpinnerState.IN),
+    FEED_BOTH(Spindexer.SpinnerState.IN, Spindexer.SpinnerState.IN),
+    EXHAUST(Spindexer.SpinnerState.IN, Spindexer.SpinnerState.AWAY);
 
-    public final SpindexerRoller.State leftState;
-    public final SpindexerRoller.State rightState;
+    public final Spindexer.SpinnerState leftState;
+    public final Spindexer.SpinnerState rightState;
 
-    State(SpindexerRoller.State left, SpindexerRoller.State right) {
+    State(Spindexer.SpinnerState left, Spindexer.SpinnerState right) {
       this.leftState = left;
       this.rightState = right;
     }
@@ -50,8 +51,8 @@ public class SpindexerGroup extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    leftRoller.spindexer.setState(mState.leftState);
-    rightRoller.spindexer.setState(mState.rightState);
+    leftRoller.setState(mState.leftState);
+    rightRoller.setState(mState.rightState);
     leftRoller.writePeriodicOutputs();
     rightRoller.writePeriodicOutputs();
   }

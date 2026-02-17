@@ -1,20 +1,20 @@
 package com.team5817.lib.requests;
 
-import com.team5817.frc2026.planners.ShootingPlannerI;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Superstructure;
 import org.littletonrobotics.junction.Logger;
 
 public class AutoShootRequest extends Request {
-  ShootingPlannerI planner;
+  ShootingPlanner planner;
   Superstructure s;
 
-  public AutoShootRequest(ShootingPlannerI planner, Superstructure s) {
+  public AutoShootRequest(ShootingPlanner planner, Superstructure s) {
     this.planner = planner;
     this.s = s;
   }
 
   @Override
-  public void act() {
+  public void update() {
     s.mShooter.followPlan(true);
     Logger.recordOutput("Shooter/Should Shoot", planner.shouldShoot());
     // if(planner.shouldShoot())
@@ -32,4 +32,7 @@ public class AutoShootRequest extends Request {
   public boolean isFinished() {
     return false; // runs until interrupted
   }
+
+  @Override
+  public void act() {}
 }

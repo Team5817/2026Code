@@ -79,9 +79,9 @@ public class ControlBoard {
    * @return the swerve rotation value
    */
   public double getSwerveRotation() {
-    double rotAxis = driver.getRightX() * 0.80;
+    double rotAxis = driver.getRightX() * 0.70;
     rotAxis =
-        com.team5817.frc2026.subsystems.Drive.SwerveConstants.invertRAxis ? rotAxis : -rotAxis;
+        com.team5817.frc2026.subsystems.Drive.SwerveConstants.invertRAxis ? -rotAxis : -rotAxis;
 
     if (Math.abs(rotAxis) < kSwerveDeadband) {
       return 0.0;

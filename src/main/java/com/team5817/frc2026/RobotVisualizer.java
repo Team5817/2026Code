@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotVisualizer {
-  public static Pose3d[] mechanismPoses = new Pose3d[5];
+
+  public static Pose3d[] mechanismPoses = new Pose3d[10];
 
   static {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < mechanismPoses.length; i++) {
       mechanismPoses[i] = new Pose3d();
     }
   }
@@ -21,77 +22,124 @@ public class RobotVisualizer {
   }
 
   /* ================= TURRET ================= */
-  public static void updateTurretPose(double position) {
-    Pose3d current =
-        new Pose3d(-0.032, 0.1, 0.373, new Rotation3d(0, 0, Units.degreesToRadians(position)));
-
-    mechanismPoses[0] = current;
+  public static void updateTurretPose(double yawDeg) {
+    mechanismPoses[0] =
+        new Pose3d(
+            -0.032,
+            0.1,
+            0.373,
+            new Rotation3d(0, 0, Units.degreesToRadians(yawDeg+180)));
   }
 
-  /* ================= HOOD ================= */
-  public static void updateHoodAngle(double position) {
-    Pose3d hoodPose =
-        mechanismPoses[0].transformBy(
-            new Transform3d(
-                0.044 - (-0.032),
-                0.0,
-                0.456 - 0.373,
-                new Rotation3d(0, Units.degreesToRadians(position), 0)));
+  /* ================= TURRET HOOD ================= */
+ public static void updateTurretHoodAngle(double pitchDeg) {
+  double pitchRad = Units.degreesToRadians(pitchDeg);
 
-    mechanismPoses[1] = hoodPose;
-  }
+  mechanismPoses[1] =
+      mechanismPoses[0].transformBy(
+          new Transform3d(
+              -0.08446,
+              0.0,
+              0.065,
+              new Rotation3d(0, -pitchRad, 0)));
+}
 
-  /* ================= FLYWHEEL ================= */
+  /* ================= TURRET FLYWHEEL ================= */
   private static double lastFlywheelTime = Timer.getTimestamp();
+  private static Rotation3d flywheelRotation = new Rotation3d();
 
-  public static void updateFlyWheel(double velocity) {
+  public static void updateTurretFlywheel(double velocityRadPerSec) {
     double dt = Timer.getTimestamp() - lastFlywheelTime;
 
-    Pose3d flywheelPose =
+    flywheelRotation =
+        flywheelRotation.rotateBy(
+            new Rotation3d(0, velocityRadPerSec * dt, 0));
+
+    mechanismPoses[2] =
         mechanismPoses[0].transformBy(
             new Transform3d(
-                0.044 - (-.0322),
+                -0.0888,
                 0.0,
-                0.456 - 0.373,
-                new Rotation3d(Units.radiansToRotations(0), velocity * dt, 0)));
+                0.065,
+                flywheelRotation));
 
-    mechanismPoses[2] = flywheelPose;
     lastFlywheelTime = Timer.getTimestamp();
   }
 
   /* ================= SPINDEXER LEFT ================= */
   private static double lastLeftTime = Timer.getTimestamp();
+  private static Rotation3d leftRotation = new Rotation3d();
 
   public static void updateSpindexerLeft(double velocity) {
     double dt = Timer.getTimestamp() - lastLeftTime;
 
-    Pose3d spindexer1Pose =
+    leftRotation =
+        leftRotation.rotateBy(new Rotation3d(0, 0, velocity * dt));
+
+    mechanismPoses[3] =
         new Pose3d(
-            0.048,
-            -.15,
-            .02,
-            mechanismPoses[3].getRotation().rotateBy(new Rotation3d(0, 0, dt * velocity)));
+            0.020,
+            -0.128,
+            0.09,
+            leftRotation);
 
-    Logger.recordOutput("SpindexerLeft/velocity", velocity);
-
-    mechanismPoses[3] = spindexer1Pose;
     lastLeftTime = Timer.getTimestamp();
   }
 
   /* ================= SPINDEXER RIGHT ================= */
   private static double lastRightTime = Timer.getTimestamp();
+  private static Rotation3d rightRotation = new Rotation3d();
 
   public static void updateSpindexerRight(double velocity) {
     double dt = Timer.getTimestamp() - lastRightTime;
 
-    Pose3d spindexer2Pose =
-        new Pose3d(
-            0.135,
-            0.15,
-            0.013,
-            mechanismPoses[4].getRotation().rotateBy(new Rotation3d(0, 0, dt * velocity)));
+    rightRotation =
+        rightRotation.rotateBy(new Rotation3d(0, 0, velocity * dt));
 
-    mechanismPoses[4] = spindexer2Pose;
+    mechanismPoses[4] =
+        new Pose3d(
+            0.085,
+            0.089,
+            0.078,
+            rightRotation);
+
     lastRightTime = Timer.getTimestamp();
+  }
+
+  /* ================= FIXED HOOD ================= */
+  public static void updateFixedHood(double pitchRad) {
+    mechanismPoses[5] =
+        new Pose3d(
+            -0.051,
+            -0.3237,
+            0.4633,
+            new Rotation3d(0, Units.degreesToRadians(17+pitchRad), 0));
+  }
+
+  /* ================= FIXED FLYWHEEL ================= */
+  public static void updateFixedFlywheel(double pitchRad) {
+    mechanismPoses[6] =
+        new Pose3d(
+            -0.0462,
+            -0.142,
+            0.4595,
+            new Rotation3d(0, -pitchRad, 0));
+  }
+
+
+  /* ================= INTAKE AND HOPPER ================= */
+  public static void updateIntake(double posMeters) {
+    mechanismPoses[7] = new Pose3d(-0.2667+posMeters,0, 0, new Rotation3d());
+    mechanismPoses[8] = mechanismPoses[7].transformBy(new Transform3d( 0.414, 0.0, 0.1945, new Rotation3d(0,posMeters>.25? 0:Units.degreesToRadians(-66),0)));
+  }
+
+  /* ================= CLIMB ================= */
+  public static void updateClimb(double angleDeg) {
+    mechanismPoses[9] =
+        new Pose3d(
+          -0.261,
+            0.0,
+            0.4614,
+            new Rotation3d(0, Units.degreesToRadians(-140+angleDeg), 0));
   }
 }
