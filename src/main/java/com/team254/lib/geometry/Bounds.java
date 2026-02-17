@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.Logger;
 /** Simple Bounds class that stores two 2D points constructed from four doubles. */
 public class Bounds {
   private final Translation2d bottomLft;
-  private final Translation2d topright; 
+  private final Translation2d topright;
 
   /** Construct bounds from four doubles (x1, y1, x2, y2). */
   public Bounds(double x1, double y1, double x2, double y2) {
@@ -23,7 +23,8 @@ public class Bounds {
     this.bottomRight = new Translation2d(b.x(), a.y());
     this.topLft = new Translation2d(a.x(), b.y());
   }
-  public Bounds flippedAboutX(){
+
+  public Bounds flippedAboutX() {
     Logger.recordOutput("flip x", bottomLft.mirrorAboutX(8.27));
     Logger.recordOutput("flip y", topright.mirrorAboutX(8.27));
     Translation2d topLft = topright.mirrorAboutX(8.27);
@@ -31,12 +32,13 @@ public class Bounds {
     Translation2d topright = new Translation2d(bottomRight.x(), topLft.y());
     Translation2d bottomLft = new Translation2d(topLft.x(), bottomRight.y());
 
-    return new Bounds(bottomLft, topright);}
+    return new Bounds(bottomLft, topright);
+  }
 
   private final Translation2d bottomRight;
-  private final Translation2d topLft; 
+  private final Translation2d topLft;
 
-  public Bounds flippedAboutY(){
+  public Bounds flippedAboutY() {
     Logger.recordOutput("flip x", bottomRight.mirrorAboutY(4.02));
     Logger.recordOutput("flip y", topLft.mirrorAboutY(4.02));
     Translation2d topRight = topLft.mirrorAboutY(4.02);
@@ -78,8 +80,6 @@ public class Bounds {
   public double height() {
     return Math.abs(topright.y() - bottomLft.y());
   }
-
-  
 
   @Override
   public String toString() {

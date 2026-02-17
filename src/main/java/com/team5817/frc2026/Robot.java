@@ -45,6 +45,7 @@ public class Robot extends LoggedRobot {
   ControlBoard controlBoard;
 
   Drive mDrive;
+
   public Robot() {
     super(0.02);
   }
@@ -94,9 +95,9 @@ public class Robot extends LoggedRobot {
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
     // be added.
     l.init();
-    
+
     mRobotContainer = new RobotContainer();
-    
+
     mDrive = mRobotContainer.mDrive;
     mAutoModeFactory = new AutoModeFactory(mRobotContainer.mSuperstructure, mDrive);
     mSubsystemManager = SubsystemManager.getInstance();

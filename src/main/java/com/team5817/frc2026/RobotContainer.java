@@ -37,10 +37,8 @@ import com.team5817.lib.swerve.GyroIOPigeon2;
 import com.team5817.lib.swerve.GyroIOSim;
 import com.team5817.lib.swerve.ModuleIOSim;
 import com.team5817.lib.swerve.ModuleIOTalonFX;
-
 import edu.wpi.first.math.system.plant.DCMotor;
 import java.util.Optional;
-
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.littletonrobotics.junction.Logger;
@@ -63,99 +61,100 @@ public class RobotContainer {
       case REAL:
         makeRealRobot();
         break;
-      
-    default:
+
+      default:
         break;
     }
 
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive,mIntake, mSpindexer, mShooter, mFixedShooter,  mClimb, mLight);
+    mSuperstructure =
+        new Superstructure(mDrive, mIntake, mSpindexer, mShooter, mFixedShooter, mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mShooter, mFixedShooter, mIntake, mSpindexer, mClimb, mLight);
+        mDrive,
+        mSuperstructure,
+        mVision,
+        mShooter,
+        mFixedShooter,
+        mIntake,
+        mSpindexer,
+        mClimb,
+        mLight);
   }
 
   public void makeRealRobot() {
 
-  mDrive =
-      new Drive(
-          new GyroIOPigeon2(),
-          new ModuleIOTalonFX(TunerConstants.FrontLeft),
-          new ModuleIOTalonFX(TunerConstants.FrontRight),
-          new ModuleIOTalonFX(TunerConstants.BackLeft),
-          new ModuleIOTalonFX(TunerConstants.BackRight),
-          SwerveConstants.stabilizePID,
-          SwerveConstants.snapPID);
+    mDrive =
+        new Drive(
+            new GyroIOPigeon2(),
+            new ModuleIOTalonFX(TunerConstants.FrontLeft),
+            new ModuleIOTalonFX(TunerConstants.FrontRight),
+            new ModuleIOTalonFX(TunerConstants.BackLeft),
+            new ModuleIOTalonFX(TunerConstants.BackRight),
+            SwerveConstants.stabilizePID,
+            SwerveConstants.snapPID);
 
-  mIntake =
-      new Intake(
-          new RollerSubsystemIOTalonFX(
-              Ports.INTAKE_ROLLERS,
-              IntakeConstants.RollerConstants.motorConstants,
-              2.5),
-          new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants)
-          );
-  mSpindexer = new SpindexerGroup(
-    new Spindexer(
-      new RollerSubsystemIOTalonFX(Ports.SPINDEXER_LEFT, SpindexerConstants.leftSpinner, 1),
-       new RollerSubsystemIOTalonFX(Ports.TUNNEL_LEFT, TunnelConstants.leftRoller, 1),
-       "Left"), 
-    new Spindexer(
-      new RollerSubsystemIOTalonFX(Ports.SPINDEXER_RIGHT, SpindexerConstants.rightSpinner, 1),
-       new RollerSubsystemIOTalonFX(Ports.TUNNEL_RIGHT, TunnelConstants.rightRoller, 1),
-       "Right"));
+    mIntake =
+        new Intake(
+            new RollerSubsystemIOTalonFX(
+                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
+            new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kDeployServoConstants));
+    mSpindexer =
+        new SpindexerGroup(
+            new Spindexer(
+                new RollerSubsystemIOTalonFX(
+                    Ports.SPINDEXER_LEFT, SpindexerConstants.leftSpinner, 1),
+                new RollerSubsystemIOTalonFX(Ports.TUNNEL_LEFT, TunnelConstants.leftRoller, 1),
+                "Left"),
+            new Spindexer(
+                new RollerSubsystemIOTalonFX(
+                    Ports.SPINDEXER_RIGHT, SpindexerConstants.rightSpinner, 1),
+                new RollerSubsystemIOTalonFX(Ports.TUNNEL_RIGHT, TunnelConstants.rightRoller, 1),
+                "Right"));
 
-  mShooter =
-      new Shooter(
-          new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
-          new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
-          new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
-          mDrive::getPose,
-          mDrive::getChassisSpeeds,
-          () -> 0.0 // placeholder for vision timing supplier
-          );
-          
-  mFixedShooter =
-      new FixedShooter(
-          new ActuatorIOLinear(0, 0, 0),
-          new RollerSubsystemIOTalonFX(
-              Ports.FLYWHEEL_1,
-              FixedShooterConstants.flywheelConstants,
-              1),
-          mShooter.getPlanner()
-      );
+    mShooter =
+        new Shooter(
+            new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
+            new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
+            new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
+            mDrive::getPose,
+            mDrive::getChassisSpeeds,
+            () -> 0.0 // placeholder for vision timing supplier
+            );
 
-  mVision =
-    new Vision(
-      mDrive::addVisionMeasurement,
-      new ManualVisionIOLimelight(
-        "limelight-turret",
-        mShooter.getTurretCameraPoseSupplier(), 
-        () -> mDrive.getHeading(), 
-        false 
-      )
-    );
+    mFixedShooter =
+        new FixedShooter(
+            new ActuatorIOLinear(0, 0, 0),
+            new RollerSubsystemIOTalonFX(
+                Ports.FLYWHEEL_1, FixedShooterConstants.flywheelConstants, 1),
+            mShooter.getPlanner());
 
-    mLight = new Lights(
-      null
-    );
+    mVision =
+        new Vision(
+            mDrive::addVisionMeasurement,
+            new ManualVisionIOLimelight(
+                "limelight-turret",
+                mShooter.getTurretCameraPoseSupplier(),
+                () -> mDrive.getHeading(),
+                false));
 
-  mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
+    mLight = new Lights(null);
 
-  mClimb = new Climb(
-    new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants),
-    new ActuatorIOAxial(0)//TODO
-    );
+    mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-}
-
+    mClimb =
+        new Climb(
+            new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants),
+            new ActuatorIOAxial(0) // TODO
+            );
+  }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
 
   public void fillInSimulatedSubsytems() {
-  
+
     if (RobotMode.isSim()) {
       driveSimulation =
           new SwerveDriveSimulation(
@@ -164,9 +163,8 @@ public class RobotContainer {
     }
 
     if (mClimb == null)
-      mClimb = new Climb(
-        new ServoMotorIOSim(ClimbConstants.kClimbServoConstants),
-        new ActuatorIOSim());
+      mClimb =
+          new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
 
     if (mIntake == null)
       mIntake =
@@ -179,12 +177,12 @@ public class RobotContainer {
               new Spindexer(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                   "Left"),
+                  "Left"),
               new Spindexer(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                   "Right"));
-    
+                  "Right"));
+
     if (mDrive == null)
       mDrive =
           new Drive(
@@ -206,9 +204,9 @@ public class RobotContainer {
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
-   
+
     if (mSpindexer == null)
-        mSpindexer =
+      mSpindexer =
           new SpindexerGroup(
               new Spindexer(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
@@ -217,9 +215,8 @@ public class RobotContainer {
               new Spindexer(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                   "Right"));
-  
-   
+                  "Right"));
+
     if (mVision == null)
       mVision =
           new Vision(
@@ -230,7 +227,7 @@ public class RobotContainer {
                   "limelight-right", VisionConstants.robotToCameraLeft, this::getMapleSimPose),
               new VisionIOPhotonVisionSim(
                   "limelight-left", VisionConstants.robotToCameraRight, this::getMapleSimPose));
-  
+
     if (mShooter == null)
       mShooter =
           new Shooter(
@@ -244,20 +241,16 @@ public class RobotContainer {
     if (mFixedShooter == null)
       mFixedShooter =
           new FixedShooter(
-          new ActuatorIOSim(),
-          new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
-          mShooter.getPlanner());
-          
-    if (mClimb == null)
-      mClimb = new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+              new ActuatorIOSim(),
+              new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
+              mShooter.getPlanner());
 
-    if (mLight == null)
-          mLight = new Lights(
-            new LightsIOSim()
-          );
-  
-                     
-}
+    if (mClimb == null)
+      mClimb =
+          new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+
+    if (mLight == null) mLight = new Lights(new LightsIOSim());
+  }
 
   private Pose2d getMapleSimPose() {
     return new Pose2d(driveSimulation.getSimulatedDriveTrainPose());
@@ -272,6 +265,7 @@ public class RobotContainer {
   public void displaySimFieldToAdvantageScope() {
     if (RobotMode.mode != RobotMode.Mode.SIM) return;
 
-    Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
+    Logger.recordOutput(
+        "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
   }
 }

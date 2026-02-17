@@ -5,10 +5,9 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.RobotController;
-import org.littletonrobotics.junction.Logger;
-
 import java.util.*;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class ManualVisionIOLimelight implements VisionIO {
 
@@ -55,13 +54,11 @@ public class ManualVisionIOLimelight implements VisionIO {
     // ---------------- TARGET ANGLES ----------------
     inputs.latestTargetObservation =
         new TargetObservation(
-            Rotation2d.fromDegrees(txSubscriber.get()),
-            Rotation2d.fromDegrees(tySubscriber.get()));
+            Rotation2d.fromDegrees(txSubscriber.get()), Rotation2d.fromDegrees(tySubscriber.get()));
 
     // ---------------- ROBOT YAW PUBLISHED ----------------
     Rotation2d driveYaw = rotationSupplier.get();
-    orientationPublisher.accept(
-        new double[] {driveYaw.getDegrees(), 0, 0, 0, 0, 0});
+    orientationPublisher.accept(new double[] {driveYaw.getDegrees(), 0, 0, 0, 0, 0});
     NetworkTableInstance.getDefault().flush();
 
     Logger.recordOutput("Vision/DriveYawDeg", driveYaw.getDegrees());
@@ -71,12 +68,9 @@ public class ManualVisionIOLimelight implements VisionIO {
 
     Logger.recordOutput("Vision/RTC", robotToCamera);
 
-
     Transform3d cameraToRobot = new Transform3d(robotToCamera, new Pose3d());
 
-
     Logger.recordOutput("Vision/CTR", cameraToRobot);
-
 
     Set<Integer> tagIds = new HashSet<>();
     List<PoseObservation> poseObservations = new LinkedList<>();
@@ -89,15 +83,9 @@ public class ManualVisionIOLimelight implements VisionIO {
 
       Logger.recordOutput("Vision/LL", llPose);
 
-
-      Pose3d computed =
-          incomingIsRobotPose
-              ? llPose
-              : llPose.transformBy(cameraToRobot);
-
+      Pose3d computed = incomingIsRobotPose ? llPose : llPose.transformBy(cameraToRobot);
 
       Logger.recordOutput("Vision/Computed", computed);
-
 
       poseObservations.add(
           new PoseObservation(
@@ -109,20 +97,24 @@ public class ManualVisionIOLimelight implements VisionIO {
               PoseObservationType.MEGATAG_1));
     }
 
-    inputs.poseObservations =
-        poseObservations.toArray(new PoseObservation[0]);
+    inputs.poseObservations = poseObservations.toArray(new PoseObservation[0]);
     inputs.tagIds = tagIds.stream().mapToInt(i -> i).toArray();
   }
 
   private static Pose3d parsePose(double[] raw) {
     return new Pose3d(
-        raw[0], raw[1], raw[2],
+        raw[0],
+        raw[1],
+        raw[2],
         new Rotation3d(
             Units.degreesToRadians(raw[3]),
             Units.degreesToRadians(raw[4]),
             Units.degreesToRadians(raw[5])));
   }
 
-  @Override public void stop() {}
-  @Override public void start() {}
+  @Override
+  public void stop() {}
+
+  @Override
+  public void start() {}
 }

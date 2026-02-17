@@ -1,7 +1,6 @@
 package com.team5817.lib.drivers.Vision;
 
 import com.team254.lib.geometry.Rotation2d;
-import com.team5817.lib.vision.LimelightHelpers;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
@@ -19,33 +18,33 @@ import java.util.function.Supplier;
 /** IO implementation for real Limelight hardware. */
 public class VisionIOLimelight implements VisionIO {
   private final Supplier<Rotation2d> rotationSupplier;
-    private final DoubleArrayPublisher orientationPublisher;
+  private final DoubleArrayPublisher orientationPublisher;
 
-    private final DoubleSubscriber latencySubscriber;
-    private final DoubleSubscriber txSubscriber;
-    private final DoubleSubscriber tySubscriber;
-    private final DoubleArraySubscriber megatag1Subscriber;
-    private final DoubleArraySubscriber megatag2Subscriber;
-    private final String kName;
+  private final DoubleSubscriber latencySubscriber;
+  private final DoubleSubscriber txSubscriber;
+  private final DoubleSubscriber tySubscriber;
+  private final DoubleArraySubscriber megatag1Subscriber;
+  private final DoubleArraySubscriber megatag2Subscriber;
+  private final String kName;
 
-    /**
-     * Creates a new VisionIOLimelight.
-     *
-     * @param name The configured name of the Limelight.
-     * @param rotationSupplier Supplier for the current estimated rotation, used for MegaTag 2.
-     */
-    public VisionIOLimelight(String name, Supplier<Rotation2d> rotationSupplier) {
-      var table = NetworkTableInstance.getDefault().getTable(name);
-      this.rotationSupplier = rotationSupplier;
-      orientationPublisher = table.getDoubleArrayTopic("robot_orientation_set").publish();
-      latencySubscriber = table.getDoubleTopic("tl").subscribe(0.0);
-      txSubscriber = table.getDoubleTopic("tx").subscribe(0.0);
-      tySubscriber = table.getDoubleTopic("ty").subscribe(0.0);
-      megatag1Subscriber = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
-      megatag2Subscriber =
-          table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
-      kName = name;
-    }
+  /**
+   * Creates a new VisionIOLimelight.
+   *
+   * @param name The configured name of the Limelight.
+   * @param rotationSupplier Supplier for the current estimated rotation, used for MegaTag 2.
+   */
+  public VisionIOLimelight(String name, Supplier<Rotation2d> rotationSupplier) {
+    var table = NetworkTableInstance.getDefault().getTable(name);
+    this.rotationSupplier = rotationSupplier;
+    orientationPublisher = table.getDoubleArrayTopic("robot_orientation_set").publish();
+    latencySubscriber = table.getDoubleTopic("tl").subscribe(0.0);
+    txSubscriber = table.getDoubleTopic("tx").subscribe(0.0);
+    tySubscriber = table.getDoubleTopic("ty").subscribe(0.0);
+    megatag1Subscriber = table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
+    megatag2Subscriber =
+        table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
+    kName = name;
+  }
 
   @Override
   public void updateInputs(VisionIOInputs inputs) {
@@ -145,10 +144,8 @@ public class VisionIOLimelight implements VisionIO {
   }
 
   @Override
-  public void stop() {
-  }
+  public void stop() {}
 
   @Override
-  public void start() {
-  }
+  public void start() {}
 }

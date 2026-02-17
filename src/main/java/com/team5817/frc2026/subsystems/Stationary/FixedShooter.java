@@ -4,10 +4,10 @@ import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.planners.ShootingTarget;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants.FlywheelState;
+import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.requests.Request;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,28 +21,23 @@ public class FixedShooter extends Subsystem {
   @Getter private final FixedShooterHood fixedHood;
   @Getter private final RollerSubsystem<FlywheelState> fixedFlywheel;
 
-public FixedShooter(
-    ActuatorIO hoodIO,
-    RollerSubsystemIO flywheelIO,
-    ShootingPlanner shootingPlanner) {
+  public FixedShooter(
+      ActuatorIO hoodIO, RollerSubsystemIO flywheelIO, ShootingPlanner shootingPlanner) {
 
-  this.planner = shootingPlanner;
+    this.planner = shootingPlanner;
 
-  fixedHood =
-      new FixedShooterHood(
-          hoodIO,
-          planner.getHoodAngleSupplier(ShootingTarget.HUB),
-          planner.getHoodAngleSupplier(ShootingTarget.LOB));
+    fixedHood =
+        new FixedShooterHood(
+            hoodIO,
+            planner.getHoodAngleSupplier(ShootingTarget.HUB),
+            planner.getHoodAngleSupplier(ShootingTarget.LOB));
 
-  fixedFlywheel =
-      new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
+    fixedFlywheel = new RollerSubsystem<>(FlywheelState.IDLE, "FixedShooter/Flywheel", flywheelIO);
 
-  FlywheelState.HUB.setSupplier(
-      planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
+    FlywheelState.HUB.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.HUB));
 
-  FlywheelState.LOBBING.setSupplier(
-      planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
-}
+    FlywheelState.LOBBING.setSupplier(planner.getFlywheelSpeedSupplier(ShootingTarget.LOB));
+  }
 
   @Getter
   @Accessors(prefix = "m")
@@ -62,9 +57,7 @@ public FixedShooter(
     final FixedShooterHood.State hoodState;
     final FlywheelState flywheelState;
 
-    State(
-        FixedShooterHood.State hoodState,
-        FlywheelState flywheelState) {
+    State(FixedShooterHood.State hoodState, FlywheelState flywheelState) {
       this.hoodState = hoodState;
       this.flywheelState = flywheelState;
     }

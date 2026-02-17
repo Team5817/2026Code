@@ -3,9 +3,6 @@ package com.team5817.frc2026.subsystems.Shooter;
 import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.swerve.ChassisSpeeds;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.planners.ShootingTarget;
@@ -15,13 +12,15 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.Request;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
+import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends Subsystem {
 
@@ -72,13 +71,13 @@ public class Shooter extends Subsystem {
   }
 
   /**
-   * Returns a supplier that computes the turret-mounted camera pose expressed in robot frame.
-   * The supplier is evaluated each call and reads the current turret position.
+   * Returns a supplier that computes the turret-mounted camera pose expressed in robot frame. The
+   * supplier is evaluated each call and reads the current turret position.
    */
   public Supplier<Pose3d> getTurretCameraPoseSupplier() {
     return () -> {
-  // Turret getPosition() returns degrees. Apply sign multiplier for testing conventions.
-  double turretYawRad = Math.toRadians(ShooterConstants.TURRET_YAW_SIGN * turret.getPosition());
+      // Turret getPosition() returns degrees. Apply sign multiplier for testing conventions.
+      double turretYawRad = Math.toRadians(ShooterConstants.TURRET_YAW_SIGN * turret.getPosition());
 
       // Rotate the turret->cam offset by the turret yaw around robot z
       Translation3d turretToCamRotated =
@@ -87,8 +86,9 @@ public class Shooter extends Subsystem {
       // Combine robot->turret + rotated turret->cam to form robot->camera translation
       Translation3d cameraTranslation = ShooterConstants.robotToTurret.plus(turretToCamRotated);
 
-  // Camera rotation: pitch from constants, yaw = turret yaw
-  Rotation3d cameraRot = new Rotation3d(0.0, Math.toRadians(ShooterConstants.CAMERA_PITCH_DEGREES), turretYawRad);
+      // Camera rotation: pitch from constants, yaw = turret yaw
+      Rotation3d cameraRot =
+          new Rotation3d(0.0, Math.toRadians(ShooterConstants.CAMERA_PITCH_DEGREES), turretYawRad);
 
       Pose3d pose = new Pose3d(cameraTranslation, cameraRot);
       Logger.recordOutput("Shooter/LL Pose", pose);
@@ -167,7 +167,7 @@ public class Shooter extends Subsystem {
 
       @Override
       public boolean isFinished() {
-      return atState;
+        return atState;
       }
     };
   }

@@ -14,6 +14,7 @@ import lombok.Getter;
 public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   LatchRelease latchRelease;
+
   public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
     this.latchRelease = new LatchRelease(latchIO);
@@ -81,9 +82,10 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   @Override
   public void readPeriodicInputs() {
-      latchRelease.readPeriodicInputs();
-      super.readPeriodicInputs();
+    latchRelease.readPeriodicInputs();
+    super.readPeriodicInputs();
   }
+
   @Override
   public void writePeriodicOutputs() {
     latchRelease.writePeriodicOutputs();

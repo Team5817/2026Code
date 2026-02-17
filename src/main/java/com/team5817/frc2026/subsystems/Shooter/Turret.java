@@ -19,8 +19,7 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
       ServoMotorIO io,
       DoubleSupplier hubAngleSupplier,
       DoubleSupplier lobAngleSupplier,
-      Supplier<Rotation2d> robotHeadingSupplier) 
-  {
+      Supplier<Rotation2d> robotHeadingSupplier) {
     super(State.STOW, io);
     Turret.mRobotHeadingSupplier = robotHeadingSupplier;
     State.HUB.setSupplier(hubAngleSupplier);
@@ -30,8 +29,8 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   public enum State implements ServoState {
     HEADINGTEST(kTightError),
     STOW(0.0, kLooseError),
-    HUB(kTightError), 
-    LOBBING(kTightError); 
+    HUB(kTightError),
+    LOBBING(kTightError);
 
     private DoubleSupplier demand;
     private final double allowableError;

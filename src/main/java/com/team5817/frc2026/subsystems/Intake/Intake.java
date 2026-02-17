@@ -1,8 +1,8 @@
 package com.team5817.frc2026.subsystems.Intake;
 
+import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
-import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.ParallelRequest;
@@ -80,7 +80,7 @@ public class Intake extends Subsystem {
   public void outputTelemetry() {
     mIntakeDeploy.outputTelemetry();
     mIntakeRollers.outputTelemetry();
-    RobotVisualizer.updateIntake(mIntakeDeploy.getPosition());  
+    RobotVisualizer.updateIntake(mIntakeDeploy.getPosition());
     Logger.recordOutput("Intake/Main State", mState);
   }
 }

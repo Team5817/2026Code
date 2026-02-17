@@ -3,7 +3,6 @@ package com.team5817.frc2026.planners;
 import com.team5817.frc2026.field.FieldConstants;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.lib.Util;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -23,9 +22,12 @@ public class ShootingPlanner {
   private static final int CONVERGENCE_ITERS = 5;
   private static final double MIN_NORM = 1e-4;
 
-  private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers = new EnumMap<>(ShootingTarget.class);
-  private final Map<ShootingTarget, DoubleSupplier> turretAngleSuppliers = new EnumMap<>(ShootingTarget.class);
-  private final Map<ShootingTarget, DoubleSupplier> flywheelSpeedSuppliers = new EnumMap<>(ShootingTarget.class);
+  private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers =
+      new EnumMap<>(ShootingTarget.class);
+  private final Map<ShootingTarget, DoubleSupplier> turretAngleSuppliers =
+      new EnumMap<>(ShootingTarget.class);
+  private final Map<ShootingTarget, DoubleSupplier> flywheelSpeedSuppliers =
+      new EnumMap<>(ShootingTarget.class);
 
   private final Supplier<Pose2d> shooterPoseSupplier;
   private final Supplier<ChassisSpeeds> shooterVelocitySupplier;
@@ -39,7 +41,10 @@ public class ShootingPlanner {
     this.shooterPoseSupplier = () -> builder.shooterPoseSupplier.get().wpi();
     this.shooterVelocitySupplier = () -> builder.shooterVelocitySupplier.get().wpi();
     this.atStateSupplier = builder.atStateSupplier;
-    this.timeSinceVision = builder.timeSinceVision != null ? builder.timeSinceVision : () -> Double.POSITIVE_INFINITY; // default if not set
+    this.timeSinceVision =
+        builder.timeSinceVision != null
+            ? builder.timeSinceVision
+            : () -> Double.POSITIVE_INFINITY; // default if not set
     this.config = ShootingConfig.defaultConfig();
 
     this.timeForDistance =
@@ -111,12 +116,14 @@ public class ShootingPlanner {
     private BooleanSupplier atStateSupplier;
     private DoubleSupplier timeSinceVision;
 
-    public Builder shooterPoseSupplier(Supplier<com.team254.lib.geometry.Pose2d> shooterPoseSupplier) {
+    public Builder shooterPoseSupplier(
+        Supplier<com.team254.lib.geometry.Pose2d> shooterPoseSupplier) {
       this.shooterPoseSupplier = shooterPoseSupplier;
       return this;
     }
 
-    public Builder shooterVelocitySupplier(Supplier<com.team254.lib.swerve.ChassisSpeeds> shooterVelocitySupplier) {
+    public Builder shooterVelocitySupplier(
+        Supplier<com.team254.lib.swerve.ChassisSpeeds> shooterVelocitySupplier) {
       this.shooterVelocitySupplier = shooterVelocitySupplier;
       return this;
     }
@@ -221,17 +228,18 @@ public class ShootingPlanner {
 
     Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
 
-    com.team254.lib.geometry.Translation2d pos = new com.team254.lib.geometry.Translation2d(current.getTranslation());
-    com.team254.lib.geometry.Translation2d futureHubPos = new com.team254.lib.geometry.Translation2d(futureHub.getTranslation());
-    if(Util.isRed().orElse(false)){
-        pos = pos.mirrorAboutX(FieldConstants.LinesVertical.center);
-        futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
-      }
+    com.team254.lib.geometry.Translation2d pos =
+        new com.team254.lib.geometry.Translation2d(current.getTranslation());
+    com.team254.lib.geometry.Translation2d futureHubPos =
+        new com.team254.lib.geometry.Translation2d(futureHub.getTranslation());
+    if (Util.isRed().orElse(false)) {
+      pos = pos.mirrorAboutX(FieldConstants.LinesVertical.center);
+      futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
+    }
     if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW;
     if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW;
     if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW;
     if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW;
-
 
     if (futureHubPos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
 
@@ -257,8 +265,9 @@ public class ShootingPlanner {
     if (linearVel > target.getVelocityThreshold()) return false;
     if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
     if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold()) return false;
-    if(state == Shooter.State.STOW) return false;
-    if(new com.team254.lib.geometry.Translation2d(shooterPoseSupplier.get().getTranslation()).inBounds(config.blockedBounds)) return false;
+    if (state == Shooter.State.STOW) return false;
+    if (new com.team254.lib.geometry.Translation2d(shooterPoseSupplier.get().getTranslation())
+        .inBounds(config.blockedBounds)) return false;
 
     Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
     return true;
@@ -267,7 +276,6 @@ public class ShootingPlanner {
   public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
     return hoodAngleSuppliers.get(target);
   }
-
 
   public DoubleSupplier getTurretAngleSupplier(ShootingTarget target) {
     return turretAngleSuppliers.get(target);

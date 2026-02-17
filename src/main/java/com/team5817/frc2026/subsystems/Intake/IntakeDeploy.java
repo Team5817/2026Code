@@ -19,11 +19,10 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
     super(IntakeDeploy.State.STOW, io);
   }
 
-
   /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
-    STOW(0), 
-    OUT(0.2667), 
+    STOW(0),
+    OUT(0.2667),
     ZERO(0);
 
     @Getter private double demand = 0;

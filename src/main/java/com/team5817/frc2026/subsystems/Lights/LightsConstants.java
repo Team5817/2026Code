@@ -1,11 +1,8 @@
 package com.team5817.frc2026.subsystems.Lights;
 
-
-
 public class LightsConstants {
 
-    public static final int minSlot = 0;
-    public static final int maxSlot = 100;
-    public static final double defaultFrameRate = 60.0;
-
+  public static final int minSlot = 0;
+  public static final int maxSlot = 100;
+  public static final double defaultFrameRate = 60.0;
 }

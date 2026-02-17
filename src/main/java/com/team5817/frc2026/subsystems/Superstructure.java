@@ -8,8 +8,8 @@ import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
-import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
+import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.NeverEndingRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
@@ -33,7 +33,14 @@ public class Superstructure extends Subsystem {
 
   @Setter private boolean allowAutoShoot = true;
 
-  public Superstructure(Drive drive, Intake intake, SpindexerGroup spindexerGroup, Shooter shooter, FixedShooter fixedShooter,  Climb climb, Lights lights) {
+  public Superstructure(
+      Drive drive,
+      Intake intake,
+      SpindexerGroup spindexerGroup,
+      Shooter shooter,
+      FixedShooter fixedShooter,
+      Climb climb,
+      Lights lights) {
     mDrive = drive;
     mIntake = intake;
     mSpindexerGroup = spindexerGroup;
@@ -66,29 +73,26 @@ public class Superstructure extends Subsystem {
     // );
   }
 
-/*
-        Idle: White
-        Should Not Shoot: Yellow
-        Should Shoot: Green
-        Dual mode: Fire
-        Climb: Purple 
-        Hopper empty: Flash Orange
-        Alliance shift: Red or Blue 
-*/
+  /*
+          Idle: White
+          Should Not Shoot: Yellow
+          Should Shoot: Green
+          Dual mode: Fire
+          Climb: Purple
+          Hopper empty: Flash Orange
+          Alliance shift: Red or Blue
+  */
 
   @Override
   public void periodic() {
     requestExecutor.update();
-    if (ActiveTracker.getTimeToActive() % 2 == 0){
+    if (ActiveTracker.getTimeToActive() % 2 == 0) {
       mLights.setLeds(LEDState.ORANGE);
-    }
-    else if (mClimb.getState() != Climb.State.ZERO){
+    } else if (mClimb.getState() != Climb.State.ZERO) {
       mLights.setLeds(LEDState.CLIMBING);
-    }
-    else if (mShooter.getPlanner().shouldShoot()){
+    } else if (mShooter.getPlanner().shouldShoot()) {
       mLights.setLeds(LEDState.LOCKED);
-    }
-    else if (!mShooter.getPlanner().shouldShoot()){
+    } else if (!mShooter.getPlanner().shouldShoot()) {
       mLights.setLeds(LEDState.NOT_LOCKED);
     }
     // else if (){
@@ -103,11 +107,10 @@ public class Superstructure extends Subsystem {
     // else if (){ // alliance blue
     //   mLights.setLeds(LEDState.BLUE);
     // }
-    else{
+    else {
       mLights.setLeds(LEDState.NONE);
     }
-   }
-  
+  }
 
   public boolean requestsCompleted() {
     return this.requestExecutor.isFinished();

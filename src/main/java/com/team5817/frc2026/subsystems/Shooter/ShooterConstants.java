@@ -10,11 +10,9 @@ import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
-
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
-
 import java.util.function.DoubleSupplier;
 
 public class ShooterConstants {
@@ -30,14 +28,14 @@ public class ShooterConstants {
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-  
+
   public static Pose2d shooterTransform =
-  new Pose2d(
-    0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
-    
-    static {
-    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(21.5));
-    TurretToCam = new Translation3d(.1414213562,0,0);
+      new Pose2d(
+          0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
+
+  static {
+    robotToTurret = new Translation3d(Units.inchesToMeters(6.5), 0, Units.inchesToMeters(21.5));
+    TurretToCam = new Translation3d(.1414213562, 0, 0);
 
     flywheelConstants.kMaxForwardOutput = 12.0;
     flywheelConstants.kMaxReverseOutput = -12.0;
@@ -187,8 +185,8 @@ public class ShooterConstants {
     IDLE(0.0, RollerControlMode.VOLTAGE),
     CLOSE(50.0, RollerControlMode.VELOCITY),
     FAR(80.0, RollerControlMode.VELOCITY),
-    HUB(70.0, RollerControlMode.VELOCITY), 
-    LOBBING(80.0, RollerControlMode.VELOCITY); 
+    HUB(70.0, RollerControlMode.VELOCITY),
+    LOBBING(80.0, RollerControlMode.VELOCITY);
 
     private final RollerControlMode controlMode;
     private final double toleranceRadsPerSec = 0.1;
