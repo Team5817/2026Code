@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public class LightsState {
 	public static final Color RED = new Color(255, 0, 0);
+  public static final Color OFF = new Color(0, 0, 0);
 	public static final Color PINK = new Color(255, 18, 143);
 	public static final Color GREEN = new Color(0, 255, 8);
 	public static final Color PURPLE = new Color(196, 18, 255);
@@ -12,12 +13,9 @@ public class LightsState {
 	public static final Color CYAN = new Color(52, 155, 235);
 	public static final Color BLUE = new Color(0, 0, 255);
   public static final Color WHITE = new Color(255,255,255);
+  public static final Color [] RAINBOW = { WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, OFF,
+            RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, PURPLE, OFF, OFF};
 
-  public static final Color OFF = ledOff();
-  
-  public static Color ledOff() {
-		return new Color(0, 0, 0);
-	}
 
   public enum LEDState{ 
    /* Animation List
@@ -30,17 +28,15 @@ public class LightsState {
      * FLOW
     */
     ORANGE(Color.kOrange, "SOLID"),
-    DUALMODE(Color.kWhite, "SOLID"),
-    ALLIANCERED(Color.kRed, "SOLID"),
-    ALLIANCEBLUE(Color.kBlue, "SOLID"),
-    NOTLOCKED(Color.kYellow, "SOLID"),
+    DUAL(Color.kWhite, "SOLID"),
+    ALLIANCE_RED(Color.kRed, "SOLID"),
+    ALLIANCE_BLUE(Color.kBlue, "SOLID"),
+    NOT_LOCKED(Color.kYellow, "SOLID"),
     LOCKED(Color.kGreen, "SOLID"),
     CLIMBING(Color.kPurple, "SOLID"),
     NONE(Color.kWhite, "SOLID"),
-    HOPPEREMPTY(Color.kOrange, "STROBE");
-    private LEDState(){
+    HOPPER_EMPTY(Color.kOrange, "STROBE");
 
-    }
     Color color = null;
     String animation = null;
     private LEDState(Color color, String animation){

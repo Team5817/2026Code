@@ -89,7 +89,7 @@ public class Superstructure extends Subsystem {
       mLights.setLeds(LEDState.LOCKED);
     }
     else if (!mShooter.getPlanner().shouldShoot()){
-      mLights.setLeds(LEDState.NOTLOCKED);
+      mLights.setLeds(LEDState.NOT_LOCKED);
     }
     // else if (){
     //   mLights.setLeds(LEDState.FIRE);
