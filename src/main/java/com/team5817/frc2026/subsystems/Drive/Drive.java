@@ -204,7 +204,7 @@ public class Drive extends Subsystem {
   }
 
   public void setSpeedScalar(double scalar) {
-  speedScalar = scalar;
+    speedScalar = scalar;
   }
 
   private boolean isStabilizing = true;
@@ -441,8 +441,9 @@ public class Drive extends Subsystem {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds.wpi());
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * speedScalar);
-    
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        setpointStates, TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * speedScalar);
+
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("Drive/SwerveStates/Setpoints", setpointStates);
     Logger.recordOutput("Drive/SwerveChassisSpeeds/Setpoints", discreteSpeeds.wpi());

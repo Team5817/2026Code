@@ -112,7 +112,6 @@ public class ControlBoard {
         || driver.rightTrigger.isBeingPressed());
   }
 
-
   /**
    * Checks if the top buttons on the operator's controller are clear.
    *
