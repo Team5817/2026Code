@@ -1,5 +1,6 @@
 package com.team5817.frc2026.Controls;
 
+
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -33,9 +34,8 @@ public class DriverControls {
   }
 
   /* ONE CONTROLLER */
-
   public void oneControllerMode() {
-
+    
     // mDrive.overrideHeading(true);
     if (driver.getStartButton()) d.allianceZeroGyro();
 
@@ -61,9 +61,11 @@ public class DriverControls {
 
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
+    
     // RT Slow mode
-    mControlBoard.setSwerveScalar(
-        1 - driver.getRightTriggerAxis() * .7); // coefficient is percent to reduce speed by
+    double scalar = 1 - driver.getRightTriggerAxis() * 0.7;
+    mControlBoard.setSwerveScalar(scalar);
+    d.setSpeedScalar(scalar);
 
     // Y Close
     if (driver.getYButtonPressed()) {

@@ -6,7 +6,6 @@ import com.team5817.frc2026.RobotConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.lib.Util;
 import edu.wpi.first.wpilibj.XboxController.Axis;
-import org.littletonrobotics.junction.Logger;
 
 public class ControlBoard {
   private final double kSwerveDeadband = RobotConstants.stickDeadband;
@@ -45,12 +44,9 @@ public class ControlBoard {
    * @return the swerve translation as a Translation2d object
    */
   public Translation2d getSwerveTranslation() {
-    double forwardAxis = driver.getRawAxis(Axis.kLeftY.value);
-    double strafeAxis = driver.getRawAxis(Axis.kLeftX.value);
-
+    double forwardAxis = driver.getRawAxis(Axis.kLeftY.value) * scalar;
+    double strafeAxis = driver.getRawAxis(Axis.kLeftX.value) * scalar;
     double expoForwardAxis = forwardAxis;
-    Logger.recordOutput("SLOW MODE TEST", scalar);
-
     double expoStrafeAxis = strafeAxis;
 
     expoForwardAxis =
@@ -72,8 +68,7 @@ public class ControlBoard {
 
       double scaled_x = Util.scaledDeadband(expoForwardAxis, 1.0, Math.abs(deadband_vector.x()));
       double scaled_y = Util.scaledDeadband(expoStrafeAxis, 1.0, Math.abs(deadband_vector.y()));
-      return new Translation2d(scaled_x, scaled_y)
-          .scale(d.getMaxLinearSpeedMetersPerSec() * scalar);
+      return new Translation2d(scaled_x, scaled_y).scale(d.getMaxLinearSpeedMetersPerSec());
     }
   }
 
@@ -117,7 +112,6 @@ public class ControlBoard {
         || driver.rightTrigger.isBeingPressed());
   }
 
-  // Driver and Operator
 
   /**
    * Checks if the top buttons on the operator's controller are clear.

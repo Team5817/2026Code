@@ -130,6 +130,7 @@ public class Drive extends Subsystem {
 
   @Setter private boolean autoAlignFinishedOverride = false;
 
+  private double speedScalar = 1.0;
   public static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
@@ -194,7 +195,16 @@ public class Drive extends Subsystem {
   }
 
   public void feedTeleopSetpoint(ChassisSpeeds speeds) {
+
+    speeds.vxMetersPerSecond *= speedScalar;
+    speeds.vyMetersPerSecond *= speedScalar;
+    speeds.omegaRadiansPerSecond *= speedScalar;
+
     runVelocity(getTeleopSetpoint(speeds));
+  }
+
+  public void setSpeedScalar(double scalar) {
+  speedScalar = scalar;
   }
 
   private boolean isStabilizing = true;
@@ -431,8 +441,8 @@ public class Drive extends Subsystem {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds.wpi());
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
-
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * speedScalar);
+    
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("Drive/SwerveStates/Setpoints", setpointStates);
     Logger.recordOutput("Drive/SwerveChassisSpeeds/Setpoints", discreteSpeeds.wpi());
