@@ -147,7 +147,7 @@ public class RobotContainer {
     mClimb =
         new Climb(
             new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants),
-            new ActuatorIOAxial(0) // TODO
+            new ActuatorIOAxial(0, 180) // TODO set proper range
             );
   }
 
