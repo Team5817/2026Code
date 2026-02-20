@@ -179,7 +179,6 @@ public class Drive extends Subsystem {
 
     // Start odometry thread
     PhoenixOdometryThread.getInstance().start();
-
   }
 
   /**

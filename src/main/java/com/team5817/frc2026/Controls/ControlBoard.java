@@ -1,13 +1,12 @@
 package com.team5817.frc2026.Controls;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
 import com.team5817.frc2026.RobotConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.lib.Util;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import org.littletonrobotics.junction.Logger;
 
 public class ControlBoard {
   private final double kSwerveDeadband = RobotConstants.stickDeadband;
@@ -73,10 +72,10 @@ public class ControlBoard {
 
       double scaled_x = Util.scaledDeadband(expoForwardAxis, 1.0, Math.abs(deadband_vector.x()));
       double scaled_y = Util.scaledDeadband(expoStrafeAxis, 1.0, Math.abs(deadband_vector.y()));
-return new Translation2d(scaled_x, scaled_y).scale(d.getMaxLinearSpeedMetersPerSec() * scalar);}
-
+      return new Translation2d(scaled_x, scaled_y)
+          .scale(d.getMaxLinearSpeedMetersPerSec() * scalar);
+    }
   }
-  
 
   /**
    * Gets the swerve rotation based on the driver's controller input.

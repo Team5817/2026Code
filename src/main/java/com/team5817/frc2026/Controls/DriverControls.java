@@ -1,7 +1,5 @@
 package com.team5817.frc2026.Controls;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -37,7 +35,7 @@ public class DriverControls {
   /* ONE CONTROLLER */
 
   public void oneControllerMode() {
-    
+
     // mDrive.overrideHeading(true);
     if (driver.getStartButton()) d.allianceZeroGyro();
 

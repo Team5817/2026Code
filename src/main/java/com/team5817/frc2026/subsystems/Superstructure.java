@@ -53,20 +53,14 @@ public class Superstructure extends Subsystem {
 
   public Request CloseShotRequest() {
     return new SequentialRequest(
-            mShooter.stateRequest(Shooter.State.CLOSE),
-            new NeverEndingRequest())
+            mShooter.stateRequest(Shooter.State.CLOSE), new NeverEndingRequest())
         .addName("Close Shot");
-
   }
 
   public Request FarShotRequest() {
-    return new SequentialRequest(
-            mShooter.stateRequest(Shooter.State.FAR),
-            new NeverEndingRequest())
+    return new SequentialRequest(mShooter.stateRequest(Shooter.State.FAR), new NeverEndingRequest())
         .addName("FarShot");
-
   }
-
 
   @Override
   public void periodic() {
