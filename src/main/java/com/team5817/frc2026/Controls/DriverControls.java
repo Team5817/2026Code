@@ -1,4 +1,6 @@
-package com.team5817.frc2026.controlboard;
+package com.team5817.frc2026.Controls;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
@@ -34,11 +36,8 @@ public class DriverControls {
 
   /* ONE CONTROLLER */
 
-  /**
-   * Handles the input for the one controller mode. This mode is used when only one controller is
-   * available for the driver.
-   */
   public void oneControllerMode() {
+    
     // mDrive.overrideHeading(true);
     if (driver.getStartButton()) d.allianceZeroGyro();
 
@@ -62,23 +61,6 @@ public class DriverControls {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 
-    // //LeftStick Spindexer Feed Shooter
-    if (driver.getLeftStickButtonPressed()) {
-      s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_SHOOTER);
-    }
-
-    if (driver.getLeftStickButtonReleased()) {
-      s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
-    }
-
-    // //RightStick Spindexer Feed Turret
-    if (driver.getRightStickButtonPressed()) {
-      s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_TURRET);
-    }
-    if (driver.getRightStickButtonReleased()) {
-      s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
-    }
-
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
     // RT Slow mode
@@ -89,7 +71,6 @@ public class DriverControls {
     if (driver.getYButtonPressed()) {
       s.request(s.CloseShotRequest());
     }
-
     if (driver.getYButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
@@ -98,7 +79,6 @@ public class DriverControls {
     if (driver.getAButtonPressed()) {
       s.request(s.FarShotRequest());
     }
-
     if (driver.getAButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
@@ -108,18 +88,17 @@ public class DriverControls {
       s.mShooter.forceStow(true);
       s.request(new EmptyRequest());
     }
-
     if (driver.getBButtonReleased()) {
       s.mShooter.forceStow(false);
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Down Climb
+    // Climb Down
     if (driver.POV180.wasActivated()) {
       s.mClimb.advanceClimbRequest().act();
     }
 
-    // Up Unclimb
+    // Climb Zero
     if (driver.POV0.wasActivated()) {
       s.mClimb.resetClimbStages();
     }

@@ -1,4 +1,6 @@
-package com.team5817.frc2026.controlboard;
+package com.team5817.frc2026.Controls;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
@@ -48,6 +50,8 @@ public class ControlBoard {
     double strafeAxis = driver.getRawAxis(Axis.kLeftX.value);
 
     double expoForwardAxis = forwardAxis;
+    Logger.recordOutput("SLOW MODE TEST", scalar);
+
     double expoStrafeAxis = strafeAxis;
 
     expoForwardAxis =
@@ -59,7 +63,7 @@ public class ControlBoard {
             ? expoStrafeAxis
             : -expoStrafeAxis;
 
-    Translation2d tAxes = new Translation2d(expoForwardAxis, expoStrafeAxis).scale(scalar);
+    Translation2d tAxes = new Translation2d(expoForwardAxis, expoStrafeAxis);
 
     if (Math.abs(tAxes.norm()) < kSwerveDeadband) {
       return new Translation2d();
@@ -69,9 +73,10 @@ public class ControlBoard {
 
       double scaled_x = Util.scaledDeadband(expoForwardAxis, 1.0, Math.abs(deadband_vector.x()));
       double scaled_y = Util.scaledDeadband(expoStrafeAxis, 1.0, Math.abs(deadband_vector.y()));
-      return new Translation2d(scaled_x, scaled_y).scale(d.getMaxLinearSpeedMetersPerSec());
-    }
+return new Translation2d(scaled_x, scaled_y).scale(d.getMaxLinearSpeedMetersPerSec() * scalar);}
+
   }
+  
 
   /**
    * Gets the swerve rotation based on the driver's controller input.

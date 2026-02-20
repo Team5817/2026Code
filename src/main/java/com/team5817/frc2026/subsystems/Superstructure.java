@@ -54,34 +54,19 @@ public class Superstructure extends Subsystem {
   public Request CloseShotRequest() {
     return new SequentialRequest(
             mShooter.stateRequest(Shooter.State.CLOSE),
-            // indexer on
             new NeverEndingRequest())
         .addName("Close Shot");
-    // .withCleanup(
-    //   () -> mIndexer.conformToState(Indexer.State.OFF)
-    // );
+
   }
 
   public Request FarShotRequest() {
     return new SequentialRequest(
             mShooter.stateRequest(Shooter.State.FAR),
-            // indexer on
             new NeverEndingRequest())
         .addName("FarShot");
-    // .withCleanup(
-    //   () -> mIndexer.conformToState(Indexer.State.OFF)
-    // );
+
   }
 
-  /*
-          Idle: White
-          Should Not Shoot: Yellow
-          Should Shoot: Green
-          Dual mode: Fire
-          Climb: Purple
-          Hopper empty: Flash Orange
-          Alliance shift: Red or Blue
-  */
 
   @Override
   public void periodic() {

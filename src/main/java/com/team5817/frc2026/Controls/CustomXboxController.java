@@ -1,4 +1,4 @@
-package com.team5817.frc2026.controlboard;
+package com.team5817.frc2026.Controls;
 
 import com.team254.lib.geometry.Rotation2d;
 import com.team5817.lib.Util;
