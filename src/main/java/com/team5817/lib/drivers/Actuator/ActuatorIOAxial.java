@@ -11,7 +11,9 @@ public class ActuatorIOAxial implements ActuatorIO {
     this.maxRange = maxRange;
   }
 
-  public double toDegrees(double units){return(units/maxRange);}
+  public double toDegrees(double units) {
+    return (units / maxRange);
+  }
 
   @Override
   public void runPosition(double units) {
