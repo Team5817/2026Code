@@ -4,8 +4,8 @@ import com.team5817.frc2026.autos.Modes.D;
 import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.H;
-import com.team5817.frc2026.autos.Modes.NR;
 import com.team5817.frc2026.autos.Modes.HNRD;
+import com.team5817.frc2026.autos.Modes.NR;
 import com.team5817.frc2026.autos.Modes.NRHT;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -31,7 +31,8 @@ public class AutoModeFactory {
   }
 
   public enum StartingPosition {
-    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.NR, DesiredMode.HNRD, DesiredMode.NRHT),
+    TRENCH_H(
+        DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.NR, DesiredMode.HNRD, DesiredMode.NRHT),
     TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.DNRD),
     CENTER(DesiredMode.DO_NOTHING);
 
