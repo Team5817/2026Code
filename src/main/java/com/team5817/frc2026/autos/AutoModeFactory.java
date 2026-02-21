@@ -1,9 +1,11 @@
 package com.team5817.frc2026.autos;
 
 import com.team5817.frc2026.autos.Modes.D;
+import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.H;
 import com.team5817.frc2026.autos.Modes.NR;
+import com.team5817.frc2026.autos.Modes.HNRD;
 import com.team5817.frc2026.autos.Modes.NRHT;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -23,12 +25,14 @@ public class AutoModeFactory {
     H,
     D,
     NR,
+    DNRD,
+    HNRD,
     NRHT
   }
 
   public enum StartingPosition {
-    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.NR, DesiredMode.NRHT),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D),
+    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.NR, DesiredMode.HNRD, DesiredMode.NRHT),
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.DNRD),
     CENTER(DesiredMode.DO_NOTHING);
 
     public List<DesiredMode> modes;
@@ -117,6 +121,10 @@ public class AutoModeFactory {
         return Optional.of(new D(s, mCachedClimbSelection));
       case NR:
         return Optional.of(new NR(s, mCachedClimbSelection));
+      case DNRD:
+        return Optional.of(new DNRD(s, mCachedClimbSelection));
+      case HNRD:
+        return Optional.of(new HNRD(s, mCachedClimbSelection));
       case NRHT:
         return Optional.of(new NRHT(s, mCachedClimbSelection));
       default:
