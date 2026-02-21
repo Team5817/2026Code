@@ -50,7 +50,7 @@ public class Ports {
 
   public static final CanDeviceId CLIMB = new CanDeviceId(22);
 
-  public static final CanDeviceId INTAKE_CANCODER = new CanDeviceId(23);
+  public static final CanDeviceId TURRET_CANCODER = new CanDeviceId(23);
   public static final CanDeviceId PIGEON = new CanDeviceId(24, "canivore1");
 
   public static final CanDeviceId LEDS = new CanDeviceId(25, "canivore1");

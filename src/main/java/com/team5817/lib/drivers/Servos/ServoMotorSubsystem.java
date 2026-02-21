@@ -252,7 +252,10 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   /** Zeros the sensors. */
   @Override
   public void zeroSensors() {
-    io.zeroSensors();
+    zeroSensors(0);
+  }
+  public void zeroSensors(double newPoseUnits){
+    io.zeroSensors(mConstants.unitsToRotations(newPoseUnits));
   }
 
   /** Forces the sensors to zero. */

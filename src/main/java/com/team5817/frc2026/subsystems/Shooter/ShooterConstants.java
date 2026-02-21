@@ -14,6 +14,7 @@ import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 
 import java.util.function.DoubleSupplier;
 
@@ -30,14 +31,15 @@ public class ShooterConstants {
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-  
+  public static final double cancoderToTurretRatio = (360/400);//TODO
+
   public static Pose2d shooterTransform =
-  new Pose2d(
-    0.0, 0.0, Rotation2d.fromDegrees(0.0)); // TODO: Adjust based on actual robot geometry
-    
-    static {
-    robotToTurret = new Translation3d(Units.inchesToMeters(6.5),0,Units.inchesToMeters(21.5));
-    TurretToCam = new Translation3d(.1414213562,0,0);
+      new Pose2d(
+          Units.inchesToMeters(-1.25), Units.inchesToMeters(4), Rotation2d.fromDegrees(0.0)); 
+
+  static {
+    robotToTurret = new Translation3d(Units.inchesToMeters(-1.25), Units.inchesToMeters(4), Units.inchesToMeters(21)); //z is LL Height
+    TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
 
     flywheelConstants.kMaxForwardOutput = 12.0;
     flywheelConstants.kMaxReverseOutput = -12.0;

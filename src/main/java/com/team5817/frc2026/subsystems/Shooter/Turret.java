@@ -1,6 +1,9 @@
 package com.team5817.frc2026.subsystems.Shooter;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.team254.lib.drivers.CanDeviceId;
 import com.team254.lib.geometry.Rotation2d;
+import com.team5817.frc2026.Ports;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
@@ -15,6 +18,7 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
   static Supplier<Rotation2d> mRobotHeadingSupplier = () -> Rotation2d.kIdentity;
 
+  CANcoder mCanCoder;
   public Turret(
       ServoMotorIO io,
       DoubleSupplier hubAngleSupplier,
@@ -22,9 +26,15 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
       Supplier<Rotation2d> robotHeadingSupplier) 
   {
     super(State.STOW, io);
+    mCanCoder = new CANcoder(Ports.TURRET_CANCODER.getDeviceNumber(),Ports.TURRET_CANCODER.getBus());
     Turret.mRobotHeadingSupplier = robotHeadingSupplier;
     State.HUB.setSupplier(hubAngleSupplier);
     State.LOBBING.setSupplier(lobAngleSupplier);
+
+    zeroSensors(getAbsoluteTurretDegrees());
+  }
+  public double getAbsoluteTurretDegrees(){
+    return mCanCoder.getAbsolutePosition().getValueAsDouble() * (ShooterConstants.cancoderToTurretRatio) * 365;
   }
 
   public enum State implements ServoState {
