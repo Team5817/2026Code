@@ -75,7 +75,6 @@ public class DriverControls {
     if (driver.getRightStickButtonPressed()) {
       s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_TURRET);
     }
-
     if (driver.getRightStickButtonReleased()) {
       s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
     }
