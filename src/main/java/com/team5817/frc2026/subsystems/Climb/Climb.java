@@ -49,37 +49,37 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
     }
   }
 
-    public Request advanceClimbRequest() {
-      System.out.println("Advancing climb from " + mState);
+  public Request advanceClimbRequest() {
+    System.out.println("Advancing climb from " + mState);
 
-      switch (mState) {
-        case ZERO:
-          latchRelease.setState(LatchRelease.State.RELEASED);
-          return stateRequest(State.READY);
-        case READY:
-          return stateRequest(State.DOWN);
-        case DOWN:
-          return null; 
-      }
-      return null;
+    switch (mState) {
+      case ZERO:
+        latchRelease.setState(LatchRelease.State.RELEASED);
+        return stateRequest(State.READY);
+      case READY:
+        return stateRequest(State.DOWN);
+      case DOWN:
+        return null;
     }
+    return null;
+  }
 
-    public Request climbRequest() {
-      return new SequentialRequest(
-          new Request() {
-            @Override
-            public void act() {
-              advanceClimbRequest().act();
-            }
-          },
-          new WaitRequest(1),
-          new Request() {
-            @Override
-            public void act() {
-              advanceClimbRequest().act();
-            }
-          });
-    }
+  public Request climbRequest() {
+    return new SequentialRequest(
+        new Request() {
+          @Override
+          public void act() {
+            advanceClimbRequest().act();
+          }
+        },
+        new WaitRequest(1),
+        new Request() {
+          @Override
+          public void act() {
+            advanceClimbRequest().act();
+          }
+        });
+  }
 
   public void resetClimbStages() {
     setState(State.ZERO);
