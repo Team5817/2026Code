@@ -81,8 +81,8 @@ public class TunerConstants {
   private static final double kCoupleRatio = 0;
 
   // Gear ratios (from module config)
-  private static final double kDriveGearRatio = 7.1328671328671325;
-  private static final double kSteerGearRatio = 11.314285714285715;
+  private static final double kDriveGearRatio = 5.68;
+  private static final double kSteerGearRatio = 12.1;
 
   // Radius of the wheel
   private static final Distance kWheelRadius = Inches.of(2);
@@ -135,11 +135,11 @@ public class TunerConstants {
 
   // === Module positions (based on 22.5" square wheelbase) ===
 
-  private static final Distance kX = Inches.of(11.25);
-  private static final Distance kY = Inches.of(11.25);
+  private static final Distance kX = Inches.of(13.5);
+  private static final Distance kY = Inches.of(13.5);
 
-  // === Module constants ===
-  // === Module constants (ROTATED 90° CCW: old RIGHT is now FRONT) ===
+// === Module constants ===
+// === Module constants (ROTATED 90° CCW: old RIGHT is now FRONT) ===
 // Transform applied:
 //   (x, y) -> ( y, -x )
 //   steerZero -> steerZero - 0.25 rotations

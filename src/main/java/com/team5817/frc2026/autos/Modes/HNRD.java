@@ -48,11 +48,8 @@ public class HNRD extends AutoBase {
 
     r(new TrajectoryAction(t.next(), d));
     r(new TrajectoryAction(t.next(), d));
-
     r(new AutoShootAction(1.5, p, su));
-
     r(new TrajectoryAction(t.next(), d));
-
     r(new AutoShootAction(1.5, p, su));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
