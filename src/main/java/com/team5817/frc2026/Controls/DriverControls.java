@@ -4,7 +4,6 @@ import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
-import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -47,15 +46,14 @@ public class DriverControls {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 
-    // LB Dump
+    // LB Shoot Both 
     if (driver.getLeftBumperButtonPressed()) {
-      s.mFixedShooter.setDesiredState(FixedShooter.State.HUB);
-      s.mSpindexerGroup.setState(SpindexerGroup.State.FEED_BOTH);
+      s.request(s.DualShotRequest());
     }
 
     if (driver.getLeftBumperButtonReleased()) {
+      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s));
       s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
-      s.mIntake.conformToState(Intake.State.IDLE);
     }
 
     // RB don't Shoot

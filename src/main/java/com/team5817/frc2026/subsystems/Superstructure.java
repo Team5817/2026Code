@@ -10,7 +10,9 @@ import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.NeverEndingRequest;
+import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
 import com.team5817.lib.requests.SequentialRequest;
@@ -51,15 +53,33 @@ public class Superstructure extends Subsystem {
     this.requestExecutor = new RequestExecutor();
   }
 
+
+  
   public Request CloseShotRequest() {
     return new SequentialRequest(
-            mShooter.stateRequest(Shooter.State.CLOSE), new NeverEndingRequest())
-        .addName("Close Shot");
+        new ParallelRequest(
+            mShooter.stateRequest(Shooter.State.CLOSE),
+            mFixedShooter.stateRequest(FixedShooter.State.CLOSE),
+            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+        new NeverEndingRequest())
+        .addName("CloseShot");
   }
 
   public Request FarShotRequest() {
-    return new SequentialRequest(mShooter.stateRequest(Shooter.State.FAR), new NeverEndingRequest())
+    return new SequentialRequest(
+        new ParallelRequest(
+            mShooter.stateRequest(Shooter.State.FAR),
+            mFixedShooter.stateRequest(FixedShooter.State.FAR),
+            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+        new NeverEndingRequest())
         .addName("FarShot");
+  }
+
+  public Request DualShotRequest() {
+    return new ParallelRequest(
+        new AutoShootRequest(mShooter.getPlanner(), this),
+        mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH))
+        .addName("ShootBoth");
   }
 
   @Override
