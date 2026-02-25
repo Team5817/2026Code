@@ -14,17 +14,17 @@ public class FixedShooterHood extends ActuatorSystem {
   private static final double kLooseError = 4.0;
 
   public FixedShooterHood(
-      ActuatorIO io,
-      DoubleSupplier hubAngleSupplier,
-      DoubleSupplier lobAngleSupplier) {
+      ActuatorIO io, DoubleSupplier hubAngleSupplier, DoubleSupplier lobAngleSupplier) {
 
-    super(io, FixedShooterHoodConstants.kSensorToDegrees,"FixedShooter/Hood");
+    super(io, FixedShooterHoodConstants.kSensorToDegrees, "FixedShooter/Hood");
 
     State.HUB.setSupplier(hubAngleSupplier);
     State.LOB.setSupplier(lobAngleSupplier);
   }
 
-  @Getter @Setter @Accessors(prefix = "m")
+  @Getter
+  @Setter
+  @Accessors(prefix = "m")
   private State mState = State.STOW;
 
   public enum State {
@@ -55,6 +55,7 @@ public class FixedShooterHood extends ActuatorSystem {
   public void writePeriodicOutputs() {
     runPosition(mState.getDemand());
   }
+
   public boolean atState() {
     return Math.abs(getPosition() - mState.getDemand()) < mState.getAllowableError();
   }

@@ -4,12 +4,16 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ActuatorIO {
   public default void runPosition(double units) {}
-  public default double getPosition() { return 0; }
+
+  public default double getPosition() {
+    return 0;
+  }
 
   @AutoLog
   public static class ActuatorIOInputs {
     public double timestamp;
     public double position_rotor;
-    }
+  }
+
   public default void updateInputs(ActuatorIOInputs inputs) {}
 }

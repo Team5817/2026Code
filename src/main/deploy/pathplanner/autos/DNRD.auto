@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHN2"
+            "pathName": "DToN2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "N2ToEN"
+            "pathName": "N2ToD0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ENToC0"
+            "pathName": "D0ToDT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DTToC0"
           }
         }
       ]

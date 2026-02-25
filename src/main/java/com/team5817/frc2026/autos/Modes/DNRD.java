@@ -15,7 +15,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 
-public class NR extends AutoBase {
+public class DNRD extends AutoBase {
 
   private Drive d;
   private Superstructure su;
@@ -25,33 +25,40 @@ public class NR extends AutoBase {
   private ClimbSelection climbSelection;
   private ShootingPlanner p;
 
-  public NR(Superstructure s, ClimbSelection climbSelection) {
+  public DNRD(Superstructure s, ClimbSelection climbSelection) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
     this.p = sh.getPlanner();
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
-    Trajectory SHToN1;
-    Trajectory N2ToC0;
 
-    SHToN1 = l.trajectories.get("SHToN1");
-    N2ToC0 = l.trajectories.get("N2ToC0");
+    // Depot-side paths
+    Trajectory DToN2 = l.trajectories.get("DToN2");
+    Trajectory N2ToD0 = l.trajectories.get("N2ToD0");
+    Trajectory D0ToDT = l.trajectories.get("D0ToDT");
+    Trajectory DTToC0 = l.trajectories.get("DTToC0");
 
-    t = new TrajectorySet(false, SHToN1, N2ToC0);
+    t = new TrajectorySet(false, DToN2, N2ToD0, D0ToDT, DTToC0);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
 
-    r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    su.mIntake.stateRequest(Intake.State.IDLE).act();
+
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(5, p, su));
+    r(new TrajectoryAction(t.next(), d));
+
+    r(new AutoShootAction(1.5, p, su));
+
+    r(new TrajectoryAction(t.next(), d));
+
+    r(new AutoShootAction(1.5, p, su));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
+      r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));
     }
   }

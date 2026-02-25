@@ -8,9 +8,11 @@ import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
-import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
+import com.team5817.lib.drivers.Subsystem;
+import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.NeverEndingRequest;
+import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
 import com.team5817.lib.requests.SequentialRequest;
@@ -33,7 +35,14 @@ public class Superstructure extends Subsystem {
 
   @Setter private boolean allowAutoShoot = true;
 
-  public Superstructure(Drive drive, Intake intake, SpindexerGroup spindexerGroup, Shooter shooter, FixedShooter fixedShooter,  Climb climb, Lights lights) {
+  public Superstructure(
+      Drive drive,
+      Intake intake,
+      SpindexerGroup spindexerGroup,
+      Shooter shooter,
+      FixedShooter fixedShooter,
+      Climb climb,
+      Lights lights) {
     mDrive = drive;
     mIntake = intake;
     mSpindexerGroup = spindexerGroup;
@@ -46,49 +55,41 @@ public class Superstructure extends Subsystem {
 
   public Request CloseShotRequest() {
     return new SequentialRequest(
-            mShooter.stateRequest(Shooter.State.CLOSE),
-            // indexer on
+            new ParallelRequest(
+                mShooter.stateRequest(Shooter.State.CLOSE),
+                mFixedShooter.stateRequest(FixedShooter.State.CLOSE),
+                mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
             new NeverEndingRequest())
-        .addName("Close Shot");
-    // .withCleanup(
-    //   () -> mIndexer.conformToState(Indexer.State.OFF)
-    // );
+        .addName("CloseShot");
   }
 
   public Request FarShotRequest() {
     return new SequentialRequest(
-            mShooter.stateRequest(Shooter.State.FAR),
-            // indexer on
+            new ParallelRequest(
+                mShooter.stateRequest(Shooter.State.FAR),
+                mFixedShooter.stateRequest(FixedShooter.State.FAR),
+                mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
             new NeverEndingRequest())
         .addName("FarShot");
-    // .withCleanup(
-    //   () -> mIndexer.conformToState(Indexer.State.OFF)
-    // );
   }
 
-/*
-        Idle: White
-        Should Not Shoot: Yellow
-        Should Shoot: Green
-        Dual mode: Fire
-        Climb: Purple 
-        Hopper empty: Flash Orange
-        Alliance shift: Red or Blue 
-*/
+  public Request DualShotRequest() {
+    return new ParallelRequest(
+            new AutoShootRequest(mShooter.getPlanner(), this),
+            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH))
+        .addName("ShootBoth");
+  }
 
   @Override
   public void periodic() {
     requestExecutor.update();
-    if (ActiveTracker.getTimeToActive() % 2 == 0){
+    if (ActiveTracker.getTimeToActive() % 2 == 0) {
       mLights.setLeds(LEDState.ORANGE);
-    }
-    else if (mClimb.getState() != Climb.State.ZERO){
+    } else if (mClimb.getState() != Climb.State.ZERO) {
       mLights.setLeds(LEDState.CLIMBING);
-    }
-    else if (mShooter.getPlanner().shouldShoot()){
+    } else if (mShooter.getPlanner().shouldShoot()) {
       mLights.setLeds(LEDState.LOCKED);
-    }
-    else if (!mShooter.getPlanner().shouldShoot()){
+    } else if (!mShooter.getPlanner().shouldShoot()) {
       mLights.setLeds(LEDState.NOT_LOCKED);
     }
     // else if (){
@@ -103,11 +104,10 @@ public class Superstructure extends Subsystem {
     // else if (){ // alliance blue
     //   mLights.setLeds(LEDState.BLUE);
     // }
-    else{
+    else {
       mLights.setLeds(LEDState.NONE);
     }
-   }
-  
+  }
 
   public boolean requestsCompleted() {
     return this.requestExecutor.isFinished();

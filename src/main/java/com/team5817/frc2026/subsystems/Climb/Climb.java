@@ -14,6 +14,7 @@ import lombok.Getter;
 public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   LatchRelease latchRelease;
+
   public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
     this.latchRelease = new LatchRelease(latchIO);
@@ -23,8 +24,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   public enum State implements ServoState {
     ZERO(0),
     READY(140),
-    RETRACT(30),
-    EXTEND(140);
+    DOWN(30);
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -50,29 +50,35 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   }
 
   public Request advanceClimbRequest() {
+    System.out.println("Advancing climb from " + mState);
+
     switch (mState) {
       case ZERO:
         latchRelease.setState(LatchRelease.State.RELEASED);
         return stateRequest(State.READY);
       case READY:
-        return stateRequest(State.RETRACT);
-      case RETRACT:
-        return stateRequest(State.EXTEND);
-      case EXTEND:
-        return stateRequest(State.RETRACT);
+        return stateRequest(State.DOWN);
+      case DOWN:
+        return null;
     }
     return null;
   }
 
   public Request climbRequest() {
     return new SequentialRequest(
-        advanceClimbRequest(),
-        // Wait For Climb BB
-        advanceClimbRequest(),
+        new Request() {
+          @Override
+          public void act() {
+            advanceClimbRequest().act();
+          }
+        },
         new WaitRequest(1),
-        advanceClimbRequest(),
-        new WaitRequest(1),
-        advanceClimbRequest());
+        new Request() {
+          @Override
+          public void act() {
+            advanceClimbRequest().act();
+          }
+        });
   }
 
   public void resetClimbStages() {
@@ -81,9 +87,10 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   @Override
   public void readPeriodicInputs() {
-      latchRelease.readPeriodicInputs();
-      super.readPeriodicInputs();
+    latchRelease.readPeriodicInputs();
+    super.readPeriodicInputs();
   }
+
   @Override
   public void writePeriodicOutputs() {
     latchRelease.writePeriodicOutputs();

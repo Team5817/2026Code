@@ -15,7 +15,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 
-public class NRD extends AutoBase {
+public class HNRD extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -24,39 +24,37 @@ public class NRD extends AutoBase {
   private ClimbSelection climbSelection;
   private ShootingPlanner p;
 
-  public NRD(Superstructure s, ClimbSelection climbSelection) {
+  public HNRD(Superstructure s, ClimbSelection climbSelection) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
     this.p = sh.getPlanner();
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
-    Trajectory SHN2;
-    Trajectory N2ToD0;
-    Trajectory D0ToDT;
-    Trajectory DTToC0;
 
-    SHN2 = l.trajectories.get("SHN2");
-    N2ToD0 = l.trajectories.get("N2ToD0");
-    D0ToDT = l.trajectories.get("D0ToDT");
-    DTToC0 = l.trajectories.get("DTToC0");
+    Trajectory SHToN1 = l.trajectories.get("SHToN1");
+    Trajectory N1ToD0 = l.trajectories.get("N1ToD0");
+    Trajectory D0ToDT = l.trajectories.get("D0ToDT");
+    Trajectory DTToC0 = l.trajectories.get("DTToC0");
 
-    t = new TrajectorySet(false, SHN2, N2ToD0, D0ToDT, DTToC0);
+    t = new TrajectorySet(false, SHToN1, N1ToD0, D0ToDT, DTToC0);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
+
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
+
     r(new TrajectoryAction(t.next(), d));
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(5, p, su));
+    r(new AutoShootAction(1.5, p, su));
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(3, p, su));
+    r(new AutoShootAction(1.5, p, su));
+
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));
     }
-    sh.followPlan(false);
   }
 }

@@ -7,12 +7,12 @@ package com.team5817.frc2026;
 import com.ctre.phoenix6.SignalLogger;
 import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.BuildConstants;
+import com.team5817.frc2026.Controls.ControlBoard;
+import com.team5817.frc2026.Controls.DriverControls;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoExecuter;
 import com.team5817.frc2026.autos.AutoModeFactory;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
-import com.team5817.frc2026.controlboard.ControlBoard;
-import com.team5817.frc2026.controlboard.DriverControls;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.lib.Elastic;
@@ -45,6 +45,7 @@ public class Robot extends LoggedRobot {
   ControlBoard controlBoard;
 
   Drive mDrive;
+
   public Robot() {
     super(0.02);
   }
@@ -94,9 +95,9 @@ public class Robot extends LoggedRobot {
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
     // be added.
     l.init();
-    
+
     mRobotContainer = new RobotContainer();
-    
+
     mDrive = mRobotContainer.mDrive;
     mAutoModeFactory = new AutoModeFactory(mRobotContainer.mSuperstructure, mDrive);
     mSubsystemManager = SubsystemManager.getInstance();

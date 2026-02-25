@@ -1,4 +1,4 @@
-package com.team5817.frc2026.controlboard;
+package com.team5817.frc2026.Controls;
 
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
@@ -44,9 +44,8 @@ public class ControlBoard {
    * @return the swerve translation as a Translation2d object
    */
   public Translation2d getSwerveTranslation() {
-    double forwardAxis = driver.getRawAxis(Axis.kLeftY.value);
-    double strafeAxis = driver.getRawAxis(Axis.kLeftX.value);
-
+    double forwardAxis = driver.getRawAxis(Axis.kLeftY.value) * scalar;
+    double strafeAxis = driver.getRawAxis(Axis.kLeftX.value) * scalar;
     double expoForwardAxis = forwardAxis;
     double expoStrafeAxis = strafeAxis;
 
@@ -59,7 +58,7 @@ public class ControlBoard {
             ? expoStrafeAxis
             : -expoStrafeAxis;
 
-    Translation2d tAxes = new Translation2d(expoForwardAxis, expoStrafeAxis).scale(scalar);
+    Translation2d tAxes = new Translation2d(expoForwardAxis, expoStrafeAxis);
 
     if (Math.abs(tAxes.norm()) < kSwerveDeadband) {
       return new Translation2d();
@@ -112,8 +111,6 @@ public class ControlBoard {
         || driver.leftTrigger.isBeingPressed()
         || driver.rightTrigger.isBeingPressed());
   }
-
-  // Driver and Operator
 
   /**
    * Checks if the top buttons on the operator's controller are clear.

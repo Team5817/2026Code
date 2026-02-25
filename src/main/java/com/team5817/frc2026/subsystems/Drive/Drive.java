@@ -130,6 +130,7 @@ public class Drive extends Subsystem {
 
   @Setter private boolean autoAlignFinishedOverride = false;
 
+  private double speedScalar = 1.0;
   public static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
@@ -179,16 +180,6 @@ public class Drive extends Subsystem {
 
     // Start odometry thread
     PhoenixOdometryThread.getInstance().start();
-
-    // // Configure SysId
-    // sysId = new SysIdRoutine(
-    // new SysIdRoutine.Config(
-    // null,
-    // null,
-    // null,
-    // (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
-    // new SysIdRoutine.Mechanism(
-    // (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
   }
 
   /**
@@ -204,7 +195,16 @@ public class Drive extends Subsystem {
   }
 
   public void feedTeleopSetpoint(ChassisSpeeds speeds) {
+
+    speeds.vxMetersPerSecond *= speedScalar;
+    speeds.vyMetersPerSecond *= speedScalar;
+    speeds.omegaRadiansPerSecond *= speedScalar;
+
     runVelocity(getTeleopSetpoint(speeds));
+  }
+
+  public void setSpeedScalar(double scalar) {
+    speedScalar = scalar;
   }
 
   private boolean isStabilizing = true;
@@ -441,7 +441,8 @@ public class Drive extends Subsystem {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds.wpi());
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        setpointStates, TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * speedScalar);
 
     // Log unoptimized setpoints and setpoint speeds
     Logger.recordOutput("Drive/SwerveStates/Setpoints", setpointStates);
@@ -481,20 +482,6 @@ public class Drive extends Subsystem {
     kinematics.resetHeadings(headings);
     stop();
   }
-
-  // /** Returns a command to run a quasistatic test in the specified direction.
-  // */
-  // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-  // return run(() -> runCharacterization(0.0))
-  // .withTimeout(1.0)
-  // .andThen(sysId.quasistatic(direction));
-  // }
-
-  // /** Returns a command to run a dynamic test in the specified direction. */
-  // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-  // return run(() ->
-  // runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
-  // }
 
   /** Returns the module states (turn angles and drive velocities) for all of the modules. */
   private SwerveModuleState[] getModuleStates() {

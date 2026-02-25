@@ -11,11 +11,12 @@ public class Spindexer extends Subsystem {
   public final RollerSubsystem<SpinnerState> spindexer;
   public final RollerSubsystem<TunnelState> tunnel;
 
-
-  public Spindexer(RollerSubsystemIO spinnerIO,RollerSubsystemIO tunnelIO, String name) {
-    this.spindexer = new RollerSubsystem<SpinnerState>(SpinnerState.IDLE, "Spindexer" + name, spinnerIO);
+  public Spindexer(RollerSubsystemIO spinnerIO, RollerSubsystemIO tunnelIO, String name) {
+    this.spindexer =
+        new RollerSubsystem<SpinnerState>(SpinnerState.IDLE, "Spindexer" + name, spinnerIO);
     this.tunnel = new RollerSubsystem<TunnelState>(TunnelState.IDLE, "Tunnel " + name, tunnelIO);
   }
+
   public void setState(SpinnerState spinnerState) {
     spindexer.setState(spinnerState);
     switch (spinnerState) {
@@ -61,6 +62,7 @@ public class Spindexer extends Subsystem {
       return 0.0;
     }
   }
+
   public enum TunnelState implements IRollerState {
     IDLE(0),
     IN(10),

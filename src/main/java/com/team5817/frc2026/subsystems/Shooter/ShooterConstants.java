@@ -10,7 +10,6 @@ import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
-
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
@@ -58,7 +57,7 @@ public class ShooterConstants {
     flywheelConstants.counterClockwisePositive = true;
 
     TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.FLYWHEEL_2;
+    followerConstants.id = Ports.TURRET_FLYWHEEL2;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
     flywheelConstants.kFollowerConstants = new TalonFXConstants[] {followerConstants};
@@ -186,11 +185,11 @@ public class ShooterConstants {
   }
 
   public enum FlywheelState implements IRollerState {
-    IDLE(0.0, RollerControlMode.VOLTAGE),
+    IDLE(15, RollerControlMode.VOLTAGE),
     CLOSE(50.0, RollerControlMode.VELOCITY),
     FAR(80.0, RollerControlMode.VELOCITY),
-    HUB(70.0, RollerControlMode.VELOCITY), 
-    LOBBING(80.0, RollerControlMode.VELOCITY); 
+    HUB(70.0, RollerControlMode.VELOCITY),
+    LOBBING(80.0, RollerControlMode.VELOCITY);
 
     private final RollerControlMode controlMode;
     private final double toleranceRadsPerSec = 0.1;

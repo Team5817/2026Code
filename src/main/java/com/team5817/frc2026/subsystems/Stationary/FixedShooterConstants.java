@@ -6,23 +6,20 @@ import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
-
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-
-
 import java.util.function.DoubleSupplier;
 
 public class FixedShooterConstants {
 
   /* ================= FLYWHEEL ================= */
 
-  public static final RollerConstantsTalonFX flywheelConstants =
-      new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX flywheelConstants = new RollerConstantsTalonFX();
 
-    public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
-    public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
-    public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
-    public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
+  public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
+  public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
+  public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
+  public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
+
   static {
     flywheelConstants.kMaxForwardOutput = 12.0;
     flywheelConstants.kMaxReverseOutput = -12.0;
@@ -36,19 +33,19 @@ public class FixedShooterConstants {
     flywheelConstants.counterClockwisePositive = false;
 
     TalonFXConstants follower = new TalonFXConstants();
-    follower.id = Ports.FLYWHEEL_2;
+    follower.id = Ports.FIXED_FLYWHEEL2;
     follower.counterClockwisePositive = false;
 
     flywheelConstants.kFollowerConstants = new TalonFXConstants[] {follower};
     flywheelConstants.kFollowerOpposeMasterDirection = false;
-    
+
     // Default maps for LOB
     InterpolatingDoubleTreeMap lobHood = new InterpolatingDoubleTreeMap();
     lobHood.put(1.0, 12.0);
     lobHood.put(2.0, 14.5);
     lobHood.put(3.5, 17.0);
     lobHood.put(5.0, 20.0);
- 
+
     InterpolatingDoubleTreeMap lobFly = new InterpolatingDoubleTreeMap();
     lobFly.put(1.0, 85.0);
     lobFly.put(5.0, 95.0);
@@ -67,45 +64,43 @@ public class FixedShooterConstants {
     FLYWHEEL_MAP_LOB = lobFly;
     HOOD_MAP_HUB = hubHood;
     FLYWHEEL_MAP_HUB = hubFly;
-
   }
 
-public enum FlywheelState implements IRollerState {
-  IDLE(0.0, RollerControlMode.VOLTAGE),
-  CLOSE(60.0, RollerControlMode.VELOCITY),
-  FAR(80.0, RollerControlMode.VELOCITY),
-  HUB(70.0, RollerControlMode.VELOCITY), // Placeholder
-  LOBBING(90.0, RollerControlMode.VELOCITY); // Placeholder
+  public enum FlywheelState implements IRollerState {
+    IDLE(0.0, RollerControlMode.VOLTAGE),
+    CLOSE(60.0, RollerControlMode.VELOCITY),
+    FAR(80.0, RollerControlMode.VELOCITY),
+    HUB(70.0, RollerControlMode.VELOCITY), // Placeholder
+    LOBBING(90.0, RollerControlMode.VELOCITY); // Placeholder
 
-  private final RollerControlMode controlMode;
-  private final double toleranceRadsPerSec = 1.0;
-  private DoubleSupplier supplier;
+    private final RollerControlMode controlMode;
+    private final double toleranceRadsPerSec = 1.0;
+    private DoubleSupplier supplier;
 
-  FlywheelState(double demand, RollerControlMode controlMode) {
-    this.controlMode = controlMode;
-    this.supplier = () -> demand;
+    FlywheelState(double demand, RollerControlMode controlMode) {
+      this.controlMode = controlMode;
+      this.supplier = () -> demand;
+    }
+
+    public void setSupplier(DoubleSupplier supplier) {
+      this.supplier = supplier == null ? () -> 0.0 : supplier;
+    }
+
+    @Override
+    public double getDemand() {
+      return supplier.getAsDouble();
+    }
+
+    @Override
+    public double getToleranceRadsPerSec() {
+      return toleranceRadsPerSec;
+    }
+
+    @Override
+    public RollerControlMode getControlMode() {
+      return controlMode;
+    }
   }
-
-  public void setSupplier(DoubleSupplier supplier) {
-    this.supplier = supplier == null ? () -> 0.0 : supplier;
-  }
-
-  @Override
-  public double getDemand() {
-    return supplier.getAsDouble();
-  }
-
-  @Override
-  public double getToleranceRadsPerSec() {
-    return toleranceRadsPerSec;
-  }
-
-  @Override
-  public RollerControlMode getControlMode() {
-    return controlMode;
-  }
-}
-
 
   /* ================= HOOD ================= */
 

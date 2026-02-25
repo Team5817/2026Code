@@ -34,23 +34,22 @@ public class NRHT extends AutoBase {
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
 
-    Trajectory SHTToN1;
-    Trajectory N1ToH;
+    Trajectory SHTToN2;
+    Trajectory N2ToH;
     Trajectory HToC0;
 
-    SHTToN1 = l.trajectories.get("SHTToN1");
-    N1ToH = l.trajectories.get("N1ToH");
+    SHTToN2 = l.trajectories.get("SHTToN2");
+    N2ToH = l.trajectories.get("N2ToH");
     HToC0 = l.trajectories.get("HToC0");
 
-    t = new TrajectorySet(false, SHTToN1, N1ToH, HToC0);
+    t = new TrajectorySet(false, SHTToN2, N2ToH, HToC0);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
-
-    r(new AutoShootAction(3, p, su));
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
+
     r(new TrajectoryAction(t.next(), d));
     r(new TrajectoryAction(t.next(), d));
     r(new WaitAction(5.0));

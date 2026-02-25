@@ -1,6 +1,6 @@
 package com.team5817.frc2026.autos.Actions;
 
-import com.team5817.frc2026.controlboard.CustomXboxController;
+import com.team5817.frc2026.Controls.CustomXboxController;
 
 /** Action that waits for a specific input from the controller. */
 public class WaitforControllerInput implements Action {

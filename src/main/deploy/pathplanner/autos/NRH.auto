@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHToN1"
+            "pathName": "SHToN2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "N1ToH"
+            "pathName": "N2ToH"
           }
         }
       ]
