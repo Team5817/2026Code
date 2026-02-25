@@ -46,7 +46,7 @@ public class DriverControls {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 
-    // LB Shoot Both 
+    // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {
       s.request(s.DualShotRequest());
     }

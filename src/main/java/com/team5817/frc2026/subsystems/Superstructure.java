@@ -53,32 +53,30 @@ public class Superstructure extends Subsystem {
     this.requestExecutor = new RequestExecutor();
   }
 
-
-  
   public Request CloseShotRequest() {
     return new SequentialRequest(
-        new ParallelRequest(
-            mShooter.stateRequest(Shooter.State.CLOSE),
-            mFixedShooter.stateRequest(FixedShooter.State.CLOSE),
-            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
-        new NeverEndingRequest())
+            new ParallelRequest(
+                mShooter.stateRequest(Shooter.State.CLOSE),
+                mFixedShooter.stateRequest(FixedShooter.State.CLOSE),
+                mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+            new NeverEndingRequest())
         .addName("CloseShot");
   }
 
   public Request FarShotRequest() {
     return new SequentialRequest(
-        new ParallelRequest(
-            mShooter.stateRequest(Shooter.State.FAR),
-            mFixedShooter.stateRequest(FixedShooter.State.FAR),
-            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
-        new NeverEndingRequest())
+            new ParallelRequest(
+                mShooter.stateRequest(Shooter.State.FAR),
+                mFixedShooter.stateRequest(FixedShooter.State.FAR),
+                mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+            new NeverEndingRequest())
         .addName("FarShot");
   }
 
   public Request DualShotRequest() {
     return new ParallelRequest(
-        new AutoShootRequest(mShooter.getPlanner(), this),
-        mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH))
+            new AutoShootRequest(mShooter.getPlanner(), this),
+            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH))
         .addName("ShootBoth");
   }
 
