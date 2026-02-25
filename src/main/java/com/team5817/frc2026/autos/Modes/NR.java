@@ -33,24 +33,24 @@ public class NR extends AutoBase {
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
     Trajectory SHToN1;
-    Trajectory N1ToC0;
+    Trajectory N2ToC0;
 
     SHToN1 = l.trajectories.get("SHToN1");
-    N1ToC0 = l.trajectories.get("N1ToC0");
+    N2ToC0 = l.trajectories.get("N2ToC0");
 
-    t = new TrajectorySet(false, SHToN1, N1ToC0);
+    t = new TrajectorySet(false, SHToN1, N2ToC0);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
 
-    r(new AutoShootAction(3, p, su));
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new AutoShootAction(5, p, su));
     r(new TrajectoryAction(t.next(), d));
+    r(new AutoShootAction(5, p, su));
+
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new ClimbAction(c));

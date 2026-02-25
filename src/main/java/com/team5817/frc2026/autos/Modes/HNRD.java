@@ -32,12 +32,12 @@ public class HNRD extends AutoBase {
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
 
-    Trajectory SHToN2 = l.trajectories.get("SHToN2");
-    Trajectory NToD0 = l.trajectories.get("NToD0");
+    Trajectory SHToN1 = l.trajectories.get("SHToN1");
+    Trajectory N1ToD0 = l.trajectories.get("N1ToD0");
     Trajectory D0ToDT = l.trajectories.get("D0ToDT");
     Trajectory DTToC0 = l.trajectories.get("DTToC0");
 
-    t = new TrajectorySet(false, SHToN2, NToD0, D0ToDT, DTToC0);
+    t = new TrajectorySet(false, SHToN1, N1ToD0, D0ToDT, DTToC0);
   }
 
   @Override
