@@ -54,7 +54,7 @@ public class ShooterConstants {
     flywheelConstants.counterClockwisePositive = true;
 
     TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.FLYWHEEL_2;
+    followerConstants.id = Ports.TURRET_FLYWHEEL2;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
     flywheelConstants.kFollowerConstants = new TalonFXConstants[] {followerConstants};

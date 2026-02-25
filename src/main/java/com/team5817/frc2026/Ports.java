@@ -31,7 +31,7 @@ public class Ports {
   public static final CanDeviceId BR_CANCODER = new CanDeviceId(4, "canivore1");
 
   /* SUBSYSTEM CAN DEVICE IDS*/
-  public static final CanDeviceId INTAKE_DEPLOY = new CanDeviceId(9);
+  public static final CanDeviceId RACK = new CanDeviceId(9);
   public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10, "canivore1");
 
   public static final CanDeviceId SPINDEXER_LEFT = new CanDeviceId(11);
@@ -40,13 +40,13 @@ public class Ports {
   public static final CanDeviceId TUNNEL_RIGHT = new CanDeviceId(14);
 
   public static final CanDeviceId FIXED_HOOD = new CanDeviceId(15);
-  public static final CanDeviceId FIXED_FLYWHEEL_1 = new CanDeviceId(16);
-  public static final CanDeviceId FIXED_FLYWHEEL_2 = new CanDeviceId(17);
+  public static final CanDeviceId FIXED_FLYWHEEL1 = new CanDeviceId(16);
+  public static final CanDeviceId FIXED_FLYWHEEL2 = new CanDeviceId(17);
 
   public static final CanDeviceId TURRET = new CanDeviceId(18);
   public static final CanDeviceId HOOD = new CanDeviceId(19);
-  public static final CanDeviceId FLYWHEEL_1 = new CanDeviceId(20);
-  public static final CanDeviceId FLYWHEEL_2 = new CanDeviceId(21);
+  public static final CanDeviceId TURRET_FLYWHEEL1 = new CanDeviceId(20);
+  public static final CanDeviceId TURRET_FLYWHEEL2 = new CanDeviceId(21);
 
   public static final CanDeviceId CLIMB = new CanDeviceId(22);
 

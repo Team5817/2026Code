@@ -33,7 +33,7 @@ public class FixedShooterConstants {
     flywheelConstants.counterClockwisePositive = false;
 
     TalonFXConstants follower = new TalonFXConstants();
-    follower.id = Ports.FLYWHEEL_2;
+    follower.id = Ports.FIXED_FLYWHEEL2;
     follower.counterClockwisePositive = false;
 
     flywheelConstants.kFollowerConstants = new TalonFXConstants[] {follower};
