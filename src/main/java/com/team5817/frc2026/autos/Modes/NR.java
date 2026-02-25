@@ -51,7 +51,6 @@ public class NR extends AutoBase {
     r(new TrajectoryAction(t.next(), d));
     r(new AutoShootAction(5, p, su));
 
-
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new ClimbAction(c));
     }

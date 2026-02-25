@@ -14,24 +14,16 @@ import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Spindexer.Spindexer;
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
-import com.team5817.frc2026.subsystems.Spindexer.TunnelConstants;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
-import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
-import com.team5817.lib.drivers.Actuator.ActuatorIOAxial;
-import com.team5817.lib.drivers.Actuator.ActuatorIOLinear;
 import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
-import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
 import com.team5817.lib.drivers.Servos.ServoMotorIOSim;
-import com.team5817.lib.drivers.Servos.ServoMotorIOTalonFX;
-import com.team5817.lib.drivers.Vision.ManualVisionIOLimelight;
 import com.team5817.lib.drivers.Vision.VisionIOPhotonVisionSim;
 import com.team5817.lib.swerve.GyroIOPigeon2;
 import com.team5817.lib.swerve.GyroIOSim;
@@ -118,7 +110,8 @@ public class RobotContainer {
     //     new Shooter(
     //         new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
     //         new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
-    //         new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants, 1),
+    //         new RollerSubsystemIOTalonFX(Ports.FLYWHEEL_1, ShooterConstants.flywheelConstants,
+    // 1),
     //         mDrive::getPose,
     //         mDrive::getChassisSpeeds,
     //         () -> 0.0 // placeholder for vision timing supplier

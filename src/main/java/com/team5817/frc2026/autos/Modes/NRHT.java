@@ -49,7 +49,7 @@ public class NRHT extends AutoBase {
   public void routine() {
     d.simResetWorldPose(t.initalPose());
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    
+
     r(new TrajectoryAction(t.next(), d));
     r(new TrajectoryAction(t.next(), d));
     r(new WaitAction(5.0));
