@@ -17,8 +17,6 @@ public class SpindexerConstants {
     leftSpinner.kEnableSupplyCurrentLimit = true;
     leftSpinner.kEnableStatorCurrentLimit = true;
 
-    
-
     TalonFXConstants followerConstants = new TalonFXConstants();
     followerConstants.id = Ports.TUNNEL_LEFT;
     followerConstants.counterClockwisePositive = false;
