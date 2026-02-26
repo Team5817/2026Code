@@ -11,45 +11,46 @@ import lombok.Getter;
 public class IntakeConstants {
   /** Constants related to the Intake Deploy subsystem. */
   public static final class DeployConstants {
-    public static final ServoConstants kDeployServoConstants = new ServoConstants();
+    public static final ServoConstants kRackServoConstants = new ServoConstants();
 
     static {
-      kDeployServoConstants.kName = "Intake/Deploy";
+      kRackServoConstants.kName = "Intake/Rack";
 
-      kDeployServoConstants.kMainConstants.id = Ports.RACK;
-      kDeployServoConstants.kMainConstants.counterClockwisePositive = false;
+      kRackServoConstants.kMainConstants.id = Ports.RACK;
+      kRackServoConstants.kMainConstants.counterClockwisePositive = false;
 
-      kDeployServoConstants.kHomePosition = 0; // degrees
-      kDeployServoConstants.kRotationsPerUnitDistance = (1.0 / 360.0) * 20;
+      kRackServoConstants.kHomePosition = 0;
+      kRackServoConstants.kRotationsPerUnitDistance = 143.6;
 
-      kDeployServoConstants.kMaxUnitsLimit = 100000;
-      kDeployServoConstants.kMinUnitsLimit = -100000;
+      kRackServoConstants.kMaxUnitsLimit = 0.2667;
+      kRackServoConstants.kMinUnitsLimit = 0.0;
 
-      kDeployServoConstants.kKp = 3.8125;
-      kDeployServoConstants.kKi = 0.0;
-      kDeployServoConstants.kKd = 0;
-      kDeployServoConstants.kKa = 0;
-      kDeployServoConstants.kKs = 0;
-      kDeployServoConstants.kKv = .5;
-      kDeployServoConstants.kKg = 0.265625;
+      kRackServoConstants.kKp = 3.8125;
+      kRackServoConstants.kKi = 0.0;
+      kRackServoConstants.kKd = 0;
+      kRackServoConstants.kKa = 0;
+      kRackServoConstants.kKs = 0;
+      kRackServoConstants.kKv = .5;
+      kRackServoConstants.kKg = 0.265625;
 
-      kDeployServoConstants.kCruiseVelocity = 32 * 360 * 1 / 20;
-      kDeployServoConstants.kAcceleration = 32 * 360 * 1 / 20;
+      kRackServoConstants.kCruiseVelocity = 1;
 
-      kDeployServoConstants.kMaxForwardOutput = 12.0;
-      kDeployServoConstants.kMaxReverseOutput = -12.0;
+      kRackServoConstants.kAcceleration = 1;
 
-      kDeployServoConstants.kEnableSupplyCurrentLimit = true;
-      kDeployServoConstants.kSupplyCurrentLimit = 80; // amps
+      kRackServoConstants.kMaxForwardOutput = 12.0;
+      kRackServoConstants.kMaxReverseOutput = -12.0;
 
-      kDeployServoConstants.kEnableStatorCurrentLimit = true;
-      kDeployServoConstants.kStatorCurrentLimit = 80; // amps
+      kRackServoConstants.kEnableSupplyCurrentLimit = true;
+      kRackServoConstants.kSupplyCurrentLimit = 80; // amps
 
-      kDeployServoConstants.kNeutralMode = NeutralModeValue.Brake;
+      kRackServoConstants.kEnableStatorCurrentLimit = true;
+      kRackServoConstants.kStatorCurrentLimit = 80; // amps
 
-      kDeployServoConstants.kHomingOutput = -.3;
-      kDeployServoConstants.kHomingTimeout = 0.2;
-      kDeployServoConstants.kHomingVelocityWindow = 5;
+      kRackServoConstants.kNeutralMode = NeutralModeValue.Brake;
+
+      kRackServoConstants.kHomingOutput = -.3;
+      kRackServoConstants.kHomingTimeout = 0.2;
+      kRackServoConstants.kHomingVelocityWindow = 5;
     }
   }
 

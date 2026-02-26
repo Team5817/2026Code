@@ -163,7 +163,7 @@ public class RobotContainer {
       mIntake =
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-              new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
     if (mSpindexer == null)
       mSpindexer =
           new SpindexerGroup(
@@ -196,7 +196,7 @@ public class RobotContainer {
       mIntake =
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-              new ServoMotorIOSim(IntakeConstants.DeployConstants.kDeployServoConstants));
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
 
     if (mSpindexer == null)
       mSpindexer =

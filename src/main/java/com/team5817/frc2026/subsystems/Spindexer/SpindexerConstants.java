@@ -13,9 +13,11 @@ public class SpindexerConstants {
     // Left
     leftSpinner.kMainConstants.id = Ports.SPINDEXER_LEFT;
     leftSpinner.kSupplyCurrentLimit = 40;
-    leftSpinner.kStatorCurrentLimit = 80;
+    leftSpinner.kStatorCurrentLimit = 30;
     leftSpinner.kEnableSupplyCurrentLimit = true;
     leftSpinner.kEnableStatorCurrentLimit = true;
+
+    
 
     TalonFXConstants followerConstants = new TalonFXConstants();
     followerConstants.id = Ports.TUNNEL_LEFT;
@@ -28,7 +30,7 @@ public class SpindexerConstants {
     // Right
     rightSpinner.kMainConstants.id = Ports.SPINDEXER_RIGHT;
     rightSpinner.kSupplyCurrentLimit = 40;
-    rightSpinner.kStatorCurrentLimit = 80;
+    rightSpinner.kStatorCurrentLimit = 30;
     rightSpinner.kEnableSupplyCurrentLimit = true;
     rightSpinner.kEnableStatorCurrentLimit = true;
     followerConstants = new TalonFXConstants();

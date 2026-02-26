@@ -13,7 +13,7 @@ public class TunnelConstants {
     // Left
     leftRoller.kMainConstants.id = Ports.SPINDEXER_LEFT;
     leftRoller.kSupplyCurrentLimit = 40;
-    leftRoller.kStatorCurrentLimit = 80;
+    leftRoller.kStatorCurrentLimit = 30;
     leftRoller.kEnableSupplyCurrentLimit = true;
     leftRoller.kEnableStatorCurrentLimit = true;
     TalonFXConstants followerConstants = new TalonFXConstants();
@@ -27,7 +27,7 @@ public class TunnelConstants {
     // Right
     rightRoller.kMainConstants.id = Ports.SPINDEXER_RIGHT;
     rightRoller.kSupplyCurrentLimit = 40;
-    rightRoller.kStatorCurrentLimit = 80;
+    rightRoller.kStatorCurrentLimit = 30;
     rightRoller.kEnableSupplyCurrentLimit = true;
     rightRoller.kEnableStatorCurrentLimit = true;
     followerConstants = new TalonFXConstants();

@@ -103,7 +103,7 @@ public class ShooterConstants {
       kTurretServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100 / 3 * 1.19444444444444;
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 104.166667;
 
       kTurretServoConstants.kMinUnitsLimit = -180.0;
       kTurretServoConstants.kMaxUnitsLimit = 180.0;
@@ -149,7 +149,7 @@ public class ShooterConstants {
       kHoodServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kHoodServoConstants.kHomePosition = 0.0;
-      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 100 / 1;
+      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 96 / 1;
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
       kHoodServoConstants.kMaxUnitsLimit = 43.0;
