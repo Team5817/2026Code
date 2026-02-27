@@ -39,12 +39,13 @@ public class DriverControls {
 
     // LT intake
     if (driver.leftTrigger.wasActivated()) {
-      s.mIntake.conformToState(Intake.State.INTAKING);
+      s.mIntake.conformToState(Intake.State.AGITATE);
     }
 
     if (driver.leftTrigger.wasReleased()) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
+  
 
     // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {

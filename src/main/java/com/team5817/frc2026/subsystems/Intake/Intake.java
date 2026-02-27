@@ -25,6 +25,7 @@ public class Intake extends Subsystem {
     IDLE(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW),
     HUMAN(IntakeRollers.State.IDLE, IntakeDeploy.State.OUT),
     INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.OUT),
+    AGITATE(IntakeRollers.State.INTAKING, IntakeDeploy.State.AGITATE),
     EXHAUSTING(IntakeRollers.State.EXHAUST, IntakeDeploy.State.OUT),
     STOW(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW);
 
