@@ -45,7 +45,6 @@ public class DriverControls {
     if (driver.leftTrigger.wasReleased()) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-  
 
     // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {
