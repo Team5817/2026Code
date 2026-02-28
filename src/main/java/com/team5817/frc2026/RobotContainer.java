@@ -104,13 +104,11 @@ public class RobotContainer {
     mSpindexer =
         new SpindexerGroup(
             new Spindexer(
-                new RollerSubsystemIOTalonFX(
-                    Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
+                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
                 new RollerSubsystemIOTalonFX(Ports.TUNNEL_LEFT, TunnelConstants.leftRoller, 1),
                 "Left"),
             new Spindexer(
-                new RollerSubsystemIOTalonFX(
-                    Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
+                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
                 new RollerSubsystemIOTalonFX(Ports.TUNNEL_RIGHT, TunnelConstants.rightRoller, 1),
                 "Right"));
 
@@ -118,8 +116,8 @@ public class RobotContainer {
         new Shooter(
             new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
             new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
-            new RollerSubsystemIOTalonFX(Ports.TURRET_FLYWHEEL1, ShooterConstants.flywheelConstants,
-    1),
+            new RollerSubsystemIOTalonFX(
+                Ports.TURRET_FLYWHEEL1, ShooterConstants.flywheelConstants, 1),
             mDrive::getPose,
             mDrive::getChassisSpeeds,
             () -> 0.0 // placeholder for vision timing supplier
@@ -161,7 +159,6 @@ public class RobotContainer {
     //           SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
     // if(mDrive == null)
     // SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
-    
 
     if (mClimb == null)
       mClimb =

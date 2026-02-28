@@ -20,14 +20,14 @@ public class IntakeConstants {
       kRackServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kRackServoConstants.kHomePosition = 0;
-      kRackServoConstants.kRotationsPerUnitDistance = 143.6/ (.2667/.107);
+      kRackServoConstants.kRotationsPerUnitDistance = 143.6 / (.2667 / .107);
 
       kRackServoConstants.kMaxUnitsLimit = 0.2667;
       kRackServoConstants.kMinUnitsLimit = 0.05;
 
-      kRackServoConstants.kKp = 0;// 40.0;
+      kRackServoConstants.kKp = 0; // 40.0;
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0;//0.08;
+      kRackServoConstants.kKd = 0; // 0.08;
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
 

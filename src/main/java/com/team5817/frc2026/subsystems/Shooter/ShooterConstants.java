@@ -48,9 +48,9 @@ public class ShooterConstants {
     flywheelConstants.kSupplyCurrentLimit = 40;
     flywheelConstants.kStatorCurrentLimit = 80;
 
-    flywheelConstants.kKp = .05;//0.3
-    flywheelConstants.kKs = 0.599609375;//0.7
-    flywheelConstants.kKv = 0.008679999969899654;//0.109
+    flywheelConstants.kKp = .05; // 0.3
+    flywheelConstants.kKs = 0.599609375; // 0.7
+    flywheelConstants.kKv = 0.008679999969899654; // 0.109
 
     flywheelConstants.kEnableSupplyCurrentLimit = true;
     flywheelConstants.kEnableStatorCurrentLimit = true;
@@ -108,9 +108,9 @@ public class ShooterConstants {
       kTurretServoConstants.kMinUnitsLimit = -270.0;
       kTurretServoConstants.kMaxUnitsLimit = 0.0;
 
-      kTurretServoConstants.kKp = 0;//4.0
-      kTurretServoConstants.kKi = 0.0;//5.0
-      kTurretServoConstants.kKd = .0;//0.1
+      kTurretServoConstants.kKp = 0; // 4.0
+      kTurretServoConstants.kKi = 0.0; // 5.0
+      kTurretServoConstants.kKd = .0; // 0.1
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
