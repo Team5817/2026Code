@@ -70,13 +70,20 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
     public double getDemand() {
       if (worldOriented) {
         double worldOrientedDemand =
-            demand.getAsDouble() - mRobotHeadingSupplier.get().getDegrees();
-        if (worldOrientedDemand > 180) return worldOrientedDemand - 360;
-        else if (worldOrientedDemand < -180) return worldOrientedDemand + 360;
-        // return worldOrientedDemand -(180 * Math.signum(worldOrientedDemand));
-        return worldOrientedDemand;
+        demand.getAsDouble() - mRobotHeadingSupplier.get().getDegrees();
+
+      // Wrap to [-360, 360)
+      worldOrientedDemand %= 360.0;
+
+      // Shift to [-360, 0]
+      if (worldOrientedDemand > 0) {
+          worldOrientedDemand -= 360.0;
       }
-      return demand.getAsDouble();
+
+      return worldOrientedDemand;
+        // return worldOrientedDemand -(180 * Math.signum(worldOrientedDemand));
+      }
+        return demand.getAsDouble();
     }
 
     @Override

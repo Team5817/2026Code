@@ -29,7 +29,7 @@ public class Superstructure extends Subsystem {
   public Shooter mShooter;
   public FixedShooter mFixedShooter;
   public Intake mIntake;
-  public SpindexerGroup mSpindexerGroup;
+  public SpindexerGroup mIndexer;
   public Climb mClimb;
   public Lights mLights;
 
@@ -45,7 +45,7 @@ public class Superstructure extends Subsystem {
       Lights lights) {
     mDrive = drive;
     mIntake = intake;
-    mSpindexerGroup = spindexerGroup;
+    mIndexer = spindexerGroup;
     mShooter = shooter;
     mFixedShooter = fixedShooter;
     mClimb = climb;
@@ -58,7 +58,7 @@ public class Superstructure extends Subsystem {
             new ParallelRequest(
                 mShooter.stateRequest(Shooter.State.CLOSE),
                 mFixedShooter.stateRequest(FixedShooter.State.CLOSE),
-                mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+                mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH)),
             new NeverEndingRequest())
         .addName("CloseShot");
   }
@@ -68,7 +68,7 @@ public class Superstructure extends Subsystem {
             new ParallelRequest(
                 mShooter.stateRequest(Shooter.State.FAR),
                 mFixedShooter.stateRequest(FixedShooter.State.FAR),
-                mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+                mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH)),
             new NeverEndingRequest())
         .addName("FarShot");
   }
@@ -76,7 +76,7 @@ public class Superstructure extends Subsystem {
   public Request DualShotRequest() {
     return new ParallelRequest(
             new AutoShootRequest(mShooter.getPlanner(), this),
-            mSpindexerGroup.stateRequest(SpindexerGroup.State.FEED_BOTH))
+            mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH))
         .addName("ShootBoth");
   }
 

@@ -5,6 +5,7 @@ import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import lombok.Getter;
 
 /** The IntakeDeploy class controls the deployment mechanism of the intake system. */
@@ -21,12 +22,12 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   }
 
   private double agitateStartTime = 0;
-  private static final double agitateAmplitude = Units.inchesToMeters(2);
-  private static final double agitateSpeed = 6.0; // radians/sec
+  private static final double agitateAmplitude = Units.inchesToMeters(3);
+  private static final double agitateSpeed = 4; // radians/sec
 
   /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
-    STOW(0.025),
+    STOW(0.2667),
     OUT(0.2667),
     AGITATE(0.2667),
     ZERO(0);
@@ -61,7 +62,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
 
     if (getState() == State.AGITATE) {
 
-      double time = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+      double time = Timer.getTimestamp();
 
       if (agitateStartTime == 0) {
         agitateStartTime = time;
@@ -69,7 +70,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
 
       double elapsed = time - agitateStartTime;
 
-      double center = State.AGITATE.getDemand();
+      double center = State.AGITATE.getDemand() - agitateAmplitude/2;
 
       double dynamicDemand = center + agitateAmplitude * Math.sin(elapsed * agitateSpeed);
 

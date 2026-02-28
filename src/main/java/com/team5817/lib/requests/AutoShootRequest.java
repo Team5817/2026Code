@@ -2,6 +2,8 @@ package com.team5817.lib.requests;
 
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+
 import org.littletonrobotics.junction.Logger;
 
 public class AutoShootRequest extends Request {
@@ -17,10 +19,10 @@ public class AutoShootRequest extends Request {
   public void update() {
     s.mShooter.followPlan(true);
     Logger.recordOutput("Shooter/Should Shoot", planner.shouldShoot());
-    // if(planner.shouldShoot())
-    // 	s.mIndexer.setDesiredState(Superstructure.IndexerState.INDEX);
-    // else
-    // 	s.mIndexer.setDesiredState(Superstructure.IndexerState.OFF);
+    if(planner.shouldShoot())
+    	s.mIndexer.setState(SpindexerGroup.State.FEED_TURRET);
+    else
+    	s.mIndexer.setState(SpindexerGroup.State.IDLE);
   }
 
   @Override

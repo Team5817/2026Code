@@ -78,8 +78,8 @@ public class RobotContainer {
         mVision,
         mFixedShooter,
         mIntake,
-        mSpindexer,
         mShooter,
+        mSpindexer,
         mClimb,
         mLight);
   }
@@ -154,11 +154,11 @@ public class RobotContainer {
 
   public void fillInSimulatedSubsytems() {
 
-    // driveSimulation =
-    //       new SwerveDriveSimulation(
-    //           SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
-    // if(mDrive == null)
-    // SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+    driveSimulation =
+          new SwerveDriveSimulation(
+              SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
+    if(mDrive == null)
+    SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
     if (mClimb == null)
       mClimb =

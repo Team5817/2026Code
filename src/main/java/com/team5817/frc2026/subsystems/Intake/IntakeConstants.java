@@ -25,16 +25,16 @@ public class IntakeConstants {
       kRackServoConstants.kMaxUnitsLimit = 0.2667;
       kRackServoConstants.kMinUnitsLimit = 0.05;
 
-      kRackServoConstants.kKp = 0; // 40.0;
+      kRackServoConstants.kKp = 15.0;
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0; // 0.08;
+      kRackServoConstants.kKd = 0.08;
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
 
       kRackServoConstants.kKv = 0;
       kRackServoConstants.kKg = 0;
 
-      kRackServoConstants.kCruiseVelocity = 1000000000;
+      kRackServoConstants.kCruiseVelocity = 1;
 
       kRackServoConstants.kAcceleration = 1000000000;
 
@@ -45,9 +45,9 @@ public class IntakeConstants {
       kRackServoConstants.kSupplyCurrentLimit = 80; // amps
 
       kRackServoConstants.kEnableStatorCurrentLimit = true;
-      kRackServoConstants.kStatorCurrentLimit = 40; // amps
+      kRackServoConstants.kStatorCurrentLimit = 60; // amps
 
-      kRackServoConstants.kNeutralMode = NeutralModeValue.Brake;
+      kRackServoConstants.kNeutralMode = NeutralModeValue.Coast;
 
       kRackServoConstants.kHomingOutput = -.3;
       kRackServoConstants.kHomingTimeout = 0.2;

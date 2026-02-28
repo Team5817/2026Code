@@ -131,7 +131,7 @@ public class ShooterConstants {
       kTurretServoConstants.kEnableStatorCurrentLimit = true;
       kTurretServoConstants.kStatorCurrentLimit = 30;
 
-      kTurretServoConstants.kNeutralMode = NeutralModeValue.Brake;
+      kTurretServoConstants.kNeutralMode = NeutralModeValue.Coast;
 
       kTurretServoConstants.kHomingTimeout = 0.5;
       kTurretServoConstants.kHomingOutput = -0.25;
@@ -177,7 +177,7 @@ public class ShooterConstants {
       kHoodServoConstants.kEnableStatorCurrentLimit = true;
       kHoodServoConstants.kStatorCurrentLimit = 15;
 
-      kHoodServoConstants.kNeutralMode = NeutralModeValue.Brake;
+      kHoodServoConstants.kNeutralMode = NeutralModeValue.Coast;
 
       kHoodServoConstants.kHomingTimeout = 0.5;
       kHoodServoConstants.kHomingOutput = -0.2;

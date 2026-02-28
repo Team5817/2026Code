@@ -38,13 +38,17 @@ public class DriverControls {
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // LT intake
-    if (driver.leftTrigger.wasActivated()) {
-      s.mIntake.conformToState(Intake.State.INTAKING);
+    if (driver.leftTrigger.isBeingPressed()) {
+        s.mIntake.conformToState(Intake.State.INTAKING);
     }
+    else if(codriver.xButton.isBeingPressed()) 
+      s.mIntake.conformToState(Intake.State.AGITATE);
 
-    if (driver.leftTrigger.wasReleased()) {
+    if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
+    if(codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE) 
+      s.mIntake.conformToState(Intake.State.IDLE);
 
     // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {
@@ -53,7 +57,7 @@ public class DriverControls {
 
     if (driver.getLeftBumperButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s));
-      s.mSpindexerGroup.setState(SpindexerGroup.State.IDLE);
+      s.mIndexer.setState(SpindexerGroup.State.IDLE);
     }
 
     // RB don't Shoot
