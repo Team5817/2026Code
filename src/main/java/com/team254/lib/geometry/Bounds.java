@@ -2,6 +2,8 @@ package com.team254.lib.geometry;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.team5817.frc2026.field.FieldConstants;
+
 /** Simple Bounds class that stores two 2D points constructed from four doubles. */
 public class Bounds {
   private final Translation2d bottomLft;
@@ -25,10 +27,8 @@ public class Bounds {
   }
 
   public Bounds flippedAboutX() {
-    Logger.recordOutput("flip x", bottomLft.mirrorAboutX(8.27));
-    Logger.recordOutput("flip y", topright.mirrorAboutX(8.27));
-    Translation2d topLft = topright.mirrorAboutX(8.27);
-    Translation2d bottomRight = bottomLft.mirrorAboutX(8.27);
+    Translation2d topLft = topright.mirrorAboutX(FieldConstants.fieldLength/2);
+    Translation2d bottomRight = bottomLft.mirrorAboutX(FieldConstants.fieldLength/2);
     Translation2d topright = new Translation2d(bottomRight.x(), topLft.y());
     Translation2d bottomLft = new Translation2d(topLft.x(), bottomRight.y());
 
@@ -39,10 +39,8 @@ public class Bounds {
   private final Translation2d topLft;
 
   public Bounds flippedAboutY() {
-    Logger.recordOutput("flip x", bottomRight.mirrorAboutY(4.02));
-    Logger.recordOutput("flip y", topLft.mirrorAboutY(4.02));
-    Translation2d topRight = topLft.mirrorAboutY(4.02);
-    Translation2d bottomLft = bottomRight.mirrorAboutY(4.02);
+    Translation2d topRight = topLft.mirrorAboutY(FieldConstants.fieldWidth/2);
+    Translation2d bottomLft = bottomRight.mirrorAboutY(FieldConstants.fieldWidth/2);
     Translation2d topLft = new Translation2d(bottomLft.x(), topRight.y());
     Translation2d bottomRight = new Translation2d(topRight.x(), bottomLft.y());
 

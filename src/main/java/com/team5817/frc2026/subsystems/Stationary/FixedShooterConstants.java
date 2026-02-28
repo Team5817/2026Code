@@ -30,6 +30,11 @@ public class FixedShooterConstants {
     flywheelConstants.kEnableStatorCurrentLimit = true;
     flywheelConstants.kStatorCurrentLimit = 80;
 
+    flywheelConstants.kKp = 0.3;
+    flywheelConstants.kKs = 0.6;
+    flywheelConstants.kKv = .00868;
+    
+
     flywheelConstants.counterClockwisePositive = false;
 
     TalonFXConstants follower = new TalonFXConstants();

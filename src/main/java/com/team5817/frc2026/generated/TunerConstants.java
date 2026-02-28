@@ -11,9 +11,9 @@ import edu.wpi.first.units.measure.*;
 public class TunerConstants {
 
   private static final Slot0Configs steerGains = new Slot0Configs()
-      .withKP(100)
+      .withKP(50)
       .withKI(0)
-      .withKD(0.5)
+      .withKD(0.3)
       .withKS(0.1)
       .withKV(1.91);
 
@@ -87,7 +87,7 @@ public class TunerConstants {
   private static final boolean kInvertRightSide = false;
 
   // CAN ID for the Pigeon 2
-  private static final int kPigeonId = 23;
+  private static final int kPigeonId = 24;
 
 
   // Moment of inertia for steer and drive motors
@@ -142,32 +142,32 @@ public class TunerConstants {
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
     ConstantCreator.createModuleConstants(
         5, 1, 1,
-        Rotations.of(0.368408203125 - 0.25), // rotate steer zero
-        kY,                                 // +y
+        Rotations.of(0.021728515625), // rotate steer zero
+        kY.unaryMinus(),                                 // +y
         kX.unaryMinus(),                    // -x
         kInvertLeftSide, true, false);
 
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontRight =
     ConstantCreator.createModuleConstants(
         6, 2, 2,
-        Rotations.of(0.125732421875 - 0.25), // rotate steer zero
+        Rotations.of(-0.104736328125), // rotate steer zero
         kY.unaryMinus(),                     // -y
-        kX.unaryMinus(),                     // -x
+        kX,                     // -x
         kInvertRightSide, true, false);
 
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackLeft =
     ConstantCreator.createModuleConstants(
         7, 3, 3,
-        Rotations.of(-0.335693359375 - 0.25), // rotate steer zero
+        Rotations.of(-0.298095703125), // rotate steer zero
         kY,                                  // +y
-        kX,                                  // +x
+        kX.unaryMinus(),                                  // +x
         kInvertLeftSide, true, false);
 
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackRight =
     ConstantCreator.createModuleConstants(
         8, 4, 4,
-        Rotations.of(0.159423828125 - 0.25), // rotate steer zero
-        kY.unaryMinus(),                     // -y
+        Rotations.of(-0.213623046875), // rotate steer zero
+        kY,                     // -y
         kX,                                  // +x
         kInvertRightSide, true, false);
 

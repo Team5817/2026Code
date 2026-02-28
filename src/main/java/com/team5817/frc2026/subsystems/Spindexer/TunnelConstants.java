@@ -11,7 +11,7 @@ public class TunnelConstants {
 
   static {
     // Left
-    leftRoller.kMainConstants.id = Ports.SPINDEXER_LEFT;
+    leftRoller.kMainConstants.id = Ports.SPINDEXER_2;
     leftRoller.kSupplyCurrentLimit = 40;
     leftRoller.kStatorCurrentLimit = 30;
     leftRoller.kEnableSupplyCurrentLimit = true;
@@ -25,7 +25,7 @@ public class TunnelConstants {
     leftRoller.kFollowerOpposeMasterDirection = false;
 
     // Right
-    rightRoller.kMainConstants.id = Ports.SPINDEXER_RIGHT;
+    rightRoller.kMainConstants.id = Ports.SPINDEXER_1;
     rightRoller.kSupplyCurrentLimit = 40;
     rightRoller.kStatorCurrentLimit = 30;
     rightRoller.kEnableSupplyCurrentLimit = true;

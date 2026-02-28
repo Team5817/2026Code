@@ -24,7 +24,7 @@ public class RobotVisualizer {
   /* ================= TURRET ================= */
   public static void updateTurretPose(double yawDeg) {
     mechanismPoses[0] =
-        new Pose3d(-0.032, 0.1, 0.373, new Rotation3d(0, 0, Units.degreesToRadians(yawDeg + 180)));
+        new Pose3d(-0.032, 0.1, 0.373, new Rotation3d(0, 0, Units.degreesToRadians(-yawDeg + 180)));
   }
 
   /* ================= TURRET HOOD ================= */

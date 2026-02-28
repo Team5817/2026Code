@@ -23,7 +23,7 @@ public class ShooterConstants {
   // Allows quick sign flip when turret yaw axis convention differs (1.0 or -1.0)
   public static double TURRET_YAW_SIGN = 1.0;
   // Camera pitch in degrees (positive = nose-up). Adjust to match the physical mount.
-  public static double CAMERA_PITCH_DEGREES = -50;
+  public static double CAMERA_PITCH_DEGREES = -33;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
@@ -48,9 +48,9 @@ public class ShooterConstants {
     flywheelConstants.kSupplyCurrentLimit = 40;
     flywheelConstants.kStatorCurrentLimit = 80;
 
-    flywheelConstants.kKp = 0.3;
-    flywheelConstants.kKs = 0.7;
-    flywheelConstants.kKv = 0.109;
+    flywheelConstants.kKp = .05;//0.3
+    flywheelConstants.kKs = 0.599609375;//0.7
+    flywheelConstants.kKv = 0.008679999969899654;//0.109
 
     flywheelConstants.kEnableSupplyCurrentLimit = true;
     flywheelConstants.kEnableStatorCurrentLimit = true;
@@ -105,12 +105,12 @@ public class ShooterConstants {
       kTurretServoConstants.kHomePosition = 0.0;
       kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 104.166667;
 
-      kTurretServoConstants.kMinUnitsLimit = -180.0;
-      kTurretServoConstants.kMaxUnitsLimit = 180.0;
+      kTurretServoConstants.kMinUnitsLimit = -270.0;
+      kTurretServoConstants.kMaxUnitsLimit = 0.0;
 
-      kTurretServoConstants.kKp = 4.0;
-      kTurretServoConstants.kKi = 5.0;
-      kTurretServoConstants.kKd = 0.1;
+      kTurretServoConstants.kKp = 0;//4.0
+      kTurretServoConstants.kKi = 0.0;//5.0
+      kTurretServoConstants.kKd = .0;//0.1
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
@@ -146,7 +146,7 @@ public class ShooterConstants {
       kHoodServoConstants.kName = "Shooter/Hood";
 
       kHoodServoConstants.kMainConstants.id = Ports.HOOD;
-      kHoodServoConstants.kMainConstants.counterClockwisePositive = false;
+      kHoodServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kHoodServoConstants.kHomePosition = 0.0;
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 96 / 1;
@@ -154,9 +154,9 @@ public class ShooterConstants {
       kHoodServoConstants.kMinUnitsLimit = 0.0;
       kHoodServoConstants.kMaxUnitsLimit = 43.0;
 
-      kHoodServoConstants.kKp = 20.0;
+      kHoodServoConstants.kKp = 3;
       kHoodServoConstants.kKi = 9.5;
-      kHoodServoConstants.kKd = 0.4;
+      kHoodServoConstants.kKd = 0.02;
 
       kHoodServoConstants.kKs = 0.9;
       kHoodServoConstants.kKv = 0.0;

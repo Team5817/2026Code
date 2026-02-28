@@ -16,26 +16,27 @@ public class IntakeConstants {
     static {
       kRackServoConstants.kName = "Intake/Rack";
 
-      kRackServoConstants.kMainConstants.id = Ports.RACK;
+      kRackServoConstants.kMainConstants.id = Ports.INTAKE_DEPLOY;
       kRackServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kRackServoConstants.kHomePosition = 0;
-      kRackServoConstants.kRotationsPerUnitDistance = 143.6;
+      kRackServoConstants.kRotationsPerUnitDistance = 143.6/ (.2667/.107);
 
       kRackServoConstants.kMaxUnitsLimit = 0.2667;
-      kRackServoConstants.kMinUnitsLimit = 0.0;
+      kRackServoConstants.kMinUnitsLimit = 0.05;
 
-      kRackServoConstants.kKp = 3.8125;
+      kRackServoConstants.kKp = 0;// 40.0;
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0;
+      kRackServoConstants.kKd = 0;//0.08;
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
-      kRackServoConstants.kKv = .5;
-      kRackServoConstants.kKg = 0.265625;
 
-      kRackServoConstants.kCruiseVelocity = 1;
+      kRackServoConstants.kKv = 0;
+      kRackServoConstants.kKg = 0;
 
-      kRackServoConstants.kAcceleration = 1;
+      kRackServoConstants.kCruiseVelocity = 1000000000;
+
+      kRackServoConstants.kAcceleration = 1000000000;
 
       kRackServoConstants.kMaxForwardOutput = 12.0;
       kRackServoConstants.kMaxReverseOutput = -12.0;
@@ -44,7 +45,7 @@ public class IntakeConstants {
       kRackServoConstants.kSupplyCurrentLimit = 80; // amps
 
       kRackServoConstants.kEnableStatorCurrentLimit = true;
-      kRackServoConstants.kStatorCurrentLimit = 80; // amps
+      kRackServoConstants.kStatorCurrentLimit = 40; // amps
 
       kRackServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
