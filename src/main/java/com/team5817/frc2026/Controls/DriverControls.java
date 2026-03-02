@@ -1,10 +1,8 @@
 package com.team5817.frc2026.Controls;
 
-
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -41,32 +39,27 @@ public class DriverControls {
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // LT intake
-     if(codriver.getBackButton()){
+    if (codriver.getBackButton()) {
       s.mIntake.conformToState(Intake.State.STOW);
       s.mShooter.forceStow(true);
-    }else 
-    
-    if (driver.leftTrigger.isBeingPressed()) {
-        s.mIntake.conformToState(Intake.State.INTAKING);
-    }
-    else if(codriver.xButton.isBeingPressed()) 
-      s.mIntake.conformToState(Intake.State.AGITATE);
+    } else if (driver.leftTrigger.isBeingPressed()) {
+      s.mIntake.conformToState(Intake.State.INTAKING);
+    } else if (codriver.xButton.isBeingPressed()) s.mIntake.conformToState(Intake.State.AGITATE);
 
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-    if(codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE) 
+    if (codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
       s.mIntake.conformToState(Intake.State.IDLE);
 
     // if (codriver.getLeftBumperButton()) {
     //     s.mIntake.conformToState(Intake.State.EXHAUSTING);
     // }
 
-    // if (!codriver.getLeftBumperButton() && 
+    // if (!codriver.getLeftBumperButton() &&
     //     s.mIntake.getMState() == Intake.State.EXHAUSTING) {
     //     s.mIntake.conformToState(Intake.State.IDLE);
     // }
-
 
     // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {

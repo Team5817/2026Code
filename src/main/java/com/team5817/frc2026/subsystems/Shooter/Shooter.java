@@ -134,13 +134,12 @@ public class Shooter extends Subsystem {
 
     atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
 
-      turret.setState(desiredState.turretState);
-      hood.setState(desiredState.hoodState);
-      flywheel.setState(desiredState.flywheelState);
-      if (atState) {
-        mState = desiredState;
-      }
-    
+    turret.setState(desiredState.turretState);
+    hood.setState(desiredState.hoodState);
+    flywheel.setState(desiredState.flywheelState);
+    if (atState) {
+      mState = desiredState;
+    }
   }
 
   @Override

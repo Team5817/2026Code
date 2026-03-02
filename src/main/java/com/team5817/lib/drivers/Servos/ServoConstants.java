@@ -99,11 +99,11 @@ public class ServoConstants {
     return unitsToRotations(units - kHomePosition);
   }
 
-  public double getForwardSoftLimitRotations(){
+  public double getForwardSoftLimitRotations() {
     return (((kMaxUnitsLimit - kHomePosition) * kRotationsPerUnitDistance) - kSoftLimitDeadband);
   }
-  
-  public double getReverseSoftLimitRotations(){
+
+  public double getReverseSoftLimitRotations() {
     return (((kMinUnitsLimit - kHomePosition) * kRotationsPerUnitDistance) + kSoftLimitDeadband);
   }
 }

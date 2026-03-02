@@ -189,7 +189,9 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    */
   protected double constrainRotations(double rotations) {
     return Util.limit(
-        rotations, mConstants.getReverseSoftLimitRotations(), mConstants.getForwardSoftLimitRotations());
+        rotations,
+        mConstants.getReverseSoftLimitRotations(),
+        mConstants.getForwardSoftLimitRotations());
   }
 
   /**

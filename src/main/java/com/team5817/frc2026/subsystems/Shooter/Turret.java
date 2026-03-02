@@ -9,7 +9,6 @@ import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
@@ -67,32 +66,33 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
     void setSupplier(DoubleSupplier supplier) {
       this.demand = supplier;
     }
-@Override
-public double getDemand() {
-  if (worldOriented) {
 
-    double demandDeg = demand.getAsDouble();
-    double robotHeading = mRobotHeadingSupplier.get().getDegrees();
+    @Override
+    public double getDemand() {
+      if (worldOriented) {
 
-    // Convert world → robot centric
-    double robotCentric = -demandDeg + robotHeading;
+        double demandDeg = demand.getAsDouble();
+        double robotHeading = mRobotHeadingSupplier.get().getDegrees();
 
-    // Normalize to [-180, 180)
-    robotCentric = ((robotCentric + 180) % 360 + 360) % 360 - 180;
+        // Convert world → robot centric
+        double robotCentric = -demandDeg + robotHeading;
 
-    // Shift into turret ROM [-270, 0]
-    if (robotCentric > 0) {
-        robotCentric -= 360;
+        // Normalize to [-180, 180)
+        robotCentric = ((robotCentric + 180) % 360 + 360) % 360 - 180;
+
+        // Shift into turret ROM [-270, 0]
+        if (robotCentric > 0) {
+          robotCentric -= 360;
+        }
+        Logger.recordOutput("Shooter/Turret/Unclamped", robotCentric);
+        // Clamp just in case
+        robotCentric = Math.max(-270, Math.min(0, robotCentric));
+
+        return robotCentric;
+      }
+
+      return demand.getAsDouble();
     }
-    Logger.recordOutput("Shooter/Turret/Unclamped", robotCentric);
-    // Clamp just in case
-    robotCentric = Math.max(-270, Math.min(0, robotCentric));
-
-    return robotCentric;
-  }
-
-  return demand.getAsDouble();
-}
 
     @Override
     public double getAllowableError() {

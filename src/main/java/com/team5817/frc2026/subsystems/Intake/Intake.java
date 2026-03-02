@@ -7,17 +7,14 @@ import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
-
 import lombok.Getter;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends Subsystem {
 
   private static IntakeRollers mIntakeRollers;
   private static IntakeDeploy mIntakeDeploy;
-  @Getter
-  private State mState = State.IDLE;
+  @Getter private State mState = State.IDLE;
 
   public Intake(RollerSubsystemIO FeederIO, ServoMotorIO DeployIO) {
     mIntakeRollers = new IntakeRollers(FeederIO);

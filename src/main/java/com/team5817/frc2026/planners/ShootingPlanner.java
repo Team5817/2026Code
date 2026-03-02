@@ -95,7 +95,7 @@ public class ShootingPlanner {
           t,
           () -> {
             Translation2d v = vec.get();
-         
+
             Logger.recordOutput(t + "FTG", v.getNorm());
 
             return v.getAngle().getDegrees();
@@ -242,13 +242,15 @@ public class ShootingPlanner {
 
     return Shooter.State.LOB;
   }
+
   boolean override = false;
-  public void setOverride(boolean newOverride){
+
+  public void setOverride(boolean newOverride) {
     this.override = newOverride;
   }
+
   public Boolean shouldShoot() {
-    if(override)
-      return true;
+    if (override) return true;
     if (!atStateSupplier.getAsBoolean()) return false;
 
     Shooter.State state = recommendedShooterState();

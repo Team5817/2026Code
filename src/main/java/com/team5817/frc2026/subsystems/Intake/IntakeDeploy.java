@@ -70,7 +70,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
 
       double elapsed = time - agitateStartTime;
 
-      double center = State.AGITATE.getDemand() - agitateAmplitude/2;
+      double center = State.AGITATE.getDemand() - agitateAmplitude / 2;
 
       double dynamicDemand = center + agitateAmplitude * Math.sin(elapsed * agitateSpeed);
 

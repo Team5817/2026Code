@@ -23,7 +23,6 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
-import com.team5817.lib.drivers.Actuator.ActuatorIOAxial;
 import com.team5817.lib.drivers.Actuator.ActuatorIOLinear;
 import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
@@ -147,10 +146,7 @@ public class RobotContainer {
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
     mClimb =
-        new Climb(
-            new ServoMotorIOSim(ClimbConstants.kClimbServoConstants),
-            new ActuatorIOSim()
-            );
+        new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
@@ -158,10 +154,9 @@ public class RobotContainer {
   public void fillInSimulatedSubsytems() {
 
     driveSimulation =
-          new SwerveDriveSimulation(
-              SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
-    if(mDrive == null)
-    SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
+        new SwerveDriveSimulation(
+            SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
+    if (mDrive == null) SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
     if (mClimb == null)
       mClimb =

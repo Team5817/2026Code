@@ -147,12 +147,14 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
   @Override
   public void runTorqueCurrent(double amps) {
-    mMain.setControl(torqueCurrentOut.withOutput(amps * (mConstants.counterClockwisePositive ? 1 : -1)));
+    mMain.setControl(
+        torqueCurrentOut.withOutput(amps * (mConstants.counterClockwisePositive ? 1 : -1)));
   }
 
   @Override
   public void runVelocity(double velocity) {
-    mMain.setControl(velocityOut.withVelocity(velocity * (mConstants.counterClockwisePositive ? 1 : -1)));
+    mMain.setControl(
+        velocityOut.withVelocity(velocity * (mConstants.counterClockwisePositive ? 1 : -1)));
   }
 
   @Override
