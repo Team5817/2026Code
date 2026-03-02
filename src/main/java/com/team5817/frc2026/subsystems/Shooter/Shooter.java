@@ -76,8 +76,7 @@ public class Shooter extends Subsystem {
    */
   public Supplier<Pose3d> getTurretCameraPoseSupplier() {
     return () -> {
-      // Turret getPosition() returns degrees. Apply sign multiplier for testing conventions.
-      double turretYawRad = Math.toRadians(ShooterConstants.TURRET_YAW_SIGN * turret.getPosition());
+      double turretYawRad = Math.toRadians(-turret.getPosition());
 
       // Rotate the turret->cam offset by the turret yaw around robot z
       Translation3d turretToCamRotated =
@@ -135,14 +134,13 @@ public class Shooter extends Subsystem {
 
     atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
 
-    if (mState != desiredState) {
       turret.setState(desiredState.turretState);
       hood.setState(desiredState.hoodState);
       flywheel.setState(desiredState.flywheelState);
       if (atState) {
         mState = desiredState;
       }
-    }
+    
   }
 
   @Override

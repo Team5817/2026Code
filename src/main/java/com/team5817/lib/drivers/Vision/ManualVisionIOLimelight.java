@@ -94,7 +94,7 @@ public class ManualVisionIOLimelight implements VisionIO {
               raw.value.length >= 18 ? raw.value[17] : 0.0,
               (int) raw.value[7],
               raw.value[9],
-              PoseObservationType.MEGATAG_1));
+              PoseObservationType.MANUAL));
     }
 
     inputs.poseObservations = poseObservations.toArray(new PoseObservation[0]);

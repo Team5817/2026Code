@@ -18,7 +18,7 @@ public class SpindexerConstants {
     Spinner2.kEnableStatorCurrentLimit = true;
 
     TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_LEFT;
+    followerConstants.id = Ports.TUNNEL_SECONDARY;
     followerConstants.counterClockwisePositive = true;
     followerConstants.invert_sensor_phase = false;
     Spinner2.kFollowerConstants = new TalonFXConstants[] {followerConstants};
@@ -32,7 +32,7 @@ public class SpindexerConstants {
     Spinner1.kEnableSupplyCurrentLimit = true;
     Spinner1.kEnableStatorCurrentLimit = true;
     followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_RIGHT;
+    followerConstants.id = Ports.TUNNEL_PRIMARY;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
     Spinner1.kFollowerConstants = new TalonFXConstants[] {followerConstants};

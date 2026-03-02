@@ -32,6 +32,7 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
 import com.team5817.lib.drivers.Servos.ServoMotorIOSim;
 import com.team5817.lib.drivers.Servos.ServoMotorIOTalonFX;
 import com.team5817.lib.drivers.Vision.ManualVisionIOLimelight;
+import com.team5817.lib.drivers.Vision.VisionIOLimelight;
 import com.team5817.lib.drivers.Vision.VisionIOPhotonVisionSim;
 import com.team5817.lib.swerve.GyroIOPigeon2;
 import com.team5817.lib.swerve.GyroIOSim;
@@ -105,11 +106,11 @@ public class RobotContainer {
         new SpindexerGroup(
             new Spindexer(
                 new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
-                new RollerSubsystemIOTalonFX(Ports.TUNNEL_LEFT, TunnelConstants.leftRoller, 1),
+                new RollerSubsystemIOTalonFX(Ports.TUNNEL_SECONDARY, TunnelConstants.leftRoller, 1),
                 "Left"),
             new Spindexer(
                 new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
-                new RollerSubsystemIOTalonFX(Ports.TUNNEL_RIGHT, TunnelConstants.rightRoller, 1),
+                new RollerSubsystemIOTalonFX(Ports.TUNNEL_PRIMARY, TunnelConstants.rightRoller, 1),
                 "Right"));
 
     mShooter =
@@ -137,7 +138,9 @@ public class RobotContainer {
                 "limelight-turret",
                 mShooter.getTurretCameraPoseSupplier(),
                 () -> mDrive.getHeading(),
-                false));
+                false),
+            new VisionIOLimelight("limelight-front", mDrive::getHeading),
+            new VisionIOLimelight("limelight-back", mDrive::getHeading));
 
     mLight = new Lights(new LightsIOSim());
 
@@ -145,8 +148,8 @@ public class RobotContainer {
 
     mClimb =
         new Climb(
-            new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants),
-            new ActuatorIOAxial(8, 180) // TODO set proper range
+            new ServoMotorIOSim(ClimbConstants.kClimbServoConstants),
+            new ActuatorIOSim()
             );
   }
 

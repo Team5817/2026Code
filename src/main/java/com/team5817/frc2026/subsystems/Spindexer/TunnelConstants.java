@@ -17,8 +17,8 @@ public class TunnelConstants {
     leftRoller.kEnableSupplyCurrentLimit = true;
     leftRoller.kEnableStatorCurrentLimit = true;
     TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_LEFT;
-    followerConstants.counterClockwisePositive = false;
+    followerConstants.id = Ports.TUNNEL_SECONDARY;
+    followerConstants.counterClockwisePositive = true;
     followerConstants.invert_sensor_phase = false;
     leftRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
 
@@ -31,7 +31,7 @@ public class TunnelConstants {
     rightRoller.kEnableSupplyCurrentLimit = true;
     rightRoller.kEnableStatorCurrentLimit = true;
     followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_RIGHT;
+    followerConstants.id = Ports.TUNNEL_PRIMARY;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
     rightRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};

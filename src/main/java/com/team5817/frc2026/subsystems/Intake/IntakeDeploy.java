@@ -22,7 +22,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   }
 
   private double agitateStartTime = 0;
-  private static final double agitateAmplitude = Units.inchesToMeters(3);
+  private static final double agitateAmplitude = Units.inchesToMeters(2.5);
   private static final double agitateSpeed = 4; // radians/sec
 
   /** Represents the different states of the intake deployment. */

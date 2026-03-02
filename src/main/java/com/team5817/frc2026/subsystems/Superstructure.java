@@ -57,8 +57,7 @@ public class Superstructure extends Subsystem {
     return new SequentialRequest(
             new ParallelRequest(
                 mShooter.stateRequest(Shooter.State.CLOSE),
-                mFixedShooter.stateRequest(FixedShooter.State.CLOSE),
-                mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+                mIndexer.stateRequest(SpindexerGroup.State.FEED_TURRET)),
             new NeverEndingRequest())
         .addName("CloseShot");
   }
@@ -67,8 +66,7 @@ public class Superstructure extends Subsystem {
     return new SequentialRequest(
             new ParallelRequest(
                 mShooter.stateRequest(Shooter.State.FAR),
-                mFixedShooter.stateRequest(FixedShooter.State.FAR),
-                mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH)),
+                mIndexer.stateRequest(SpindexerGroup.State.FEED_TURRET)),
             new NeverEndingRequest())
         .addName("FarShot");
   }
@@ -76,7 +74,8 @@ public class Superstructure extends Subsystem {
   public Request DualShotRequest() {
     return new ParallelRequest(
             new AutoShootRequest(mShooter.getPlanner(), this),
-            mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH))
+            mIndexer.stateRequest(SpindexerGroup.State.FEED_BOTH),
+            mFixedShooter.stateRequest(FixedShooter.State.HUB))
         .addName("ShootBoth");
   }
 

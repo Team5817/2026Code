@@ -46,6 +46,7 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
   private final TalonFXConfiguration config;
   private final double reduction;
+  private final RollerConstantsTalonFX mConstants;
 
   public RollerSubsystemIOTalonFX(
       CanDeviceId id, RollerConstantsTalonFX mConstants, double reduction) {
@@ -112,6 +113,7 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
                 tempCelsius,
                 tempFault));
     PhoenixUtil.tryUntilOk(5, () -> mMain.optimizeBusUtilization(0, 1.0));
+    this.mConstants = mConstants;
   }
 
   @Override
@@ -140,17 +142,17 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
   @Override
   public void runVolts(double volts) {
-    mMain.setControl(voltageOut.withOutput(volts));
+    mMain.setControl(voltageOut.withOutput(volts * (mConstants.counterClockwisePositive ? 1 : -1)));
   }
 
   @Override
   public void runTorqueCurrent(double amps) {
-    mMain.setControl(torqueCurrentOut.withOutput(amps));
+    mMain.setControl(torqueCurrentOut.withOutput(amps * (mConstants.counterClockwisePositive ? 1 : -1)));
   }
 
   @Override
   public void runVelocity(double velocity) {
-    mMain.setControl(velocityOut.withVelocity(velocity));
+    mMain.setControl(velocityOut.withVelocity(velocity * (mConstants.counterClockwisePositive ? 1 : -1)));
   }
 
   @Override

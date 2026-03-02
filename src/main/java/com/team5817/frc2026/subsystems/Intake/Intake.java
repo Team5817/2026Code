@@ -30,7 +30,7 @@ public class Intake extends Subsystem {
     INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.OUT),
     AGITATE(IntakeRollers.State.INTAKING, IntakeDeploy.State.AGITATE),
     EXHAUSTING(IntakeRollers.State.EXHAUST, IntakeDeploy.State.OUT),
-    STOW(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW);
+    STOW(IntakeRollers.State.IDLE, IntakeDeploy.State.ZERO);
 
     final IntakeRollers.State rollerState;
     final IntakeDeploy.State deployState;

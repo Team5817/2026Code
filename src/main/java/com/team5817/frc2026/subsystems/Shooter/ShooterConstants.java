@@ -78,14 +78,17 @@ public class ShooterConstants {
 
     // Default maps for HUB
     InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
-    hubHood.put(1.0, 5.0);
-    hubHood.put(2.0, 7.5);
-    hubHood.put(3.5, 10.0);
-    hubHood.put(5.0, 12.0);
+    hubHood.put(1.0, 3.0);
+    hubHood.put(2.64, 10.0);
+    hubHood.put(3.5, 16.0);
+
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
-    hubFly.put(1.0, 50.0);
-    hubFly.put(5.0, 80.0);
+    hubFly.put(1.0, 35.0);
+    hubFly.put(3.0, 54.0);//Depot
+    hubFly.put(3.6, 52.0);//trench
+    hubFly.put(4.0, 58.0);//tower side
+    hubFly.put(5.0, 72.0);//Human
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
@@ -108,9 +111,9 @@ public class ShooterConstants {
       kTurretServoConstants.kMinUnitsLimit = -270.0;
       kTurretServoConstants.kMaxUnitsLimit = 0.0;
 
-      kTurretServoConstants.kKp = 0; // 4.0
-      kTurretServoConstants.kKi = 0.0; // 5.0
-      kTurretServoConstants.kKd = .0; // 0.1
+      kTurretServoConstants.kKp = 4.0;
+      kTurretServoConstants.kKi = 5.0;
+      kTurretServoConstants.kKd = 0.1;
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
@@ -152,7 +155,7 @@ public class ShooterConstants {
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 96 / 1;
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
-      kHoodServoConstants.kMaxUnitsLimit = 43.0;
+      kHoodServoConstants.kMaxUnitsLimit = 30.0;
 
       kHoodServoConstants.kKp = 3;
       kHoodServoConstants.kKi = 9.5;
@@ -187,8 +190,8 @@ public class ShooterConstants {
 
   public enum FlywheelState implements IRollerState {
     IDLE(15, RollerControlMode.VOLTAGE),
-    CLOSE(50.0, RollerControlMode.VELOCITY),
-    FAR(80.0, RollerControlMode.VELOCITY),
+    CLOSE(43.0, RollerControlMode.VELOCITY),
+    FAR(65.0, RollerControlMode.VELOCITY),
     HUB(70.0, RollerControlMode.VELOCITY),
     LOBBING(80.0, RollerControlMode.VELOCITY);
 

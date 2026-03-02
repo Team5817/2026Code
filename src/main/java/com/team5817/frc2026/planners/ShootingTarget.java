@@ -37,7 +37,7 @@ public enum ShootingTarget {
   HUB(
       ShooterConstants.HOOD_MAP_HUB,
       ShooterConstants.FLYWHEEL_MAP_HUB,
-      new Translation2d(4.6, 4),
+      new Translation2d(FieldConstants.Hub.innerCenterPoint.toTranslation2d()),
       4.0,
       30.0,
       0.5);

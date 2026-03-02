@@ -25,7 +25,7 @@ public class SpindexerGroup extends Subsystem {
 
   public enum State {
     IDLE(Spindexer.SpinnerState.IDLE, Spindexer.SpinnerState.IDLE),
-    FEED_TURRET(Spindexer.SpinnerState.CLOCK, Spindexer.SpinnerState.CLOCK),
+    FEED_TURRET(Spindexer.SpinnerState.COUNTERCLOCK, Spindexer.SpinnerState.COUNTERCLOCK),
     FEED_SHOOTER(Spindexer.SpinnerState.COUNTERCLOCK, Spindexer.SpinnerState.COUNTERCLOCK),
     FEED_BOTH(Spindexer.SpinnerState.CLOCK, Spindexer.SpinnerState.COUNTERCLOCK),
     EXHAUST(Spindexer.SpinnerState.COUNTERCLOCK, Spindexer.SpinnerState.CLOCK);

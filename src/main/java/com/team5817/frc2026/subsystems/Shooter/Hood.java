@@ -21,8 +21,8 @@ public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
 
   public enum State implements ServoState {
     STOW(() -> 0.0, kLooseError),
-    CLOSE(() -> 0.0, kTightError),
-    FAR(() -> 0.0, kTightError),
+    CLOSE(() -> 13.4, kTightError),
+    FAR(() -> 18, kTightError),
     HUB(kTightError),
     LOBBING(kTightError);
 

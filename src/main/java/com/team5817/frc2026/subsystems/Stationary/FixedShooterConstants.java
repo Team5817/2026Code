@@ -34,7 +34,7 @@ public class FixedShooterConstants {
     flywheelConstants.kKs = 0.6;
     flywheelConstants.kKv = .00868;
 
-    flywheelConstants.counterClockwisePositive = false;
+    flywheelConstants.counterClockwisePositive = true;
 
     TalonFXConstants follower = new TalonFXConstants();
     follower.id = Ports.FIXED_FLYWHEEL2;
@@ -72,7 +72,7 @@ public class FixedShooterConstants {
 
   public enum FlywheelState implements IRollerState {
     IDLE(0.0, RollerControlMode.VOLTAGE),
-    CLOSE(60.0, RollerControlMode.VELOCITY),
+    CLOSE(45, RollerControlMode.VELOCITY),
     FAR(80.0, RollerControlMode.VELOCITY),
     HUB(70.0, RollerControlMode.VELOCITY), // Placeholder
     LOBBING(90.0, RollerControlMode.VELOCITY); // Placeholder

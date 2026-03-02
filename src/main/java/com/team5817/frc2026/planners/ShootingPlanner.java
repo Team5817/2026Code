@@ -95,13 +95,10 @@ public class ShootingPlanner {
           t,
           () -> {
             Translation2d v = vec.get();
-            double x = v.getX();
-            double y = v.getY();
+         
+            Logger.recordOutput(t + "FTG", v.getNorm());
 
-            if (!Double.isFinite(x) || !Double.isFinite(y)) return 0.0;
-            if (Math.hypot(x, y) < MIN_NORM) return 0.0;
-
-            return Math.toDegrees(Math.atan2(y, x));
+            return v.getAngle().getDegrees();
           });
     }
   }
@@ -245,8 +242,13 @@ public class ShootingPlanner {
 
     return Shooter.State.LOB;
   }
-
+  boolean override = false;
+  public void setOverride(boolean newOverride){
+    this.override = newOverride;
+  }
   public Boolean shouldShoot() {
+    if(override)
+      return true;
     if (!atStateSupplier.getAsBoolean()) return false;
 
     Shooter.State state = recommendedShooterState();

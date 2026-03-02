@@ -1,9 +1,12 @@
 package com.team5817.frc2026.Controls;
 
+
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -33,11 +36,16 @@ public class DriverControls {
 
   /* ONE CONTROLLER */
   public void oneControllerMode() {
-
+    s.mShooter.getPlanner().setOverride(codriver.getLeftBumperButton());
     // mDrive.overrideHeading(true);
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // LT intake
+     if(codriver.getBackButton()){
+      s.mIntake.conformToState(Intake.State.STOW);
+      s.mShooter.forceStow(true);
+    }else 
+    
     if (driver.leftTrigger.isBeingPressed()) {
         s.mIntake.conformToState(Intake.State.INTAKING);
     }
@@ -50,6 +58,16 @@ public class DriverControls {
     if(codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE) 
       s.mIntake.conformToState(Intake.State.IDLE);
 
+    // if (codriver.getLeftBumperButton()) {
+    //     s.mIntake.conformToState(Intake.State.EXHAUSTING);
+    // }
+
+    // if (!codriver.getLeftBumperButton() && 
+    //     s.mIntake.getMState() == Intake.State.EXHAUSTING) {
+    //     s.mIntake.conformToState(Intake.State.IDLE);
+    // }
+
+
     // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {
       s.request(s.DualShotRequest());
@@ -58,6 +76,7 @@ public class DriverControls {
     if (driver.getLeftBumperButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s));
       s.mIndexer.setState(SpindexerGroup.State.IDLE);
+      s.mFixedShooter.setDesiredState(FixedShooter.State.IDLE);
     }
 
     // RB don't Shoot

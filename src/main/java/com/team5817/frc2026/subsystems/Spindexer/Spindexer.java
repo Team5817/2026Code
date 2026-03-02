@@ -27,7 +27,7 @@ public class Spindexer extends Subsystem {
         tunnel.setState(TunnelState.IN);
         break;
       case CLOCK:
-        tunnel.setState(TunnelState.AWAY);
+        tunnel.setState(TunnelState.IN);
         break;
       case EXHAUST:
         tunnel.setState(TunnelState.EXHAUST);
@@ -37,9 +37,9 @@ public class Spindexer extends Subsystem {
 
   public enum SpinnerState implements IRollerState {
     IDLE(0),
-    COUNTERCLOCK(10),
-    CLOCK(-10),
-    EXHAUST(-12);
+    COUNTERCLOCK(-10),
+    CLOCK(10),
+    EXHAUST(12);
 
     private final double demand;
 
@@ -65,9 +65,9 @@ public class Spindexer extends Subsystem {
 
   public enum TunnelState implements IRollerState {
     IDLE(0),
-    IN(-10),
-    AWAY(10),
-    EXHAUST(12);
+    IN(10),
+    AWAY(-10),
+    EXHAUST(-12);
 
     private final double demand;
 
