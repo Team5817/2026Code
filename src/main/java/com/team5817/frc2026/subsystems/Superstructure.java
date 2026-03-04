@@ -7,7 +7,6 @@ import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
-import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.AutoShootRequest;
@@ -27,7 +26,6 @@ public class Superstructure extends Subsystem {
   // Subsystems
   public Drive mDrive;
   public Shooter mShooter;
-  public FixedShooter mFixedShooter;
   public Intake mIntake;
   public Indexer mIndexer;
   public Climb mClimb;
@@ -40,14 +38,12 @@ public class Superstructure extends Subsystem {
       Intake intake,
       Indexer spindexerGroup,
       Shooter shooter,
-      FixedShooter fixedShooter,
       Climb climb,
       Lights lights) {
     mDrive = drive;
     mIntake = intake;
     mIndexer = spindexerGroup;
     mShooter = shooter;
-    mFixedShooter = fixedShooter;
     mClimb = climb;
     mLights = lights;
     this.requestExecutor = new RequestExecutor();
@@ -57,26 +53,22 @@ public class Superstructure extends Subsystem {
     return new SequentialRequest(
             new ParallelRequest(
                 mShooter.stateRequest(Shooter.State.CLOSE),
-                mIndexer.stateRequest(Indexer.State.FEED_TURRET)),
-            new NeverEndingRequest())
-        .addName("CloseShot");
+                mIndexer.stateRequest(Indexer.State.FEED)),
+            new NeverEndingRequest()).addName("CloseShot");
   }
 
   public Request FarShotRequest() {
     return new SequentialRequest(
             new ParallelRequest(
                 mShooter.stateRequest(Shooter.State.FAR),
-                mIndexer.stateRequest(Indexer.State.FEED_TURRET)),
-            new NeverEndingRequest())
-        .addName("FarShot");
+                mIndexer.stateRequest(Indexer.State.FEED)),
+            new NeverEndingRequest()).addName("FarShot");
   }
 
   public Request DualShotRequest() {
     return new ParallelRequest(
             new AutoShootRequest(mShooter.getPlanner(), this),
-            mIndexer.stateRequest(Indexer.State.FEED_BOTH),
-            mFixedShooter.stateRequest(FixedShooter.State.HUB))
-        .addName("ShootBoth");
+            mIndexer.stateRequest(Indexer.State.FEED)).addName("ShootBoth");
   }
 
   @Override

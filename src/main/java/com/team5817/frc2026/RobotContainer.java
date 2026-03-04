@@ -16,9 +16,8 @@ import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Spindexer.Spindexer;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants;
+import com.team5817.frc2026.subsystems.Spindexer.Tunnel;
 import com.team5817.frc2026.subsystems.Spindexer.TunnelConstants;
-import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
-import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
@@ -48,7 +47,6 @@ public class RobotContainer {
   public Intake mIntake = null;
   public Indexer mSpindexer = null;
   public Shooter mShooter = null;
-  public FixedShooter mFixedShooter = null;
   public Vision mVision = null;
   public Climb mClimb = null;
   public Lights mLight = null;
@@ -70,13 +68,12 @@ public class RobotContainer {
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
     mSuperstructure =
-        new Superstructure(mDrive, mIntake, mSpindexer, mShooter, mFixedShooter, mClimb, mLight);
+        new Superstructure(mDrive, mIntake, mSpindexer, mShooter, mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
         mDrive,
         mSuperstructure,
         mVision,
-        mFixedShooter,
         mIntake,
         mShooter,
         mSpindexer,
@@ -101,16 +98,20 @@ public class RobotContainer {
             new RollerSubsystemIOTalonFX(
                 Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
             new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants));
+    
     mSpindexer =
         new Indexer(
             new Spindexer(
-                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
-                new RollerSubsystemIOTalonFX(Ports.TUNNEL_SECONDARY, TunnelConstants.leftRoller, 1),
+                new RollerSubsystemIOTalonFX(
+                    Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
                 "Left"),
             new Spindexer(
-                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
-                new RollerSubsystemIOTalonFX(Ports.TUNNEL_PRIMARY, TunnelConstants.rightRoller, 1),
-                "Right"));
+                new RollerSubsystemIOTalonFX(
+                    Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
+                "Right"),
+            new Tunnel(
+                new RollerSubsystemIOTalonFX(
+                    Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
 
     mShooter =
         new Shooter(
@@ -122,13 +123,6 @@ public class RobotContainer {
             mDrive::getChassisSpeeds,
             () -> 0.0 // placeholder for vision timing supplier
             );
-
-    mFixedShooter =
-        new FixedShooter(
-            new ActuatorIOLinear(9, 0, 0),
-            new RollerSubsystemIOTalonFX(
-                Ports.FIXED_FLYWHEEL1, FixedShooterConstants.flywheelConstants, 1),
-            mShooter.getPlanner());
 
     mVision =
         new Vision(
@@ -167,17 +161,21 @@ public class RobotContainer {
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
+  
     if (mSpindexer == null)
-      mSpindexer =
-          new Indexer(
-              new Spindexer(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  "Left"),
-              new Spindexer(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  "Right"));
+     mSpindexer =
+        new Indexer(
+            new Spindexer(
+                new RollerSubsystemIOTalonFX(
+                    Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
+                "Left"),
+            new Spindexer(
+                new RollerSubsystemIOTalonFX(
+                    Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
+                "Right"),
+            new Tunnel(
+                new RollerSubsystemIOTalonFX(
+                    Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
 
     if (mDrive == null)
       mDrive =
@@ -202,16 +200,18 @@ public class RobotContainer {
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
 
     if (mSpindexer == null)
-      mSpindexer =
-          new Indexer(
-              new Spindexer(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  "Left"),
-              new Spindexer(
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                  "Right"));
+        mSpindexer =
+            new Indexer(
+                new Spindexer(
+                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                    "Left"),
+                
+            new Spindexer(
+                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+                    "Right"),
+               
+            new Tunnel(
+                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10)));
 
     if (mVision == null)
       mVision =
@@ -233,13 +233,6 @@ public class RobotContainer {
               mDrive::getPose,
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
-
-    if (mFixedShooter == null)
-      mFixedShooter =
-          new FixedShooter(
-              new ActuatorIOSim(),
-              new RollerSubsystemIOSim(DCMotor.getKrakenX60(2), 20, 10),
-              mShooter.getPlanner());
 
     if (mClimb == null)
       mClimb =
