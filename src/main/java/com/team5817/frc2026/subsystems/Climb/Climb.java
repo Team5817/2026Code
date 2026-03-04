@@ -29,8 +29,9 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   /** Enum representing the different states of the elevator. */
   public enum State implements ServoState {
     ZERO(0),
-    READY(140),
-    DOWN(30);
+    READY(140), //-187 prep
+    DOWN(30);//-65 climbed
+
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;

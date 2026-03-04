@@ -15,12 +15,12 @@ public final class ClimbConstants {
     kClimbServoConstants.kMainConstants.counterClockwisePositive = true;
 
     kClimbServoConstants.kHomePosition = 0; // degrees
-    kClimbServoConstants.kRotationsPerUnitDistance = 72.82 / 1.4 * 3 / 4;
+    kClimbServoConstants.kRotationsPerUnitDistance = (180.0 - 28.0) / 189.06 / 365.0;
 
-    kClimbServoConstants.kMaxUnitsLimit = 150;
+    kClimbServoConstants.kMaxUnitsLimit = 180-28;
     kClimbServoConstants.kMinUnitsLimit = 0.0;
 
-    kClimbServoConstants.kKp = 15;
+    kClimbServoConstants.kKp = 16;
     kClimbServoConstants.kKi = 0.0;
     kClimbServoConstants.kKd = 0.2;
     kClimbServoConstants.kKa = 0.0;

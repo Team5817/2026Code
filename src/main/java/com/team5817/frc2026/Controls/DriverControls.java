@@ -5,6 +5,7 @@ import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
 
@@ -33,16 +34,19 @@ public class DriverControls {
 
   /* ONE CONTROLLER */
   public void oneControllerMode() {
-    s.mShooter.getPlanner().setOverride(codriver.getLeftBumperButton());
-    // mDrive.overrideHeading(true);
+    s.mShooter.getPlanner().setOverride(driver.getLeftBumperButton());
+
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // LT intake
     if (codriver.getBackButton()) {
       s.mIntake.conformToState(Intake.State.STOW);
       s.mShooter.forceStow(true);
+      s.mClimb.setState(Climb.State.ZERO);
+
     } else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
+      
     } else if (codriver.xButton.isBeingPressed()) s.mIntake.conformToState(Intake.State.AGITATE);
 
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
@@ -51,14 +55,15 @@ public class DriverControls {
     if (codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
       s.mIntake.conformToState(Intake.State.IDLE);
 
-    // if (codriver.getLeftBumperButton()) {
-    //     s.mIntake.conformToState(Intake.State.EXHAUSTING);
-    // }
 
-    // if (!codriver.getLeftBumperButton() &&
-    //     s.mIntake.getMState() == Intake.State.EXHAUSTING) {
-    //     s.mIntake.conformToState(Intake.State.IDLE);
-    // }
+    //Co-driver Outtake
+    if (codriver.leftTrigger.isBeingPressed()) {
+        s.mIntake.conformToState(Intake.State.EXHAUSTING);
+    }
+    if (!codriver.leftTrigger.isBeingPressed() &&
+        s.mIntake.getMState() == Intake.State.EXHAUSTING) {
+        s.mIntake.conformToState(Intake.State.IDLE);
+    }
 
     // LB Shoot Both
     if (driver.getLeftBumperButtonPressed()) {
@@ -94,15 +99,16 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // B Force Hood
-    if (driver.getBButtonPressed()) {
-      s.mShooter.forceStow(true);
-      s.request(new EmptyRequest());
+    // B Force Hood (Driver and Co-driver)
+    if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
+        s.mShooter.forceStow(true);
+        s.request(new EmptyRequest());
     }
-    if (driver.getBButtonReleased()) {
-      s.mShooter.forceStow(false);
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
-    }
+
+    if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {
+        s.mShooter.forceStow(false);
+        s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+}
 
     // Climb Down
     if (driver.POV180.wasActivated()) {
