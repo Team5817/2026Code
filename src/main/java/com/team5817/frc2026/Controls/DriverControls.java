@@ -1,11 +1,11 @@
 package com.team5817.frc2026.Controls;
 
 import com.team5817.frc2026.ActiveTracker;
+import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
-import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
 
@@ -46,7 +46,7 @@ public class DriverControls {
 
     } else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-      
+
     } else if (codriver.xButton.isBeingPressed()) s.mIntake.conformToState(Intake.State.AGITATE);
 
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
@@ -55,14 +55,13 @@ public class DriverControls {
     if (codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
       s.mIntake.conformToState(Intake.State.IDLE);
 
-
-    //Co-driver Outtake
+    // Co-driver Outtake
     if (codriver.leftTrigger.isBeingPressed()) {
-        s.mIntake.conformToState(Intake.State.EXHAUSTING);
+      s.mIntake.conformToState(Intake.State.EXHAUSTING);
     }
-    if (!codriver.leftTrigger.isBeingPressed() &&
-        s.mIntake.getMState() == Intake.State.EXHAUSTING) {
-        s.mIntake.conformToState(Intake.State.IDLE);
+    if (!codriver.leftTrigger.isBeingPressed()
+        && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
+      s.mIntake.conformToState(Intake.State.IDLE);
     }
 
     // LB Shoot Both
@@ -101,14 +100,14 @@ public class DriverControls {
 
     // B Force Hood (Driver and Co-driver)
     if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
-        s.mShooter.forceStow(true);
-        s.request(new EmptyRequest());
+      s.mShooter.forceStow(true);
+      s.request(new EmptyRequest());
     }
 
     if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {
-        s.mShooter.forceStow(false);
-        s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
-}
+      s.mShooter.forceStow(false);
+      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+    }
 
     // Climb Down
     if (driver.POV180.wasActivated()) {

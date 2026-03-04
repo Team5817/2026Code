@@ -127,7 +127,8 @@ public class RobotContainer {
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
     mClimb =
-        new Climb(new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+        new Climb(
+            new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
