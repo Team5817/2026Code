@@ -37,7 +37,7 @@ public class ShootAction implements Action {
     s.mShooter.followPlan(false);
     timer.reset();
     timer.start();
-    s.mIndexer.setState(Indexer.State.FEED_TURRET);
+    s.mIndexer.setState(Indexer.State.FEED);
     s.mShooter.setDesiredState(Shooter.State.HUB);
   }
 }

@@ -34,14 +34,9 @@ public class Ports {
   public static final CanDeviceId INTAKE_DEPLOY = new CanDeviceId(9);
   public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10);
 
-  public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(11);
-  public static final CanDeviceId TUNNEL_SECONDARY = new CanDeviceId(12);
   public static final CanDeviceId SPINDEXER_1 = new CanDeviceId(13);
-  public static final CanDeviceId TUNNEL_PRIMARY = new CanDeviceId(14);
-
-  public static final CanDeviceId FIXED_HOOD = new CanDeviceId(15);
-  public static final CanDeviceId FIXED_FLYWHEEL1 = new CanDeviceId(16);
-  public static final CanDeviceId FIXED_FLYWHEEL2 = new CanDeviceId(17);
+  public static final CanDeviceId SPINDEXER_2 = new CanDeviceId(11);
+  public static final CanDeviceId TUNNEL = new CanDeviceId(14);
 
   public static final CanDeviceId TURRET = new CanDeviceId(18);
   public static final CanDeviceId HOOD = new CanDeviceId(19);

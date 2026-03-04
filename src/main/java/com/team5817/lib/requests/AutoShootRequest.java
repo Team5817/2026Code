@@ -18,7 +18,7 @@ public class AutoShootRequest extends Request {
   public void update() {
     s.mShooter.followPlan(true);
     Logger.recordOutput("Shooter/Should Shoot", planner.shouldShoot());
-    if (planner.shouldShoot()) s.mIndexer.setState(Indexer.State.FEED_TURRET);
+    if (planner.shouldShoot()) s.mIndexer.setState(Indexer.State.FEED);
     else s.mIndexer.setState(Indexer.State.IDLE);
   }
 

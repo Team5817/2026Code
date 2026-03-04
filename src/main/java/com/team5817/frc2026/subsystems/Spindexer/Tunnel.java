@@ -6,27 +6,26 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Subsystem;
 
-public class Spindexer extends Subsystem {
+public class Tunnel extends Subsystem {
 
-  public final RollerSubsystem<SpinnerState> spindexer;
+  public final RollerSubsystem<TunnelState> tunnel;
 
-  public Spindexer(RollerSubsystemIO spinnerIO, String name) {
-    this.spindexer =
-        new RollerSubsystem<>(SpinnerState.IDLE, "Spindexer " + name, spinnerIO);
+  public Tunnel(RollerSubsystemIO io) {
+    this.tunnel = new RollerSubsystem<>(TunnelState.IDLE, "Tunnel", io);
   }
 
-  public void setState(SpinnerState spinnerState) {
-    spindexer.setState(spinnerState);
+  public void setState(TunnelState state) {
+    tunnel.setState(state);
   }
 
-  public enum SpinnerState implements IRollerState {
+  public enum TunnelState implements IRollerState {
     IDLE(0),
-    COUNTERCLOCK(-10),
-    CLOCK(10);
+    IN(12),
+    EXHAUST(-12);
 
     private final double demand;
 
-    SpinnerState(double demand) {
+    TunnelState(double demand) {
       this.demand = demand;
     }
 
@@ -48,26 +47,26 @@ public class Spindexer extends Subsystem {
 
   @Override
   public void readPeriodicInputs() {
-    spindexer.readPeriodicInputs();
+    tunnel.readPeriodicInputs();
   }
 
   @Override
   public void writePeriodicOutputs() {
-    spindexer.writePeriodicOutputs();
+    tunnel.writePeriodicOutputs();
   }
 
   @Override
   public boolean checkSystem() {
-    return spindexer.allOK();
+    return tunnel.allOK();
   }
 
   @Override
   public void stop() {
-    setState(SpinnerState.IDLE);
+    setState(TunnelState.IDLE);
   }
 
   @Override
   public void outputTelemetry() {
-    spindexer.outputTelemetry();
+    tunnel.outputTelemetry();
   }
 }

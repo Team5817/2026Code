@@ -12,30 +12,46 @@ public class Indexer extends Subsystem {
 
   private final Spindexer leftRoller;
   private final Spindexer rightRoller;
+  private final Tunnel tunnel;
 
   @Getter
   @Setter
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
-  public Indexer(Spindexer leftRoller, Spindexer rightRoller) {
+  public Indexer(Spindexer leftRoller, Spindexer rightRoller, Tunnel tunnel) {
     this.leftRoller = leftRoller;
     this.rightRoller = rightRoller;
+    this.tunnel = tunnel;
   }
 
   public enum State {
-    IDLE(Spindexer.SpinnerState.IDLE, Spindexer.SpinnerState.IDLE),
-    FEED_TURRET(Spindexer.SpinnerState.COUNTERCLOCK, Spindexer.SpinnerState.COUNTERCLOCK),
-    FEED_SHOOTER(Spindexer.SpinnerState.COUNTERCLOCK, Spindexer.SpinnerState.COUNTERCLOCK),
-    FEED_BOTH(Spindexer.SpinnerState.CLOCK, Spindexer.SpinnerState.COUNTERCLOCK),
-    EXHAUST(Spindexer.SpinnerState.COUNTERCLOCK, Spindexer.SpinnerState.CLOCK);
+    IDLE(
+        Spindexer.SpinnerState.IDLE,
+        Spindexer.SpinnerState.IDLE,
+        Tunnel.TunnelState.IDLE),
+
+    FEED(
+        Spindexer.SpinnerState.COUNTERCLOCK,
+        Spindexer.SpinnerState.COUNTERCLOCK,
+        Tunnel.TunnelState.IN),
+
+    EXHAUST(
+        Spindexer.SpinnerState.COUNTERCLOCK,
+        Spindexer.SpinnerState.CLOCK,
+        Tunnel.TunnelState.EXHAUST);
 
     public final Spindexer.SpinnerState leftState;
     public final Spindexer.SpinnerState rightState;
+    public final Tunnel.TunnelState tunnelState;
 
-    State(Spindexer.SpinnerState left, Spindexer.SpinnerState right) {
+    State(
+        Spindexer.SpinnerState left,
+        Spindexer.SpinnerState right,
+        Tunnel.TunnelState tunnel) {
       this.leftState = left;
       this.rightState = right;
+      this.tunnelState = tunnel;
     }
   }
 
@@ -47,19 +63,25 @@ public class Indexer extends Subsystem {
   public void readPeriodicInputs() {
     leftRoller.readPeriodicInputs();
     rightRoller.readPeriodicInputs();
+    tunnel.readPeriodicInputs();
   }
 
   @Override
   public void writePeriodicOutputs() {
     leftRoller.setState(mState.leftState);
     rightRoller.setState(mState.rightState);
+    tunnel.setState(mState.tunnelState);
+
     leftRoller.writePeriodicOutputs();
     rightRoller.writePeriodicOutputs();
+    tunnel.writePeriodicOutputs();
   }
 
   @Override
   public boolean checkSystem() {
-    return leftRoller.checkSystem() && rightRoller.checkSystem();
+    return leftRoller.checkSystem()
+        && rightRoller.checkSystem()
+        && tunnel.checkSystem();
   }
 
   @Override
@@ -71,8 +93,11 @@ public class Indexer extends Subsystem {
   public void outputTelemetry() {
     RobotVisualizer.updateSpindexerLeft(leftRoller.spindexer.getVelocity());
     RobotVisualizer.updateSpindexerRight(rightRoller.spindexer.getVelocity());
-    rightRoller.outputTelemetry();
+
     leftRoller.outputTelemetry();
+    rightRoller.outputTelemetry();
+    tunnel.outputTelemetry();
+
     super.outputTelemetry();
   }
 }

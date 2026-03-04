@@ -2,40 +2,20 @@ package com.team5817.frc2026.subsystems.Spindexer;
 
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
-import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 
 public class TunnelConstants {
 
-  public static final RollerConstantsTalonFX leftRoller = new RollerConstantsTalonFX();
-  public static final RollerConstantsTalonFX rightRoller = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX TUNNEL =
+      new RollerConstantsTalonFX();
 
   static {
-    // Left
-    leftRoller.kMainConstants.id = Ports.SPINDEXER_2;
-    leftRoller.kSupplyCurrentLimit = 40;
-    leftRoller.kStatorCurrentLimit = 30;
-    leftRoller.kEnableSupplyCurrentLimit = true;
-    leftRoller.kEnableStatorCurrentLimit = true;
-    TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_SECONDARY;
-    followerConstants.counterClockwisePositive = true;
-    followerConstants.invert_sensor_phase = false;
-    leftRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
+    TUNNEL.kMainConstants.id = Ports.TUNNEL;
 
-    leftRoller.kFollowerOpposeMasterDirection = false;
+    TUNNEL.kSupplyCurrentLimit = 40;
+    TUNNEL.kStatorCurrentLimit = 30;
+    TUNNEL.kEnableSupplyCurrentLimit = true;
+    TUNNEL.kEnableStatorCurrentLimit = true;
 
-    // Right
-    rightRoller.kMainConstants.id = Ports.SPINDEXER_1;
-    rightRoller.kSupplyCurrentLimit = 40;
-    rightRoller.kStatorCurrentLimit = 30;
-    rightRoller.kEnableSupplyCurrentLimit = true;
-    rightRoller.kEnableStatorCurrentLimit = true;
-    followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TUNNEL_PRIMARY;
-    followerConstants.counterClockwisePositive = false;
-    followerConstants.invert_sensor_phase = false;
-    rightRoller.kFollowerConstants = new TalonFXConstants[] {followerConstants};
-
-    rightRoller.kFollowerOpposeMasterDirection = false;
+    TUNNEL.kMainConstants.counterClockwisePositive = true;
   }
 }
