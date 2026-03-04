@@ -5,8 +5,8 @@ import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.H;
 import com.team5817.frc2026.autos.Modes.HNRD;
-import com.team5817.frc2026.autos.Modes.NR;
-import com.team5817.frc2026.autos.Modes.NRHT;
+import com.team5817.frc2026.autos.Modes.HNR;
+import com.team5817.frc2026.autos.Modes.NRH;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -24,16 +24,15 @@ public class AutoModeFactory {
     DO_NOTHING,
     H,
     D,
-    NR,
-    DNRD,
+    MAIN_HUMAN,
+    MAIN_DEPOT,
     HNRD,
     NRHT
   }
 
   public enum StartingPosition {
-    TRENCH_H(
-        DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.NR, DesiredMode.HNRD, DesiredMode.NRHT),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.DNRD),
+    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.MAIN_HUMAN, DesiredMode.HNRD, DesiredMode.NRHT),
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.MAIN_DEPOT),
     CENTER(DesiredMode.DO_NOTHING);
 
     public List<DesiredMode> modes;
@@ -55,8 +54,7 @@ public class AutoModeFactory {
   private Optional<AutoBase> mAutoMode = Optional.empty();
 
   private static SendableChooser<DesiredMode> mModeChooser = new SendableChooser<>();
-  private static SendableChooser<StartingPosition> mStartingPositionSelector =
-      new SendableChooser<>();
+  private static SendableChooser<StartingPosition> mStartingPositionSelector = new SendableChooser<>();
   private static SendableChooser<ClimbSelection> mClimbPreferenceSelector = new SendableChooser<>();
 
   /**
@@ -66,6 +64,7 @@ public class AutoModeFactory {
   public AutoModeFactory(Superstructure s, Drive d) {
     this.s = s;
     this.d = d;
+    
     mStartingPositionSelector.setDefaultOption("TRENCH_D", StartingPosition.TRENCH_D);
     mStartingPositionSelector.addOption("TRENCH_H", StartingPosition.TRENCH_H);
     mStartingPositionSelector.addOption("CENTER", StartingPosition.CENTER);
@@ -120,14 +119,14 @@ public class AutoModeFactory {
         return Optional.of(new H(s, mCachedClimbSelection));
       case D:
         return Optional.of(new D(s, mCachedClimbSelection));
-      case NR:
-        return Optional.of(new NR(s, mCachedClimbSelection));
-      case DNRD:
+      case MAIN_HUMAN:
+        return Optional.of(new HNR(s, mCachedClimbSelection));
+      case MAIN_DEPOT:
         return Optional.of(new DNRD(s, mCachedClimbSelection));
       case HNRD:
         return Optional.of(new HNRD(s, mCachedClimbSelection));
       case NRHT:
-        return Optional.of(new NRHT(s, mCachedClimbSelection));
+        return Optional.of(new NRH(s, mCachedClimbSelection));
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;

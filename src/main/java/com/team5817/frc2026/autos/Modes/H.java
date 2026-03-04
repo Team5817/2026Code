@@ -1,6 +1,6 @@
 package com.team5817.frc2026.autos.Modes;
 
-import com.team5817.frc2026.autos.Actions.AutoShootAction;
+import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
@@ -30,6 +30,7 @@ public class H extends AutoBase {
     this.p = sh.getPlanner();
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
+    
     Trajectory SHFToH;
     Trajectory HToC0;
     Trajectory C0ToC;
@@ -47,7 +48,7 @@ public class H extends AutoBase {
 
     sh.followPlan(true);
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(4, p, su));
+    r(new ShootAction(4, su));
     sh.setDesiredState(Shooter.State.STOW);
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));

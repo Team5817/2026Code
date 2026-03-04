@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "DToN2"
+            "pathName": "SDFTToN2"
           }
         },
         {
@@ -26,6 +26,12 @@
           "type": "path",
           "data": {
             "pathName": "DTToC0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C0ToC1"
           }
         }
       ]

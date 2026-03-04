@@ -1,6 +1,6 @@
 package com.team5817.frc2026.autos.Modes;
 
-import com.team5817.frc2026.autos.Actions.AutoShootAction;
+import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
@@ -16,6 +16,7 @@ import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 
 public class HNS extends AutoBase {
+  //Approved
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -31,30 +32,42 @@ public class HNS extends AutoBase {
     this.p = sh.getPlanner();
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
+    
     Trajectory SHFToH;
-    Trajectory HToN1;
-    Trajectory N1ToC0;
+    Trajectory HToN2;
+    Trajectory N2ToC0;
+    Trajectory C0ToC1;
 
     SHFToH = l.trajectories.get("SHFToH");
-    HToN1 = l.trajectories.get("HToN1");
-    N1ToC0 = l.trajectories.get("N1ToC0");
-
-    t = new TrajectorySet(false, SHFToH, HToN1, N1ToC0);
+    HToN2 = l.trajectories.get("HToN2");
+    N2ToC0 = l.trajectories.get("N2ToC0");
+    C0ToC1 = l.trajectories.get("C0ToC1");
+    t = new TrajectorySet(false, SHFToH, HToN2, N2ToC0, C0ToC1);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
+    sh.followPlan(false);
+    sh.setDesiredState(Shooter.State.STOW);
+
+    r(new TrajectoryAction(t.next(), d));
+    
+    r(new ShootAction(6, su));
+
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(5, p, su));
+    su.mIntake.stateRequest(Intake.State.IDLE).act();
+
     r(new TrajectoryAction(t.next(), d));
-    r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(5, p, su));
+    r(new ShootAction(5, su));
+
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));
+      r(new TrajectoryAction(t.next(), d));
+
       r(new ClimbAction(c));
     }
-    sh.followPlan(false);
+    
   }
 }

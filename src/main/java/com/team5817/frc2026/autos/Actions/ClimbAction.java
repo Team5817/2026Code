@@ -9,7 +9,7 @@ public class ClimbAction implements Action {
   RequestExecutor executor;
 
   public ClimbAction(Climb c) {
-    this.climbRequest = c.climbRequest();
+    this.climbRequest = c.advanceClimbRequest();
     executor = new RequestExecutor();
   }
 

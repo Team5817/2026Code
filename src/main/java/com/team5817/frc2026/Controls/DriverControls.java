@@ -3,7 +3,7 @@ package com.team5817.frc2026.Controls;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
@@ -68,7 +68,7 @@ public class DriverControls {
 
     if (driver.getLeftBumperButtonReleased()) {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s));
-      s.mIndexer.setState(SpindexerGroup.State.IDLE);
+      s.mIndexer.setState(Indexer.State.IDLE);
       s.mFixedShooter.setDesiredState(FixedShooter.State.IDLE);
     }
 

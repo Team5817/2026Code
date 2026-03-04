@@ -21,6 +21,12 @@
           "data": {
             "pathName": "N2ToC0"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C0ToC1"
+          }
         }
       ]
     }

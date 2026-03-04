@@ -1,6 +1,6 @@
 package com.team5817.frc2026.autos.Modes;
 
-import com.team5817.frc2026.autos.Actions.AutoShootAction;
+import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
@@ -43,13 +43,15 @@ public class D extends AutoBase {
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
+    sh.followPlan(false);
+    sh.setDesiredState(Shooter.State.STOW);
+
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     r(new TrajectoryAction(t.next(), d));
-    r(new AutoShootAction(5, p, su));
+    r(new ShootAction(5, su));
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new ClimbAction(c));
     }
-    sh.followPlan(false);
   }
 }

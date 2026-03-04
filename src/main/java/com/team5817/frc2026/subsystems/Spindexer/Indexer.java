@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class SpindexerGroup extends Subsystem {
+public class Indexer extends Subsystem {
 
   private final Spindexer leftRoller;
   private final Spindexer rightRoller;
@@ -18,7 +18,7 @@ public class SpindexerGroup extends Subsystem {
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
-  public SpindexerGroup(Spindexer leftRoller, Spindexer rightRoller) {
+  public Indexer(Spindexer leftRoller, Spindexer rightRoller) {
     this.leftRoller = leftRoller;
     this.rightRoller = rightRoller;
   }

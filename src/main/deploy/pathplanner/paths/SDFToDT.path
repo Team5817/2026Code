@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.08466666666666667,
+        "x": 0.08466666666666711,
         "y": 7.8048819444444435
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SDFT"
     },
     {
       "anchor": {
@@ -53,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

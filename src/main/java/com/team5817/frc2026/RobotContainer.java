@@ -15,7 +15,7 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Spindexer.Spindexer;
 import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants;
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerGroup;
+import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Spindexer.TunnelConstants;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooter;
 import com.team5817.frc2026.subsystems.Stationary.FixedShooterConstants;
@@ -46,7 +46,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
   public Drive mDrive = null;
   public Intake mIntake = null;
-  public SpindexerGroup mSpindexer = null;
+  public Indexer mSpindexer = null;
   public Shooter mShooter = null;
   public FixedShooter mFixedShooter = null;
   public Vision mVision = null;
@@ -102,7 +102,7 @@ public class RobotContainer {
                 Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
             new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants));
     mSpindexer =
-        new SpindexerGroup(
+        new Indexer(
             new Spindexer(
                 new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
                 new RollerSubsystemIOTalonFX(Ports.TUNNEL_SECONDARY, TunnelConstants.leftRoller, 1),
@@ -169,7 +169,7 @@ public class RobotContainer {
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
     if (mSpindexer == null)
       mSpindexer =
-          new SpindexerGroup(
+          new Indexer(
               new Spindexer(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
@@ -203,7 +203,7 @@ public class RobotContainer {
 
     if (mSpindexer == null)
       mSpindexer =
-          new SpindexerGroup(
+          new Indexer(
               new Spindexer(
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
                   new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
