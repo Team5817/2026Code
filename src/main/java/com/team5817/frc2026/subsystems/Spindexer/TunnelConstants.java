@@ -5,8 +5,7 @@ import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 
 public class TunnelConstants {
 
-  public static final RollerConstantsTalonFX TUNNEL =
-      new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX TUNNEL = new RollerConstantsTalonFX();
 
   static {
     TUNNEL.kMainConstants.id = Ports.TUNNEL;

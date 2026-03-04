@@ -22,6 +22,5 @@ public class SpindexerConstants {
     Spinner1.kStatorCurrentLimit = 30;
     Spinner1.kEnableSupplyCurrentLimit = true;
     Spinner1.kEnableStatorCurrentLimit = true;
-
   }
 }

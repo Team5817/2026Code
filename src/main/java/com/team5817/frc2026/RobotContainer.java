@@ -22,7 +22,6 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
-import com.team5817.lib.drivers.Actuator.ActuatorIOLinear;
 import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
@@ -67,18 +66,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure =
-        new Superstructure(mDrive, mIntake, mSpindexer, mShooter, mClimb, mLight);
+    mSuperstructure = new Superstructure(mDrive, mIntake, mSpindexer, mShooter, mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive,
-        mSuperstructure,
-        mVision,
-        mIntake,
-        mShooter,
-        mSpindexer,
-        mClimb,
-        mLight);
+        mDrive, mSuperstructure, mVision, mIntake, mShooter, mSpindexer, mClimb, mLight);
   }
 
   public void makeRealRobot() {
@@ -98,20 +89,16 @@ public class RobotContainer {
             new RollerSubsystemIOTalonFX(
                 Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
             new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants));
-    
+
     mSpindexer =
         new Indexer(
             new Spindexer(
-                new RollerSubsystemIOTalonFX(
-                    Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
+                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
                 "Left"),
             new Spindexer(
-                new RollerSubsystemIOTalonFX(
-                    Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
+                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
                 "Right"),
-            new Tunnel(
-                new RollerSubsystemIOTalonFX(
-                    Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
+            new Tunnel(new RollerSubsystemIOTalonFX(Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
 
     mShooter =
         new Shooter(
@@ -161,21 +148,17 @@ public class RobotContainer {
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
-  
+
     if (mSpindexer == null)
-     mSpindexer =
-        new Indexer(
-            new Spindexer(
-                new RollerSubsystemIOTalonFX(
-                    Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
-                "Left"),
-            new Spindexer(
-                new RollerSubsystemIOTalonFX(
-                    Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
-                "Right"),
-            new Tunnel(
-                new RollerSubsystemIOTalonFX(
-                    Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
+      mSpindexer =
+          new Indexer(
+              new Spindexer(
+                  new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
+                  "Left"),
+              new Spindexer(
+                  new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
+                  "Right"),
+              new Tunnel(new RollerSubsystemIOTalonFX(Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
 
     if (mDrive == null)
       mDrive =
@@ -200,18 +183,11 @@ public class RobotContainer {
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
 
     if (mSpindexer == null)
-        mSpindexer =
-            new Indexer(
-                new Spindexer(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                    "Left"),
-                
-            new Spindexer(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
-                    "Right"),
-               
-            new Tunnel(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10)));
+      mSpindexer =
+          new Indexer(
+              new Spindexer(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
+              new Spindexer(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"),
+              new Tunnel(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10)));
 
     if (mVision == null)
       mVision =

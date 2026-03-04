@@ -26,10 +26,7 @@ public class Indexer extends Subsystem {
   }
 
   public enum State {
-    IDLE(
-        Spindexer.SpinnerState.IDLE,
-        Spindexer.SpinnerState.IDLE,
-        Tunnel.TunnelState.IDLE),
+    IDLE(Spindexer.SpinnerState.IDLE, Spindexer.SpinnerState.IDLE, Tunnel.TunnelState.IDLE),
 
     FEED(
         Spindexer.SpinnerState.COUNTERCLOCK,
@@ -45,10 +42,7 @@ public class Indexer extends Subsystem {
     public final Spindexer.SpinnerState rightState;
     public final Tunnel.TunnelState tunnelState;
 
-    State(
-        Spindexer.SpinnerState left,
-        Spindexer.SpinnerState right,
-        Tunnel.TunnelState tunnel) {
+    State(Spindexer.SpinnerState left, Spindexer.SpinnerState right, Tunnel.TunnelState tunnel) {
       this.leftState = left;
       this.rightState = right;
       this.tunnelState = tunnel;
@@ -79,9 +73,7 @@ public class Indexer extends Subsystem {
 
   @Override
   public boolean checkSystem() {
-    return leftRoller.checkSystem()
-        && rightRoller.checkSystem()
-        && tunnel.checkSystem();
+    return leftRoller.checkSystem() && rightRoller.checkSystem() && tunnel.checkSystem();
   }
 
   @Override
