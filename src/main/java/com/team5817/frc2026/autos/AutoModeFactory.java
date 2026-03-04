@@ -4,8 +4,8 @@ import com.team5817.frc2026.autos.Modes.D;
 import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.H;
-import com.team5817.frc2026.autos.Modes.HNRD;
 import com.team5817.frc2026.autos.Modes.HNR;
+import com.team5817.frc2026.autos.Modes.HNRD;
 import com.team5817.frc2026.autos.Modes.NRH;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -31,7 +31,12 @@ public class AutoModeFactory {
   }
 
   public enum StartingPosition {
-    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.H, DesiredMode.MAIN_HUMAN, DesiredMode.HNRD, DesiredMode.NRHT),
+    TRENCH_H(
+        DesiredMode.DO_NOTHING,
+        DesiredMode.H,
+        DesiredMode.MAIN_HUMAN,
+        DesiredMode.HNRD,
+        DesiredMode.NRHT),
     TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.MAIN_DEPOT),
     CENTER(DesiredMode.DO_NOTHING);
 
@@ -54,7 +59,8 @@ public class AutoModeFactory {
   private Optional<AutoBase> mAutoMode = Optional.empty();
 
   private static SendableChooser<DesiredMode> mModeChooser = new SendableChooser<>();
-  private static SendableChooser<StartingPosition> mStartingPositionSelector = new SendableChooser<>();
+  private static SendableChooser<StartingPosition> mStartingPositionSelector =
+      new SendableChooser<>();
   private static SendableChooser<ClimbSelection> mClimbPreferenceSelector = new SendableChooser<>();
 
   /**
@@ -64,7 +70,7 @@ public class AutoModeFactory {
   public AutoModeFactory(Superstructure s, Drive d) {
     this.s = s;
     this.d = d;
-    
+
     mStartingPositionSelector.setDefaultOption("TRENCH_D", StartingPosition.TRENCH_D);
     mStartingPositionSelector.addOption("TRENCH_H", StartingPosition.TRENCH_H);
     mStartingPositionSelector.addOption("CENTER", StartingPosition.CENTER);

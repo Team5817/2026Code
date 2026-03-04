@@ -1,12 +1,9 @@
 package com.team5817.frc2026.autos.Modes;
 
-import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ParallelAction;
+import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
-
-import java.util.List;
-
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
@@ -19,9 +16,10 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
+import java.util.List;
 
 public class DNRD extends AutoBase {
-  //Approved
+  // Approved
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -45,7 +43,6 @@ public class DNRD extends AutoBase {
     Trajectory DTToC0 = l.trajectories.get("DTToC0");
     Trajectory C0ToC1 = l.trajectories.get("C0ToC1");
 
-
     t = new TrajectorySet(false, SDFTToN2, N2ToD0, D0ToDT, DTToC0, C0ToC1);
   }
 
@@ -65,19 +62,16 @@ public class DNRD extends AutoBase {
 
     r(new TrajectoryAction(t.next(), d));
 
-    if(climbSelection == ClimbSelection.SHOULD_CLIMB){
-      r(new ParallelAction(List.of(
-        new ClimbAction(c),
-        new ShootAction(4, su)
-      )));
-    }else{
+    if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
+      r(new ParallelAction(List.of(new ClimbAction(c), new ShootAction(4, su))));
+    } else {
       r(new ShootAction(4, su));
     }
-    
+
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));
       r(new TrajectoryAction(t.next(), d));
-      
+
       r(new ClimbAction(c));
     }
   }

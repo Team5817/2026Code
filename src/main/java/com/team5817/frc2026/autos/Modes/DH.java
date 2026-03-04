@@ -1,7 +1,7 @@
 package com.team5817.frc2026.autos.Modes;
 
-import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
+import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
@@ -31,12 +31,11 @@ public class DH extends AutoBase {
     this.p = sh.getPlanner();
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
- 
+
     Trajectory SDFToDT;
     Trajectory DTToH;
     Trajectory HToC0;
     Trajectory C0ToC1;
-     
 
     SDFToDT = l.trajectories.get("SDFToDT");
     DTToH = l.trajectories.get("DTToH");
@@ -55,7 +54,7 @@ public class DH extends AutoBase {
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-  
+
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(7, su));
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {

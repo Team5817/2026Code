@@ -54,7 +54,7 @@ public class Ports {
   public static final CanDeviceId PIGEON = new CanDeviceId(24, "canivore1");
 
   public static final CanDeviceId LEDS = new CanDeviceId(25, "canivore1");
-public static final CanDeviceId CLIMB_CANCODER = new CanDeviceId(26, "canivore1");//TODO
+  public static final CanDeviceId CLIMB_CANCODER = new CanDeviceId(26, "canivore1"); // TODO
 
   /* BEAM BREAK DIO CHANNELS */
   // public static final int INDEXER_BEAM_BREAK = 0;

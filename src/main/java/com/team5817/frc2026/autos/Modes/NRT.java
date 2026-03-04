@@ -1,7 +1,7 @@
 package com.team5817.frc2026.autos.Modes;
 
-import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
+import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
@@ -16,7 +16,7 @@ import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 
 public class NRT extends AutoBase {
-  //Approved
+  // Approved
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -32,7 +32,7 @@ public class NRT extends AutoBase {
     this.p = sh.getPlanner();
     this.c = s.mClimb;
     this.climbSelection = climbSelection;
-   
+
     Trajectory SHNToC0;
     Trajectory N2ToC0;
 
