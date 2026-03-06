@@ -10,6 +10,7 @@ import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Drive.Drive.DriveControlState;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -57,20 +58,24 @@ public class NSwipe extends AutoBase {
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
     sh.setDesiredState(Shooter.State.STOW_HOOD);
+    sh.forceStow(true);
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
     r(new TrajectoryAction(t.next(), d));
+    d.setControlState(DriveControlState.OPEN_LOOP);
     r(new ShootAction(5, su,1));
+    
     
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
     r(new TrajectoryAction(t.next(), d));
-    r(new ShootAction(5, su, 1));
+    d.setControlState(DriveControlState.OPEN_LOOP);
+    r(new ShootAction(4, su, 1));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
         r(new TrajectoryAction(t.next(), d));

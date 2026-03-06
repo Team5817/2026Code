@@ -37,7 +37,8 @@ public class ShootAction implements Action {
 
   @Override
   public void update() {
-    if(s.mShooter.atState && spinupTimer.get()>spinupTime) {
+    Logger.recordOutput("SpinTIMER", spinupTimer.get());
+    if(spinupTimer.get()>spinupTime) {
       s.mIndexer.setState(Indexer.State.FEED);
     } else {
       s.mIndexer.setState(Indexer.State.IDLE);
@@ -49,6 +50,7 @@ public class ShootAction implements Action {
     s.mIndexer.setState(Indexer.State.IDLE);
     s.mIntake.conformToState(Intake.State.IDLE);
     s.mShooter.setDesiredState(Shooter.State.STOW_HOOD);
+    s.mShooter.forceStow(true);
   }
 
   @Override
@@ -56,8 +58,11 @@ public class ShootAction implements Action {
     s.mShooter.followPlan(false);
     timer.reset();
     timer.start();
+    spinupTimer.reset();
+    spinupTimer.start();
     s.mIntake.conformToState(Intake.State.AGITATE);
     s.mIndexer.setState(Indexer.State.FEED);
     s.mShooter.setDesiredState(Shooter.State.HUB);
+    s.mShooter.forceStow(false);
   }
 }
