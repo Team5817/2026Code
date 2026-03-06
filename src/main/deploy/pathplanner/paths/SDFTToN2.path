@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.213850931677018,
-        "y": 7.419148181011535
+        "x": 4.246042590949423,
+        "y": 7.58815439219166
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.091178861037166,
-        "y": 7.533469295326827
+        "x": 8.123370520309571,
+        "y": 7.702475506506952
       },
       "isLocked": false,
       "linkedName": "SDFT"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -89.10482628978897
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

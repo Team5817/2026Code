@@ -19,6 +19,7 @@ import com.team5817.lib.Elastic;
 import com.team5817.lib.RobotMode;
 import com.team5817.lib.Util;
 import com.team5817.lib.requests.AutoShootRequest;
+import com.team5817.lib.requests.EmptyRequest;
 import com.team5817.lib.vision.LimelightPoseCalibrator;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -26,7 +27,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
+
+import java.lang.reflect.Field;
 import java.util.Optional;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -112,7 +117,7 @@ public class Robot extends LoggedRobot {
 
   /** This method is called periodically, regardless of the robot's mode. */
   boolean needsZero = true;
-
+  Field2d elasticField2d = new Field2d();
   @Override
   public void robotPeriodic() {
     if (needsZero && DriverStation.getAlliance().isPresent()) {
@@ -123,6 +128,8 @@ public class Robot extends LoggedRobot {
     mSubsystemManager.updateSubsystems();
     RobotVisualizer.outputTelemetry();
     ActiveTracker.updateActive();
+    elasticField2d.setRobotPose(mRobotContainer.mDrive.getPose().wpi());
+    SmartDashboard.putData("Elastic/Field", elasticField2d);
   }
 
   boolean disableGyroReset = false;
@@ -133,6 +140,8 @@ public class Robot extends LoggedRobot {
     mSubsystemManager.start();
     neverEnabled = false;
     Elastic.selectTab("Autonomous");
+    mRobotContainer.mSuperstructure.request(new EmptyRequest());
+    mRobotContainer.mShooter.forceStow(false);
     mAutoExecuter.start();
   }
 

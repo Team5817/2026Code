@@ -254,31 +254,31 @@ public class ShootingPlanner {
   }
 
   public Boolean shouldShoot() {
-    if (override) return true;
-    if (!atStateSupplier.getAsBoolean()) return false;
+    return override;
+    // if (!atStateSupplier.getAsBoolean()) return false;
 
-    Shooter.State state = recommendedShooterState();
-    ChassisSpeeds speeds = shooterVelocitySupplier.get();
-    if (speeds == null) return false;
+    // Shooter.State state = recommendedShooterState();
+    // ChassisSpeeds speeds = shooterVelocitySupplier.get();
+    // if (speeds == null) return false;
 
-    double linearVel = Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
-    double angularVelDeg = Math.toDegrees(speeds.omegaRadiansPerSecond);
+    // double linearVel = Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    // double angularVelDeg = Math.toDegrees(speeds.omegaRadiansPerSecond);
 
-    ShootingTarget target =
-        state == Shooter.State.HUB
-            ? ShootingTarget.HUB
-            : state == Shooter.State.LOB ? ShootingTarget.LOB : null;
+    // ShootingTarget target =
+    //     state == Shooter.State.HUB
+    //         ? ShootingTarget.HUB
+    //         : state == Shooter.State.LOB ? ShootingTarget.LOB : null;
 
-    if (target == null) return false;
-    if (linearVel > target.getVelocityThreshold()) return false;
-    if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
-    if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold()) return false;
-    if (state == Shooter.State.STOW_HOOD) return false;
-    if (new com.team254.lib.geometry.Translation2d(shooterPoseSupplier.get().getTranslation())
-        .inBounds(config.blockedBounds)) return false;
+    // if (target == null) return false;
+    // if (linearVel > target.getVelocityThreshold()) return false;
+    // if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
+    // if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold()) return false;
+    // if (state == Shooter.State.STOW_HOOD) return false;
+    // if (new com.team254.lib.geometry.Translation2d(shooterPoseSupplier.get().getTranslation())
+    //     .inBounds(config.blockedBounds)) return false;
 
-    Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
-    return true;
+    // Logger.recordOutput("Shooter/Planner/time", Timer.getTimestamp());
+    // return true;
   }
 
   public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {

@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ActiveTracker {
@@ -82,7 +84,6 @@ public class ActiveTracker {
   public static double getTimeToActive() {
     if (DriverStation.isAutonomous()) return 0;
     if (!DriverStation.isTeleopEnabled()) return Double.POSITIVE_INFINITY;
-    if (!ensureWonAuto()) return Double.POSITIVE_INFINITY;
 
     double matchTime = DriverStation.getMatchTime();
 
@@ -94,15 +95,12 @@ public class ActiveTracker {
         break;
       }
     }
-
-    // if current window is active for our alliance => already active
-    if (current != null && current.isActiveFor(wonAuto)) return 0;
-
+    
     // otherwise find next window (with smaller start) that will be active
     // windows are ordered from largest start to smallest start, so iterate and find first with
     // start < matchTime
     for (TeleopWindow w : TELEOP_WINDOWS) {
-      if (w.start < matchTime && w.isActiveFor(wonAuto)) {
+      if (w.start < matchTime) {
         return matchTime - w.start;
       }
     }
@@ -138,7 +136,6 @@ public class ActiveTracker {
     // fallback
     isActive = false;
   }
-
   public static boolean shouldShakeController() {
     double tta = getTimeToActive();
 

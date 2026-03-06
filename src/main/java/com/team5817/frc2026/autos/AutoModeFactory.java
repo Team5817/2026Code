@@ -1,5 +1,6 @@
 package com.team5817.frc2026.autos;
 
+import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DNS;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
@@ -33,7 +34,8 @@ public class AutoModeFactory {
     D,
     DNRD,
     HNRD,
-    NRHT
+    NRHT,
+    CENTER_MAIN
   }
 
   public enum StartingPosition {
@@ -46,8 +48,8 @@ public class AutoModeFactory {
         DesiredMode.NSWIPE,
         DesiredMode.HNRD,
         DesiredMode.NRHT),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.DNS, DesiredMode.DNRD),
-    CENTER(DesiredMode.DO_NOTHING);
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.DNS, DesiredMode.DNRD, DesiredMode.NSWIPE),
+    CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER_MAIN);
 
     public List<DesiredMode> modes;
 
@@ -141,9 +143,11 @@ public class AutoModeFactory {
       case DNS:
         return Optional.of(new DNS(s, mCachedClimbSelection));
       case NSWIPE:
-        return Optional.of(new NSwipe(s, mCachedClimbSelection));
+        return Optional.of(new NSwipe(s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
       case DNRD:
         return Optional.of(new DNRD(s, mCachedClimbSelection));
+      case CENTER_MAIN:
+        return Optional.of(new PL(s, mCachedClimbSelection));
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;

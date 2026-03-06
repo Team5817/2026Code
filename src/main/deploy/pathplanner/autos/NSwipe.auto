@@ -13,25 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NEToSH"
+            "pathName": "NEToHS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "SHToNE2"
+            "pathName": "HSToNE2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NE2ToSH"
+            "pathName": "NE2ToHS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "SHToC0"
+            "pathName": "HSToC0"
           }
         },
         {

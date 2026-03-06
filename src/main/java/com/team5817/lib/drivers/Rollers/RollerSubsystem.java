@@ -1,10 +1,3 @@
-// Copyright (c) 2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package com.team5817.lib.drivers.Rollers;
 
 import com.team5817.lib.drivers.Subsystem;
@@ -57,13 +50,14 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   public void readPeriodicInputs() {
     io.updateInputs(inputs);
     Logger.processInputs(inputsName, inputs);
+
     if (mState.getControlMode() == RollerControlMode.VELOCITY) {
-      atState =
-          Math.abs(inputs.data.velocityRotsPerSec() - mState.getDemand())
-              < mState.getToleranceRadsPerSec();
+      double error = mState.getDemand() - inputs.data.velocityRotsPerSec();
+      atState = Math.abs(error) < mState.getToleranceRadsPerSec();
     } else {
       atState = true;
     }
+
     disconnected.set(!motorConnectedDebouncer.calculate(inputs.data.connected()));
     tempFault.set(inputs.data.tempFault());
   }
@@ -81,13 +75,14 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
         break;
     }
 
+    double error = mState.getDemand() - inputs.data.velocityRotsPerSec();
+
     Logger.recordOutput(inputsName + "/State", mState);
     Logger.recordOutput(inputsName + "/Control Mode", mState.getControlMode());
     Logger.recordOutput(inputsName + "/Desired", mState.getDemand());
     Logger.recordOutput(inputsName + "/Position", Math.toDegrees(inputs.data.positionRads()));
-    Logger.recordOutput(inputsName + "/Velocity", (inputs.data.velocityRotsPerSec()));
-    Logger.recordOutput(
-        inputsName + "/Error", mState.getDemand() - inputs.data.velocityRotsPerSec());
+    Logger.recordOutput(inputsName + "/Velocity", inputs.data.velocityRotsPerSec());
+    Logger.recordOutput(inputsName + "/Error", error);
     Logger.recordOutput(inputsName + "/BrakeModeEnabled", brakeModeEnabled);
     Logger.recordOutput(inputsName + "/atState", atState);
   }

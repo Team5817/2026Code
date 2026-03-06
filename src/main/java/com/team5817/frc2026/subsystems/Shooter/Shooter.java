@@ -133,10 +133,10 @@ public class Shooter extends Subsystem {
   public void periodic() {
     if (followPlan) setDesiredState(planner.recommendedShooterState());
     if (forcedStow) {
-      desiredState = State.STOW;
+      desiredState = State.STOW_HOOD;
     }
 
-    atState = turret.atState() && hood.atState() && flywheel.atState() && !forcedStow;
+    atState = turret.atState() && hood.atState();
 
     turret.setState(desiredState.turretState);
     hood.setState(desiredState.hoodState);

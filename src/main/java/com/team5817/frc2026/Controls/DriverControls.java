@@ -1,4 +1,5 @@
 package com.team5817.frc2026.Controls;
+import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Climb.Climb;
@@ -33,7 +34,8 @@ public class DriverControls {
 
   /* ONE CONTROLLER */
   public void oneControllerMode() {
-    s.mShooter.getPlanner().setOverride(driver.getRightBumperButton());
+
+    s.mShooter.getPlanner().setOverride(driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2);
 
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
@@ -110,9 +112,9 @@ public class DriverControls {
     }
 
     // Controller Shake
+    Logger.recordOutput("ActiveTracker/Should Shake", ActiveTracker.shouldShakeController());
     if (ActiveTracker.shouldShakeController()) {
-      driver.rumble(0.3, 1);
-      ;
+      codriver.rumble(0.3, 1);
     }
   }
 

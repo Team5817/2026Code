@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.751131944444445,
-        "y": 6.653819444444444
+        "x": 4.246042590949423,
+        "y": 7.58815439219166
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.442887074632608,
-        "y": -1.2529778743097406
+        "x": 8.511437444543034,
+        "y": 7.5479148181011535
       },
       "isLocked": false,
-      "linkedName": "EN"
+      "linkedName": "SDFT"
     },
     {
       "anchor": {
-        "x": 2.05,
-        "y": 3.36
+        "x": 7.682502218278616,
+        "y": 4.570186335403726
       },
       "prevControl": {
-        "x": 1.7210867272349406,
-        "y": -0.6415048493034434
+        "x": 7.602023070097605,
+        "y": 7.813496007098491
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C0"
+      "linkedName": "N2"
     }
   ],
   "rotationTargets": [],
@@ -41,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 2.0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,

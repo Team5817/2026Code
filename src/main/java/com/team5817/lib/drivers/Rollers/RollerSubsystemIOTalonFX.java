@@ -1,10 +1,3 @@
-// Copyright (c) 2025 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
-
 package com.team5817.lib.drivers.Rollers;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -26,7 +19,6 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
-/** Generic roller IO implementation for a roller or series of rollers using a Kraken. */
 public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
   private final TalonFX mMain;
 
@@ -38,7 +30,6 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
   private final StatusSignal<Temperature> tempCelsius;
   private final StatusSignal<Boolean> tempFault;
 
-  // Single shot for voltage mode, robot loop will call continuously
   private final VoltageOut voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0);
   private final VelocityDutyCycle velocityOut =
       new VelocityDutyCycle(0).withUpdateFreqHz(0).withSlot(0);
@@ -72,6 +63,7 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
     config.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = mConstants.kRampRate;
     config.ClosedLoopRamps.VoltageClosedLoopRampPeriod = mConstants.kRampRate;
     config.ClosedLoopRamps.TorqueClosedLoopRampPeriod = mConstants.kRampRate;
+
     config.CurrentLimits.SupplyCurrentLimit = mConstants.kSupplyCurrentLimit;
     config.CurrentLimits.SupplyCurrentLimitEnable = mConstants.kEnableSupplyCurrentLimit;
 
@@ -90,6 +82,7 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
             : InvertedValue.Clockwise_Positive);
 
     config.MotorOutput.NeutralMode = mConstants.kNeutralMode;
+
     PhoenixUtil.tryUntilOk(5, () -> mMain.getConfigurator().apply(config));
 
     position = mMain.getPosition();
@@ -112,6 +105,7 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
                 torqueCurrent,
                 tempCelsius,
                 tempFault));
+
     PhoenixUtil.tryUntilOk(5, () -> mMain.optimizeBusUtilization(0, 1.0));
     this.mConstants = mConstants;
   }

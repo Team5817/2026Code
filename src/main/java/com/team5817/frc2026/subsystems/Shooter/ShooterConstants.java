@@ -84,10 +84,10 @@ public class ShooterConstants {
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.0, 35.0);
-    hubFly.put(3.0, 55.0); // Depot
+    hubFly.put(3.0, 54.0); // Depot
     hubFly.put(3.6, 53.0); // trench
-    hubFly.put(4.0, 58.0); // tower side
-    hubFly.put(5.0, 72.0); // Human
+    hubFly.put(4.0, 57.0); // tower side
+    hubFly.put(5.0, 70.5); // Human
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
@@ -156,11 +156,11 @@ public class ShooterConstants {
       kHoodServoConstants.kMinUnitsLimit = 0.0;
       kHoodServoConstants.kMaxUnitsLimit = 30.0;
 
-      kHoodServoConstants.kKp = 3;
-      kHoodServoConstants.kKi = 9.5;
-      kHoodServoConstants.kKd = 0.02;
+      kHoodServoConstants.kKp = 0;//3;
+      kHoodServoConstants.kKi = 0;//9.5;
+      kHoodServoConstants.kKd = 0;//0.02;
 
-      kHoodServoConstants.kKs = 0.9;
+      kHoodServoConstants.kKs = 0;//0.9;
       kHoodServoConstants.kKv = 0.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;

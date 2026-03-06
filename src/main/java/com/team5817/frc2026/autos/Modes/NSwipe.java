@@ -27,7 +27,7 @@ public class NSwipe extends AutoBase {
   private ClimbSelection climbSelection;
   private ShootingPlanner p;
 
-  public NSwipe(Superstructure s, ClimbSelection climbSelection) {
+  public NSwipe(Superstructure s, ClimbSelection climbSelection, boolean isHumanSide) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -43,45 +43,40 @@ public class NSwipe extends AutoBase {
     Trajectory C0ToC1;
 
     SHToNE = l.trajectories.get("SHToNE");
-    NEToSH = l.trajectories.get("NEToSH");
-    SHToNE2 = l.trajectories.get("SHToNE2");
-    NE2ToSH = l.trajectories.get("NE2ToSH");
-    SHToC0 = l.trajectories.get("SHToC0");
+    NEToSH = l.trajectories.get("NEToHS");
+    SHToNE2 = l.trajectories.get("HSToNE2");
+    NE2ToSH = l.trajectories.get("NE2ToHS");
+    SHToC0 = l.trajectories.get("HSToC0");
     C0ToC1 = l.trajectories.get("C0ToC1");
 
-    t = new TrajectorySet(false, SHToNE, NEToSH, SHToNE2, NE2ToSH, SHToC0, C0ToC1);
+    t = new TrajectorySet(!isHumanSide, SHToNE, NEToSH, SHToNE2, NE2ToSH, SHToC0, C0ToC1);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
+    d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
-    sh.setDesiredState(Shooter.State.STOW);
+    sh.setDesiredState(Shooter.State.STOW_HOOD);
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
     r(new TrajectoryAction(t.next(), d));
-    r(new ShootAction(5, su));
+    r(new ShootAction(5, su,1));
     
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
     r(new TrajectoryAction(t.next(), d));
-    r(new ShootAction(5, su));
+    r(new ShootAction(5, su, 1));
 
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
-      r(new ParallelAction(List.of(new ClimbAction(c))));
-
-    } else {
-      r(new ShootAction(5, su));
-    }
-
-    if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
-      r(new TrajectoryAction(t.next(), d));
+        r(new TrajectoryAction(t.next(), d));
+      r(new ClimbAction(c));
       r(new TrajectoryAction(t.next(), d));
 
       r(new ClimbAction(c));
