@@ -35,7 +35,7 @@ public class ShootAction implements Action {
   @Override
   public void update() {
     Logger.recordOutput("SpinTIMER", spinupTimer.get());
-    if(spinupTimer.get()>spinupTime) {
+    if (spinupTimer.get() > spinupTime) {
       s.mIndexer.setState(Indexer.State.FEED);
     } else {
       s.mIndexer.setState(Indexer.State.IDLE);

@@ -154,7 +154,7 @@ public class ShooterConstants {
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 96 / 1;
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
-    kHoodServoConstants.kMaxUnitsLimit = 30.0;
+      kHoodServoConstants.kMaxUnitsLimit = 30.0;
 
       kHoodServoConstants.kKp = 3;
       kHoodServoConstants.kKi = 9.5;
