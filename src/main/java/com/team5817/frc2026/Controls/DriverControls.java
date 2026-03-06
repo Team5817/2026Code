@@ -1,5 +1,4 @@
 package com.team5817.frc2026.Controls;
-import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
@@ -7,6 +6,7 @@ import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * The DriverControls class handles the input from the driver and co-driver controllers and
@@ -34,7 +34,9 @@ public class DriverControls {
   /* ONE CONTROLLER */
   public void oneControllerMode() {
 
-    s.mShooter.getPlanner().setOverride(driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2);
+    s.mShooter
+        .getPlanner()
+        .setOverride(driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2);
 
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());

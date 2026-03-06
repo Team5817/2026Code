@@ -156,11 +156,11 @@ public class ShooterConstants {
       kHoodServoConstants.kMinUnitsLimit = 0.0;
       kHoodServoConstants.kMaxUnitsLimit = 30.0;
 
-      kHoodServoConstants.kKp = 0;//3;
-      kHoodServoConstants.kKi = 0;//9.5;
-      kHoodServoConstants.kKd = 0;//0.02;
+      kHoodServoConstants.kKp = 0; // 3;
+      kHoodServoConstants.kKi = 0; // 9.5;
+      kHoodServoConstants.kKd = 0; // 0.02;
 
-      kHoodServoConstants.kKs = 0;//0.9;
+      kHoodServoConstants.kKs = 0; // 0.9;
       kHoodServoConstants.kKv = 0.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;

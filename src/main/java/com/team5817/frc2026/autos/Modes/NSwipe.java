@@ -1,7 +1,6 @@
 package com.team5817.frc2026.autos.Modes;
 
 import com.team5817.frc2026.autos.Actions.ClimbAction;
-import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
@@ -15,7 +14,6 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
-import java.util.List;
 
 public class NSwipe extends AutoBase {
   private Drive d;
@@ -63,8 +61,8 @@ public class NSwipe extends AutoBase {
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
     r(new TrajectoryAction(t.next(), d));
-    r(new ShootAction(5, su,1));
-    
+    r(new ShootAction(5, su, 1));
+
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
@@ -73,7 +71,7 @@ public class NSwipe extends AutoBase {
     r(new ShootAction(5, su, 1));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
-        r(new TrajectoryAction(t.next(), d));
+      r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));
       r(new TrajectoryAction(t.next(), d));
 
