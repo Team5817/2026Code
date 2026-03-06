@@ -11,7 +11,7 @@ public class Spindexer extends Subsystem {
   public final RollerSubsystem<SpinnerState> spindexer;
 
   public Spindexer(RollerSubsystemIO spinnerIO, String name) {
-    this.spindexer = new RollerSubsystem<>(SpinnerState.IDLE, "Spindexer " + name, spinnerIO);
+    this.spindexer = new RollerSubsystem<>(SpinnerState.IDLE, "Indexer/Spindexer " + name, spinnerIO);
   }
 
   public void setState(SpinnerState spinnerState) {
@@ -20,8 +20,8 @@ public class Spindexer extends Subsystem {
 
   public enum SpinnerState implements IRollerState {
     IDLE(0),
-    COUNTERCLOCK(-10),
-    CLOCK(10);
+    COUNTERCLOCK(-11),
+    CLOCK(11);
 
     private final double demand;
 

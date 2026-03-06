@@ -17,6 +17,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import javax.crypto.interfaces.PBEKey;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -101,11 +104,12 @@ public class Shooter extends Subsystem {
 
   @Getter @Setter private State desiredState = State.HUB;
 
-  private boolean atState = false;
+  public boolean atState = false;
   private boolean forcedStow = false;
 
   public enum State {
     STOW(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
+    STOW_HOOD(Turret.State.HUB, Hood.State.STOW, ShooterConstants.FlywheelState.HUB),
     CLOSE(Turret.State.STOW, Hood.State.CLOSE, ShooterConstants.FlywheelState.CLOSE),
     FAR(Turret.State.STOW, Hood.State.FAR, ShooterConstants.FlywheelState.FAR),
     HUB(Turret.State.HUB, Hood.State.HUB, ShooterConstants.FlywheelState.HUB),

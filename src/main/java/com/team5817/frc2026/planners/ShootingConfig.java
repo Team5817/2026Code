@@ -39,13 +39,18 @@ public class ShootingConfig {
 
   public static ShootingConfig defaultConfig() {
     InterpolatingDoubleTreeMap timeMap = new InterpolatingDoubleTreeMap();
+    
     timeMap.put(1.0, 0.2);
+    timeMap.put(3.0, 0.3);
+    timeMap.put(5.0, 0.38);// TODO add more values
+
     Bounds hubBounds = new Bounds(0.0, 0.0, 4.6, 8);
-    Bounds dangerBounds = new Bounds(4.33, 0, 5.8, 1.3);
+    Bounds dangerBounds = new Bounds(3.65, 0, 5.5, 1.3);
     Bounds blockedBounds = new Bounds(5, 3.5, 6, 4.6);
     Bounds dangerBoundsOpponent = dangerBounds.flippedAboutY();
     Bounds dangerBoundsFlipped = dangerBounds.flippedAboutX();
     Bounds dangerBoundsFlippedOpponent = dangerBounds.flippedAboutX().flippedAboutY();
+
     Logger.recordOutput(
         "Shooting/DangerBounds",
         new double[] {

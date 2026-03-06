@@ -4,7 +4,6 @@ import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -34,51 +33,43 @@ public class DriverControls {
 
   /* ONE CONTROLLER */
   public void oneControllerMode() {
-    s.mShooter.getPlanner().setOverride(driver.getLeftBumperButton());
+    s.mShooter.getPlanner().setOverride(driver.getRightBumperButton());
 
+    // RB don't Shoot
+    s.setAllowAutoShoot(!driver.getRightBumperButton());
     if (driver.getStartButton()) d.allianceZeroGyro();
 
-    // LT intake
+    // Manual Zero
     if (codriver.getBackButton()) {
       s.mIntake.conformToState(Intake.State.STOW);
       s.mShooter.forceStow(true);
-      s.mClimb.setState(Climb.State.ZERO);
+      // s.mClimb.setState(Climb.State.ZERO);
+    } 
 
-    } else if (driver.leftTrigger.isBeingPressed()) {
+    // LT Intake
+    else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-
-    } else if (codriver.xButton.isBeingPressed()) s.mIntake.conformToState(Intake.State.AGITATE);
-
+    } 
+    else if (codriver.rightTrigger.isBeingPressed()) {
+      s.mIntake.conformToState(Intake.State.AGITATE);
+    }
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-    if (codriver.xButton.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
+    if (codriver.rightTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
       s.mIntake.conformToState(Intake.State.IDLE);
 
-    // Co-driver Outtake
-    if (codriver.leftTrigger.isBeingPressed()) {
+    // LB Outtake
+    if (driver.leftBumper.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.EXHAUSTING);
     }
-    if (!codriver.leftTrigger.isBeingPressed()
+    if (!driver.leftBumper.isBeingPressed()
         && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 
-    // LB Shoot Both
-    if (driver.getLeftBumperButtonPressed()) {
-      s.request(s.DualShotRequest());
-    }
-
-    if (driver.getLeftBumperButtonReleased()) {
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s));
-      s.mIndexer.setState(Indexer.State.IDLE);
-    }
-
-    // RB don't Shoot
-    s.setAllowAutoShoot(!driver.getRightBumperButton());
-
     // RT Slow mode
-    double scalar = 1 - driver.getRightTriggerAxis() * 0.7;
+    double scalar = 1 - driver.getRightTriggerAxis() * 0.5;
     mControlBoard.setSwerveScalar(scalar);
     d.setSpeedScalar(scalar);
 
@@ -98,12 +89,11 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // B Force Hood (Driver and Co-driver)
+    // B Force Hood (Both)
     if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
       s.request(new EmptyRequest());
     }
-
     if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {
       s.mShooter.forceStow(false);
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));

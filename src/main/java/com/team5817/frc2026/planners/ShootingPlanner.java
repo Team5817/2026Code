@@ -208,7 +208,7 @@ public class ShootingPlanner {
     ChassisSpeeds speeds = shooterVelocitySupplier.get();
 
     if (current == null || speeds == null) {
-      return Shooter.State.STOW;
+      return Shooter.State.STOW_HOOD;
     }
 
     Translation2d toHub = ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
@@ -233,10 +233,14 @@ public class ShootingPlanner {
       pos = pos.mirrorAboutX(FieldConstants.LinesVertical.center);
       futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
     }
-    if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW;
-    if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW;
-    if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW;
-    if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW;
+    if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
+    if(futureHubPos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
+    if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
+    if(futureHubPos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
+    if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
+    if(futureHubPos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
+    if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
+    if(futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
 
     if (futureHubPos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
 
@@ -269,7 +273,7 @@ public class ShootingPlanner {
     if (linearVel > target.getVelocityThreshold()) return false;
     if (Math.abs(angularVelDeg) > target.getRotationThreshold()) return false;
     if (timeSinceVision.getAsDouble() > target.getTimeSinceVisionThreshold()) return false;
-    if (state == Shooter.State.STOW) return false;
+    if (state == Shooter.State.STOW_HOOD) return false;
     if (new com.team254.lib.geometry.Translation2d(shooterPoseSupplier.get().getTranslation())
         .inBounds(config.blockedBounds)) return false;
 

@@ -24,6 +24,7 @@ import com.team254.lib.geometry.Translation2d;
 import com.team254.lib.geometry.Twist2d;
 import com.team254.lib.swerve.ChassisSpeeds;
 import com.team254.lib.util.SynchronousPIDF;
+import com.team5817.frc2026.Robot;
 import com.team5817.frc2026.field.AlignmentPoint.AlignmentType;
 import com.team5817.frc2026.generated.TunerConstants;
 import com.team5817.lib.RobotMode;
@@ -438,6 +439,8 @@ public class Drive extends Subsystem {
    * @param speeds Speeds in meters/sec
    */
   public void runVelocity(ChassisSpeeds speeds) {
+    if(Robot.isReal())
+      speeds = new ChassisSpeeds(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond);
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds.wpi());

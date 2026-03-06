@@ -17,6 +17,7 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   private static final double kLooseError = 4.0;
 
   static Supplier<Rotation2d> mRobotHeadingSupplier = () -> Rotation2d.kIdentity;
+  static DoubleSupplier mTurretPositionSupplier = () -> 0.0;
 
   CANcoder mCanCoder;
 
@@ -25,14 +26,21 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
       DoubleSupplier hubAngleSupplier,
       DoubleSupplier lobAngleSupplier,
       Supplier<Rotation2d> robotHeadingSupplier) {
+
     super(State.STOW, io);
+
     mCanCoder =
         new CANcoder(Ports.TURRET_CANCODER.getDeviceNumber(), Ports.TURRET_CANCODER.getBus());
+
     Turret.mRobotHeadingSupplier = robotHeadingSupplier;
+
     State.HUB.setSupplier(hubAngleSupplier);
     State.LOBBING.setSupplier(lobAngleSupplier);
 
     zeroSensors(getAbsoluteTurretDegrees());
+
+    // allow enum access to turret position
+    Turret.mTurretPositionSupplier = this::getPosition;
   }
 
   public double getAbsoluteTurretDegrees() {
@@ -74,21 +82,35 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
         double demandDeg = demand.getAsDouble();
         double robotHeading = mRobotHeadingSupplier.get().getDegrees();
 
-        // Convert world → robot centric
+        // world → robot centric
         double robotCentric = -demandDeg + robotHeading;
 
-        // Normalize to [-180, 180)
+        // normalize to [-180,180)
         robotCentric = ((robotCentric + 180) % 360 + 360) % 360 - 180;
 
-        // Shift into turret ROM [-270, 0]
-        if (robotCentric > 0) {
-          robotCentric -= 360;
-        }
-        Logger.recordOutput("Shooter/Turret/Unclamped", robotCentric);
-        // Clamp just in case
-        robotCentric = Math.max(-270, Math.min(0, robotCentric));
+        double current = mTurretPositionSupplier.getAsDouble();
 
-        return robotCentric;
+        double[] candidates = {
+          robotCentric,
+          robotCentric - 360,
+          robotCentric + 360
+        };
+
+        double chosen = robotCentric;
+        double bestError = Double.POSITIVE_INFINITY;
+
+        for (double c : candidates) {
+          if (c < -390 || c > 0) continue;
+
+          double error = Math.abs(c - current);
+          if (error < bestError) {
+            bestError = error;
+            chosen = c;
+          }
+        }
+
+        Logger.recordOutput("Shooter/Turret/Unclamped", chosen);
+        return chosen;
       }
 
       return demand.getAsDouble();

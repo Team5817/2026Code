@@ -44,7 +44,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotContainer {
   public Drive mDrive = null;
   public Intake mIntake = null;
-  public Indexer mSpindexer = null;
+  public Indexer mIndexer = null;
   public Shooter mShooter = null;
   public Vision mVision = null;
   public Climb mClimb = null;
@@ -66,10 +66,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mIntake, mSpindexer, mShooter, mClimb, mLight);
+    mSuperstructure = new Superstructure(mDrive, mIntake, mIndexer, mShooter, mClimb, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mIntake, mShooter, mSpindexer, mClimb, mLight);
+        mDrive, mSuperstructure, mVision, mIntake, mShooter, mIndexer, mClimb, mLight);
   }
 
   public void makeRealRobot() {
@@ -90,7 +90,7 @@ public class RobotContainer {
                 Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
             new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants));
 
-    mSpindexer =
+    mIndexer =
         new Indexer(
             new Spindexer(
                 new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
@@ -150,8 +150,8 @@ public class RobotContainer {
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
 
-    if (mSpindexer == null)
-      mSpindexer =
+    if (mIndexer == null)
+      mIndexer =
           new Indexer(
               new Spindexer(
                   new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
@@ -183,8 +183,8 @@ public class RobotContainer {
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
               new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
 
-    if (mSpindexer == null)
-      mSpindexer =
+    if (mIndexer == null)
+      mIndexer =
           new Indexer(
               new Spindexer(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
               new Spindexer(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"),

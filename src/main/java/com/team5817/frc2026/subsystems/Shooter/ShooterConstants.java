@@ -84,8 +84,8 @@ public class ShooterConstants {
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.0, 35.0);
-    hubFly.put(3.0, 54.0); // Depot
-    hubFly.put(3.6, 52.0); // trench
+    hubFly.put(3.0, 55.0); // Depot
+    hubFly.put(3.6, 53.0); // trench
     hubFly.put(4.0, 58.0); // tower side
     hubFly.put(5.0, 72.0); // Human
 
@@ -107,7 +107,7 @@ public class ShooterConstants {
       kTurretServoConstants.kHomePosition = 0.0;
       kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 104.166667;
 
-      kTurretServoConstants.kMinUnitsLimit = -270.0;
+      kTurretServoConstants.kMinUnitsLimit = -390.0;
       kTurretServoConstants.kMaxUnitsLimit = 0.0;
 
       kTurretServoConstants.kKp = 4.0;

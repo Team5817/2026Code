@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.732743055555556,
-        "y": 7.2323958333333325
+        "x": 4.213850931677018,
+        "y": 7.419148181011535
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.08466666666666711,
-        "y": 7.8048819444444435
+        "x": 0.5657745427881302,
+        "y": 7.991634292122646
       },
       "isLocked": false,
       "linkedName": "SDFT"
@@ -38,8 +38,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -53,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -89.10482628978897
   },
   "useDefaultConstraints": false
 }

@@ -3,6 +3,8 @@ package com.team5817.frc2026.autos.Actions;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Intake.Intake;
+
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,12 +26,19 @@ public class ShootAction implements Action {
   }
 
   @Override
-  public void update() {}
+  public void update() {
+    if(s.mShooter.atState) {
+      s.mIndexer.setState(Indexer.State.FEED);
+    } else {
+      s.mIndexer.setState(Indexer.State.IDLE);
+    }
+  }
 
   @Override
   public void done() {
     s.mIndexer.setState(Indexer.State.IDLE);
     s.mShooter.setDesiredState(Shooter.State.STOW);
+    s.mIntake.conformToState(Intake.State.IDLE);
   }
 
   @Override
@@ -37,6 +46,7 @@ public class ShootAction implements Action {
     s.mShooter.followPlan(false);
     timer.reset();
     timer.start();
+    s.mIntake.conformToState(Intake.State.AGITATE);
     s.mIndexer.setState(Indexer.State.FEED);
     s.mShooter.setDesiredState(Shooter.State.HUB);
   }

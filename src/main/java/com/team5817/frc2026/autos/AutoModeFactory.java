@@ -1,12 +1,14 @@
 package com.team5817.frc2026.autos;
 
-import com.team5817.frc2026.autos.Modes.D;
 import com.team5817.frc2026.autos.Modes.DNRD;
+import com.team5817.frc2026.autos.Modes.DNS;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.H;
-import com.team5817.frc2026.autos.Modes.HNR;
-import com.team5817.frc2026.autos.Modes.HNRD;
+
 import com.team5817.frc2026.autos.Modes.NRH;
+import com.team5817.frc2026.autos.Modes.NS;
+import com.team5817.frc2026.autos.Modes.NSH;
+import com.team5817.frc2026.autos.Modes.NSwipe;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,9 +25,13 @@ public class AutoModeFactory {
   public enum DesiredMode {
     DO_NOTHING,
     H,
+    NS,
+    NSH,
+    NRH,
+    DNS,
+    NSWIPE,
     D,
-    MAIN_HUMAN,
-    MAIN_DEPOT,
+    DNRD,
     HNRD,
     NRHT
   }
@@ -34,10 +40,13 @@ public class AutoModeFactory {
     TRENCH_H(
         DesiredMode.DO_NOTHING,
         DesiredMode.H,
-        DesiredMode.MAIN_HUMAN,
+        DesiredMode.NS,
+        DesiredMode.NSH,
+        DesiredMode.NRH,
+        DesiredMode.NSWIPE,
         DesiredMode.HNRD,
         DesiredMode.NRHT),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.MAIN_DEPOT),
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.D, DesiredMode.DNS, DesiredMode.DNRD),
     CENTER(DesiredMode.DO_NOTHING);
 
     public List<DesiredMode> modes;
@@ -123,16 +132,18 @@ public class AutoModeFactory {
         return Optional.of(new DoNothingMode());
       case H:
         return Optional.of(new H(s, mCachedClimbSelection));
-      case D:
-        return Optional.of(new D(s, mCachedClimbSelection));
-      case MAIN_HUMAN:
-        return Optional.of(new HNR(s, mCachedClimbSelection));
-      case MAIN_DEPOT:
-        return Optional.of(new DNRD(s, mCachedClimbSelection));
-      case HNRD:
-        return Optional.of(new HNRD(s, mCachedClimbSelection));
-      case NRHT:
+      case NS:
+        return Optional.of(new NS(s, mCachedClimbSelection));
+      case NSH:
+        return Optional.of(new NSH(s, mCachedClimbSelection));
+      case NRH:
         return Optional.of(new NRH(s, mCachedClimbSelection));
+      case DNS:
+        return Optional.of(new DNS(s, mCachedClimbSelection));
+      case NSWIPE:
+        return Optional.of(new NSwipe(s, mCachedClimbSelection));
+      case DNRD:
+        return Optional.of(new DNRD(s, mCachedClimbSelection));
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;

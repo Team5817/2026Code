@@ -29,7 +29,7 @@ public final class SwerveConstants {
 
   /* Controller Invert */
   public static final boolean invertYAxis = false;
-  public static final boolean invertRAxis = false;
+  public static final boolean invertRAxis = true;
   public static final boolean invertXAxis = false;
 
   /* Heading Controller */

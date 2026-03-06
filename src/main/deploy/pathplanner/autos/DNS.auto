@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHFToH"
+            "pathName": "DToN1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HToC0"
+            "pathName": "N1ToC02"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C0ToC1"
+            "pathName": "C02ToC2"
           }
         }
       ]

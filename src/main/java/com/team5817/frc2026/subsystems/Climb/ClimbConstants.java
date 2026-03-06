@@ -20,13 +20,13 @@ public final class ClimbConstants {
     kClimbServoConstants.kMaxUnitsLimit = 180 - 28;
     kClimbServoConstants.kMinUnitsLimit = 0.0;
 
-    kClimbServoConstants.kKp = 16;
+    kClimbServoConstants.kKp = 0;//16;
     kClimbServoConstants.kKi = 0.0;
-    kClimbServoConstants.kKd = 0.2;
+    kClimbServoConstants.kKd = 0;//0.2;
     kClimbServoConstants.kKa = 0.0;
     kClimbServoConstants.kKs = 0.0;
-    kClimbServoConstants.kKv = .1;
-    kClimbServoConstants.kKg = 7;
+    kClimbServoConstants.kKv = 0.0;
+    kClimbServoConstants.kKg = 0.0;
 
     kClimbServoConstants.kCruiseVelocity =
         9999.0 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s
@@ -44,7 +44,7 @@ public final class ClimbConstants {
 
     kClimbServoConstants.kFollowerOpposeMasterDirection = MotorAlignmentValue.Aligned;
 
-    kClimbServoConstants.kNeutralMode = NeutralModeValue.Brake;
+    kClimbServoConstants.kNeutralMode = NeutralModeValue.Coast;
 
     kClimbServoConstants.kHomingTimeout = 0.5;
     kClimbServoConstants.kHomingOutput = -.25;

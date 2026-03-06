@@ -67,13 +67,6 @@ public class Superstructure extends Subsystem {
         .addName("FarShot");
   }
 
-  public Request DualShotRequest() {
-    return new ParallelRequest(
-            new AutoShootRequest(mShooter.getPlanner(), this),
-            mIndexer.stateRequest(Indexer.State.FEED))
-        .addName("ShootBoth");
-  }
-
   @Override
   public void periodic() {
     requestExecutor.update();

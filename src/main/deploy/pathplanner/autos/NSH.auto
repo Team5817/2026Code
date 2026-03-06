@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHFToH"
+            "pathName": "SHToNS"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NSToN1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N2ToH"
           }
         },
         {
