@@ -1,7 +1,6 @@
 package com.team5817.frc2026.Controls;
 
 import com.team5817.frc2026.ActiveTracker;
-import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -44,13 +43,12 @@ public class DriverControls {
       s.mIntake.conformToState(Intake.State.STOW);
       s.mShooter.forceStow(true);
       // s.mClimb.setState(Climb.State.ZERO);
-    } 
+    }
 
     // LT Intake
     else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-    } 
-    else if (codriver.rightTrigger.isBeingPressed()) {
+    } else if (codriver.rightTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.AGITATE);
     }
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
@@ -63,8 +61,7 @@ public class DriverControls {
     if (driver.leftBumper.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.EXHAUSTING);
     }
-    if (!driver.leftBumper.isBeingPressed()
-        && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
+    if (!driver.leftBumper.isBeingPressed() && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 

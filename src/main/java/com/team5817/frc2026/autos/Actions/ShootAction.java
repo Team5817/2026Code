@@ -1,10 +1,9 @@
 package com.team5817.frc2026.autos.Actions;
 
+import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
-import com.team5817.frc2026.subsystems.Intake.Intake;
-
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 
@@ -27,7 +26,7 @@ public class ShootAction implements Action {
 
   @Override
   public void update() {
-    if(s.mShooter.atState) {
+    if (s.mShooter.atState) {
       s.mIndexer.setState(Indexer.State.FEED);
     } else {
       s.mIndexer.setState(Indexer.State.IDLE);

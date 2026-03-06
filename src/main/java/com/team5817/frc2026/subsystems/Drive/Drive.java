@@ -439,8 +439,10 @@ public class Drive extends Subsystem {
    * @param speeds Speeds in meters/sec
    */
   public void runVelocity(ChassisSpeeds speeds) {
-    if(Robot.isReal())
-      speeds = new ChassisSpeeds(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond);
+    if (Robot.isReal())
+      speeds =
+          new ChassisSpeeds(
+              speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, -speeds.omegaRadiansPerSecond);
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds.wpi());

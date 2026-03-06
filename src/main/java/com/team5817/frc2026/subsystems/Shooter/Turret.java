@@ -90,11 +90,7 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
         double current = mTurretPositionSupplier.getAsDouble();
 
-        double[] candidates = {
-          robotCentric,
-          robotCentric - 360,
-          robotCentric + 360
-        };
+        double[] candidates = {robotCentric, robotCentric - 360, robotCentric + 360};
 
         double chosen = robotCentric;
         double bestError = Double.POSITIVE_INFINITY;

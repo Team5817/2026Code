@@ -18,7 +18,7 @@ import com.team5817.lib.motion.TrajectorySet;
 import java.util.List;
 
 public class NRH extends AutoBase {
-  //Testing Priority, WIP
+  // Testing Priority, WIP
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;

@@ -4,7 +4,6 @@ import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DNS;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.H;
-
 import com.team5817.frc2026.autos.Modes.NRH;
 import com.team5817.frc2026.autos.Modes.NS;
 import com.team5817.frc2026.autos.Modes.NSH;

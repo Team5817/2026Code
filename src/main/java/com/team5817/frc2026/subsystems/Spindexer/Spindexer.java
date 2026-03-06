@@ -11,7 +11,8 @@ public class Spindexer extends Subsystem {
   public final RollerSubsystem<SpinnerState> spindexer;
 
   public Spindexer(RollerSubsystemIO spinnerIO, String name) {
-    this.spindexer = new RollerSubsystem<>(SpinnerState.IDLE, "Indexer/Spindexer " + name, spinnerIO);
+    this.spindexer =
+        new RollerSubsystem<>(SpinnerState.IDLE, "Indexer/Spindexer " + name, spinnerIO);
   }
 
   public void setState(SpinnerState spinnerState) {
