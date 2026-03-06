@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ActiveTracker {
@@ -95,7 +93,7 @@ public class ActiveTracker {
         break;
       }
     }
-    
+
     // otherwise find next window (with smaller start) that will be active
     // windows are ordered from largest start to smallest start, so iterate and find first with
     // start < matchTime
@@ -136,6 +134,7 @@ public class ActiveTracker {
     // fallback
     isActive = false;
   }
+
   public static boolean shouldShakeController() {
     double tta = getTimeToActive();
 

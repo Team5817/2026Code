@@ -48,7 +48,7 @@ public class H extends AutoBase {
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
-    
+
     sh.followPlan(false);
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(8, su));
