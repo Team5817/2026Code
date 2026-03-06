@@ -9,7 +9,6 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.NeverEndingRequest;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;

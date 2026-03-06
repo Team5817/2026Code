@@ -1,26 +1,24 @@
 package com.team5817.frc2026.autos.Modes;
 
-import java.util.List;
-
-import com.team5817.frc2026.autos.AutoBase;
-import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
-import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
+import com.team5817.frc2026.autos.AutoBase;
+import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
+import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
-import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Intake.Intake.State;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
+import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
+import java.util.List;
 
-public class DNS extends AutoBase{
-  //Testing Priority, WIP
+public class DNS extends AutoBase {
+  // Testing Priority, WIP
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -41,7 +39,6 @@ public class DNS extends AutoBase{
     Trajectory DToN1 = l.trajectories.get("DToN1");
     Trajectory N1ToC02 = l.trajectories.get("N1ToC02");
     Trajectory C02ToC2 = l.trajectories.get("C02ToC2");
-    
 
     t = new TrajectorySet(false, DToN1, N1ToC02, C02ToC2);
   }
@@ -71,4 +68,3 @@ public class DNS extends AutoBase{
     }
   }
 }
-

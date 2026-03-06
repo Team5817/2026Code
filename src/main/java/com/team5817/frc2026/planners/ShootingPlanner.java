@@ -234,13 +234,13 @@ public class ShootingPlanner {
       futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
     }
     if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
-    if(futureHubPos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
     if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
-    if(futureHubPos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
     if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
-    if(futureHubPos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
     if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
-    if(futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
 
     if (futureHubPos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
 
