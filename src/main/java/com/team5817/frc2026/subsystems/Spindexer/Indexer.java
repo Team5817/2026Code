@@ -1,6 +1,7 @@
 package com.team5817.frc2026.subsystems.Spindexer;
 
 import com.team5817.frc2026.RobotVisualizer;
+import com.team5817.frc2026.subsystems.Spindexer.Tunnel.TunnelState;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.Request;
@@ -32,7 +33,10 @@ public class Indexer extends Subsystem {
         Spindexer.SpinnerState.COUNTERCLOCK,
         Spindexer.SpinnerState.COUNTERCLOCK,
         Tunnel.TunnelState.IN),
-
+    SPINUP(
+      Spindexer.SpinnerState.IDLE,
+      Spindexer.SpinnerState.IDLE,
+      TunnelState.IN),
     EXHAUST(
         Spindexer.SpinnerState.COUNTERCLOCK,
         Spindexer.SpinnerState.CLOCK,

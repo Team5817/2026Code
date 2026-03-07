@@ -65,7 +65,7 @@ public class NSwipe extends AutoBase {
 
     r(new TrajectoryAction(t.next(), d));
     d.setControlState(DriveControlState.OPEN_LOOP);
-    r(new ShootAction(5, su, 2));
+    r(new ShootAction(5, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), d));
@@ -73,7 +73,7 @@ public class NSwipe extends AutoBase {
 
     r(new TrajectoryAction(t.next(), d));
     d.setControlState(DriveControlState.OPEN_LOOP);
-    r(new ShootAction(4, su, 2));
+    r(new ShootAction(4, su, 1));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));
