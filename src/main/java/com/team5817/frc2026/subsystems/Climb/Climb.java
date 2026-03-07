@@ -60,7 +60,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
       case READY:
         return stateRequest(State.DOWN);
       case DOWN:
-        return null;
+        return stateRequest(State.READY);
     }
     return null;
   }
