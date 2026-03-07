@@ -52,13 +52,13 @@ public class DriverControls {
     // LT Intake
     else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-    } else if (codriver.rightTrigger.isBeingPressed()) {
+    } else if (codriver.getRightTriggerAxis() > 0.2) {
       s.mIntake.conformToState(Intake.State.AGITATE);
     }
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-    if (codriver.rightTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
+    if (codriver.getRightTriggerAxis() < 0.2 && s.mIntake.getMState() == Intake.State.AGITATE)
       s.mIntake.conformToState(Intake.State.IDLE);
 
     // LB Outtake
