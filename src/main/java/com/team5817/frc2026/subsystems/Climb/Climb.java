@@ -1,7 +1,6 @@
 package com.team5817.frc2026.subsystems.Climb;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.team5817.frc2026.Ports;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
@@ -20,8 +19,6 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
-    this.mCANCoder =
-        new CANcoder(Ports.CLIMB_CANCODER.getDeviceNumber(), Ports.CLIMB_CANCODER.getBus());
     this.latchRelease = new LatchRelease(latchIO);
     zeroSensors(mCANCoder.getAbsolutePosition().getValueAsDouble() * 365);
   }
