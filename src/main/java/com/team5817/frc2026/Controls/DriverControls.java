@@ -84,10 +84,10 @@ public class DriverControls {
 
     // A Far
     if (driver.getAButtonPressed()) {
-      s.request(s.FarShotRequest());
+      s.mIntake.conformToState(Intake.State.STOW);
     }
     if (driver.getAButtonReleased()) {
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+      s.mIntake.conformToState(Intake.State.IDLE);
     }
 
     // B Force Hood (Both)

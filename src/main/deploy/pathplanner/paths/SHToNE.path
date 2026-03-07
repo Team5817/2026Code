@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.332512705806955,
-        "y": 0.39
+        "x": 7.915891748003549,
+        "y": 0.44965394853593577
       },
       "isLocked": false,
       "linkedName": "SH"
     },
     {
       "anchor": {
-        "x": 8.440527777777778,
-        "y": 2.9570208333333325
+        "x": 7.923939662821651,
+        "y": 2.36505767524401
       },
       "prevControl": {
-        "x": 8.099472222222222,
-        "y": 0.794972222222222
+        "x": 7.811268855368235,
+        "y": 0.5220851818988457
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.49379652605459173,
+      "minWaypointRelativePos": 0.6459731543624171,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,

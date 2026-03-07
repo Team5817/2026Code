@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.732825261263925,
-        "y": 0.38875117075815746
+        "y": 0.3887511707581575
       },
       "isLocked": false,
       "linkedName": "HS"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
