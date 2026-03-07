@@ -15,12 +15,10 @@ import lombok.Getter;
 public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   LatchRelease latchRelease;
-  CANcoder mCANCoder;
 
   public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
     this.latchRelease = new LatchRelease(latchIO);
-    zeroSensors(mCANCoder.getAbsolutePosition().getValueAsDouble() * 365);
   }
 
   /** Enum representing the different states of the elevator. */
