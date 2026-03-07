@@ -85,7 +85,7 @@ public class ShooterConstants {
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.0, 35.0);
     hubFly.put(3.0, 54.0); // Depot
-    hubFly.put(3.6, 53.0); // trench
+    hubFly.put(3.6, 52.0); // trench
     hubFly.put(4.0, 57.0); // tower side
     hubFly.put(5.0, 70.5); // Human
 

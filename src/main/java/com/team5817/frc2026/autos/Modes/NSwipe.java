@@ -56,6 +56,7 @@ public class NSwipe extends AutoBase {
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
     sh.setDesiredState(Shooter.State.STOW_HOOD);
+    p.setOverride(false);
     sh.forceStow(true);
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();

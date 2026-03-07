@@ -20,8 +20,8 @@ public class Tunnel extends Subsystem {
 
   public enum TunnelState implements IRollerState {
     IDLE(0),
-    IN(11),
-    EXHAUST(-11);
+    IN(12),
+    EXHAUST(-12);
 
     private final double demand;
 
