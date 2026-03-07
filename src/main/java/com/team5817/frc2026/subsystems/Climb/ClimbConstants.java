@@ -12,7 +12,7 @@ public final class ClimbConstants {
     kClimbServoConstants.kName = "Climb";
 
     kClimbServoConstants.kMainConstants.id = Ports.CLIMB;
-    kClimbServoConstants.kMainConstants.counterClockwisePositive = true;
+    kClimbServoConstants.kMainConstants.counterClockwisePositive = false;
 
     kClimbServoConstants.kHomePosition = 0; // degrees
     kClimbServoConstants.kRotationsPerUnitDistance = 129.205/90;
