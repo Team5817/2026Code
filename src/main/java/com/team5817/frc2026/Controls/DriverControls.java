@@ -42,13 +42,6 @@ public class DriverControls {
     s.setAllowAutoShoot(!driver.getRightBumperButton());
     if (driver.getStartButton()) d.allianceZeroGyro();
 
-    // Manual Zero
-    if (codriver.getBackButton()) {
-      s.mIntake.conformToState(Intake.State.STOW);
-      s.mShooter.forceStow(true);
-      // s.mClimb.setState(Climb.State.ZERO);
-    }
-
     // LT Intake
     else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
@@ -85,9 +78,6 @@ public class DriverControls {
     // A Far
     if (driver.getAButtonPressed()) {
       s.mIntake.conformToState(Intake.State.STOW);
-    }
-    if (driver.getAButtonReleased()) {
-      s.mIntake.conformToState(Intake.State.IDLE);
     }
 
     // B Force Hood (Both)
