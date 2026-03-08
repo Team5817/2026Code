@@ -44,7 +44,7 @@ public final class ClimbConstants {
 
     kClimbServoConstants.kFollowerOpposeMasterDirection = MotorAlignmentValue.Aligned;
 
-    kClimbServoConstants.kNeutralMode = NeutralModeValue.Coast;
+    kClimbServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
     kClimbServoConstants.kHomingTimeout = 0.5;
     kClimbServoConstants.kHomingOutput = -.25;

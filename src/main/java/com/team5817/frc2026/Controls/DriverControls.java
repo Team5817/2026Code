@@ -3,6 +3,9 @@ package com.team5817.frc2026.Controls;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shooter.Shooter;
+import com.team5817.frc2026.subsystems.Spindexer.Indexer;
+import com.team5817.frc2026.subsystems.Spindexer.Indexer.State;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -83,6 +86,7 @@ public class DriverControls {
     // B Force Hood (Both)
     if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
+      s.mIndexer.setState(Indexer.State.IDLE);
       s.request(new EmptyRequest());
     }
     if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {
