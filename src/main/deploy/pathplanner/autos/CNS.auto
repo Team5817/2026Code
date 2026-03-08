@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHToNE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEToHS"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CHSToNE2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CNE2ToHS"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Port Hueneme",
+  "choreoAuto": false
+}
