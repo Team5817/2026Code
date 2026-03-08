@@ -76,41 +76,43 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
     }
 
     @Override
-    public double getDemand() {
-      if (worldOriented) {
+public double getDemand() {
 
-        double demandDeg = demand.getAsDouble();
-        double robotHeading = mRobotHeadingSupplier.get().getDegrees();
+  double target;
 
-        // world → robot centric
-        double robotCentric = -demandDeg + robotHeading;
+  if (worldOriented) {
+    double demandDeg = demand.getAsDouble();
+    double robotHeading = mRobotHeadingSupplier.get().getDegrees();
 
-        // normalize to [-180,180)
-        robotCentric = ((robotCentric + 180) % 360 + 360) % 360 - 180;
+    // world → robot centric
+    target = -demandDeg + robotHeading;
 
-        double current = mTurretPositionSupplier.getAsDouble();
+    // normalize to [-180,180)
+    target = ((target + 180) % 360 + 360) % 360 - 180;
+  } else {
+    target = demand.getAsDouble();
+  }
 
-        double[] candidates = {robotCentric, robotCentric - 360, robotCentric + 360};
+  double current = mTurretPositionSupplier.getAsDouble();
 
-        double chosen = robotCentric;
-        double bestError = Double.POSITIVE_INFINITY;
+  double[] candidates = {target, target - 360, target + 360};
 
-        for (double c : candidates) {
-          if (c < -390 || c > 0) continue;
+  double chosen = target;
+  double bestError = Double.POSITIVE_INFINITY;
 
-          double error = Math.abs(c - current);
-          if (error < bestError) {
-            bestError = error;
-            chosen = c;
-          }
-        }
+  for (double c : candidates) {
+    if (c < -390 || c > 0) continue;
 
-        Logger.recordOutput("Shooter/Turret/Unclamped", chosen);
-        return chosen;
-      }
-
-      return demand.getAsDouble();
+    double error = Math.abs(c - current);
+    if (error < bestError) {
+      bestError = error;
+      chosen = c;
     }
+  }
+
+  Logger.recordOutput("Shooter/Turret/Unclamped", chosen);
+  return chosen;
+}
 
     @Override
     public double getAllowableError() {
