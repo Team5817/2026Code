@@ -67,7 +67,7 @@ public class Cl extends AutoBase {
     r(new TrajectoryAction(t.next(),1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
     d.runVelocity(new ChassisSpeeds());
-    r(new ShootAction(6, su, 1));
+    r(new ShootAction(7, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(),1, d));
