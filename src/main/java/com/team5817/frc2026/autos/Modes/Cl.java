@@ -3,6 +3,7 @@ package com.team5817.frc2026.autos.Modes;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
+import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
@@ -65,7 +66,8 @@ public class Cl extends AutoBase {
 
     r(new TrajectoryAction(t.next(),1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
-    r(new ShootAction(5, su, 1));
+    d.runVelocity(new ChassisSpeeds());
+    r(new ShootAction(6, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(),1, d));
@@ -73,6 +75,8 @@ public class Cl extends AutoBase {
 
     r(new TrajectoryAction(t.next(),1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
+    d.runVelocity(new ChassisSpeeds());
+
     r(new ShootAction(4, su, 1));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
