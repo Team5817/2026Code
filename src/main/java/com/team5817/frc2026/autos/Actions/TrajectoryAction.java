@@ -2,7 +2,6 @@ package com.team5817.frc2026.autos.Actions;
 
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.lib.motion.Trajectory;
-
 import edu.wpi.first.wpilibj.Timer;
 
 /** TrajectoryAction is an action that sets a trajectory for the robot to follow. */
@@ -59,7 +58,7 @@ public class TrajectoryAction implements Action {
   @Override
   public boolean isFinished() {
     // return false;
-    return mDrive.isTrajectoryFinished() && timeSinceStart.get()>0.5;
+    return mDrive.isTrajectoryFinished() && timeSinceStart.get() > 0.5;
   }
 
   /** Updates the action. This method is called periodically while the action is running. */

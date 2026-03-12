@@ -76,43 +76,43 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
     }
 
     @Override
-public double getDemand() {
+    public double getDemand() {
 
-  double target;
+      double target;
 
-  if (worldOriented) {
-    double demandDeg = demand.getAsDouble();
-    double robotHeading = mRobotHeadingSupplier.get().getDegrees();
+      if (worldOriented) {
+        double demandDeg = demand.getAsDouble();
+        double robotHeading = mRobotHeadingSupplier.get().getDegrees();
 
-    // world → robot centric
-    target = -demandDeg + robotHeading;
+        // world → robot centric
+        target = -demandDeg + robotHeading;
 
-    // normalize to [-180,180)
-    target = ((target + 180) % 360 + 360) % 360 - 180;
-  } else {
-    target = demand.getAsDouble();
-  }
+        // normalize to [-180,180)
+        target = ((target + 180) % 360 + 360) % 360 - 180;
+      } else {
+        target = demand.getAsDouble();
+      }
 
-  double current = mTurretPositionSupplier.getAsDouble();
+      double current = mTurretPositionSupplier.getAsDouble();
 
-  double[] candidates = {target, target - 360, target + 360};
+      double[] candidates = {target, target - 360, target + 360};
 
-  double chosen = target;
-  double bestError = Double.POSITIVE_INFINITY;
+      double chosen = target;
+      double bestError = Double.POSITIVE_INFINITY;
 
-  for (double c : candidates) {
-    if (c < -390 || c > 0) continue;
+      for (double c : candidates) {
+        if (c < -390 || c > 0) continue;
 
-    double error = Math.abs(c - current);
-    if (error < bestError) {
-      bestError = error;
-      chosen = c;
+        double error = Math.abs(c - current);
+        if (error < bestError) {
+          bestError = error;
+          chosen = c;
+        }
+      }
+
+      Logger.recordOutput("Shooter/Turret/Unclamped", chosen);
+      return chosen;
     }
-  }
-
-  Logger.recordOutput("Shooter/Turret/Unclamped", chosen);
-  return chosen;
-}
 
     @Override
     public double getAllowableError() {

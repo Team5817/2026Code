@@ -33,10 +33,7 @@ public class Indexer extends Subsystem {
         Spindexer.SpinnerState.COUNTERCLOCK,
         Spindexer.SpinnerState.COUNTERCLOCK,
         Tunnel.TunnelState.IN),
-    SPINUP(
-      Spindexer.SpinnerState.IDLE,
-      Spindexer.SpinnerState.IDLE,
-      TunnelState.IN),
+    SPINUP(Spindexer.SpinnerState.IDLE, Spindexer.SpinnerState.IDLE, TunnelState.IN),
     EXHAUST(
         Spindexer.SpinnerState.COUNTERCLOCK,
         Spindexer.SpinnerState.CLOCK,

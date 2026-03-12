@@ -1,9 +1,9 @@
 package com.team5817.frc2026.autos.Modes;
 
+import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
-import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
@@ -61,19 +61,19 @@ public class Cl extends AutoBase {
     sh.forceStow(true);
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(),1, d));
+    r(new TrajectoryAction(t.next(), 1, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
-    r(new TrajectoryAction(t.next(),1.5, d));
+    r(new TrajectoryAction(t.next(), 1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
     d.runVelocity(new ChassisSpeeds());
     r(new ShootAction(7, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(),1, d));
+    r(new TrajectoryAction(t.next(), 1, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
-    r(new TrajectoryAction(t.next(),1.5, d));
+    r(new TrajectoryAction(t.next(), 1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
     d.runVelocity(new ChassisSpeeds());
 

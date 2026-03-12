@@ -60,18 +60,18 @@ public class NSwipe extends AutoBase {
     sh.forceStow(true);
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(),1, d));
+    r(new TrajectoryAction(t.next(), 1, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
-    r(new TrajectoryAction(t.next(),1.5, d));
+    r(new TrajectoryAction(t.next(), 1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
     r(new ShootAction(5, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(),1, d));
+    r(new TrajectoryAction(t.next(), 1, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
-    r(new TrajectoryAction(t.next(),1.5, d));
+    r(new TrajectoryAction(t.next(), 1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
     r(new ShootAction(4, su, 1));
 

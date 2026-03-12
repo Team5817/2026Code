@@ -1,6 +1,5 @@
 package com.team5817.frc2026.subsystems.Climb;
 
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;

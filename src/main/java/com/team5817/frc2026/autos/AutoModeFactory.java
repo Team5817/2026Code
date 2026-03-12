@@ -156,8 +156,7 @@ public class AutoModeFactory {
                 s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
       case CLOSESWIPE:
         return Optional.of(
-            new Cl(
-                s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
+            new Cl(s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
       case DNRD:
         return Optional.of(new DNRD(s, mCachedClimbSelection));
       case CENTER_MAIN:
