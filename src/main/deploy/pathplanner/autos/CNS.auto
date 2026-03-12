@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HSToNE2"
+            "pathName": "CHSToNE2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NE2ToHS"
+            "pathName": "CNE2ToHS"
           }
         }
       ]

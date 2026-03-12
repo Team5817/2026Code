@@ -38,7 +38,7 @@ public class ShootAction implements Action {
     if (spinupTimer.get() > spinupTime) {
       s.mIndexer.setState(Indexer.State.FEED);
     } else {
-      s.mIndexer.setState(Indexer.State.IDLE);
+      s.mIndexer.setState(Indexer.State.SPINUP);
     }
   }
 
@@ -58,7 +58,7 @@ public class ShootAction implements Action {
     spinupTimer.reset();
     spinupTimer.start();
     s.mIntake.conformToState(Intake.State.AGITATE);
-    s.mIndexer.setState(Indexer.State.FEED);
+    s.mIndexer.setState(Indexer.State.SPINUP);
     s.mShooter.setDesiredState(Shooter.State.HUB);
     s.mShooter.forceStow(false);
   }

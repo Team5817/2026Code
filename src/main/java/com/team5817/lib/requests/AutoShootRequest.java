@@ -25,6 +25,7 @@ public class AutoShootRequest extends Request {
   @Override
   public void cleanup() {
     s.mShooter.followPlan(false);
+    s.mIndexer.setState(Indexer.State.IDLE);  
   }
 
   @Override

@@ -22,7 +22,7 @@ public class Intake extends Subsystem {
   }
 
   public enum State {
-    IDLE(IntakeRollers.State.IDLE, IntakeDeploy.State.STOW),
+    IDLE(IntakeRollers.State.IDLE, IntakeDeploy.State.IDLE),
     HUMAN(IntakeRollers.State.IDLE, IntakeDeploy.State.OUT),
     INTAKING(IntakeRollers.State.INTAKING, IntakeDeploy.State.OUT),
     AGITATE(IntakeRollers.State.INTAKING, IntakeDeploy.State.AGITATE),

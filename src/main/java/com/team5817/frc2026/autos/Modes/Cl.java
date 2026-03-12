@@ -3,6 +3,7 @@ package com.team5817.frc2026.autos.Modes;
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
+import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
@@ -16,7 +17,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 
-public class NSwipe extends AutoBase {
+public class Cl extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -25,7 +26,7 @@ public class NSwipe extends AutoBase {
   private ClimbSelection climbSelection;
   private ShootingPlanner p;
 
-  public NSwipe(Superstructure s, ClimbSelection climbSelection, boolean isHumanSide) {
+  public Cl(Superstructure s, ClimbSelection climbSelection, boolean isHumanSide) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -42,8 +43,8 @@ public class NSwipe extends AutoBase {
 
     SHToNE = l.trajectories.get("SHToNE");
     NEToSH = l.trajectories.get("NEToHS");
-    SHToNE2 = l.trajectories.get("HSToNE2");
-    NE2ToSH = l.trajectories.get("NE2ToHS");
+    SHToNE2 = l.trajectories.get("CHSToNE2");
+    NE2ToSH = l.trajectories.get("CNE2ToHS");
     SHToC0 = l.trajectories.get("HSToC0");
     C0ToC1 = l.trajectories.get("C0ToC1");
 
@@ -65,7 +66,8 @@ public class NSwipe extends AutoBase {
 
     r(new TrajectoryAction(t.next(),1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
-    r(new ShootAction(5, su, 1));
+    d.runVelocity(new ChassisSpeeds());
+    r(new ShootAction(7, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(),1, d));
@@ -73,6 +75,8 @@ public class NSwipe extends AutoBase {
 
     r(new TrajectoryAction(t.next(),1.5, d));
     d.setControlState(DriveControlState.OPEN_LOOP);
+    d.runVelocity(new ChassisSpeeds());
+
     r(new ShootAction(4, su, 1));
 
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {

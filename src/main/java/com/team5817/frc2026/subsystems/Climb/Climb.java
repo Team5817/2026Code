@@ -1,7 +1,6 @@
 package com.team5817.frc2026.subsystems.Climb;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.team5817.frc2026.Ports;
 import com.team5817.frc2026.RobotVisualizer;
 import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
@@ -16,21 +15,17 @@ import lombok.Getter;
 public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
 
   LatchRelease latchRelease;
-  CANcoder mCANCoder;
 
   public Climb(ServoMotorIO io, ActuatorIO latchIO) {
     super(State.ZERO, io, true);
-    this.mCANCoder =
-        new CANcoder(Ports.CLIMB_CANCODER.getDeviceNumber(), Ports.CLIMB_CANCODER.getBus());
     this.latchRelease = new LatchRelease(latchIO);
-    zeroSensors(mCANCoder.getAbsolutePosition().getValueAsDouble() * 365);
   }
 
   /** Enum representing the different states of the elevator. */
   public enum State implements ServoState {
     ZERO(0),
     READY(140), // -187 prep
-    DOWN(30); // -65 climbed
+    DOWN(48); // -65 climbed
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -65,7 +60,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
       case READY:
         return stateRequest(State.DOWN);
       case DOWN:
-        return null;
+        return stateRequest(State.READY);
     }
     return null;
   }

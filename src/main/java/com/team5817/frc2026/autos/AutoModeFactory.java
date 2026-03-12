@@ -1,5 +1,6 @@
 package com.team5817.frc2026.autos;
 
+import com.team5817.frc2026.autos.Modes.Cl;
 import com.team5817.frc2026.autos.Modes.DNRD;
 import com.team5817.frc2026.autos.Modes.DNS;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
@@ -30,6 +31,7 @@ public class AutoModeFactory {
     NRH,
     DNS,
     NSWIPE,
+    CLOSESWIPE,
     D,
     DNRD,
     HNRD,
@@ -46,13 +48,15 @@ public class AutoModeFactory {
         DesiredMode.NRH,
         DesiredMode.NSWIPE,
         DesiredMode.HNRD,
-        DesiredMode.NRHT),
+        DesiredMode.NRHT,
+        DesiredMode.CLOSESWIPE),
     TRENCH_D(
         DesiredMode.DO_NOTHING,
         DesiredMode.D,
         DesiredMode.DNS,
         DesiredMode.DNRD,
-        DesiredMode.NSWIPE),
+        DesiredMode.NSWIPE,
+        DesiredMode.CLOSESWIPE),
     CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER_MAIN);
 
     public List<DesiredMode> modes;
@@ -149,6 +153,10 @@ public class AutoModeFactory {
       case NSWIPE:
         return Optional.of(
             new NSwipe(
+                s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
+      case CLOSESWIPE:
+        return Optional.of(
+            new Cl(
                 s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
       case DNRD:
         return Optional.of(new DNRD(s, mCachedClimbSelection));

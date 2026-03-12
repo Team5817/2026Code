@@ -18,7 +18,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
    * @param encoder_constants The constants for the absolute encoder.
    */
   public IntakeDeploy(final ServoConstants constants, ServoMotorIO io) {
-    super(IntakeDeploy.State.STOW, io, false);
+    super(IntakeDeploy.State.IDLE, io, false);
   }
 
   private double agitateStartTime = 0;
@@ -27,7 +27,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
 
   /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
-    STOW(0.2667),
+    IDLE(0.2667),
     OUT(0.2667),
     AGITATE(0.2667),
     ZERO(0);

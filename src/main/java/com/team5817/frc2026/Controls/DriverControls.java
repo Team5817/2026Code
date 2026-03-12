@@ -3,6 +3,9 @@ package com.team5817.frc2026.Controls;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shooter.Shooter;
+import com.team5817.frc2026.subsystems.Spindexer.Indexer;
+import com.team5817.frc2026.subsystems.Spindexer.Indexer.State;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -42,23 +45,16 @@ public class DriverControls {
     s.setAllowAutoShoot(!driver.getRightBumperButton());
     if (driver.getStartButton()) d.allianceZeroGyro();
 
-    // Manual Zero
-    if (codriver.getBackButton()) {
-      s.mIntake.conformToState(Intake.State.STOW);
-      s.mShooter.forceStow(true);
-      // s.mClimb.setState(Climb.State.ZERO);
-    }
-
     // LT Intake
     else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-    } else if (codriver.rightTrigger.isBeingPressed()) {
+    } else if (codriver.getRightTriggerAxis() > 0.2) {
       s.mIntake.conformToState(Intake.State.AGITATE);
     }
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-    if (codriver.rightTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.AGITATE)
+    if (codriver.getRightTriggerAxis() < 0.2 && s.mIntake.getMState() == Intake.State.AGITATE)
       s.mIntake.conformToState(Intake.State.IDLE);
 
     // LB Outtake
@@ -84,15 +80,13 @@ public class DriverControls {
 
     // A Far
     if (driver.getAButtonPressed()) {
-      s.request(s.FarShotRequest());
-    }
-    if (driver.getAButtonReleased()) {
-      s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
+      s.mIntake.conformToState(Intake.State.STOW);
     }
 
     // B Force Hood (Both)
     if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
+      s.mIndexer.setState(Indexer.State.IDLE);
       s.request(new EmptyRequest());
     }
     if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {

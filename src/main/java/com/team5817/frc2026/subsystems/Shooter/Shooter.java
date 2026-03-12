@@ -102,7 +102,7 @@ public class Shooter extends Subsystem {
   @Getter @Setter private State desiredState = State.HUB;
 
   public boolean atState = false;
-  private boolean forcedStow = false;
+  private boolean forcedStow = true;
 
   public enum State {
     STOW(Turret.State.STOW, Hood.State.STOW, ShooterConstants.FlywheelState.IDLE),
@@ -128,6 +128,7 @@ public class Shooter extends Subsystem {
 
   @Override
   public void periodic() {
+
     if (followPlan) setDesiredState(planner.recommendedShooterState());
     if (forcedStow) {
       desiredState = State.STOW_HOOD;
