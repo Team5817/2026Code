@@ -59,17 +59,15 @@ public class NSH extends AutoBase {
     p.setOverride(false);
     sh.forceStow(true);
 
-
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(), 0.3,  d));
+    r(new TrajectoryAction(t.next(), 0.3, d));
 
     r(new TrajectoryAction(t.next(), 0.3, d));
-    
-    
+
     r(new TrajectoryAction(t.next(), 1, d));
     r(new ShootAction(8, su));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    
+
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new ParallelAction(List.of(new ClimbAction(c))));
 
