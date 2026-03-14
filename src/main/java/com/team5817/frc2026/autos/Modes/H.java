@@ -4,12 +4,14 @@ import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
+import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Drive.Drive.DriveControlState;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
@@ -48,15 +50,18 @@ public class H extends AutoBase {
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
+    d.zeroGyro(t.initalPose().getRotation().getDegrees());
 
     sh.followPlan(false);
     r(new TrajectoryAction(t.next(), d));
-    r(new ShootAction(8, su));
-    sh.setDesiredState(Shooter.State.STOW);
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
+      r(new ShootAction(8, su));
+      sh.setDesiredState(Shooter.State.STOW);
       r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d), new ClimbAction(c))));
       r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));
+    }else{
+      r(new ShootAction(200, su));
     }
   }
 }

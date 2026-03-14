@@ -37,32 +37,39 @@ public class NSH extends AutoBase {
 
     Trajectory SHToNS;
     Trajectory NSToN1;
+    Trajectory N2ToHS;
     Trajectory HToC0;
     Trajectory C0ToC1;
 
     SHToNS = l.trajectories.get("SHToNS");
     NSToN1 = l.trajectories.get("NSToN1");
+    N2ToHS = l.trajectories.get("N2ToHS");
     HToC0 = l.trajectories.get("HToC0");
     C0ToC1 = l.trajectories.get("C0ToC1");
 
-    t = new TrajectorySet(false, SHToNS, NSToN1, HToC0, C0ToC1);
+    t = new TrajectorySet(false, SHToNS, NSToN1, N2ToHS, HToC0, C0ToC1);
   }
 
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
+    d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
-    sh.setDesiredState(Shooter.State.STOW);
+    sh.setDesiredState(Shooter.State.STOW_HOOD);
+    p.setOverride(false);
+    sh.forceStow(true);
+
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
+    r(new TrajectoryAction(t.next(), 0.3,  d));
 
-    r(new TrajectoryAction(t.next(), d));
-    r(new TrajectoryAction(t.next(), d));
+    r(new TrajectoryAction(t.next(), 0.3, d));
+    
+    
+    r(new TrajectoryAction(t.next(), 1, d));
+    r(new ShootAction(8, su));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new TrajectoryAction(t.next(), d));
-
-    r(new ShootAction(7.0, su));
-
+    
     if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
       r(new ParallelAction(List.of(new ClimbAction(c))));
 

@@ -88,6 +88,9 @@ public class ShooterConstants {
     hubFly.put(3.6, 52.5); // trench
     hubFly.put(4.0, 56.5); // tower side
     hubFly.put(5.0, 70.0); // Human
+    hubFly.put(5.4, 76.0); // Human again
+
+    
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;

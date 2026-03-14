@@ -1,6 +1,8 @@
 package com.team5817.frc2026.autos.Actions;
 
+import com.team254.lib.swerve.ChassisSpeeds;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Drive.Drive.DriveControlState;
 import com.team5817.lib.motion.Trajectory;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -68,6 +70,8 @@ public class TrajectoryAction implements Action {
   /** Called once when the action is finished. */
   @Override
   public void done() {
-    System.out.println("Segement Complete");
+    mDrive.setControlState(DriveControlState.OPEN_LOOP);
+    mDrive.runVelocity(new ChassisSpeeds());
+    System.out.println("Auto: Segement Complete");
   }
 }
