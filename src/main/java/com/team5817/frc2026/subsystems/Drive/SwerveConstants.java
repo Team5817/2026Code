@@ -59,7 +59,7 @@ public final class SwerveConstants {
       DriveTrainSimulationConfig.Default()
           .withGyro(COTS.ofPigeon2())
           .withSwerveModule(() -> new SwerveModuleSimulation(moduleConfig))
-          .withBumperSize(Meters.of(.1), Meters.of(.1))
+          .withBumperSize(Meters.of(.3), Meters.of(.3))
           .withCustomModuleTranslations(Drive.getModuleTranslations())
           .withRobotMass(Pounds.of(115));
 }
