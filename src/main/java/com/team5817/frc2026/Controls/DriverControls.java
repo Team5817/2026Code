@@ -1,6 +1,7 @@
 package com.team5817.frc2026.Controls;
 
 import com.team5817.frc2026.ActiveTracker;
+import com.team5817.frc2026.field.AlignmentPoint.AlignmentType;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Spindexer.Indexer;
@@ -107,6 +108,14 @@ public class DriverControls {
     if (ActiveTracker.shouldShakeController()) {
       codriver.rumble(0.3, 1);
     }
+    if(driver.POV270.isBeingPressed()){
+      d.autoAlign(AlignmentType.CLIMB_PREP);
+    }
+    else if(driver.POV90.isBeingPressed()){
+      d.autoAlign(AlignmentType.CLIMB_ENTRY);
+    }
+    else
+      d.setAutoAlignFinishedOverride(true);
   }
 
   CustomXboxController driver;

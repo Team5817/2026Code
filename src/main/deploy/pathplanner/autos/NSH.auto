@@ -38,6 +38,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Port Hueneme",
+  "folder": null,
   "choreoAuto": false
 }

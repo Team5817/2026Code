@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHFToH"
+            "pathName": "SHToNE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HToC0"
+            "pathName": "NEToHS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C0ToC1"
+            "pathName": "HSToNE2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NE2ToHS"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Port Hueneme",
+  "folder": null,
   "choreoAuto": false
 }

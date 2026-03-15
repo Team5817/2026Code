@@ -23,12 +23,8 @@ public class AlignmentPoint {
 
   /** Enum representing the types of alignments that can be allowed at an alignment point. */
   public enum AlignmentType {
-    CORAL_SCORE,
-    CORAL_SCORE_LEFT,
-    CORAL_SCORE_RIGHT,
-    ALGAE_CLEAN,
-    ALGAE_SCORE,
-    HUMAN,
+    CLIMB_PREP,
+    CLIMB_ENTRY,
     NONE;
     public Pose2d tolerance;
 

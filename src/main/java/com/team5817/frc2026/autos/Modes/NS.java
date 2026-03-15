@@ -5,7 +5,7 @@ import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
-import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
+import com.team5817.frc2026.autos.AutoModeFactory.EndSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
@@ -24,10 +24,10 @@ public class NS extends AutoBase {
   private TrajectorySet t;
   private Climb c;
   private Shooter sh;
-  private ClimbSelection climbSelection;
+  private EndSelection climbSelection;
   private ShootingPlanner p;
 
-  public NS(Superstructure s, ClimbSelection climbSelection) {
+  public NS(Superstructure s, EndSelection climbSelection) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -62,14 +62,14 @@ public class NS extends AutoBase {
 
     r(new ShootAction(6.0, su));
 
-    if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
+    if (climbSelection == EndSelection.SHOULD_CLIMB) {
       r(new ParallelAction(List.of(new ClimbAction(c))));
 
     } else {
       r(new ShootAction(5, su));
     }
 
-    if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
+    if (climbSelection == EndSelection.SHOULD_CLIMB) {
       r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));
     }

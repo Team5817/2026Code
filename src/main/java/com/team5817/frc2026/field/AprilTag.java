@@ -10,40 +10,18 @@ public class AprilTag {
 
   private int id;
   private Pose2d fieldToTag;
-  private boolean isScoring;
 
-  private AlignmentPoint tagToLeftAlign;
-  private AlignmentPoint tagToRightAlign;
-  private AlignmentPoint tagToCenterAlign;
   private List<AlignmentType> allTypes = new ArrayList<>();
   private List<AlignmentPoint> allAlignmentPoints;
 
-  /**
-   * Constructs an AprilTag with the specified parameters.
-   *
-   * @param id the ID of the AprilTag
-   * @param isScoring whether the AprilTag is for scoring
-   * @param tagToCenterAlign the center alignment point
-   * @param tagToLeftAlign the left alignment point
-   * @param tagToRightAlign the right alignment point
-   */
+
   public AprilTag(
       int id,
-      boolean isScoring,
-      AlignmentPoint tagToCenterAlign,
-      AlignmentPoint tagToLeftAlign,
-      AlignmentPoint tagToRightAlign) {
+      List<AlignmentPoint> allAlignmentPoints) {
     this.id = id;
-    this.isScoring = isScoring;
-    this.tagToCenterAlign = tagToCenterAlign;
-    this.tagToLeftAlign = tagToLeftAlign;
-    this.tagToRightAlign = tagToRightAlign;
     this.fieldToTag = new Pose2d(FieldLayout.kTagMap.getTagPose(id).get().toPose2d());
-    this.allAlignmentPoints = List.of(tagToCenterAlign, tagToLeftAlign, tagToRightAlign);
+    this.allAlignmentPoints = allAlignmentPoints;
 
-    if (isScoring) {
-      this.fieldToTag = fieldToTag.withRotation(fieldToTag.getRotation().flip());
-    }
     for (AlignmentPoint alignments : allAlignmentPoints) {
       for (AlignmentType tagTypes : alignments.getAllowedAllignments()) {
         if (!allTypes.contains(tagTypes)) {
@@ -72,15 +50,6 @@ public class AprilTag {
   }
 
   /**
-   * Checks if the AprilTag is for scoring.
-   *
-   * @return true if the AprilTag is for scoring, false otherwise
-   */
-  public boolean isScoring() {
-    return isScoring;
-  }
-
-  /**
    * Gets all allowable alignment types for the AprilTag.
    *
    * @return a list of allowable alignment types
@@ -96,32 +65,5 @@ public class AprilTag {
    */
   public List<AlignmentPoint> getAllAlignmentPoints() {
     return allAlignmentPoints;
-  }
-
-  /**
-   * Gets the center alignment point for the AprilTag.
-   *
-   * @return the center alignment point
-   */
-  public AlignmentPoint getTagToCenterAlign() {
-    return tagToCenterAlign;
-  }
-
-  /**
-   * Gets the left alignment point for the AprilTag.
-   *
-   * @return the left alignment point
-   */
-  public AlignmentPoint getTagToLeftAlign() {
-    return tagToLeftAlign;
-  }
-
-  /**
-   * Gets the right alignment point for the AprilTag.
-   *
-   * @return the right alignment point
-   */
-  public AlignmentPoint getTagToRightAlign() {
-    return tagToRightAlign;
   }
 }

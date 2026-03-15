@@ -13,8 +13,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
-  private static final double kTightError = 3.0;
-  private static final double kLooseError = 4.0;
+  private static final double kTightError = 5.0;
+  private static final double kLooseError = 6.0;
 
   static Supplier<Rotation2d> mRobotHeadingSupplier = () -> Rotation2d.kIdentity;
   static DoubleSupplier mTurretPositionSupplier = () -> 0.0;

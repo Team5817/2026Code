@@ -6,11 +6,10 @@ import com.team254.lib.geometry.Translation2d;
 import com.team5817.frc2026.RobotConstants;
 import com.team5817.frc2026.field.AlignmentPoint.AlignmentType;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Contains various field dimensions and useful reference points. Dimensions are in meters, and sets
@@ -30,120 +29,50 @@ public class FieldLayout {
   public static final AprilTagFieldLayout kTagMap;
 
   static {
-    try {
       kTagMap =
-          AprilTagFieldLayout.loadFromResource(AprilTagFields.k2025ReefscapeWelded.m_resourceFile);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+          FieldConstants.AprilTagLayoutType.OFFICIAL.getLayout();
   }
 
-  private static final AlignmentPoint kReefToCenterAlign =
+  private static final AlignmentPoint kLeftClimPrep =
       new AlignmentPoint(
-          new Translation2d(-RobotConstants.kBumberSideLength / 2, 0.0), AlignmentType.ALGAE_CLEAN);
-  private static final AlignmentPoint kReefToRightAlign =
+          new Translation2d(+(RobotConstants.kBumberSideLength) / 2 + 1.2, -0.38),
+          AlignmentType.CLIMB_PREP);
+  private static final AlignmentPoint kRightClimbPrep =
       new AlignmentPoint(
-          new Translation2d(-(RobotConstants.kBumberSideLength + 0.3158) / 2, -0.1643),
-          AlignmentType.CORAL_SCORE,
-          AlignmentType.CORAL_SCORE_RIGHT);
-  private static final AlignmentPoint kReefToLeftAlign =
-      new AlignmentPoint(
-          new Translation2d(-(RobotConstants.kBumberSideLength + 0.3158) / 2, 0.1643),
-          AlignmentType.CORAL_SCORE,
-          AlignmentType.CORAL_SCORE_LEFT);
+          new Translation2d(+(RobotConstants.kBumberSideLength) / 2 + 1.2, 0.48),
+          AlignmentType.CLIMB_PREP);
 
-  private static final AlignmentPoint kHumanToCenterAlign =
+ 
+  private static final AlignmentPoint kLeftClimbEntry =
       new AlignmentPoint(
-          new Translation2d(RobotConstants.kBumberSideLength / 2, 0.0), AlignmentType.HUMAN);
-  private static final AlignmentPoint kHumanToRightAlign =
+          new Translation2d(RobotConstants.kBumberSideLength / 2 + 1, -0.38), AlignmentType.CLIMB_ENTRY);
+  private static final AlignmentPoint kRightClimbEntry =
       new AlignmentPoint(
-          new Translation2d(RobotConstants.kBumberSideLength / 2, -0.55), AlignmentType.HUMAN);
-  private static final AlignmentPoint kHumanToLeftAlign =
-      new AlignmentPoint(
-          new Translation2d(RobotConstants.kBumberSideLength / 2, 0.55), AlignmentType.HUMAN);
-
-  private static final AlignmentPoint kProcessorToCenterAlign =
-      new AlignmentPoint(
-          new Translation2d(-RobotConstants.kBumberSideLength / 2, 0.0), AlignmentType.ALGAE_SCORE);
+          new Translation2d(RobotConstants.kBumberSideLength / 2 + 1, 0.48), AlignmentType.CLIMB_ENTRY);
 
   public static class Red {
 
     public static final HashMap<Integer, AprilTag> kAprilTagMap = new HashMap<>();
-    // From field manual: 46.355 cm
-    // From CAD: 46.2534 cm
-    // From step layout marking: 46.2788 cm
-    // Old value: 46.272  cm
 
-    public static final AprilTag kAprilTag6 =
-        new AprilTag(6, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag7 =
-        new AprilTag(7, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag8 =
-        new AprilTag(8, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag9 =
-        new AprilTag(9, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag10 =
-        new AprilTag(10, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag11 =
-        new AprilTag(11, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag1 =
-        new AprilTag(1, false, kHumanToCenterAlign, kHumanToLeftAlign, kHumanToRightAlign);
-    public static final AprilTag kAprilTag2 =
-        new AprilTag(2, false, kHumanToCenterAlign, kHumanToLeftAlign, kHumanToRightAlign);
-    public static final AprilTag kAprilTag3 =
+    public static final AprilTag kAprilTag15 =
         new AprilTag(
-            3, true, kProcessorToCenterAlign, kProcessorToCenterAlign, kProcessorToCenterAlign);
+            15, List.of(kLeftClimbEntry, kRightClimbEntry, kLeftClimPrep,kRightClimbPrep));
 
     static {
-      kAprilTagMap.put(6, kAprilTag6);
-      kAprilTagMap.put(7, kAprilTag7);
-      kAprilTagMap.put(8, kAprilTag8);
-      kAprilTagMap.put(9, kAprilTag9);
-      kAprilTagMap.put(10, kAprilTag10);
-      kAprilTagMap.put(11, kAprilTag11);
-      kAprilTagMap.put(1, kAprilTag1);
-      kAprilTagMap.put(2, kAprilTag2);
-      kAprilTagMap.put(3, kAprilTag3);
+      kAprilTagMap.put(15, kAprilTag15);
     }
   }
 
   public static class Blue {
     public static final HashMap<Integer, AprilTag> kAprilTagMap = new HashMap<>();
-    // From field manual: 46.355 cm
-    // From CAD: 46.2534 cm
-    // From step layout marking: 46.2788 cm
-    // Old value: 46.272  cm
 
-    public static final AprilTag kAprilTag17 =
-        new AprilTag(17, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag18 =
-        new AprilTag(18, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag19 =
-        new AprilTag(19, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag20 =
-        new AprilTag(20, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag21 =
-        new AprilTag(21, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag22 =
-        new AprilTag(22, true, kReefToCenterAlign, kReefToLeftAlign, kReefToRightAlign);
-    public static final AprilTag kAprilTag12 =
-        new AprilTag(12, false, kHumanToCenterAlign, kHumanToLeftAlign, kHumanToRightAlign);
-    public static final AprilTag kAprilTag13 =
-        new AprilTag(13, false, kHumanToCenterAlign, kHumanToLeftAlign, kHumanToRightAlign);
-    public static final AprilTag kAprilTag16 =
+    public static final AprilTag kAprilTag31 =
         new AprilTag(
-            16, true, kProcessorToCenterAlign, kProcessorToCenterAlign, kProcessorToCenterAlign);
+            31, List.of(kLeftClimbEntry, kRightClimbEntry, kLeftClimPrep,kRightClimbPrep));
 
     static {
-      kAprilTagMap.put(17, kAprilTag17);
-      kAprilTagMap.put(18, kAprilTag18);
-      kAprilTagMap.put(19, kAprilTag19);
-      kAprilTagMap.put(20, kAprilTag20);
-      kAprilTagMap.put(21, kAprilTag21);
-      kAprilTagMap.put(22, kAprilTag22);
-      kAprilTagMap.put(12, kAprilTag12);
-      kAprilTagMap.put(13, kAprilTag13);
-      kAprilTagMap.put(16, kAprilTag16);
+      kAprilTagMap.put(31, kAprilTag31);
+    
     }
   }
 

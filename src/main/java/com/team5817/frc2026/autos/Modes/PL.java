@@ -5,7 +5,7 @@ import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
-import com.team5817.frc2026.autos.AutoModeFactory.ClimbSelection;
+import com.team5817.frc2026.autos.AutoModeFactory.EndSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
@@ -17,16 +17,15 @@ import com.team5817.lib.motion.TrajectorySet;
 import java.util.List;
 
 public class PL extends AutoBase {
-  // Testing Priority, WIP
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
   private Climb c;
   private Shooter sh;
-  private ClimbSelection climbSelection;
+  private EndSelection climbSelection;
   private ShootingPlanner p;
 
-  public PL(Superstructure s, ClimbSelection climbSelection) {
+  public PL(Superstructure s, EndSelection climbSelection) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -49,7 +48,7 @@ public class PL extends AutoBase {
     sh.followPlan(false);
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(4, su));
-    if (climbSelection == ClimbSelection.SHOULD_CLIMB) {
+    if (climbSelection == EndSelection.SHOULD_CLIMB) {
       r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d), new ClimbAction(c))));
       r(new TrajectoryAction(t.next(), d));
       r(new ClimbAction(c));

@@ -21,8 +21,8 @@ public class Spindexer extends Subsystem {
 
   public enum SpinnerState implements IRollerState {
     IDLE(0),
-    COUNTERCLOCK(-12),
-    CLOCK(12);
+    COUNTERCLOCK(-11),
+    CLOCK(11);
 
     private final double demand;
 

@@ -1,15 +1,11 @@
 package com.team5817.frc2026.autos;
 
-import com.team5817.frc2026.autos.Modes.Cl;
-import com.team5817.frc2026.autos.Modes.DNRD;
-import com.team5817.frc2026.autos.Modes.DNS;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
-import com.team5817.frc2026.autos.Modes.H;
-import com.team5817.frc2026.autos.Modes.NRH;
+import com.team5817.frc2026.autos.Modes.DynamicAuto;
+import com.team5817.frc2026.autos.Modes.DynamicSteal;
 import com.team5817.frc2026.autos.Modes.NS;
-import com.team5817.frc2026.autos.Modes.NSH;
-import com.team5817.frc2026.autos.Modes.NSwipe;
 import com.team5817.frc2026.autos.Modes.PL;
+
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -25,62 +21,53 @@ public class AutoModeFactory {
 
   public enum DesiredMode {
     DO_NOTHING,
-    H,
     NS,
     NSH,
     NRH,
-    DNS,
-    NSWIPE,
+    FARSWIPE,
     CLOSESWIPE,
-    D,
-    DNRD,
-    HNRD,
     NRHT,
     CENTER_MAIN
   }
 
-  public enum StartingPosition {
+  public enum StartingSelection {
     TRENCH_H(
         DesiredMode.DO_NOTHING,
-        DesiredMode.H,
         DesiredMode.NS,
         DesiredMode.NSH,
-        DesiredMode.NRH,
-        DesiredMode.NSWIPE,
-        DesiredMode.HNRD,
+        DesiredMode.FARSWIPE,
         DesiredMode.NRHT,
         DesiredMode.CLOSESWIPE),
     TRENCH_D(
         DesiredMode.DO_NOTHING,
-        DesiredMode.D,
-        DesiredMode.DNS,
-        DesiredMode.DNRD,
-        DesiredMode.NSWIPE,
+        DesiredMode.FARSWIPE,
         DesiredMode.CLOSESWIPE),
-    CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER_MAIN);
+    CENTER(
+        DesiredMode.DO_NOTHING, 
+        DesiredMode.CENTER_MAIN);
 
     public List<DesiredMode> modes;
 
-    private StartingPosition(DesiredMode... validModes) {
+    private StartingSelection(DesiredMode... validModes) {
       this.modes = List.of(validModes);
     }
   }
 
-  public enum ClimbSelection {
+  public enum EndSelection {
     SHOULD_CLIMB,
-    SHOULD_NOT_CLIMB
+    SHOULD_NOT_CLIMB,
+    HUMAN
   }
 
   private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
-  private StartingPosition mCachedStartingPosition = StartingPosition.TRENCH_H;
-  private ClimbSelection mCachedClimbSelection = ClimbSelection.SHOULD_CLIMB;
+  private StartingSelection mCachedStartingSelection = StartingSelection.TRENCH_H;
+  private EndSelection mCachedEndSelection = EndSelection.SHOULD_CLIMB;
 
   private Optional<AutoBase> mAutoMode = Optional.empty();
 
   private static SendableChooser<DesiredMode> mModeChooser = new SendableChooser<>();
-  private static SendableChooser<StartingPosition> mStartingPositionSelector =
-      new SendableChooser<>();
-  private static SendableChooser<ClimbSelection> mClimbPreferenceSelector = new SendableChooser<>();
+  private static SendableChooser<StartingSelection> mStartingPositionSelector = new SendableChooser<>();
+  private static SendableChooser<EndSelection> mEndSelection = new SendableChooser<>();
 
   /**
    * Constructor for AutoModeSelector. Initializes the SendableChoosers for starting position,
@@ -90,12 +77,13 @@ public class AutoModeFactory {
     this.s = s;
     this.d = d;
 
-    mStartingPositionSelector.setDefaultOption("TRENCH_D", StartingPosition.TRENCH_D);
-    mStartingPositionSelector.addOption("TRENCH_H", StartingPosition.TRENCH_H);
-    mStartingPositionSelector.addOption("CENTER", StartingPosition.CENTER);
+    mStartingPositionSelector.setDefaultOption("TRENCH_D", StartingSelection.TRENCH_D);
+    mStartingPositionSelector.addOption("TRENCH_H", StartingSelection.TRENCH_H);
+    mStartingPositionSelector.addOption("CENTER", StartingSelection.CENTER);
 
-    mClimbPreferenceSelector.setDefaultOption("DO NOT CLIMB", ClimbSelection.SHOULD_NOT_CLIMB);
-    mClimbPreferenceSelector.addOption("CLIMB", ClimbSelection.SHOULD_CLIMB);
+    mEndSelection.setDefaultOption("DO NOT CLIMB", EndSelection.SHOULD_NOT_CLIMB);
+    mEndSelection.addOption("CLIMB", EndSelection.SHOULD_CLIMB);
+    mEndSelection.addOption("HUMAN", EndSelection.HUMAN);
   }
 
   /**
@@ -103,14 +91,14 @@ public class AutoModeFactory {
    * cached values for pickup location and scoring locations.
    */
   public void updateModeCreator() {
-    if (mCachedStartingPosition != mStartingPositionSelector.getSelected()
+    if (mCachedStartingSelection != mStartingPositionSelector.getSelected()
         && mStartingPositionSelector.getSelected() != null) {
       mModeChooser = new SendableChooser<>();
       mStartingPositionSelector
           .getSelected()
           .modes
           .forEach(m -> mModeChooser.addOption(m.name(), m));
-      mCachedStartingPosition = mStartingPositionSelector.getSelected();
+      mCachedStartingSelection = mStartingPositionSelector.getSelected();
     }
 
     DesiredMode desiredMode = mModeChooser.getSelected();
@@ -120,13 +108,13 @@ public class AutoModeFactory {
     }
     mAutoMode = getAutoModeForParams(desiredMode);
 
-    mCachedClimbSelection = mClimbPreferenceSelector.getSelected();
+    mCachedEndSelection = mEndSelection.getSelected();
 
     SmartDashboard.putData("Starting Position", mStartingPositionSelector);
     SmartDashboard.putData("Auto Mode", mModeChooser);
     Logger.recordOutput("Selected Auto", desiredMode);
 
-    SmartDashboard.putData("Climb Preference", mClimbPreferenceSelector);
+    SmartDashboard.putData("End Selection", mEndSelection);
   }
 
   /**
@@ -136,31 +124,23 @@ public class AutoModeFactory {
    * @return An Optional containing the AutoBase instance if a valid mode is found, otherwise an
    *     empty Optional.
    */
+
   private Optional<AutoBase> getAutoModeForParams(DesiredMode mode) {
     switch (mode) {
       case DO_NOTHING:
         return Optional.of(new DoNothingMode());
-      case H:
-        return Optional.of(new H(s, mCachedClimbSelection));
       case NS:
-        return Optional.of(new NS(s, mCachedClimbSelection));
+        return Optional.of(new NS(s, mCachedEndSelection));
       case NSH:
-        return Optional.of(new NSH(s, mCachedClimbSelection));
-      case NRH:
-        return Optional.of(new NRH(s, mCachedClimbSelection));
-      case DNS:
-        return Optional.of(new DNS(s, mCachedClimbSelection));
-      case NSWIPE:
+        return Optional.of(new DynamicSteal(s, mCachedEndSelection));
+      case FARSWIPE:
         return Optional.of(
-            new NSwipe(
-                s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
+            new DynamicAuto(s, mCachedEndSelection, mCachedStartingSelection == StartingSelection.TRENCH_H, false));
       case CLOSESWIPE:
         return Optional.of(
-            new Cl(s, mCachedClimbSelection, mCachedStartingPosition == StartingPosition.TRENCH_H));
-      case DNRD:
-        return Optional.of(new DNRD(s, mCachedClimbSelection));
+            new DynamicAuto(s, mCachedEndSelection, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
       case CENTER_MAIN:
-        return Optional.of(new PL(s, mCachedClimbSelection));
+        return Optional.of(new PL(s, mCachedEndSelection));
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;
@@ -197,7 +177,7 @@ public class AutoModeFactory {
   /** Outputs the selected autonomous mode and starting position to the SmartDashboard. */
   public void outputToSmartDashboard() {
     SmartDashboard.putString("AutoModeSelected", mCachedDesiredMode.name());
-    SmartDashboard.putString("Starting Position Selected", mCachedStartingPosition.name());
+    SmartDashboard.putString("Starting Position Selected", mCachedStartingSelection.name());
   }
 
   /**

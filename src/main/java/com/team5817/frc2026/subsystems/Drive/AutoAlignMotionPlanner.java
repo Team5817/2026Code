@@ -79,13 +79,13 @@ public class AutoAlignMotionPlanner {
       return ChassisSpeeds.fromFieldRelativeSpeeds(0.0, 0.0, 0.0, current_pose.getRotation());
     }
 
-    mAutoAlignComplete =
-        translationWithinDeadband && rotationWithinDeadband && Math.abs(driveSpeed) < .1;
+    mAutoAlignComplete =false;
+        // translationWithinDeadband && rotationWithinDeadband && Math.abs(driveSpeed) < .1;
 
     Logger.recordOutput("AutoAlign/TranslationDone", translationWithinDeadband);
     Logger.recordOutput("AutoAlign/RotationDone", rotationWithinDeadband);
     heartbeat++;
-    Logger.recordOutput("AutoAlign/heart", heartbeat);
+    Logger.recordOutput("AutfAlign/heart", heartbeat);
     if (mStartTime.isPresent() && mAutoAlignComplete) {
       System.out.println(
           "Auto align took: " + (Timer.getFPGATimestamp() - mStartTime.getAsDouble()));

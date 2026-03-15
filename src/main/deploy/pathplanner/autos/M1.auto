@@ -27,11 +27,17 @@
           "data": {
             "pathName": "CNE2ToHS"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HSToNE2"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Port Hueneme",
+  "folder": null,
   "choreoAuto": false
 }

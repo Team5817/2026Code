@@ -253,8 +253,8 @@ public class ShootingPlanner {
   }
 
   public Boolean shouldShoot() {
+    if (!atStateSupplier.getAsBoolean()) return false;
     return override;
-    // if (!atStateSupplier.getAsBoolean()) return false;
 
     // Shooter.State state = recommendedShooterState();
     // ChassisSpeeds speeds = shooterVelocitySupplier.get();
