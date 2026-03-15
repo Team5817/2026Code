@@ -1,7 +1,7 @@
 package com.team5817.frc2026.autos.Actions;
 
-import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
+import com.team5817.frc2026.subsystems.Superstructure;
 
 public class ShootWhenInZone implements Action {
 
@@ -10,13 +10,12 @@ public class ShootWhenInZone implements Action {
   private boolean hasStarted = false;
 
   public ShootWhenInZone(double durationSeconds, Superstructure s, double spinUpTime) {
-    this.shootAction = new ShootAction(durationSeconds, s,spinUpTime);
+    this.shootAction = new ShootAction(durationSeconds, s, spinUpTime);
     this.s = s;
   }
 
   @Override
-  public void start() {
-  }
+  public void start() {}
 
   @Override
   public void update() {
@@ -24,8 +23,7 @@ public class ShootWhenInZone implements Action {
       shootAction.start();
       hasStarted = true;
     }
-    if(hasStarted)
-        shootAction.update();
+    if (hasStarted) shootAction.update();
   }
 
   @Override
@@ -33,9 +31,8 @@ public class ShootWhenInZone implements Action {
     return shootAction.isFinished() && hasStarted;
   }
 
-   @Override
-   public void done() {
+  @Override
+  public void done() {
     shootAction.done();
-   }
-    
+  }
 }
