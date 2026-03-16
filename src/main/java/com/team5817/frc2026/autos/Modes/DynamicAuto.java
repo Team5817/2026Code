@@ -1,9 +1,5 @@
 package com.team5817.frc2026.autos.Modes;
 
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.SequentialAction;
@@ -23,6 +19,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class DynamicAuto extends AutoBase {
   private Drive d;
@@ -75,47 +72,31 @@ public class DynamicAuto extends AutoBase {
     ClimbPrep = l.trajectories.get("HSToC0");
     ClimbEntry = l.trajectories.get("C0ToC1");
     TelePrep = l.trajectories.get("HSToNE2");
-      
-if (endSelection == EndSelection.SHOULD_CLIMB) {
-  t = new TrajectorySet(
-      !isHumanSide,
-      Intake1,
-      Return1,
-      Intake2,
-      ReturnShoot2,
-      ClimbEntry
-  );
-} 
-else if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
-  t = new TrajectorySet(
-      !isHumanSide,
-      Intake1,
-      Return1,
-      Intake2,
-      Return2,
-      TelePrep
-  );
-} 
-else { 
-  t = new TrajectorySet(
-      !isHumanSide,
-      Intake1,
-      Return1,
-      Intake2,
-      Return2,
-      ReturnShoot2,
-      TelePrep,
-      ClimbPrep,
-      ClimbEntry
-  );
-}}
-  
+
+    if (endSelection == EndSelection.SHOULD_CLIMB) {
+      t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, ReturnShoot2, ClimbEntry);
+    } else if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
+      t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
+    } else {
+      t =
+          new TrajectorySet(
+              !isHumanSide,
+              Intake1,
+              Return1,
+              Intake2,
+              Return2,
+              ReturnShoot2,
+              TelePrep,
+              ClimbPrep,
+              ClimbEntry);
+    }
+  }
 
   @Override
   public void routine() {
-    
+
     Logger.recordOutput("Auto/ cached DESIRED", endSelection);
-    
+
     d.simResetWorldPose(t.initalPose());
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
@@ -141,19 +122,14 @@ else {
         break;
 
       case SHOULD_CLIMB:
-        
         su.mIntake.stateRequest(Intake.State.IDLE).act();
-        r(new ParallelAction(List.of(
-            new TrajectoryAction(t.next(), 1.5, d),
-            new ShootWhenInZone(4, su, 1),
-            new SequentialAction(
-              List.of(
-                new WaitAction(3),
-                new ClimbAction(c)
-              )
-            )
-        )));
-        
+        r(
+            new ParallelAction(
+                List.of(
+                    new TrajectoryAction(t.next(), 1.5, d),
+                    new ShootWhenInZone(4, su, 1),
+                    new SequentialAction(List.of(new WaitAction(3), new ClimbAction(c))))));
+
         r(new TrajectoryAction(t.next(), d));
         r(new ClimbAction(c));
         break;

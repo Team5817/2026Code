@@ -109,7 +109,6 @@ public class AutoModeFactory {
     SmartDashboard.putData("Auto Mode", mModeChooser);
     Logger.recordOutput("Selected Auto", desiredMode);
     SmartDashboard.putData("End Selection", mEndSelection);
-
   }
 
   /**
@@ -146,7 +145,6 @@ public class AutoModeFactory {
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;
-        
     }
 
     System.err.println("No valid auto mode found for  " + mode);
