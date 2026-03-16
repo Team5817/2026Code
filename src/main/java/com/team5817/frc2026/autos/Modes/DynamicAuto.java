@@ -22,6 +22,7 @@ import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
+import java.util.List;
 
 public class DynamicAuto extends AutoBase {
   private Drive d;
@@ -32,7 +33,8 @@ public class DynamicAuto extends AutoBase {
   private EndSelection endSelection;
   private ShootingPlanner p;
 
-  public DynamicAuto(Superstructure s, EndSelection endSelection, boolean isHumanSide, boolean isClose) {
+  public DynamicAuto(
+      Superstructure s, EndSelection endSelection, boolean isHumanSide, boolean isClose) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -48,7 +50,7 @@ public class DynamicAuto extends AutoBase {
     Trajectory TelePrep;
     Trajectory ClimbPrep;
     Trajectory ClimbEntry;
-    
+
     Intake1 = l.trajectories.get("SHToNE");
     Return1 = l.trajectories.get("NEToHS");
     ReturnShoot2 = l.trajectories.get("CNE2ToC0");
@@ -68,7 +70,7 @@ public class DynamicAuto extends AutoBase {
         Return2 = l.trajectories.get("NE2ToHS");
       }
     }
-    
+
     // Climb Option
     ClimbPrep = l.trajectories.get("HSToC0");
     ClimbEntry = l.trajectories.get("C0ToC1");
@@ -109,7 +111,6 @@ else {
 }}
   
 
-
   @Override
   public void routine() {
     
@@ -131,14 +132,12 @@ else {
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), 1, d));
-    
-    
+
     switch (endSelection) {
       case HUMAN:
-        r(new ParallelAction(List.of(
-          new TrajectoryAction(t.next(), 1.5, d),
-          new ShootWhenInZone(100, su, 1)
-        )));
+        r(
+            new ParallelAction(
+                List.of(new TrajectoryAction(t.next(), 1.5, d), new ShootWhenInZone(100, su, 1))));
         break;
 
       case SHOULD_CLIMB:

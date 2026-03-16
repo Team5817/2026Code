@@ -5,7 +5,6 @@ import com.team5817.frc2026.autos.Modes.DynamicAuto;
 import com.team5817.frc2026.autos.Modes.DynamicSteal;
 import com.team5817.frc2026.autos.Modes.NS;
 import com.team5817.frc2026.autos.Modes.PL;
-
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -38,13 +37,8 @@ public class AutoModeFactory {
         DesiredMode.FARSWIPE,
         DesiredMode.NRHT,
         DesiredMode.CLOSESWIPE),
-    TRENCH_D(
-        DesiredMode.DO_NOTHING,
-        DesiredMode.FARSWIPE,
-        DesiredMode.CLOSESWIPE),
-    CENTER(
-        DesiredMode.DO_NOTHING, 
-        DesiredMode.CENTER_MAIN);
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.FARSWIPE, DesiredMode.CLOSESWIPE),
+    CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER_MAIN);
 
     public List<DesiredMode> modes;
 
@@ -66,7 +60,8 @@ public class AutoModeFactory {
   private Optional<AutoBase> mAutoMode = Optional.empty();
 
   private static SendableChooser<DesiredMode> mModeChooser = new SendableChooser<>();
-  private static SendableChooser<StartingSelection> mStartingPositionSelector = new SendableChooser<>();
+  private static SendableChooser<StartingSelection> mStartingPositionSelector =
+      new SendableChooser<>();
   private static SendableChooser<EndSelection> mEndSelection = new SendableChooser<>();
 
   /**
@@ -124,7 +119,6 @@ public class AutoModeFactory {
    * @return An Optional containing the AutoBase instance if a valid mode is found, otherwise an
    *     empty Optional.
    */
-
   private Optional<AutoBase> getAutoModeForParams(DesiredMode mode) {
     switch (mode) {
       case DO_NOTHING:
@@ -135,10 +129,18 @@ public class AutoModeFactory {
         return Optional.of(new DynamicSteal(s, mCachedEndSelection));
       case FARSWIPE:
         return Optional.of(
-            new DynamicAuto(s, mCachedEndSelection, mCachedStartingSelection == StartingSelection.TRENCH_H, false));
+            new DynamicAuto(
+                s,
+                mCachedEndSelection,
+                mCachedStartingSelection == StartingSelection.TRENCH_H,
+                false));
       case CLOSESWIPE:
         return Optional.of(
-            new DynamicAuto(s, mCachedEndSelection, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
+            new DynamicAuto(
+                s,
+                mCachedEndSelection,
+                mCachedStartingSelection == StartingSelection.TRENCH_H,
+                true));
       case CENTER_MAIN:
         return Optional.of(new PL(s, mCachedEndSelection));
       default:

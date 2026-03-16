@@ -29,8 +29,7 @@ public class FieldLayout {
   public static final AprilTagFieldLayout kTagMap;
 
   static {
-      kTagMap =
-          FieldConstants.AprilTagLayoutType.OFFICIAL.getLayout();
+    kTagMap = FieldConstants.AprilTagLayoutType.OFFICIAL.getLayout();
   }
 
   private static final AlignmentPoint kLeftClimPrep =
@@ -42,13 +41,14 @@ public class FieldLayout {
           new Translation2d(+(RobotConstants.kBumberSideLength) / 2 + 1.2, 0.48),
           AlignmentType.CLIMB_PREP);
 
- 
   private static final AlignmentPoint kLeftClimbEntry =
       new AlignmentPoint(
-          new Translation2d(RobotConstants.kBumberSideLength / 2 + 1, -0.38), AlignmentType.CLIMB_ENTRY);
+          new Translation2d(RobotConstants.kBumberSideLength / 2 + 1, -0.38),
+          AlignmentType.CLIMB_ENTRY);
   private static final AlignmentPoint kRightClimbEntry =
       new AlignmentPoint(
-          new Translation2d(RobotConstants.kBumberSideLength / 2 + 1, 0.48), AlignmentType.CLIMB_ENTRY);
+          new Translation2d(RobotConstants.kBumberSideLength / 2 + 1, 0.48),
+          AlignmentType.CLIMB_ENTRY);
 
   public static class Red {
 
@@ -56,7 +56,7 @@ public class FieldLayout {
 
     public static final AprilTag kAprilTag15 =
         new AprilTag(
-            15, List.of(kLeftClimbEntry, kRightClimbEntry, kLeftClimPrep,kRightClimbPrep));
+            15, List.of(kLeftClimbEntry, kRightClimbEntry, kLeftClimPrep, kRightClimbPrep));
 
     static {
       kAprilTagMap.put(15, kAprilTag15);
@@ -68,11 +68,10 @@ public class FieldLayout {
 
     public static final AprilTag kAprilTag31 =
         new AprilTag(
-            31, List.of(kLeftClimbEntry, kRightClimbEntry, kLeftClimPrep,kRightClimbPrep));
+            31, List.of(kLeftClimbEntry, kRightClimbEntry, kLeftClimPrep, kRightClimbPrep));
 
     static {
       kAprilTagMap.put(31, kAprilTag31);
-    
     }
   }
 

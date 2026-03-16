@@ -14,10 +14,7 @@ public class AprilTag {
   private List<AlignmentType> allTypes = new ArrayList<>();
   private List<AlignmentPoint> allAlignmentPoints;
 
-
-  public AprilTag(
-      int id,
-      List<AlignmentPoint> allAlignmentPoints) {
+  public AprilTag(int id, List<AlignmentPoint> allAlignmentPoints) {
     this.id = id;
     this.fieldToTag = new Pose2d(FieldLayout.kTagMap.getTagPose(id).get().toPose2d());
     this.allAlignmentPoints = allAlignmentPoints;

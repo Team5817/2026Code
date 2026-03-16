@@ -108,14 +108,11 @@ public class DriverControls {
     if (ActiveTracker.shouldShakeController()) {
       codriver.rumble(0.3, 1);
     }
-    if(driver.POV270.isBeingPressed()){
+    if (driver.POV270.isBeingPressed()) {
       d.autoAlign(AlignmentType.CLIMB_PREP);
-    }
-    else if(driver.POV90.isBeingPressed()){
+    } else if (driver.POV90.isBeingPressed()) {
       d.autoAlign(AlignmentType.CLIMB_ENTRY);
-    }
-    else
-      d.setAutoAlignFinishedOverride(true);
+    } else d.setAutoAlignFinishedOverride(true);
   }
 
   CustomXboxController driver;
