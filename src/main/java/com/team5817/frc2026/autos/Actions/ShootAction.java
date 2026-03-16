@@ -2,8 +2,9 @@ package com.team5817.frc2026.autos.Actions;
 
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
-import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Indexer.Indexer;
+
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 

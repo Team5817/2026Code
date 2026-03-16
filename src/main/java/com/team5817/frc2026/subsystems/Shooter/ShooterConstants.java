@@ -17,7 +17,7 @@ import java.util.function.DoubleSupplier;
 
 public class ShooterConstants {
 
-  public static final RollerConstantsTalonFX flywheelConstants = new RollerConstantsTalonFX();
+  public static final RollerConstantsTalonFX kFlywheelConstants = new RollerConstantsTalonFX();
   public static final Translation3d TurretToCam;
   public static final Translation3d robotToTurret;
   // Allows quick sign flip when turret yaw axis convention differs (1.0 or -1.0)
@@ -32,38 +32,39 @@ public class ShooterConstants {
 
   public static Pose2d shooterTransform =
       new Pose2d(Units.inchesToMeters(-1.25), Units.inchesToMeters(4), Rotation2d.fromDegrees(0.0));
-
+//V2 x 4.625
+//V2 y 2.25
   static {
     robotToTurret =
         new Translation3d(
-            Units.inchesToMeters(-1.25),
-            Units.inchesToMeters(4),
-            Units.inchesToMeters(21)); // z is LL Height
+            Units.inchesToMeters(-2.25),//og -1.25
+            Units.inchesToMeters(4.625),//og 4
+            Units.inchesToMeters(21)); // z is LL Height, og 21
     TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
 
-    flywheelConstants.kMaxForwardOutput = 12.0;
-    flywheelConstants.kMaxReverseOutput = -12.0;
+    kFlywheelConstants.kMaxForwardOutput = 12.0;
+    kFlywheelConstants.kMaxReverseOutput = -12.0;
 
-    flywheelConstants.kNeutralMode = NeutralModeValue.Coast;
-    flywheelConstants.kSupplyCurrentLimit = 40;
-    flywheelConstants.kStatorCurrentLimit = 80;
+    kFlywheelConstants.kNeutralMode = NeutralModeValue.Coast;
+    kFlywheelConstants.kSupplyCurrentLimit = 40;
+    kFlywheelConstants.kStatorCurrentLimit = 80;
 
-    flywheelConstants.kKp = .05; // 0.3
-    flywheelConstants.kKs = 0.599609375; // 0.7
-    flywheelConstants.kKv = 0.008679999969899654; // 0.109
+    kFlywheelConstants.kKp = .05; 
+    kFlywheelConstants.kKs = 0.599609375;
+    kFlywheelConstants.kKv = 0.008679999969899654; 
 
-    flywheelConstants.kEnableSupplyCurrentLimit = true;
-    flywheelConstants.kEnableStatorCurrentLimit = true;
+    kFlywheelConstants.kEnableSupplyCurrentLimit = true;
+    kFlywheelConstants.kEnableStatorCurrentLimit = true;
 
-    flywheelConstants.counterClockwisePositive = true;
+    kFlywheelConstants.counterClockwisePositive = true;
 
     TalonFXConstants followerConstants = new TalonFXConstants();
     followerConstants.id = Ports.TURRET_FLYWHEEL2;
     followerConstants.counterClockwisePositive = false;
     followerConstants.invert_sensor_phase = false;
-    flywheelConstants.kFollowerConstants = new TalonFXConstants[] {followerConstants};
+    kFlywheelConstants.kFollowerConstants = new TalonFXConstants[] {followerConstants};
 
-    flywheelConstants.kFollowerOpposeMasterDirection = false;
+    kFlywheelConstants.kFollowerOpposeMasterDirection = false;
 
     // Default maps for LOB
     InterpolatingDoubleTreeMap lobHood = new InterpolatingDoubleTreeMap();
@@ -89,7 +90,7 @@ public class ShooterConstants {
     hubFly.put(4.0, 56.5); // tower side
     hubFly.put(5.0, 70.0); // Human (figure out)
     hubFly.put(5.4, 77.0); // Far-most Human again
-
+    
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
     HOOD_MAP_HUB = hubHood;

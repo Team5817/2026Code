@@ -8,16 +8,13 @@ import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Climb.ClimbConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
+import com.team5817.frc2026.subsystems.Indexer.Indexer;
+import com.team5817.frc2026.subsystems.Indexer.IndexerConstants;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
 import com.team5817.frc2026.subsystems.Lights.Lights;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
-import com.team5817.frc2026.subsystems.Spindexer.Indexer;
-import com.team5817.frc2026.subsystems.Spindexer.Spindexer;
-import com.team5817.frc2026.subsystems.Spindexer.SpindexerConstants;
-import com.team5817.frc2026.subsystems.Spindexer.Tunnel;
-import com.team5817.frc2026.subsystems.Spindexer.TunnelConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
@@ -73,7 +70,6 @@ public class RobotContainer {
   }
 
   public void makeRealRobot() {
-
     mDrive =
         new Drive(
             new GyroIOPigeon2(),
@@ -87,25 +83,22 @@ public class RobotContainer {
     mIntake =
         new Intake(
             new RollerSubsystemIOTalonFX(
-                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.motorConstants, 2.5),
+                Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.kMotorConstants, 2.5),
             new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants));
 
     mIndexer =
         new Indexer(
-            new Spindexer(
-                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
-                "Left"),
-            new Spindexer(
-                new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
-                "Right"),
-            new Tunnel(new RollerSubsystemIOTalonFX(Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
+            new RollerSubsystemIOTalonFX(
+                Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2),//TODO placeholder
+            new RollerSubsystemIOTalonFX(
+                Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
 
     mShooter =
         new Shooter(
             new ServoMotorIOTalonFX(ShooterConstants.TurretConstants.kTurretServoConstants),
             new ServoMotorIOTalonFX(ShooterConstants.HoodConstants.kHoodServoConstants),
             new RollerSubsystemIOTalonFX(
-                Ports.TURRET_FLYWHEEL1, ShooterConstants.flywheelConstants, 1),
+                Ports.TURRET_FLYWHEEL1, ShooterConstants.kFlywheelConstants, 1),
             mDrive::getPose,
             mDrive::getChassisSpeeds,
             () -> 0.0 // placeholder for vision timing supplier
@@ -153,13 +146,10 @@ public class RobotContainer {
     if (mIndexer == null)
       mIndexer =
           new Indexer(
-              new Spindexer(
-                  new RollerSubsystemIOTalonFX(Ports.SPINDEXER_2, SpindexerConstants.Spinner2, 1),
-                  "Left"),
-              new Spindexer(
-                  new RollerSubsystemIOTalonFX(Ports.SPINDEXER_1, SpindexerConstants.Spinner1, 1),
-                  "Right"),
-              new Tunnel(new RollerSubsystemIOTalonFX(Ports.TUNNEL, TunnelConstants.TUNNEL, 1)));
+              new RollerSubsystemIOTalonFX(
+                  Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 1),
+              new RollerSubsystemIOTalonFX(
+                  Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
 
     if (mDrive == null)
       mDrive =
@@ -186,9 +176,8 @@ public class RobotContainer {
     if (mIndexer == null)
       mIndexer =
           new Indexer(
-              new Spindexer(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Left"),
-              new Spindexer(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10), "Right"),
-              new Tunnel(new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10)));
+              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10),
+              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 20, 10));
 
     if (mVision == null)
       mVision =
@@ -216,7 +205,9 @@ public class RobotContainer {
           new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
 
     if (mLight == null) mLight = new Lights(new LightsIOSim());
+
   }
+
 
   private Pose2d getMapleSimPose() {
     return new Pose2d(driveSimulation.getSimulatedDriveTrainPose());
@@ -231,7 +222,6 @@ public class RobotContainer {
   public void displaySimFieldToAdvantageScope() {
     if (RobotMode.mode != RobotMode.Mode.SIM) return;
 
-    Logger.recordOutput(
-        "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
+    Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
   }
 }
