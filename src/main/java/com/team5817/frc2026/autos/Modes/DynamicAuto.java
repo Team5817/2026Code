@@ -2,12 +2,15 @@ package com.team5817.frc2026.autos.Modes;
 
 import java.util.List;
 
+import org.littletonrobotics.junction.Logger;
 
 import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ParallelAction;
+import com.team5817.frc2026.autos.Actions.SequentialAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ShootWhenInZone;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
+import com.team5817.frc2026.autos.Actions.WaitAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoModeFactory.EndSelection;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
@@ -41,12 +44,14 @@ public class DynamicAuto extends AutoBase {
     Trajectory Return1;
     Trajectory Intake2;
     Trajectory Return2;
+    Trajectory ReturnShoot2;
     Trajectory TelePrep;
     Trajectory ClimbPrep;
     Trajectory ClimbEntry;
     
     Intake1 = l.trajectories.get("SHToNE");
     Return1 = l.trajectories.get("NEToHS");
+    ReturnShoot2 = l.trajectories.get("CNE2ToC0");
 
     if (isClose) {
       Intake2 = l.trajectories.get("CHSToNE2");
@@ -69,17 +74,47 @@ public class DynamicAuto extends AutoBase {
     ClimbEntry = l.trajectories.get("C0ToC1");
     TelePrep = l.trajectories.get("HSToNE2");
       
-    if (endSelection == EndSelection.SHOULD_NOT_CLIMB){
-      t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
-    }
-    else{
-        t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep, ClimbPrep, ClimbEntry);
-    }
-  }
+if (endSelection == EndSelection.SHOULD_CLIMB) {
+  t = new TrajectorySet(
+      !isHumanSide,
+      Intake1,
+      Return1,
+      Intake2,
+      ReturnShoot2,
+      ClimbEntry
+  );
+} 
+else if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
+  t = new TrajectorySet(
+      !isHumanSide,
+      Intake1,
+      Return1,
+      Intake2,
+      Return2,
+      TelePrep
+  );
+} 
+else { 
+  t = new TrajectorySet(
+      !isHumanSide,
+      Intake1,
+      Return1,
+      Intake2,
+      Return2,
+      ReturnShoot2,
+      TelePrep,
+      ClimbPrep,
+      ClimbEntry
+  );
+}}
+  
 
 
   @Override
   public void routine() {
+    
+    Logger.recordOutput("Auto/ cached DESIRED", endSelection);
+    
     d.simResetWorldPose(t.initalPose());
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
@@ -92,7 +127,7 @@ public class DynamicAuto extends AutoBase {
     r(new TrajectoryAction(t.next(), 1.5, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
-    r(new ShootAction(6, su, 1));
+    r(new ShootAction(4, su, 1));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), 1, d));
@@ -105,27 +140,31 @@ public class DynamicAuto extends AutoBase {
           new ShootWhenInZone(100, su, 1)
         )));
         break;
-      case SHOULD_CLIMB:
-        r(new TrajectoryAction(t.next(), 1.5, d));
-        su.mIntake.stateRequest(Intake.State.IDLE).act();
 
+      case SHOULD_CLIMB:
+        
+        su.mIntake.stateRequest(Intake.State.IDLE).act();
         r(new ParallelAction(List.of(
-          new TrajectoryAction(t.next(), 1.5, d),
-          new ClimbAction(c))
-          ));
-        r(new ShootAction(4, su, 1));
-          
-        r(new TrajectoryAction(t.next(), 1, d));
+            new TrajectoryAction(t.next(), 1.5, d),
+            new ShootWhenInZone(4, su, 1),
+            new SequentialAction(
+              List.of(
+                new WaitAction(3),
+                new ClimbAction(c)
+              )
+            )
+        )));
+        
+        r(new TrajectoryAction(t.next(), d));
         r(new ClimbAction(c));
         break;
+
       case SHOULD_NOT_CLIMB:
         r(new TrajectoryAction(t.next(), 1.5, d));
         su.mIntake.stateRequest(Intake.State.IDLE).act();
         r(new ShootAction(4, su, 1));
         su.mIntake.stateRequest(Intake.State.IDLE).act();
         r(new TrajectoryAction(t.next(), 1.5, d));
-
-
         break;
     }
   }

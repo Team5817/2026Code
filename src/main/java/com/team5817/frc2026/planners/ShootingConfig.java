@@ -42,6 +42,7 @@ public class ShootingConfig {
 
     timeMap.put(1.0, 0.16);
     timeMap.put(3.0, 0.24);
+    timeMap.put(10.0, 1.0);
     timeMap.put(5.0, 0.34); // TODO add more values
 
     Bounds hubBounds = new Bounds(0.0, 0.0, 4.6, 8);

@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SHToNE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NEToHS"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CHSToNE2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CNE2ToC0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C0ToC1"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
