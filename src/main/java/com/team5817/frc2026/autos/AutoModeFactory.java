@@ -25,10 +25,7 @@ public class AutoModeFactory {
   }
 
   public enum StartingSelection {
-    TRENCH_H(
-        DesiredMode.DO_NOTHING,
-        DesiredMode.FAR_SWIPE,
-        DesiredMode.MT_SCOOP),
+    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.FAR_SWIPE, DesiredMode.MT_SCOOP),
     TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.FAR_SWIPE, DesiredMode.MT_SCOOP),
     CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER);
 

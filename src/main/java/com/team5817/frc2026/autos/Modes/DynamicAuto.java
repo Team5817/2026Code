@@ -59,17 +59,9 @@ public class DynamicAuto extends AutoBase {
 
     TelePrep = l.trajectories.get("NSHOTToNE2");
 
- if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
-      t = 
-          new TrajectorySet(
-              !isHumanSide, 
-              Intake1, 
-              Return1, 
-              Intake2, 
-              Return2, 
-              TelePrep);
-    } 
-    else {
+    if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
+      t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
+    } else {
       t =
           new TrajectorySet(
               !isHumanSide, Intake1, Return1, Intake2, Return2, ReturnShoot2, TelePrep);

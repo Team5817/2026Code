@@ -4,9 +4,9 @@ import com.team5817.frc2026.autos.Actions.ClimbAction;
 import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
-import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
+import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -40,26 +40,22 @@ public class FS extends AutoBase {
 
   @Override
   public void routine() {
-      d.simResetWorldPose(t.initalPose());
-      d.zeroGyro(t.initalPose().getRotation().getDegrees());
-      sh.followPlan(false);
-      sh.setDesiredState(Shooter.State.STOW_HOOD);
-      p.setOverride(false);
-      sh.forceStow(true);
+    d.simResetWorldPose(t.initalPose());
+    d.zeroGyro(t.initalPose().getRotation().getDegrees());
+    sh.followPlan(false);
+    sh.setDesiredState(Shooter.State.STOW_HOOD);
+    p.setOverride(false);
+    sh.forceStow(true);
 
-      su.mIntake.stateRequest(Intake.State.INTAKING).act();
-      r(new TrajectoryAction(t.next(), d));
+    su.mIntake.stateRequest(Intake.State.INTAKING).act();
+    r(new TrajectoryAction(t.next(), d));
 
-      su.mIntake.stateRequest(Intake.State.IDLE).act();
-      r(new TrajectoryAction(t.next(), d));
+    su.mIntake.stateRequest(Intake.State.IDLE).act();
+    r(new TrajectoryAction(t.next(), d));
 
-      r(new ParallelAction(List.of(
-          new ShootAction(5, su, 1),
-          new ClimbAction(c)
-      )));
+    r(new ParallelAction(List.of(new ShootAction(5, su, 1), new ClimbAction(c))));
 
-      r(new TrajectoryAction(t.next(), d));
-      r(new ClimbAction(c));
-    }
-
+    r(new TrajectoryAction(t.next(), d));
+    r(new ClimbAction(c));
+  }
 }
