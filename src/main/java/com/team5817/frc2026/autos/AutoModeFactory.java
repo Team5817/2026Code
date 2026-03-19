@@ -5,10 +5,8 @@ import com.team5817.frc2026.autos.Modes.DynamicAuto;
 import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -26,10 +24,7 @@ public class AutoModeFactory {
   }
 
   public enum StartingSelection {
-    TRENCH_H(
-        DesiredMode.DO_NOTHING,
-        DesiredMode.FARSWIPE,
-        DesiredMode.MT_SCOOP),
+    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.FARSWIPE, DesiredMode.MT_SCOOP),
     TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.FARSWIPE, DesiredMode.MT_SCOOP),
     CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER);
 

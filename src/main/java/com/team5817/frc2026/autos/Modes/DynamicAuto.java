@@ -1,6 +1,5 @@
 package com.team5817.frc2026.autos.Modes;
 
-
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
@@ -41,7 +40,6 @@ public class DynamicAuto extends AutoBase {
     Trajectory ReturnShoot2;
     Trajectory TelePrep;
 
-
     Intake1 = l.trajectories.get("SHToMT1");
     Return1 = l.trajectories.get("MT1ToHS");
     ReturnShoot2 = l.trajectories.get("CNE2ToNSHOT");
@@ -55,24 +53,18 @@ public class DynamicAuto extends AutoBase {
     } else {
       Intake2 = l.trajectories.get("HSToNE2");
       {
-      Return2 = l.trajectories.get("NE2ToHS");
+        Return2 = l.trajectories.get("NE2ToHS");
       }
     }
 
     TelePrep = l.trajectories.get("NSHOTToNE2");
 
- if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
+    if (endSelection == EndSelection.SHOULD_NOT_CLIMB) {
       t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
     } else {
       t =
           new TrajectorySet(
-              !isHumanSide,
-              Intake1,
-              Return1,
-              Intake2,
-              Return2,
-              ReturnShoot2,
-              TelePrep);
+              !isHumanSide, Intake1, Return1, Intake2, Return2, ReturnShoot2, TelePrep);
     }
   }
 
@@ -99,7 +91,6 @@ public class DynamicAuto extends AutoBase {
     r(new TrajectoryAction(t.next(), 1, d));
 
     switch (endSelection) {
-
       case SHOULD_NOT_CLIMB:
         r(new TrajectoryAction(t.next(), 1.5, d));
         su.mIntake.stateRequest(Intake.State.IDLE).act();
