@@ -7,37 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHToNE"
+            "pathName": "SCToCO"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NEToBS"
+            "pathName": "COToC0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BSToHS"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CHSToNE2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CNE2ToHS"
+            "pathName": "C0ToC1"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Port Hueneme",
+  "folder": null,
   "choreoAuto": false
 }

@@ -44,10 +44,12 @@ public class PL extends AutoBase {
   public void routine() {
 
     d.simResetWorldPose(t.initalPose());
-
     sh.followPlan(false);
+    d.zeroGyro(t.initalPose().getRotation().getDegrees());
+
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(4, su));
+    
     if (climbSelection == EndSelection.SHOULD_CLIMB) {
       r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d), new ClimbAction(c))));
       r(new TrajectoryAction(t.next(), d));

@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHToNE"
+            "pathName": "SHToMT1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "NEToHS"
+            "pathName": "MT1ToHS"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CHSToNE2"
+            "pathName": "HSToCNE2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CNE2ToH"
+            "pathName": "CNE2ToNSHOT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NSHOTToNE2"
           }
         }
       ]

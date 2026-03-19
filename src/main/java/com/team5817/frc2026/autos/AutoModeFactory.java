@@ -2,13 +2,13 @@ package com.team5817.frc2026.autos;
 
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.DynamicAuto;
-import com.team5817.frc2026.autos.Modes.DynamicSteal;
-import com.team5817.frc2026.autos.Modes.NS;
 import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import java.util.List;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
@@ -20,25 +20,18 @@ public class AutoModeFactory {
 
   public enum DesiredMode {
     DO_NOTHING,
-    NS,
-    NSH,
-    NRH,
     FARSWIPE,
-    CLOSESWIPE,
-    NRHT,
-    CENTER_MAIN
+    MT_SCOOP,
+    CENTER
   }
 
   public enum StartingSelection {
     TRENCH_H(
         DesiredMode.DO_NOTHING,
-        DesiredMode.NS,
-        DesiredMode.NSH,
         DesiredMode.FARSWIPE,
-        DesiredMode.NRHT,
-        DesiredMode.CLOSESWIPE),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.FARSWIPE, DesiredMode.CLOSESWIPE),
-    CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER_MAIN);
+        DesiredMode.MT_SCOOP),
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.FARSWIPE, DesiredMode.MT_SCOOP),
+    CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER);
 
     public List<DesiredMode> modes;
 
@@ -49,8 +42,7 @@ public class AutoModeFactory {
 
   public enum EndSelection {
     SHOULD_CLIMB,
-    SHOULD_NOT_CLIMB,
-    HUMAN
+    SHOULD_NOT_CLIMB
   }
 
   private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -78,7 +70,6 @@ public class AutoModeFactory {
 
     mEndSelection.setDefaultOption("DO NOT CLIMB", EndSelection.SHOULD_NOT_CLIMB);
     mEndSelection.addOption("CLIMB", EndSelection.SHOULD_CLIMB);
-    mEndSelection.addOption("HUMAN", EndSelection.HUMAN);
   }
 
   /**
@@ -122,10 +113,7 @@ public class AutoModeFactory {
     switch (mode) {
       case DO_NOTHING:
         return Optional.of(new DoNothingMode());
-      case NS:
-        return Optional.of(new NS(s, mCachedEndSelection));
-      case NSH:
-        return Optional.of(new DynamicSteal(s, mCachedEndSelection));
+
       case FARSWIPE:
         return Optional.of(
             new DynamicAuto(
@@ -133,15 +121,18 @@ public class AutoModeFactory {
                 mCachedEndSelection,
                 mCachedStartingSelection == StartingSelection.TRENCH_H,
                 false));
-      case CLOSESWIPE:
+
+      case MT_SCOOP:
         return Optional.of(
             new DynamicAuto(
                 s,
                 mCachedEndSelection,
                 mCachedStartingSelection == StartingSelection.TRENCH_H,
                 true));
-      case CENTER_MAIN:
+
+      case CENTER:
         return Optional.of(new PL(s, mCachedEndSelection));
+
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
         break;

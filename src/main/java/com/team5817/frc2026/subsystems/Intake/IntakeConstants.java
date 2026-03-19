@@ -34,7 +34,7 @@ public class IntakeConstants {
       kRackServoConstants.kKv = 0;
       kRackServoConstants.kKg = 0;
 
-      kRackServoConstants.kCruiseVelocity = 1;
+      kRackServoConstants.kCruiseVelocity = 1;// do .2 first
 
       kRackServoConstants.kAcceleration = 1000000000;
 
