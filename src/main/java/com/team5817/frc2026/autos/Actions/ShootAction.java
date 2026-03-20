@@ -57,7 +57,7 @@ public class ShootAction implements Action {
     timer.start();
     spinupTimer.reset();
     spinupTimer.start();
-    s.mIntake.conformToState(Intake.State.AGITATE);
+    s.mIntake.conformToState(Intake.State.SQUEEZING);
     s.mIndexer.setState(Indexer.State.SPINUP);
     s.mShooter.setDesiredState(Shooter.State.HUB);
     s.mShooter.forceStow(false);

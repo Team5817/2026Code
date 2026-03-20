@@ -9,6 +9,18 @@
           "data": {
             "pathName": "SCToCO"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "COToC0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C0ToC1"
+          }
         }
       ]
     }

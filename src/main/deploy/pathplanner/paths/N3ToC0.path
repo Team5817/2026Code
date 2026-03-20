@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.6985980479148175,
-        "y": 3.0571783496007097
+        "x": 7.6975138888888885,
+        "y": 3.4198819444444437
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.278368881248151,
-        "y": 0.4566297384895983
+        "x": 5.157868055555556,
+        "y": 3.8583819444444445
       },
       "isLocked": false,
       "linkedName": "N3"
     },
     {
       "anchor": {
-        "x": 4.341770833333333,
-        "y": 0.6792569444444438
+        "x": 5.852159722222223,
+        "y": 1.8546805555555554
       },
       "prevControl": {
-        "x": 5.712173639375035,
-        "y": 0.6885478109260825
+        "x": 5.742534722222223,
+        "y": 2.354083333333334
       },
       "nextControl": {
-        "x": 2.5451388888888893,
-        "y": 0.6670763888888884
+        "x": 6.210170453767945,
+        "y": 0.22374277851392166
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.475756944444445,
+        "y": 0.5939930555555555
+      },
+      "prevControl": {
+        "x": 5.535465277777778,
+        "y": 0.5209097222222214
+      },
+      "nextControl": {
+        "x": 3.6310176983722213,
+        "y": 0.6522509345950198
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +52,8 @@
         "y": 3.36
       },
       "prevControl": {
-        "x": 2.045736111111111,
-        "y": 1.0568541666666662
+        "x": 2.1810069444444444,
+        "y": 0.40467361111111
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +62,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6680497925311198,
+      "waypointRelativePos": 0.33195020746887943,
+      "rotationDegrees": -130.0
+    },
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.310165975103735,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2.35,
       "rotationDegrees": 0.0
     }
   ],
@@ -62,11 +90,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Far Sweep",
+  "folder": "Close Sweep",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

@@ -16,7 +16,7 @@ import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 import java.util.List;
 
-public class FS extends AutoBase {
+public class CS extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -24,7 +24,7 @@ public class FS extends AutoBase {
   private Shooter sh;
   private ShootingPlanner p;
 
-  public FS(Superstructure s, boolean isHumanSide) {
+  public CS(Superstructure s, boolean isHumanSide) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;

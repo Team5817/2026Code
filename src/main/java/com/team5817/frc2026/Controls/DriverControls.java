@@ -25,6 +25,7 @@ public class DriverControls {
    * Constructor for the DriverControls class. Initializes the Drive and Superstructure instances
    * and sets the initial goal state.
    */
+
   public DriverControls(Drive d, Superstructure s) {
     this.d = d;
     this.s = s;
@@ -40,6 +41,7 @@ public class DriverControls {
         .getPlanner()
         .setOverride(driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2);
 
+
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
     if (driver.getStartButton()) d.allianceZeroGyro();
@@ -47,13 +49,13 @@ public class DriverControls {
     // LT Intake
     else if (driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-    } else if (codriver.getRightTriggerAxis() > 0.2) {
-      s.mIntake.conformToState(Intake.State.AGITATE);
+    } else if (driver.rightBumper.isBeingPressed()) {
+      s.mIntake.conformToState(Intake.State.SQUEEZING);
     }
     if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-    if (codriver.getRightTriggerAxis() < 0.2 && s.mIntake.getMState() == Intake.State.AGITATE)
+    if (driver.rightBumper.wasReleased() && s.mIntake.getMState() == Intake.State.SQUEEZING)
       s.mIntake.conformToState(Intake.State.IDLE);
 
     // LB Outtake
@@ -67,7 +69,7 @@ public class DriverControls {
     // RT Slow mode
     double scalar = 1 - driver.getRightTriggerAxis() * 0.5;
     mControlBoard.setSwerveScalar(scalar);
-    d.setSpeedScalar(scalar);
+    d.setSpeedScalar(scalar); //TODO integrate to sotm to reduce sporadicitiy
 
     // Y Close
     if (driver.getYButtonPressed()) {
@@ -77,12 +79,12 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // A Far
+    // Intake Deploy 
     if (driver.getAButtonPressed()) {
       s.mIntake.conformToState(Intake.State.STOW);
     }
 
-    // B Force Hood (Both)
+    // B Force Hood
     if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
       s.mIndexer.setState(Indexer.State.IDLE);
@@ -117,8 +119,6 @@ public class DriverControls {
 
   CustomXboxController driver;
   CustomXboxController codriver;
-  /* TWO CONTROLLERS */
-  double lastTime = 0;
 
   /**
    * Handles the input for the two controller mode. This mode is used when both driver and co-driver

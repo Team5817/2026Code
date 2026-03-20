@@ -2,8 +2,10 @@ package com.team5817.frc2026.autos;
 
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.DynamicAuto;
-import com.team5817.frc2026.autos.Modes.FS;
+import com.team5817.frc2026.autos.Modes.CS;
 import com.team5817.frc2026.autos.Modes.PL;
+import com.team5817.frc2026.autos.Modes.PLL;
+import com.team5817.frc2026.autos.Modes.PLR;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,15 +21,17 @@ public class AutoModeFactory {
 
   public enum DesiredMode {
     DO_NOTHING,
-    FAR_SWIPE,
+    CLOSE_SWEEP,
     MT_SCOOP,
-    CENTER
+    PL,
+    PL_LEFT,
+    PL_RIGHT
   }
 
   public enum StartingSelection {
-    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.FAR_SWIPE, DesiredMode.MT_SCOOP),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.FAR_SWIPE, DesiredMode.MT_SCOOP),
-    CENTER(DesiredMode.DO_NOTHING, DesiredMode.CENTER);
+    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP),
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP),
+    CENTER(DesiredMode.DO_NOTHING, DesiredMode.PL,DesiredMode.PL_LEFT, DesiredMode.PL_RIGHT );
 
     public List<DesiredMode> modes;
 
@@ -36,21 +40,14 @@ public class AutoModeFactory {
     }
   }
 
-  public enum EndSelection {
-    SHOULD_CLIMB,
-    SHOULD_NOT_CLIMB
-  }
 
   private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
   private StartingSelection mCachedStartingSelection = StartingSelection.TRENCH_H;
-  private EndSelection mCachedEndSelection = EndSelection.SHOULD_CLIMB;
 
   private Optional<AutoBase> mAutoMode = Optional.empty();
 
   private static SendableChooser<DesiredMode> mModeChooser = new SendableChooser<>();
-  private static SendableChooser<StartingSelection> mStartingPositionSelector =
-      new SendableChooser<>();
-  private static SendableChooser<EndSelection> mEndSelection = new SendableChooser<>();
+  private static SendableChooser<StartingSelection> mStartingPositionSelector = new SendableChooser<>();
 
   /**
    * Constructor for AutoModeSelector. Initializes the SendableChoosers for starting position,
@@ -64,8 +61,6 @@ public class AutoModeFactory {
     mStartingPositionSelector.addOption("TRENCH_H", StartingSelection.TRENCH_H);
     mStartingPositionSelector.addOption("CENTER", StartingSelection.CENTER);
 
-    mEndSelection.setDefaultOption("DO NOT CLIMB", EndSelection.SHOULD_NOT_CLIMB);
-    mEndSelection.addOption("CLIMB", EndSelection.SHOULD_CLIMB);
   }
 
   /**
@@ -90,12 +85,10 @@ public class AutoModeFactory {
     }
     mAutoMode = getAutoModeForParams(desiredMode);
 
-    mCachedEndSelection = mEndSelection.getSelected();
 
     SmartDashboard.putData("Starting Position", mStartingPositionSelector);
     SmartDashboard.putData("Auto Mode", mModeChooser);
     Logger.recordOutput("Selected Auto", desiredMode);
-    SmartDashboard.putData("End Selection", mEndSelection);
   }
 
   /**
@@ -105,24 +98,30 @@ public class AutoModeFactory {
    * @return An Optional containing the AutoBase instance if a valid mode is found, otherwise an
    *     empty Optional.
    */
+
   private Optional<AutoBase> getAutoModeForParams(DesiredMode mode) {
     switch (mode) {
       case DO_NOTHING:
         return Optional.of(new DoNothingMode());
 
-      case FAR_SWIPE:
-        return Optional.of(new FS(s, mCachedStartingSelection == StartingSelection.TRENCH_H));
+      case CLOSE_SWEEP:
+        return Optional.of(new CS(s, mCachedStartingSelection == StartingSelection.TRENCH_H));
 
       case MT_SCOOP:
         return Optional.of(
             new DynamicAuto(
                 s,
-                mCachedEndSelection,
                 mCachedStartingSelection == StartingSelection.TRENCH_H,
                 true));
 
-      case CENTER:
-        return Optional.of(new PL(s, mCachedEndSelection));
+      case PL:
+        return Optional.of(new PL(s));
+
+      case PL_LEFT:
+        return Optional.of(new PLL(s));
+
+      case PL_RIGHT:
+        return Optional.of(new PLR(s));
 
       default:
         System.out.println("ERROR: unexpected auto mode: " + mode);
