@@ -1,8 +1,8 @@
 package com.team5817.frc2026.autos;
 
+import com.team5817.frc2026.autos.Modes.CS;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.DynamicAuto;
-import com.team5817.frc2026.autos.Modes.CS;
 import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.autos.Modes.PLL;
 import com.team5817.frc2026.autos.Modes.PLR;
@@ -31,7 +31,7 @@ public class AutoModeFactory {
   public enum StartingSelection {
     TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP),
     TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP),
-    CENTER(DesiredMode.DO_NOTHING, DesiredMode.PL,DesiredMode.PL_LEFT, DesiredMode.PL_RIGHT );
+    CENTER(DesiredMode.DO_NOTHING, DesiredMode.PL, DesiredMode.PL_LEFT, DesiredMode.PL_RIGHT);
 
     public List<DesiredMode> modes;
 
@@ -40,14 +40,14 @@ public class AutoModeFactory {
     }
   }
 
-
   private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
   private StartingSelection mCachedStartingSelection = StartingSelection.TRENCH_H;
 
   private Optional<AutoBase> mAutoMode = Optional.empty();
 
   private static SendableChooser<DesiredMode> mModeChooser = new SendableChooser<>();
-  private static SendableChooser<StartingSelection> mStartingPositionSelector = new SendableChooser<>();
+  private static SendableChooser<StartingSelection> mStartingPositionSelector =
+      new SendableChooser<>();
 
   /**
    * Constructor for AutoModeSelector. Initializes the SendableChoosers for starting position,
@@ -60,7 +60,6 @@ public class AutoModeFactory {
     mStartingPositionSelector.setDefaultOption("TRENCH_D", StartingSelection.TRENCH_D);
     mStartingPositionSelector.addOption("TRENCH_H", StartingSelection.TRENCH_H);
     mStartingPositionSelector.addOption("CENTER", StartingSelection.CENTER);
-
   }
 
   /**
@@ -85,7 +84,6 @@ public class AutoModeFactory {
     }
     mAutoMode = getAutoModeForParams(desiredMode);
 
-
     SmartDashboard.putData("Starting Position", mStartingPositionSelector);
     SmartDashboard.putData("Auto Mode", mModeChooser);
     Logger.recordOutput("Selected Auto", desiredMode);
@@ -98,7 +96,6 @@ public class AutoModeFactory {
    * @return An Optional containing the AutoBase instance if a valid mode is found, otherwise an
    *     empty Optional.
    */
-
   private Optional<AutoBase> getAutoModeForParams(DesiredMode mode) {
     switch (mode) {
       case DO_NOTHING:
@@ -109,10 +106,7 @@ public class AutoModeFactory {
 
       case MT_SCOOP:
         return Optional.of(
-            new DynamicAuto(
-                s,
-                mCachedStartingSelection == StartingSelection.TRENCH_H,
-                true));
+            new DynamicAuto(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 
       case PL:
         return Optional.of(new PL(s));

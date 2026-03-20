@@ -47,9 +47,8 @@ public class PLR extends AutoBase {
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(4, su));
 
-      r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d), new ClimbAction(c))));
-      r(new TrajectoryAction(t.next(), d));
-      r(new ClimbAction(c));
-    
+    r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d), new ClimbAction(c))));
+    r(new TrajectoryAction(t.next(), d));
+    r(new ClimbAction(c));
   }
 }

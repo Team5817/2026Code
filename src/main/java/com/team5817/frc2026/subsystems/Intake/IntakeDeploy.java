@@ -4,7 +4,6 @@ import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
-
 import lombok.Getter;
 
 /** The IntakeDeploy class controls the deployment mechanism of the intake system. */
@@ -51,5 +50,4 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
       return ControlState.POSITION;
     }
   }
-
 }

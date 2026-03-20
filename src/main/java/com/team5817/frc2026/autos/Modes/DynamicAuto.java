@@ -21,8 +21,7 @@ public class DynamicAuto extends AutoBase {
   private Shooter sh;
   private ShootingPlanner p;
 
-  public DynamicAuto(
-      Superstructure s, boolean isHumanSide, boolean isClose) {
+  public DynamicAuto(Superstructure s, boolean isHumanSide, boolean isClose) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -55,8 +54,7 @@ public class DynamicAuto extends AutoBase {
 
     TelePrep = l.trajectories.get("NSHOTToNE2");
 
-      t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
-
+    t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
   }
 
   @Override
@@ -77,12 +75,11 @@ public class DynamicAuto extends AutoBase {
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), 1, d));
-    
-        r(new TrajectoryAction(t.next(), 1.5, d));
-        su.mIntake.stateRequest(Intake.State.IDLE).act();
-        r(new ShootAction(4, su, 1));
-        su.mIntake.stateRequest(Intake.State.IDLE).act();
-        r(new TrajectoryAction(t.next(), 1.5, d));
-    
+
+    r(new TrajectoryAction(t.next(), 1.5, d));
+    su.mIntake.stateRequest(Intake.State.IDLE).act();
+    r(new ShootAction(4, su, 1));
+    su.mIntake.stateRequest(Intake.State.IDLE).act();
+    r(new TrajectoryAction(t.next(), 1.5, d));
   }
 }

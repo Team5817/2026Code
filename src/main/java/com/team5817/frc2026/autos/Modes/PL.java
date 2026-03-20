@@ -33,6 +33,5 @@ public class PL extends AutoBase {
 
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(4, su));
-    
   }
 }

@@ -25,7 +25,6 @@ public class DriverControls {
    * Constructor for the DriverControls class. Initializes the Drive and Superstructure instances
    * and sets the initial goal state.
    */
-
   public DriverControls(Drive d, Superstructure s) {
     this.d = d;
     this.s = s;
@@ -40,7 +39,6 @@ public class DriverControls {
     s.mShooter
         .getPlanner()
         .setOverride(driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2);
-
 
     // RB don't Shoot
     s.setAllowAutoShoot(!driver.getRightBumperButton());
@@ -69,7 +67,7 @@ public class DriverControls {
     // RT Slow mode
     double scalar = 1 - driver.getRightTriggerAxis() * 0.5;
     mControlBoard.setSwerveScalar(scalar);
-    d.setSpeedScalar(scalar); //TODO integrate to sotm to reduce sporadicitiy
+    d.setSpeedScalar(scalar); // TODO integrate to sotm to reduce sporadicitiy
 
     // Y Close
     if (driver.getYButtonPressed()) {
@@ -79,7 +77,7 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Intake Deploy 
+    // Intake Deploy
     if (driver.getAButtonPressed()) {
       s.mIntake.conformToState(Intake.State.STOW);
     }
