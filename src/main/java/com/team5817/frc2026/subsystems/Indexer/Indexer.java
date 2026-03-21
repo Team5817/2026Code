@@ -30,7 +30,7 @@ public class Indexer extends Subsystem {
     IDLE(SpindexerState.IDLE, TunnelState.IDLE),
     FEED(SpindexerState.COUNTERCLOCK, TunnelState.IN),
     SPINUP(SpindexerState.IDLE, TunnelState.IN),
-    EXHAUST(SpindexerState.COUNTERCLOCK, TunnelState.EXHAUST);
+    EXHAUST(SpindexerState.CLOCK, TunnelState.EXHAUST);
 
     public final SpindexerState spindexerState;
     public final TunnelState tunnelState;

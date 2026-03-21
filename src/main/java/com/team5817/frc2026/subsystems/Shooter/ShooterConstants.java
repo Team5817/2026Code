@@ -33,13 +33,11 @@ public class ShooterConstants {
   public static Pose2d shooterTransform =
       new Pose2d(Units.inchesToMeters(-1.25), Units.inchesToMeters(4), Rotation2d.fromDegrees(0.0));
 
-  // V2 x 4.625
-  // V2 y 2.25
   static {
     robotToTurret =
         new Translation3d(
-            Units.inchesToMeters(-2.25), // og -1.25
-            Units.inchesToMeters(4.625), // og 4
+            Units.inchesToMeters(-2.25), // og -1.25, V2 x 4.625
+            Units.inchesToMeters(4.625), // og 4, V2 y 2.25
             Units.inchesToMeters(21)); // z is LL Height, og 21
     TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
 
@@ -84,7 +82,7 @@ public class ShooterConstants {
     hubHood.put(2.64, 10.0);
     hubHood.put(3.5, 16.0);
 
-    InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
+    InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();//TODO add a shit ton of values (madtown)
     hubFly.put(1.0, 35.0); // Hub
     hubFly.put(3.0, 50.0); // Depot
     hubFly.put(3.6, 52.5); // trench
@@ -108,7 +106,7 @@ public class ShooterConstants {
       kTurretServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 65.4545455; // og 104.166667
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 65.545454; // og 104.166667
 
       kTurretServoConstants.kMinUnitsLimit = -390.0;
       kTurretServoConstants.kMaxUnitsLimit = 0.0;
@@ -136,7 +134,7 @@ public class ShooterConstants {
       kTurretServoConstants.kEnableStatorCurrentLimit = true;
       kTurretServoConstants.kStatorCurrentLimit = 30;
 
-      kTurretServoConstants.kNeutralMode = NeutralModeValue.Coast;
+      kTurretServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
       kTurretServoConstants.kHomingTimeout = 0.5;
       kTurretServoConstants.kHomingOutput = -0.25;
@@ -154,10 +152,10 @@ public class ShooterConstants {
       kHoodServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kHoodServoConstants.kHomePosition = 0.0;
-      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 96 / 1;
+      kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 88.3; // og 1 / 360.0 * 96 / 1
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
-      kHoodServoConstants.kMaxUnitsLimit = 30.0;
+      kHoodServoConstants.kMaxUnitsLimit = 30.0;//TODO find max
 
       kHoodServoConstants.kKp = 3;
       kHoodServoConstants.kKi = 9.5;
@@ -182,7 +180,7 @@ public class ShooterConstants {
       kHoodServoConstants.kEnableStatorCurrentLimit = true;
       kHoodServoConstants.kStatorCurrentLimit = 15;
 
-      kHoodServoConstants.kNeutralMode = NeutralModeValue.Coast;
+      kHoodServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
       kHoodServoConstants.kHomingTimeout = 0.5;
       kHoodServoConstants.kHomingOutput = -0.2;

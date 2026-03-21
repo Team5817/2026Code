@@ -20,9 +20,8 @@ public class IntakeConstants {
       kRackServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kRackServoConstants.kHomePosition = 0;
-      kRackServoConstants.kRotationsPerUnitDistance = 143.6 / (.2667 / .107);
-
-      kRackServoConstants.kMaxUnitsLimit = 0.2667;
+      kRackServoConstants.kRotationsPerUnitDistance = 41.15;//TODO or 143.6 * (3.28125 / 11.458)? 
+      kRackServoConstants.kMaxUnitsLimit = 0.3175;
       kRackServoConstants.kMinUnitsLimit = 0.0;
 
       kRackServoConstants.kKp = 15.0;
@@ -71,7 +70,7 @@ public class IntakeConstants {
     public enum FeederState implements IRollerState {
       IDLE(0),
       INTAKING(-11),
-      EXHAUST(12);
+      EXHAUST(11);
 
       @Getter private final double demand;
       @Getter private final RollerControlMode controlMode;
