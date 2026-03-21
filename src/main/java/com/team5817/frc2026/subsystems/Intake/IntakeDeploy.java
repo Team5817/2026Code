@@ -1,7 +1,5 @@
 package com.team5817.frc2026.subsystems.Intake;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix6.mechanisms.DifferentialMechanism.DisabledReasonValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Servos.ServoConstants;
@@ -61,7 +59,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
 
   @Override
   public void setDesiredState(State mDesiredState) {
-      super.setDesiredState(mDesiredState);
-      setNeutralMode(mDesiredState.neutralMode);
+    super.setDesiredState(mDesiredState);
+    setNeutralMode(mDesiredState.neutralMode);
   }
 }

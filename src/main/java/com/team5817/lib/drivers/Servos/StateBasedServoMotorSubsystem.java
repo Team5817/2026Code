@@ -1,6 +1,5 @@
 package com.team5817.lib.drivers.Servos;
 
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.lib.Util;
 import com.team5817.lib.requests.Request;
 import lombok.Getter;
@@ -44,7 +43,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
           super.applyVoltage(mDesiredState.getDemand());
       }
 
-    if (mDesiredState.isDisabled()){ 
+    if (mDesiredState.isDisabled()) {
       super.applyVoltage(0);
     }
 

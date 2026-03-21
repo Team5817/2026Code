@@ -267,7 +267,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     io.forceZeroSensors();
   }
 
-  public void setNeutralMode(NeutralModeValue neutralMode){
+  public void setNeutralMode(NeutralModeValue neutralMode) {
     io.setNeutralMode(neutralMode);
   }
 

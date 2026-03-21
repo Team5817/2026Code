@@ -24,11 +24,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import lombok.Getter;
-
 import java.util.function.UnaryOperator;
-
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ServoMotorIOTalonFX implements ServoMotorIO {
@@ -247,17 +243,17 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
    * @param mode The neutral mode.
    */
   private NeutralModeValue currNeutralModeValue;
+
   @Override
   public void setNeutralMode(NeutralModeValue mode) {
     Logger.recordOutput(mConstants.kName + "/Neutral Mode", mode.name());
-    if(currNeutralModeValue == mode)
-      return;
+    if (currNeutralModeValue == mode) return;
 
     changeTalonConfig(
-      (conf) -> {
-        conf.MotorOutput.NeutralMode = mode;
-        return conf;
-      });
+        (conf) -> {
+          conf.MotorOutput.NeutralMode = mode;
+          return conf;
+        });
     currNeutralModeValue = mode;
   }
 
