@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "COToC02"
+            "pathName": "COToC0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C02ToC2"
+            "pathName": "C0ToC1"
           }
         }
       ]
