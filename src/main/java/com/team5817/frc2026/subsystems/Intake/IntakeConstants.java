@@ -57,15 +57,15 @@ public class IntakeConstants {
 
   public static final class RollerConstants {
 
-    public static RollerConstantsTalonFX motorConstants = new RollerConstantsTalonFX();
+    public static RollerConstantsTalonFX kMotorConstants = new RollerConstantsTalonFX();
 
     static {
-      motorConstants.kSupplyCurrentLimit = 40;
-      motorConstants.kStatorCurrentLimit = 80;
-      motorConstants.kEnableSupplyCurrentLimit = true;
-      motorConstants.kEnableStatorCurrentLimit = true;
-      motorConstants.kMaxForwardOutput = 12.0;
-      motorConstants.kMaxReverseOutput = -12.0;
+      kMotorConstants.kSupplyCurrentLimit = 40;
+      kMotorConstants.kStatorCurrentLimit = 80;
+      kMotorConstants.kEnableSupplyCurrentLimit = true;
+      kMotorConstants.kEnableStatorCurrentLimit = true;
+      kMotorConstants.kMaxForwardOutput = 12.0;
+      kMotorConstants.kMaxReverseOutput = -12.0;
     }
 
     public enum FeederState implements IRollerState {

@@ -1,8 +1,9 @@
 package com.team5817.lib.requests;
 
 import com.team5817.frc2026.planners.ShootingPlanner;
-import com.team5817.frc2026.subsystems.Spindexer.Indexer;
 import com.team5817.frc2026.subsystems.Superstructure;
+import com.team5817.frc2026.subsystems.Indexer.Indexer;
+
 import org.littletonrobotics.junction.Logger;
 
 public class AutoShootRequest extends Request {
