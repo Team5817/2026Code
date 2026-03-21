@@ -1,5 +1,8 @@
 package com.team5817.frc2026.subsystems.Intake;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.mechanisms.DifferentialMechanism.DisabledReasonValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
@@ -24,6 +27,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
     @Getter private boolean disabled = false;
+    @Getter private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
     /**
      * p Constructs a new State.
@@ -38,6 +42,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
 
     State() {
       this.disabled = true;
+      this.neutralMode = NeutralModeValue.Coast;
     }
 
     @Override
@@ -52,5 +57,11 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
         Util.epsilonEquals(getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError());
     if (out && getDesiredState() == State.OUT) setDesiredState(State.DISABLED);
     super.writePeriodicOutputs();
+  }
+
+  @Override
+  public void setDesiredState(State mDesiredState) {
+      super.setDesiredState(mDesiredState);
+      setNeutralMode(mDesiredState.neutralMode);
   }
 }

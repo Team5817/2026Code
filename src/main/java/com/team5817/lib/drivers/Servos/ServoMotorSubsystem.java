@@ -1,5 +1,6 @@
 package com.team5817.lib.drivers.Servos;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team254.lib.drivers.CanDeviceId;
 import com.team254.lib.motion.MotionState;
 import com.team254.lib.util.DelayedBoolean;
@@ -264,6 +265,10 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   /** Forces the sensors to zero. */
   public void forceZero() {
     io.forceZeroSensors();
+  }
+
+  public void setNeutralMode(NeutralModeValue neutralMode){
+    io.setNeutralMode(neutralMode);
   }
 
   /** Outputs telemetry data. */
