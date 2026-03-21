@@ -1,6 +1,5 @@
 package com.team5817.frc2026.subsystems.Intake;
 
-import com.ctre.phoenix6.mechanisms.DifferentialMechanism.DisabledReasonValue;
 import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
@@ -14,11 +13,12 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   public IntakeDeploy(final ServoConstants constants, ServoMotorIO io) {
     super(IntakeDeploy.State.OUT, io, true);
   }
+
   /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
     OUT(0.3175),
     DISABLED(),
-    SQUEEZE(0.1), 
+    SQUEEZE(0.1),
     ZERO(0);
 
     @Getter private double demand = 0;
@@ -45,15 +45,12 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
       return ControlState.POSITION;
     }
   }
+
   @Override
   public void writePeriodicOutputs() {
-    boolean out = 
-      Util.epsilonEquals(
-            getPosition(),
-            State.OUT.getDemand(),
-            State.OUT.getAllowableError());
-    if(out && getDesiredState() == State.OUT)
-      setDesiredState(State.DISABLED);
+    boolean out =
+        Util.epsilonEquals(getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError());
+    if (out && getDesiredState() == State.OUT) setDesiredState(State.DISABLED);
     super.writePeriodicOutputs();
   }
 }
