@@ -50,9 +50,9 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   }
 
   public Request advanceClimbRequest() {
-    System.out.println("Advancing climb from " + mState);
+    System.out.println("Advancing climb from " + mDesiredState);
 
-    switch (mState) {
+    switch (mDesiredState) {
       case ZERO:
         latchRelease.setState(LatchRelease.State.RELEASED);
         return stateRequest(State.READY);
@@ -82,7 +82,7 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   }
 
   public void resetClimbStages() {
-    setState(State.ZERO);
+    setDesiredState(State.ZERO);
   }
 
   @Override

@@ -43,22 +43,23 @@ public class DriverControls {
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // LT Intake
-    else if (driver.leftTrigger.isBeingPressed()) {
+    if (driver.leftTrigger.wasActivated()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-    } else if (driver.rightBumper.isBeingPressed()) {
+    }
+    if (driver.rightBumper.wasActivated() && !driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.SQUEEZING);
     }
-    if (driver.leftTrigger.wasReleased() && s.mIntake.getMState() == Intake.State.INTAKING) {
+    if (driver.leftTrigger.wasReleased()) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
     if (driver.rightBumper.wasReleased() && s.mIntake.getMState() == Intake.State.SQUEEZING)
       s.mIntake.conformToState(Intake.State.IDLE);
 
     // LB Outtake
-    if (driver.leftBumper.isBeingPressed()) {
+    if (driver.leftBumper.wasActivated()) {
       s.mIntake.conformToState(Intake.State.EXHAUSTING);
     }
-    if (!driver.leftBumper.isBeingPressed() && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
+    if (driver.leftBumper.wasReleased() && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
 

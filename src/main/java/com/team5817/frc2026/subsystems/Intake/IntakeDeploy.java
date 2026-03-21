@@ -1,5 +1,7 @@
 package com.team5817.frc2026.subsystems.Intake;
 
+import com.ctre.phoenix6.mechanisms.DifferentialMechanism.DisabledReasonValue;
+import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
@@ -9,21 +11,14 @@ import lombok.Getter;
 /** The IntakeDeploy class controls the deployment mechanism of the intake system. */
 public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.State> {
 
-  /**
-   * Constructs a new IntakeDeploy subsystem.
-   *
-   * @param constants The constants for the servo motor subsystem.
-   * @param encoder_constants The constants for the absolute encoder.
-   */
   public IntakeDeploy(final ServoConstants constants, ServoMotorIO io) {
-    super(IntakeDeploy.State.IDLE, io, true);
+    super(IntakeDeploy.State.OUT, io, true);
   }
-
   /** Represents the different states of the intake deployment. */
   public enum State implements ServoState {
-    IDLE(0.3175), // og .2667
     OUT(0.3175),
-    SQUEEZE(0.1), // TODO placeholder
+    DISABLED(),
+    SQUEEZE(0.1), 
     ZERO(0);
 
     @Getter private double demand = 0;
@@ -38,7 +33,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
      */
     State(double output) {
       this.demand = output;
-      this.allowableError = .1;
+      this.allowableError = .03;
     }
 
     State() {
@@ -49,5 +44,16 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
     public ControlState getControlState() {
       return ControlState.POSITION;
     }
+  }
+  @Override
+  public void writePeriodicOutputs() {
+    boolean out = 
+      Util.epsilonEquals(
+            getPosition(),
+            State.OUT.getDemand(),
+            State.OUT.getAllowableError());
+    if(out && getDesiredState() == State.OUT)
+      setDesiredState(State.DISABLED);
+    super.writePeriodicOutputs();
   }
 }

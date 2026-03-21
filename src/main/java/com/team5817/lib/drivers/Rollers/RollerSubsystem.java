@@ -24,7 +24,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   @Getter
   @Setter
   @Accessors(prefix = "m")
-  private S mState;
+  private S mDesiredState;
 
   protected boolean atState = true;
 
@@ -39,7 +39,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   }
 
   public RollerSubsystem(S initialState, String name, String inputsName, RollerSubsystemIO io) {
-    this.mState = initialState;
+    this.mDesiredState = initialState;
     this.inputsName = name;
     this.io = io;
 
@@ -51,9 +51,9 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
     io.updateInputs(inputs);
     Logger.processInputs(inputsName, inputs);
 
-    if (mState.getControlMode() == RollerControlMode.VELOCITY) {
-      double error = mState.getDemand() - inputs.data.velocityRotsPerSec();
-      atState = Math.abs(error) < mState.getToleranceRadsPerSec();
+    if (mDesiredState.getControlMode() == RollerControlMode.VELOCITY) {
+      double error = mDesiredState.getDemand() - inputs.data.velocityRotsPerSec();
+      atState = Math.abs(error) < mDesiredState.getToleranceRadsPerSec();
     } else {
       atState = true;
     }
@@ -63,23 +63,23 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
   }
 
   public void writePeriodicOutputs() {
-    switch (mState.getControlMode()) {
+    switch (mDesiredState.getControlMode()) {
       case TORQUE:
-        io.runTorqueCurrent(mState.getDemand());
+        io.runTorqueCurrent(mDesiredState.getDemand());
         break;
       case VELOCITY:
-        io.runVelocity(mState.getDemand());
+        io.runVelocity(mDesiredState.getDemand());
         break;
       case VOLTAGE:
-        io.runVolts(mState.getDemand());
+        io.runVolts(mDesiredState.getDemand());
         break;
     }
 
-    double error = mState.getDemand() - inputs.data.velocityRotsPerSec();
+    double error = mDesiredState.getDemand() - inputs.data.velocityRotsPerSec();
 
-    Logger.recordOutput(inputsName + "/State", mState);
-    Logger.recordOutput(inputsName + "/Control Mode", mState.getControlMode());
-    Logger.recordOutput(inputsName + "/Desired", mState.getDemand());
+    Logger.recordOutput(inputsName + "/State", mDesiredState);
+    Logger.recordOutput(inputsName + "/Control Mode", mDesiredState.getControlMode());
+    Logger.recordOutput(inputsName + "/Desired", mDesiredState.getDemand());
     Logger.recordOutput(inputsName + "/Position", Math.toDegrees(inputs.data.positionRads()));
     Logger.recordOutput(inputsName + "/Velocity", inputs.data.velocityRotsPerSec());
     Logger.recordOutput(inputsName + "/Error", error);
@@ -109,7 +109,7 @@ public class RollerSubsystem<S extends Enum<S> & IRollerState> extends Subsystem
     return new Request() {
       @Override
       public void act() {
-        setState(newState);
+        setDesiredState(newState);
       }
     };
   }

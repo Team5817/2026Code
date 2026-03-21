@@ -78,7 +78,7 @@ public class Superstructure extends Subsystem {
       mLights.setLeds(LEDState.TWINKLE_WHITE);
       return;
     }
-    if (mClimb.getState() != Climb.State.ZERO) {
+    if (mClimb.getDesiredState() != Climb.State.ZERO) {
       mLights.setLeds(LEDState.RAINBOW);
       return;
     }

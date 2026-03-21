@@ -107,8 +107,8 @@ public class Indexer extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    spindexer.setState(mState.spindexerState);
-    tunnel.setState(mState.tunnelState);
+    spindexer.setDesiredState(mState.spindexerState);
+    tunnel.setDesiredState(mState.tunnelState);
 
     spindexer.writePeriodicOutputs();
     tunnel.writePeriodicOutputs();

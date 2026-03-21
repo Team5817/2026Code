@@ -12,7 +12,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
   @Getter
   @Setter
   @Accessors(prefix = "m")
-  protected S mState;
+  protected S mDesiredState;
 
   private final boolean allowAutoStateOutput;
   protected boolean atState = false;
@@ -24,7 +24,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
   public StateBasedServoMotorSubsystem(
       S initialState, ServoMotorIO io, boolean enableAutoStateOutput) {
     super(io);
-    this.mState = initialState;
+    this.mDesiredState = initialState;
     this.allowAutoStateOutput = enableAutoStateOutput;
   }
 
@@ -35,15 +35,15 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
   @Override
   public void writePeriodicOutputs() {
     if (allowAutoStateOutput)
-      switch (mState.getControlState()) {
+      switch (mDesiredState.getControlState()) {
         case POSITION:
-          super.setPositionSetpoint(mState.getDemand());
+          super.setPositionSetpoint(mDesiredState.getDemand());
           break;
         case VOLTAGE:
-          super.applyVoltage(mState.getDemand());
+          super.applyVoltage(mDesiredState.getDemand());
       }
 
-    if (mState.isDisabled()) super.applyVoltage(0);
+    if (mDesiredState.isDisabled()) super.applyVoltage(0);
 
     super.writePeriodicOutputs();
   }
@@ -55,14 +55,14 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
         Util.epsilonEquals(
             getPosition() - mConstants.kHomePosition,
             mConstants.rotationsToUnits(demand),
-            mState.getAllowableError());
-    if (mState.isDisabled() || mControlState != ControlState.POSITION) atState = true;
+            mDesiredState.getAllowableError());
+    if (mDesiredState.isDisabled() || mControlState != ControlState.POSITION) atState = true;
   }
 
   @Override
   public void outputTelemetry() {
     Logger.recordOutput(mConstants.kName + "/AtState", atState);
-    Logger.recordOutput(mConstants.kName + "/State", mState);
+    Logger.recordOutput(mConstants.kName + "/State", mDesiredState);
     super.outputTelemetry();
   }
 
@@ -79,7 +79,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
         if (mControlState != ControlState.POSITION) {
           mControlState = ControlState.POSITION;
         }
-        setState(_wantedState);
+        setDesiredState(_wantedState);
       }
 
       @Override
