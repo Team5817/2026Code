@@ -25,7 +25,7 @@ public class Lights extends Subsystem {
     Logger.recordOutput("Lights/Main State", io.getState(mState));
   }
 
-  public Request setState(LEDState state) {
+  public Request setStateRequest(LEDState state) {
     return new Request() {
       @Override
       public void act() {

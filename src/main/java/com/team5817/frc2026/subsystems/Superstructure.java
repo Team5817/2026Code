@@ -1,5 +1,6 @@
 package com.team5817.frc2026.subsystems;
 
+import com.ctre.phoenix.CANifier.LEDChannel;
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
@@ -14,7 +15,11 @@ import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
 import com.team5817.lib.requests.SequentialRequest;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import lombok.Setter;
+
+import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends Subsystem {
@@ -69,30 +74,30 @@ public class Superstructure extends Subsystem {
   @Override
   public void periodic() {
     requestExecutor.update();
-    if (ActiveTracker.getTimeToActive() % 2 == 0) {
-      mLights.setLeds(LEDState.ORANGE);
-    } else if (mClimb.getState() != Climb.State.ZERO) {
-      mLights.setLeds(LEDState.CLIMBING);
-    } else if (mShooter.getPlanner().shouldShoot()) {
-      mLights.setLeds(LEDState.LOCKED);
-    } else if (!mShooter.getPlanner().shouldShoot()) {
-      mLights.setLeds(LEDState.NOT_LOCKED);
+    handleLED();
+  }
+  public void handleLED(){
+    if(DriverStation.isDisabled()){
+      mLights.setLeds(LEDState.TWINKLE_WHITE);
+      return;
     }
-    // else if (){
-    //   mLights.setLeds(LEDState.FIRE);
-    // }
-    // else if (){
-    //   mLights.setLeds(LEDState.STROBEORANGE);
-    // }
-    // else if (){ // alliance red
-    //   mLights.setLeds(LEDState.RED);
-    // }
-    // else if (){ // alliance blue
-    //   mLights.setLeds(LEDState.BLUE);
-    // }
-    else {
-      mLights.setLeds(LEDState.NONE);
+    if(mClimb.getState() != Climb.State.ZERO){
+      mLights.setLeds(LEDState.RAINBOW);
+      return;
     }
+    if (ActiveTracker.getShiftInfo().active()) {
+      if(ActiveTracker.getShiftInfo().remainingTime()<5)
+        mLights.setLeds(LEDState.BLINK_BLUE);
+      else{
+        mLights.setLeds(LEDState.BLUE);
+      }
+      return;
+    }
+    else if(ActiveTracker.getShiftInfo().remainingTime()<5 ){
+      mLights.setLeds(LEDState.RED);
+      return;
+    }
+    mLights.setLeds(LEDState.TEAL);
   }
 
   public boolean requestsCompleted() {

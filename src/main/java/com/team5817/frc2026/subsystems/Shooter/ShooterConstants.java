@@ -31,7 +31,7 @@ public class ShooterConstants {
   public static final double cancoderToTurretRatio = (360 / 400); // TODO
 
   public static Pose2d shooterTransform =
-      new Pose2d(Units.inchesToMeters(-1.25), Units.inchesToMeters(4), Rotation2d.fromDegrees(0.0));
+      new Pose2d(Units.inchesToMeters(-2.25), Units.inchesToMeters(4.625), Rotation2d.fromDegrees(0.0));
 
   static {
     robotToTurret =

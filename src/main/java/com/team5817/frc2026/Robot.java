@@ -127,7 +127,6 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("Elastic/Match Time", Timer.getMatchTime());
     mSubsystemManager.updateSubsystems();
     RobotVisualizer.outputTelemetry();
-    ActiveTracker.updateActive();
     elasticField2d.setRobotPose(mRobotContainer.mDrive.getPose().wpi());
     SmartDashboard.putData("Elastic/Field", elasticField2d);
   }
@@ -165,6 +164,7 @@ public class Robot extends LoggedRobot {
         new AutoShootRequest(mRobotContainer.mShooter.getPlanner(), mRobotContainer.mSuperstructure)
             .addName("AutoShoot"));
     mRobotContainer.mShooter.forceStow(false);
+    ActiveTracker.initialize();
   }
 
   /** This method is called periodically during teleoperated mode. */

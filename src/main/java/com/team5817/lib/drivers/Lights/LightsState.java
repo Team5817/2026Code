@@ -29,14 +29,15 @@ public class LightsState {
      * FLOW
      */
     ORANGE(Color.kOrange, "SOLID"),
-    DUAL(Color.kWhite, "SOLID"),
-    ALLIANCE_RED(Color.kRed, "SOLID"),
-    ALLIANCE_BLUE(Color.kBlue, "SOLID"),
-    NOT_LOCKED(Color.kYellow, "SOLID"),
-    LOCKED(Color.kGreen, "SOLID"),
-    CLIMBING(Color.kPurple, "SOLID"),
+    TWINKLE_WHITE(Color.kWhite, "TWINKLE"),
+    RED(Color.kRed, "SOLID"),
+    BLUE(Color.kBlue, "SOLID"),
+    YELLOW(Color.kYellow, "SOLID"),
+    TEAL(Color.kTeal, "SOLID"),
+    PURPLE(Color.kPurple, "SOLID"),
     NONE(Color.kWhite, "SOLID"),
-    HOPPER_EMPTY(Color.kOrange, "STROBE");
+    BLINK_BLUE(Color.kBlue, "STROBE"),
+    RAINBOW(null, "RAINBOW");
 
     Color color = null;
     String animation = null;

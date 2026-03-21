@@ -102,12 +102,7 @@ public class DriverControls {
     if (driver.POV0.wasActivated()) {
       s.mClimb.resetClimbStages();
     }
-
-    // Controller Shake
-    Logger.recordOutput("ActiveTracker/Should Shake", ActiveTracker.shouldShakeController());
-    if (ActiveTracker.shouldShakeController()) {
-      codriver.rumble(0.3, 1);
-    }
+    
     if (driver.POV270.isBeingPressed()) {
       d.autoAlign(AlignmentType.CLIMB_PREP);
     } else if (driver.POV90.isBeingPressed()) {

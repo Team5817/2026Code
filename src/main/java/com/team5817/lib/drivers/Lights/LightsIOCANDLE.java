@@ -7,6 +7,7 @@ import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.RgbFadeAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.controls.StrobeAnimation;
+import com.ctre.phoenix6.controls.TwinkleAnimation;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 
@@ -21,7 +22,7 @@ public class LightsIOCANDLE implements LightsIO {
   public void setControl(LightsState.LEDState state, double frameRate, int minSlot, int maxSlot) {
     switch (state.animation) {
       case "FLOW":
-        mCandle.setControl(new ColorFlowAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate));
+        mCandle.setControl(new ColorFlowAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
         break;
 
       case "FIRE":
@@ -29,7 +30,7 @@ public class LightsIOCANDLE implements LightsIO {
         break;
 
       case "LARSON":
-        mCandle.setControl(new LarsonAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate));
+        mCandle.setControl(new LarsonAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
         break;
 
       case "RAINBOW":
@@ -41,7 +42,10 @@ public class LightsIOCANDLE implements LightsIO {
         break;
 
       case "STROBE":
-        mCandle.setControl(new StrobeAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate));
+        mCandle.setControl(new StrobeAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
+        break;
+      case "TWINKLE":
+        mCandle.setControl(new TwinkleAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
         break;
       case "SOLID":
         if (state.color != null)
