@@ -89,9 +89,8 @@ public class RobotContainer {
     mIndexer =
         new Indexer(
             new RollerSubsystemIOTalonFX(
-                Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2),//TODO placeholder
-            new RollerSubsystemIOTalonFX(
-                Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
+                Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2), // TODO placeholder
+            new RollerSubsystemIOTalonFX(Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
 
     mShooter =
         new Shooter(
@@ -148,8 +147,7 @@ public class RobotContainer {
           new Indexer(
               new RollerSubsystemIOTalonFX(
                   Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 1),
-              new RollerSubsystemIOTalonFX(
-                  Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
+              new RollerSubsystemIOTalonFX(Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
 
     if (mDrive == null)
       mDrive =
@@ -205,9 +203,7 @@ public class RobotContainer {
           new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
 
     if (mLight == null) mLight = new Lights(new LightsIOSim());
-
   }
-
 
   private Pose2d getMapleSimPose() {
     return new Pose2d(driveSimulation.getSimulatedDriveTrainPose());
@@ -222,6 +218,7 @@ public class RobotContainer {
   public void displaySimFieldToAdvantageScope() {
     if (RobotMode.mode != RobotMode.Mode.SIM) return;
 
-    Logger.recordOutput("FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
+    Logger.recordOutput(
+        "FieldSimulation/RobotPosition", driveSimulation.getSimulatedDriveTrainPose());
   }
 }

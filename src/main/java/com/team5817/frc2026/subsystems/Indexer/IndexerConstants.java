@@ -9,7 +9,6 @@ public class IndexerConstants {
   public static final RollerConstantsTalonFX kTunnelConstants = new RollerConstantsTalonFX();
 
   static {
-
     kSpindexerConstants.kMainConstants.id = Ports.SPINDEXER;
     kSpindexerConstants.kSupplyCurrentLimit = 40;
     kSpindexerConstants.kStatorCurrentLimit = 30;
@@ -22,6 +21,5 @@ public class IndexerConstants {
     kTunnelConstants.kEnableSupplyCurrentLimit = true;
     kTunnelConstants.kEnableStatorCurrentLimit = true;
     kTunnelConstants.kMainConstants.counterClockwisePositive = true;
-
   }
 }

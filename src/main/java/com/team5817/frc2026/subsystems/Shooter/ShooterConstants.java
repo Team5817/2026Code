@@ -32,13 +32,14 @@ public class ShooterConstants {
 
   public static Pose2d shooterTransform =
       new Pose2d(Units.inchesToMeters(-1.25), Units.inchesToMeters(4), Rotation2d.fromDegrees(0.0));
-//V2 x 4.625
-//V2 y 2.25
+
+  // V2 x 4.625
+  // V2 y 2.25
   static {
     robotToTurret =
         new Translation3d(
-            Units.inchesToMeters(-2.25),//og -1.25
-            Units.inchesToMeters(4.625),//og 4
+            Units.inchesToMeters(-2.25), // og -1.25
+            Units.inchesToMeters(4.625), // og 4
             Units.inchesToMeters(21)); // z is LL Height, og 21
     TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
 
@@ -49,9 +50,9 @@ public class ShooterConstants {
     kFlywheelConstants.kSupplyCurrentLimit = 40;
     kFlywheelConstants.kStatorCurrentLimit = 80;
 
-    kFlywheelConstants.kKp = .05; 
+    kFlywheelConstants.kKp = .05;
     kFlywheelConstants.kKs = 0.599609375;
-    kFlywheelConstants.kKv = 0.008679999969899654; 
+    kFlywheelConstants.kKv = 0.008679999969899654;
 
     kFlywheelConstants.kEnableSupplyCurrentLimit = true;
     kFlywheelConstants.kEnableStatorCurrentLimit = true;
@@ -90,7 +91,7 @@ public class ShooterConstants {
     hubFly.put(4.0, 56.5); // tower side
     hubFly.put(5.0, 70.0); // Human (figure out)
     hubFly.put(5.4, 77.0); // Far-most Human again
-    
+
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
     HOOD_MAP_HUB = hubHood;
@@ -107,7 +108,7 @@ public class ShooterConstants {
       kTurretServoConstants.kMainConstants.counterClockwisePositive = true;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 65.4545455; //og 104.166667
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 65.4545455; // og 104.166667
 
       kTurretServoConstants.kMinUnitsLimit = -390.0;
       kTurretServoConstants.kMaxUnitsLimit = 0.0;

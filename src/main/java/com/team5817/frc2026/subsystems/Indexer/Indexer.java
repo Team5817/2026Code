@@ -16,7 +16,9 @@ public class Indexer extends Subsystem {
   private final RollerSubsystem<SpindexerState> spindexer;
   private final RollerSubsystem<TunnelState> tunnel;
 
-  @Getter @Setter @Accessors(prefix = "m")
+  @Getter
+  @Setter
+  @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
   public Indexer(RollerSubsystemIO spindexerIO, RollerSubsystemIO tunnelIO) {
@@ -55,9 +57,9 @@ public class Indexer extends Subsystem {
     }
 
     @Override
-    public double getDemand() { 
+    public double getDemand() {
       return demand;
-     }
+    }
 
     @Override
     public RollerSubsystem.RollerControlMode getControlMode() {
@@ -65,7 +67,9 @@ public class Indexer extends Subsystem {
     }
 
     @Override
-    public double getToleranceRadsPerSec() { return 0.0; }
+    public double getToleranceRadsPerSec() {
+      return 0.0;
+    }
   }
 
   public enum TunnelState implements IRollerState {
@@ -81,7 +85,7 @@ public class Indexer extends Subsystem {
 
     @Override
     public double getDemand() {
-      return demand; 
+      return demand;
     }
 
     @Override
@@ -90,7 +94,9 @@ public class Indexer extends Subsystem {
     }
 
     @Override
-    public double getToleranceRadsPerSec() { return 0.0; }
+    public double getToleranceRadsPerSec() {
+      return 0.0;
+    }
   }
 
   @Override
