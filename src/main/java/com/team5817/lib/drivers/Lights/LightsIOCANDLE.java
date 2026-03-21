@@ -22,7 +22,10 @@ public class LightsIOCANDLE implements LightsIO {
   public void setControl(LightsState.LEDState state, double frameRate, int minSlot, int maxSlot) {
     switch (state.animation) {
       case "FLOW":
-        mCandle.setControl(new ColorFlowAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
+        mCandle.setControl(
+            new ColorFlowAnimation(minSlot, maxSlot)
+                .withUpdateFreqHz(frameRate)
+                .withColor(new RGBWColor(state.color)));
         break;
 
       case "FIRE":
@@ -30,7 +33,10 @@ public class LightsIOCANDLE implements LightsIO {
         break;
 
       case "LARSON":
-        mCandle.setControl(new LarsonAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
+        mCandle.setControl(
+            new LarsonAnimation(minSlot, maxSlot)
+                .withUpdateFreqHz(frameRate)
+                .withColor(new RGBWColor(state.color)));
         break;
 
       case "RAINBOW":
@@ -42,10 +48,16 @@ public class LightsIOCANDLE implements LightsIO {
         break;
 
       case "STROBE":
-        mCandle.setControl(new StrobeAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
+        mCandle.setControl(
+            new StrobeAnimation(minSlot, maxSlot)
+                .withUpdateFreqHz(frameRate)
+                .withColor(new RGBWColor(state.color)));
         break;
       case "TWINKLE":
-        mCandle.setControl(new TwinkleAnimation(minSlot, maxSlot).withUpdateFreqHz(frameRate).withColor(new RGBWColor(state.color)));
+        mCandle.setControl(
+            new TwinkleAnimation(minSlot, maxSlot)
+                .withUpdateFreqHz(frameRate)
+                .withColor(new RGBWColor(state.color)));
         break;
       case "SOLID":
         if (state.color != null)

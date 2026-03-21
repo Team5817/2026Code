@@ -1,6 +1,5 @@
 package com.team5817.frc2026.Controls;
 
-import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.field.AlignmentPoint.AlignmentType;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
@@ -8,7 +7,6 @@ import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
-import org.littletonrobotics.junction.Logger;
 
 /**
  * The DriverControls class handles the input from the driver and co-driver controllers and
@@ -102,7 +100,7 @@ public class DriverControls {
     if (driver.POV0.wasActivated()) {
       s.mClimb.resetClimbStages();
     }
-    
+
     if (driver.POV270.isBeingPressed()) {
       d.autoAlign(AlignmentType.CLIMB_PREP);
     } else if (driver.POV90.isBeingPressed()) {

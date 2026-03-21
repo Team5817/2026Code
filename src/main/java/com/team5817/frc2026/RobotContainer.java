@@ -114,8 +114,7 @@ public class RobotContainer {
             new VisionIOLimelight("limelight-front", mDrive::getHeading),
             new VisionIOLimelight("limelight-back", mDrive::getHeading));
 
-    mLight = new Lights(
-        new LightsIOSim());
+    mLight = new Lights(new LightsIOSim());
 
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 

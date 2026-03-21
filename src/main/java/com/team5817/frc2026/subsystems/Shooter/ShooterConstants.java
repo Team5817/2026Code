@@ -31,7 +31,8 @@ public class ShooterConstants {
   public static final double cancoderToTurretRatio = (360 / 400); // TODO
 
   public static Pose2d shooterTransform =
-      new Pose2d(Units.inchesToMeters(-2.25), Units.inchesToMeters(4.625), Rotation2d.fromDegrees(0.0));
+      new Pose2d(
+          Units.inchesToMeters(-2.25), Units.inchesToMeters(4.625), Rotation2d.fromDegrees(0.0));
 
   static {
     robotToTurret =
@@ -82,7 +83,8 @@ public class ShooterConstants {
     hubHood.put(2.64, 10.0);
     hubHood.put(3.5, 16.0);
 
-    InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();//TODO add a shit ton of values (madtown)
+    InterpolatingDoubleTreeMap hubFly =
+        new InterpolatingDoubleTreeMap(); // TODO add a shit ton of values (madtown)
     hubFly.put(1.0, 35.0); // Hub
     hubFly.put(3.0, 50.0); // Depot
     hubFly.put(3.6, 52.5); // trench
@@ -155,7 +157,7 @@ public class ShooterConstants {
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 88.3; // og 1 / 360.0 * 96 / 1
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
-      kHoodServoConstants.kMaxUnitsLimit = 30.0;//TODO find max
+      kHoodServoConstants.kMaxUnitsLimit = 30.0; // TODO find max
 
       kHoodServoConstants.kKp = 3;
       kHoodServoConstants.kKi = 9.5;

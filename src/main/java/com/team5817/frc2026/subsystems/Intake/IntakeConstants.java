@@ -20,7 +20,7 @@ public class IntakeConstants {
       kRackServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kRackServoConstants.kHomePosition = 0;
-      kRackServoConstants.kRotationsPerUnitDistance = 41.15;//TODO or 143.6 * (3.28125 / 11.458)? 
+      kRackServoConstants.kRotationsPerUnitDistance = 41.15; // TODO or 143.6 * (3.28125 / 11.458)?
       kRackServoConstants.kMaxUnitsLimit = 0.3175;
       kRackServoConstants.kMinUnitsLimit = 0.0;
 
