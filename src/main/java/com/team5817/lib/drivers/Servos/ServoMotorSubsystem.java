@@ -52,14 +52,15 @@ public abstract class ServoMotorSubsystem extends Subsystem {
 
   public enum ControlState {
     POSITION,
-    VOLTAGE
+    VOLTAGE,
+    POSITION_VOLTAGE
   }
 
   protected ServoMotorIOInputsAutoLogged mServoInputs = new ServoMotorIOInputsAutoLogged();
 
   @Getter
   @Accessors(prefix = "m")
-  protected ControlState mControlState = ControlState.VOLTAGE;
+  protected ControlState mControlState = ControlState.POSITION_VOLTAGE;
 
   /** Reads the periodic inputs from the Talon. */
   @Override
@@ -71,8 +72,12 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   /** Writes the periodic outputs to the Talon. */
   @Override
   public void writePeriodicOutputs() {
-    if (mHoming) handleHoming();
-    io.setControl(mControlState, demand);
+      if (mHoming) handleHoming();
+    // Let the IO implementation decide which position-control flavor to use
+    // (ServoMotorIOTalonFX supports toggling between MotionMagic and
+    // PositionVoltage via setUsePositionVoltage). Call the generic run
+    // method which will route to the configured control type.
+    io.runPosition(demand);
   }
 
   public void handleHoming() {

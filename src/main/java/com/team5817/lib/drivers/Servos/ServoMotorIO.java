@@ -38,11 +38,32 @@ public interface ServoMotorIO {
     } else if (mControlState == ControlState.VOLTAGE) {
       runVoltage(demand);
     }
+    else if (mControlState == ControlState.POSITION_VOLTAGE){
+      runPositionVoltage(demand);
+    }
   }
 
   public default void runPosition(double units) {}
 
   public default void runVoltage(double volts) {}
+
+  public default void runPositionVoltage(double volts){}
+
+  /**
+   * Optional hook for hardware IO implementations to enable/disable PositionVoltage mode.
+   * Default implementation is a no-op for non-hardware (e.g., sim) implementations.
+   *
+   * @param use true to enable PositionVoltage mode when supported
+   */
+  public default void setUsePositionVoltage(boolean use) {}
+
+  /**
+   * Reports whether the IO implementation is currently using PositionVoltage.
+   * Default returns false for implementations that don't support or track this.
+   */
+  public default boolean isUsingPositionVoltage() {
+    return false;
+  }
 
   public default void zeroSensors() {
     zeroSensors(0);

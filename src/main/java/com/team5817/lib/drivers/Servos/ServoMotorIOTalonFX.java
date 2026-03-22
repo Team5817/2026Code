@@ -9,6 +9,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -31,6 +32,7 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
 
   private final VoltageOut voltageControl = new VoltageOut(0);
   private final MotionMagicVoltage positionControl = new MotionMagicVoltage(0).withSlot(0);
+  private final PositionVoltage positionVoltageControl = new PositionVoltage(0).withSlot(0);
 
   protected final ServoConstants mConstants;
   protected final TalonFX mMain;
@@ -262,10 +264,28 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMain.setControl(voltageControl.withOutput(volts));
   }
 
-  @Override
-  public void runPosition(double demand) {
+    private boolean usePositionVoltage = false;
+
+    public void setUsePositionVoltage(boolean use) {
+      this.usePositionVoltage = use;
+    }
+
+@Override
+public void runPosition(double demand) {
+  // Choose control mode based on the flag. If position-voltage is enabled, use
+  // PositionVoltage; otherwise fall back to MotionMagicVoltage (legacy behavior).
+  if (usePositionVoltage) {
+    mMain.setControl(positionVoltageControl.withPosition(demand));
+  } else {
     mMain.setControl(positionControl.withPosition(demand));
   }
+}
+
+@Override
+public void runPositionVoltage(double demand) {
+  // Explicit position-voltage API: always use PositionVoltage control.
+  mMain.setControl(positionVoltageControl.withPosition(demand));
+}
 
   /** Zeros the sensors. */
   @Override

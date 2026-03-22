@@ -41,6 +41,9 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
           break;
         case VOLTAGE:
           super.applyVoltage(mDesiredState.getDemand());
+          break;
+        case POSITION_VOLTAGE:
+        super.applyVoltage(mDesiredState.getDemand());      
       }
 
     if (mDesiredState.isDisabled()) {
