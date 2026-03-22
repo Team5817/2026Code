@@ -63,8 +63,8 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
             mDesiredState.getAllowableError());
 
     if (mDesiredState.isDisabled()
-        || (mControlState != ControlState.POSITION && mControlState != ControlState.POSITION_VOLTAGE))
-      atState = true;
+        || (mControlState != ControlState.POSITION
+            && mControlState != ControlState.POSITION_VOLTAGE)) atState = true;
   }
 
   @Override

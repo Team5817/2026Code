@@ -167,9 +167,10 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The setpoint in units.
    */
   public double getSetpoint() {
-  return (mControlState == ControlState.POSITION || mControlState == ControlState.POSITION_VOLTAGE)
-    ? mConstants.rotationsToHomedUnits(demand)
-    : Double.NaN;
+    return (mControlState == ControlState.POSITION
+            || mControlState == ControlState.POSITION_VOLTAGE)
+        ? mConstants.rotationsToHomedUnits(demand)
+        : Double.NaN;
   }
 
   /**
@@ -178,9 +179,10 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The setpoint in homed units.
    */
   public double getSetpointHomed() {
-  return (mControlState == ControlState.POSITION || mControlState == ControlState.POSITION_VOLTAGE)
-    ? mConstants.rotationsToHomedUnits(demand)
-    : Double.NaN;
+    return (mControlState == ControlState.POSITION
+            || mControlState == ControlState.POSITION_VOLTAGE)
+        ? mConstants.rotationsToHomedUnits(demand)
+        : Double.NaN;
   }
 
   /**
@@ -196,8 +198,8 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   }
 
   /**
-   * Sets the setpoint for position control using PositionVoltage (hardware that
-   * supports it should implement runPositionVoltage).
+   * Sets the setpoint for position control using PositionVoltage (hardware that supports it should
+   * implement runPositionVoltage).
    *
    * @param units The setpoint in units.
    */
