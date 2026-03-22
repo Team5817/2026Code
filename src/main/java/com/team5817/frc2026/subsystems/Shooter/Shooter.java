@@ -50,14 +50,14 @@ public class Shooter extends Subsystem {
             .timeSinceVisionSupplier(timeSinceVision)
             .build();
 
-  this.turret =
-    new Turret(
-      turretIO,
-      planner.getTurretAngleSupplier(ShootingTarget.HUB),
-      planner.getTurretAngleSupplier(ShootingTarget.LOB),
-      robotHeadingSupplier);
-    
-  this.hood =
+    this.turret =
+        new Turret(
+            turretIO,
+            planner.getTurretAngleSupplier(ShootingTarget.HUB),
+            planner.getTurretAngleSupplier(ShootingTarget.LOB),
+            robotHeadingSupplier);
+
+    this.hood =
         new Hood(
             hoodIO,
             planner.getHoodAngleSupplier(ShootingTarget.HUB),
