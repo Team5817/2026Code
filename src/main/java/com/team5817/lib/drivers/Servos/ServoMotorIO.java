@@ -46,7 +46,7 @@ public interface ServoMotorIO {
 
   public default void runVoltage(double volts) {}
 
-  public default void runPositionVoltage(double volts) {}
+  public default void runPositionVoltage(double units) {}
 
   /**
    * Optional hook for hardware IO implementations to enable/disable PositionVoltage mode. Default
