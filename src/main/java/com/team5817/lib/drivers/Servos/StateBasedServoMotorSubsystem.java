@@ -43,7 +43,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
           super.applyVoltage(mDesiredState.getDemand());
           break;
         case POSITION_VOLTAGE:
-          super.applyVoltage(mDesiredState.getDemand());
+          super.setPositionVoltageSetpoint(mDesiredState.getDemand());
       }
 
     if (mDesiredState.isDisabled()) {
@@ -61,7 +61,10 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
             getPosition() - mConstants.kHomePosition,
             mConstants.rotationsToUnits(demand),
             mDesiredState.getAllowableError());
-    if (mDesiredState.isDisabled() || mControlState != ControlState.POSITION) atState = true;
+
+    if (mDesiredState.isDisabled()
+        || (mControlState != ControlState.POSITION && mControlState != ControlState.POSITION_VOLTAGE))
+      atState = true;
   }
 
   @Override
@@ -81,9 +84,7 @@ public class StateBasedServoMotorSubsystem<S extends Enum<S> & ServoState>
     return new Request() {
       @Override
       public void act() {
-        if (mControlState != ControlState.POSITION) {
-          mControlState = ControlState.POSITION;
-        }
+        mControlState = _wantedState.getControlState();
         setDesiredState(_wantedState);
       }
 

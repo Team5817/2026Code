@@ -73,11 +73,19 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   @Override
   public void writePeriodicOutputs() {
     if (mHoming) handleHoming();
-    // Let the IO implementation decide which position-control flavor to use
-    // (ServoMotorIOTalonFX supports toggling between MotionMagic and
-    // PositionVoltage via setUsePositionVoltage). Call the generic run
-    // method which will route to the configured control type.
-    io.runPosition(demand);
+
+    switch (mControlState) {
+      case POSITION:
+        io.runPosition(demand);
+        break;
+      case POSITION_VOLTAGE:
+        io.runPositionVoltage(demand);
+        break;
+      case VOLTAGE:
+      default:
+        io.runVoltage(demand);
+        break;
+    }
   }
 
   public void handleHoming() {
@@ -159,9 +167,9 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The setpoint in units.
    */
   public double getSetpoint() {
-    return mControlState == ControlState.POSITION
-        ? mConstants.rotationsToHomedUnits(demand)
-        : Double.NaN;
+  return (mControlState == ControlState.POSITION || mControlState == ControlState.POSITION_VOLTAGE)
+    ? mConstants.rotationsToHomedUnits(demand)
+    : Double.NaN;
   }
 
   /**
@@ -170,9 +178,9 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The setpoint in homed units.
    */
   public double getSetpointHomed() {
-    return (mControlState == ControlState.POSITION)
-        ? mConstants.rotationsToHomedUnits(demand)
-        : Double.NaN;
+  return (mControlState == ControlState.POSITION || mControlState == ControlState.POSITION_VOLTAGE)
+    ? mConstants.rotationsToHomedUnits(demand)
+    : Double.NaN;
   }
 
   /**
@@ -184,6 +192,19 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     demand = constrainRotations(mConstants.homeAwareUnitsToRotations(units));
     if (mControlState != ControlState.POSITION) {
       mControlState = ControlState.POSITION;
+    }
+  }
+
+  /**
+   * Sets the setpoint for position control using PositionVoltage (hardware that
+   * supports it should implement runPositionVoltage).
+   *
+   * @param units The setpoint in units.
+   */
+  public void setPositionVoltageSetpoint(double units) {
+    demand = constrainRotations(mConstants.homeAwareUnitsToRotations(units));
+    if (mControlState != ControlState.POSITION_VOLTAGE) {
+      mControlState = ControlState.POSITION_VOLTAGE;
     }
   }
 
