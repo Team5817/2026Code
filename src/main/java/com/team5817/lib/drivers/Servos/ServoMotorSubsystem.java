@@ -72,7 +72,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   /** Writes the periodic outputs to the Talon. */
   @Override
   public void writePeriodicOutputs() {
-      if (mHoming) handleHoming();
+    if (mHoming) handleHoming();
     // Let the IO implementation decide which position-control flavor to use
     // (ServoMotorIOTalonFX supports toggling between MotionMagic and
     // PositionVoltage via setUsePositionVoltage). Call the generic run
