@@ -24,16 +24,16 @@ public class IntakeConstants {
       kRackServoConstants.kMaxUnitsLimit = 0.3175;
       kRackServoConstants.kMinUnitsLimit = 0.0;
 
-      kRackServoConstants.kKp = 15.0;
+      kRackServoConstants.kKp = 15.0;//15
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0.08;
+      kRackServoConstants.kKd = 0.08;//.08
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
 
       kRackServoConstants.kKv = 0;
       kRackServoConstants.kKg = 0;
 
-      kRackServoConstants.kCruiseVelocity = 1; // do .2 first
+      kRackServoConstants.kCruiseVelocity = 1; // do .2 first, og 1
 
       kRackServoConstants.kAcceleration = 1000000000;
 

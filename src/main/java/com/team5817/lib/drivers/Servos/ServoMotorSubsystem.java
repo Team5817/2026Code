@@ -74,18 +74,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   public void writePeriodicOutputs() {
     if (mHoming) handleHoming();
 
-    switch (mControlState) {
-      case POSITION:
-        io.runPosition(demand);
-        break;
-      case POSITION_VOLTAGE:
-        io.runPositionVoltage(demand);
-        break;
-      case VOLTAGE:
-      default:
-        io.runVoltage(demand);
-        break;
-    }
+    io.setControl(mControlState, demand);
   }
 
   public void handleHoming() {

@@ -264,26 +264,14 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMain.setControl(voltageControl.withOutput(volts));
   }
 
-  private boolean usePositionVoltage = false;
-
-  public void setUsePositionVoltage(boolean use) {
-    this.usePositionVoltage = use;
-  }
 
   @Override
   public void runPosition(double demand) {
-    // Choose control mode based on the flag. If position-voltage is enabled, use
-    // PositionVoltage; otherwise fall back to MotionMagicVoltage (legacy behavior).
-    if (usePositionVoltage) {
-      mMain.setControl(positionVoltageControl.withPosition(demand));
-    } else {
-      mMain.setControl(positionControl.withPosition(demand));
-    }
+    mMain.setControl(positionControl.withPosition(demand));
   }
 
   @Override
   public void runPositionVoltage(double demand) {
-    // Explicit position-voltage API: always use PositionVoltage control.
     mMain.setControl(positionVoltageControl.withPosition(demand));
   }
 

@@ -49,9 +49,9 @@ public class ShooterConstants {
     kFlywheelConstants.kSupplyCurrentLimit = 40;
     kFlywheelConstants.kStatorCurrentLimit = 80;
 
-    kFlywheelConstants.kKp = .05;
-    kFlywheelConstants.kKs = 0.599609375;
-    kFlywheelConstants.kKv = 0.008679999969899654;
+    kFlywheelConstants.kKp = 0.0;//0.5
+    kFlywheelConstants.kKs = 0.0;//0.599609375
+    kFlywheelConstants.kKv = 0.0;//0.008679999969899654
 
     kFlywheelConstants.kEnableSupplyCurrentLimit = true;
     kFlywheelConstants.kEnableStatorCurrentLimit = true;
@@ -113,9 +113,9 @@ public class ShooterConstants {
       kTurretServoConstants.kMinUnitsLimit = -390.0;
       kTurretServoConstants.kMaxUnitsLimit = 0.0;
 
-      kTurretServoConstants.kKp = 4.0;
-      kTurretServoConstants.kKi = 5.0;
-      kTurretServoConstants.kKd = 0.1;
+      kTurretServoConstants.kKp = 0.0;// 4.0
+      kTurretServoConstants.kKi = 0.0; //5.0
+      kTurretServoConstants.kKd = 0.0;//0.1
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
@@ -159,11 +159,11 @@ public class ShooterConstants {
       kHoodServoConstants.kMinUnitsLimit = 0.0;
       kHoodServoConstants.kMaxUnitsLimit = 30.0; // TODO find max
 
-      kHoodServoConstants.kKp = 3;
-      kHoodServoConstants.kKi = 9.5;
-      kHoodServoConstants.kKd = 0.02;
+      kHoodServoConstants.kKp = 0.0;//3
+      kHoodServoConstants.kKi = 0.0;//9.5
+      kHoodServoConstants.kKd = 0.0;//0.02
 
-      kHoodServoConstants.kKs = 0.9;
+      kHoodServoConstants.kKs = 0.0;//0.9
       kHoodServoConstants.kKv = 0.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;
