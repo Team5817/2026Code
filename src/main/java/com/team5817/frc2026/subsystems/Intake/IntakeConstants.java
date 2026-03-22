@@ -24,9 +24,9 @@ public class IntakeConstants {
       kRackServoConstants.kMaxUnitsLimit = 0.3175;
       kRackServoConstants.kMinUnitsLimit = 0.0;
 
-      kRackServoConstants.kKp = 15.0;//15
+      kRackServoConstants.kKp = 15.0; // 15
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0.08;//.08
+      kRackServoConstants.kKd = 0.08; // .08
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
 

@@ -20,9 +20,9 @@ public final class ClimbConstants {
     kClimbServoConstants.kMaxUnitsLimit = 140;
     kClimbServoConstants.kMinUnitsLimit = 0.0;
 
-    kClimbServoConstants.kKp = 0.0;//16
+    kClimbServoConstants.kKp = 0.0; // 16
     kClimbServoConstants.kKi = 0.0;
-    kClimbServoConstants.kKd = 0.0;//.2
+    kClimbServoConstants.kKd = 0.0; // .2
     kClimbServoConstants.kKa = 0.0;
     kClimbServoConstants.kKs = 0.0;
     kClimbServoConstants.kKv = 0.0;

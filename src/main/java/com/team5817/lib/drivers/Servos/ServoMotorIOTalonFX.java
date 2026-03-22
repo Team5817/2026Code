@@ -264,7 +264,6 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMain.setControl(voltageControl.withOutput(volts));
   }
 
-
   @Override
   public void runPosition(double demand) {
     mMain.setControl(positionControl.withPosition(demand));
