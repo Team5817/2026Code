@@ -15,14 +15,10 @@ import com.team5817.lib.requests.EmptyRequest;
 public class DriverControls {
 
   public ControlBoard mControlBoard;
-
   Superstructure s;
   Drive d;
 
-  /**
-   * Constructor for the DriverControls class. Initializes the Drive and Superstructure instances
-   * and sets the initial goal state.
-   */
+
   public DriverControls(Drive d, Superstructure s) {
     this.d = d;
     this.s = s;
@@ -31,7 +27,6 @@ public class DriverControls {
     this.codriver = mControlBoard.operator;
   }
 
-  /* ONE CONTROLLER */
   public void oneControllerMode() {
 
     s.mShooter
@@ -76,7 +71,7 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Intake Deploy
+    // Intake Stow
     if (driver.getAButtonPressed()) {
       s.mIntake.conformToState(Intake.State.STOW);
     }

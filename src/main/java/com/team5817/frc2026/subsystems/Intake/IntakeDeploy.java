@@ -1,5 +1,7 @@
 package com.team5817.frc2026.subsystems.Intake;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Servos.ServoConstants;
@@ -53,13 +55,9 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   public void writePeriodicOutputs() {
     boolean out =
         Util.epsilonEquals(getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError());
+    Logger.recordOutput(
+      "Intake/Rack/Out", out);
     if (out && getDesiredState() == State.OUT) setDesiredState(State.DISABLED);
     super.writePeriodicOutputs();
-  }
-
-  @Override
-  public void setDesiredState(State mDesiredState) {
-    super.setDesiredState(mDesiredState);
-    setNeutralMode(mDesiredState.neutralMode);
   }
 }

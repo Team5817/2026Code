@@ -20,20 +20,20 @@ public class IntakeConstants {
       kRackServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kRackServoConstants.kHomePosition = 0;
-      kRackServoConstants.kRotationsPerUnitDistance = 41.15; // TODO or 143.6 * (3.28125 / 11.458)?
-      kRackServoConstants.kMaxUnitsLimit = 0.3175;
+      kRackServoConstants.kRotationsPerUnitDistance = 143.6 * (3.28125 / 11.458);
+      kRackServoConstants.kMaxUnitsLimit = 0.317;
       kRackServoConstants.kMinUnitsLimit = 0.0;
 
-      kRackServoConstants.kKp = 15.0; // 15
+      kRackServoConstants.kKp = 1.0;
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0.08; // .08
+      kRackServoConstants.kKd = 0.00; 
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
 
       kRackServoConstants.kKv = 0;
       kRackServoConstants.kKg = 0;
 
-      kRackServoConstants.kCruiseVelocity = 1; // do .2 first, og 1
+      kRackServoConstants.kCruiseVelocity = 1; 
 
       kRackServoConstants.kAcceleration = 1000000000;
 
@@ -47,7 +47,6 @@ public class IntakeConstants {
       kRackServoConstants.kStatorCurrentLimit = 60; // amps
 
       kRackServoConstants.kNeutralMode = NeutralModeValue.Coast;
-
       kRackServoConstants.kHomingOutput = -.3;
       kRackServoConstants.kHomingTimeout = 0.2;
       kRackServoConstants.kHomingVelocityWindow = 5;
@@ -69,8 +68,8 @@ public class IntakeConstants {
 
     public enum FeederState implements IRollerState {
       IDLE(0),
-      INTAKING(-11),
-      EXHAUST(11);
+      INTAKING(12),
+      EXHAUST(-12);
 
       @Getter private final double demand;
       @Getter private final RollerControlMode controlMode;

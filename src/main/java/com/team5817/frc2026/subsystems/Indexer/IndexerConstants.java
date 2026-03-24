@@ -1,5 +1,6 @@
 package com.team5817.frc2026.subsystems.Indexer;
 
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 
@@ -14,6 +15,8 @@ public class IndexerConstants {
     kSpindexerConstants.kStatorCurrentLimit = 30;
     kSpindexerConstants.kEnableSupplyCurrentLimit = true;
     kSpindexerConstants.kEnableStatorCurrentLimit = true;
+    kSpindexerConstants.kNeutralMode = NeutralModeValue.Coast;
+
 
     kTunnelConstants.kMainConstants.id = Ports.TUNNEL;
     kTunnelConstants.kSupplyCurrentLimit = 40;
