@@ -9,7 +9,6 @@ import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
-import com.team5817.lib.drivers.Servos.ServoMotorSubsystem.TalonFXConstants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.util.Units;
@@ -26,7 +25,7 @@ public class ShooterConstants {
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-  public static final double cancoderToTurretRatio = (360 / 400); // 
+  public static final double cancoderToTurretRatio = (360 / 400); //
 
   public static Pose2d shooterTransform =
       new Pose2d(
@@ -35,9 +34,7 @@ public class ShooterConstants {
   static {
     robotToTurret =
         new Translation3d(
-            Units.inchesToMeters(-2.25), 
-            Units.inchesToMeters(4.625), 
-            Units.inchesToMeters(21));
+            Units.inchesToMeters(-2.25), Units.inchesToMeters(4.625), Units.inchesToMeters(21));
     TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
 
     kFlywheelConstants.kMaxForwardOutput = 12.0;
@@ -47,15 +44,15 @@ public class ShooterConstants {
     kFlywheelConstants.kSupplyCurrentLimit = 40;
     kFlywheelConstants.kStatorCurrentLimit = 80;
 
-    kFlywheelConstants.kKp = 0.04; 
-    kFlywheelConstants.kKs = 0.0703125; 
-    kFlywheelConstants.kKv = 0.008999999612569809; 
+    kFlywheelConstants.kKp = 0.04;
+    kFlywheelConstants.kKs = 0.0703125;
+    kFlywheelConstants.kKv = 0.008999999612569809;
 
     kFlywheelConstants.kEnableSupplyCurrentLimit = true;
     kFlywheelConstants.kEnableStatorCurrentLimit = true;
 
     kFlywheelConstants.counterClockwisePositive = false;
-  kFlywheelConstants.kMainConstants.id = Ports.TURRET_FLYWHEEL1;
+    kFlywheelConstants.kMainConstants.id = Ports.TURRET_FLYWHEEL1;
     kFlywheelConstants.kFollowerID = Ports.TURRET_FLYWHEEL2;
     kFlywheelConstants.kFollowerOpposeMasterDirection = true;
 
@@ -78,12 +75,12 @@ public class ShooterConstants {
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.6, 42.0); // Front Hub
-    hubFly.put(2.4, 47.5); //left hub
+    hubFly.put(2.4, 47.5); // left hub
     hubFly.put(3.0, 52.0); // Mid Hub
-    hubFly.put(3.6, 52.5); // depot 
-    hubFly.put(4.1, 54.5); //left mid wall
-    hubFly.put(4.6, 56.0); //Human Side
-    hubFly.put(5.2, 64.0); //Human Corner
+    hubFly.put(3.6, 52.5); // depot
+    hubFly.put(4.1, 54.5); // left mid wall
+    hubFly.put(4.6, 56.0); // Human Side
+    hubFly.put(5.2, 64.0); // Human Corner
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
@@ -101,13 +98,13 @@ public class ShooterConstants {
       kTurretServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 60; 
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 60;
       kTurretServoConstants.kMinUnitsLimit = -300.0;
       kTurretServoConstants.kMaxUnitsLimit = 0;
 
-      kTurretServoConstants.kKp = 7.5; 
-      kTurretServoConstants.kKi = 0.0; 
-      kTurretServoConstants.kKd = 0.2; 
+      kTurretServoConstants.kKp = 7.5;
+      kTurretServoConstants.kKi = 0.0;
+      kTurretServoConstants.kKd = 0.2;
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
@@ -146,13 +143,13 @@ public class ShooterConstants {
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 88.3; // og 1 / 360.0 * 96 / 1
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
-      kHoodServoConstants.kMaxUnitsLimit = 30.0; 
+      kHoodServoConstants.kMaxUnitsLimit = 30.0;
 
-      kHoodServoConstants.kKp = 4.0; 
-      kHoodServoConstants.kKi = 7.0; 
-      kHoodServoConstants.kKd = 0.05; 
+      kHoodServoConstants.kKp = 4.0;
+      kHoodServoConstants.kKi = 7.0;
+      kHoodServoConstants.kKd = 0.05;
 
-      kHoodServoConstants.kKs = 0.0; 
+      kHoodServoConstants.kKs = 0.0;
       kHoodServoConstants.kKv = 0.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;

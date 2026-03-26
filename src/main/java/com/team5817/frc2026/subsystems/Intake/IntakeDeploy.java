@@ -1,7 +1,5 @@
 package com.team5817.frc2026.subsystems.Intake;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team254.lib.util.Util;
 import com.team5817.lib.drivers.Servos.ServoConstants;
@@ -9,6 +7,7 @@ import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import lombok.Getter;
+import org.littletonrobotics.junction.Logger;
 
 /** The IntakeDeploy class controls the deployment mechanism of the intake system. */
 public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.State> {
@@ -55,8 +54,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   public void writePeriodicOutputs() {
     boolean out =
         Util.epsilonEquals(getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError());
-    Logger.recordOutput(
-      "Intake/Rack/Out", out);
+    Logger.recordOutput("Intake/Rack/Out", out);
     if (out && getDesiredState() == State.OUT) setDesiredState(State.DISABLED);
     super.writePeriodicOutputs();
   }

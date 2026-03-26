@@ -43,7 +43,7 @@ public class ShootingConfig {
     timeMap.put(1.0, 0.16);
     timeMap.put(3.0, 0.26);
     timeMap.put(10.0, 1.0);
-    timeMap.put(5.0, 0.34); 
+    timeMap.put(5.0, 0.34);
 
     Bounds hubBounds = new Bounds(0.0, 0.0, 4.6, 8);
     Bounds dangerBounds = new Bounds(3.65, 0, 5.5, 1.3);

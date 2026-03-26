@@ -80,6 +80,5 @@ public class DynamicAuto extends AutoBase {
     r(new TrajectoryAction(t.next(), 1.5, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
     r(new ShootAction(10, su, 2));
-
   }
 }

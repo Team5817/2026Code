@@ -19,7 +19,6 @@ public class DriverControls {
   Superstructure s;
   Drive d;
 
-
   public DriverControls(Drive d, Superstructure s) {
     this.d = d;
     this.s = s;
@@ -29,7 +28,7 @@ public class DriverControls {
   }
 
   public void oneControllerMode() {
-    if(driver.getBackButton()){
+    if (driver.getBackButton()) {
       s.mShooter.setDesiredState(Shooter.State.STOW);
       s.mIntake.conformToState(Intake.State.STOW);
       return;

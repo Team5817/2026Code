@@ -26,14 +26,14 @@ public class IntakeConstants {
 
       kRackServoConstants.kKp = 1.0;
       kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0.00; 
+      kRackServoConstants.kKd = 0.00;
       kRackServoConstants.kKa = 0;
       kRackServoConstants.kKs = 0;
 
       kRackServoConstants.kKv = 0;
       kRackServoConstants.kKg = 0;
 
-      kRackServoConstants.kCruiseVelocity = 1; 
+      kRackServoConstants.kCruiseVelocity = 1;
 
       kRackServoConstants.kAcceleration = 1000000000;
 
