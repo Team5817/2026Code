@@ -253,7 +253,7 @@ public class ShootingPlanner {
   }
 
   public Boolean shouldShoot() {
-    if (!atStateSupplier.getAsBoolean()) return false;
+    // if (!atStateSupplier.getAsBoolean()) return false;
     return override;
 
     // Shooter.State state = recommendedShooterState();

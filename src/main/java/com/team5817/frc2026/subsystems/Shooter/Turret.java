@@ -86,32 +86,19 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
         // world → robot centric
         target = -demandDeg + robotHeading;
-
-        // normalize to [-180,180)
-        target = ((target + 180) % 360 + 360) % 360 - 180;
       } else {
         target = demand.getAsDouble();
       }
 
-      double current = mTurretPositionSupplier.getAsDouble();
+      // Normalize to [-180, 180)
+      target = ((target + 180) % 360 + 360) % 360 - 180;
 
-      double[] candidates = {target, target - 360, target + 360};
-
-      double chosen = target;
-      double bestError = Double.POSITIVE_INFINITY;
-
-      for (double c : candidates) {
-        if (c < -390 || c > 0) continue;
-
-        double error = Math.abs(c - current);
-        if (error < bestError) {
-          bestError = error;
-          chosen = c;
-        }
+      // Shift into [-300, 0] range
+      if (target > 0) {
+        target -= 360;
       }
 
-      Logger.recordOutput("Shooter/Turret/Unclamped", chosen);
-      return chosen;
+      return target;
     }
 
     @Override
@@ -121,7 +108,7 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
 
     @Override
     public ControlState getControlState() {
-      return ControlState.POSITION;
+      return ControlState.POSITION_VOLTAGE;
     }
 
     @Override

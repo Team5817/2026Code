@@ -4,6 +4,7 @@ import com.team5817.frc2026.field.AlignmentPoint.AlignmentType;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
@@ -28,6 +29,11 @@ public class DriverControls {
   }
 
   public void oneControllerMode() {
+    if(driver.getBackButton()){
+      s.mShooter.setDesiredState(Shooter.State.STOW);
+      s.mIntake.conformToState(Intake.State.STOW);
+      return;
+    }
 
     s.mShooter
         .getPlanner()

@@ -1,13 +1,17 @@
 package com.team5817.lib.drivers.Rollers;
 
+import org.dyn4j.geometry.hull.MonotoneChain;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.team254.lib.drivers.CanDeviceId;
 import com.team254.lib.drivers.Phoenix6Util;
 import com.team254.lib.drivers.TalonFXFactory;
@@ -107,6 +111,14 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
                 tempFault));
 
     PhoenixUtil.tryUntilOk(5, () -> mMain.optimizeBusUtilization(0, 1.0));
+
+    if(mConstants.kFollowerID != null){
+      TalonFXFactory.createPermanentFollowerTalon(
+      mConstants.kFollowerID,
+      mConstants.kMainConstants.id,
+      mConstants.kFollowerOpposeMasterDirection ? MotorAlignmentValue.Opposed : MotorAlignmentValue.Aligned);
+    }
+    
     this.mConstants = mConstants;
   }
 
@@ -136,19 +148,17 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
   @Override
   public void runVolts(double volts) {
-    mMain.setControl(voltageOut.withOutput(volts * (mConstants.counterClockwisePositive ? 1 : -1)));
+    mMain.setControl(voltageOut.withOutput(volts));
   }
 
   @Override
   public void runTorqueCurrent(double amps) {
-    mMain.setControl(
-        torqueCurrentOut.withOutput(amps * (mConstants.counterClockwisePositive ? 1 : -1)));
+    mMain.setControl(torqueCurrentOut.withOutput(amps));
   }
 
   @Override
   public void runVelocity(double velocity) {
-    mMain.setControl(
-        velocityOut.withVelocity(velocity * (mConstants.counterClockwisePositive ? 1 : -1)));
+    mMain.setControl(velocityOut.withVelocity(velocity));
   }
 
   @Override

@@ -55,7 +55,7 @@ public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
 
     @Override
     public ControlState getControlState() {
-      return ControlState.POSITION;
+      return ControlState.POSITION_VOLTAGE;
     }
   }
 

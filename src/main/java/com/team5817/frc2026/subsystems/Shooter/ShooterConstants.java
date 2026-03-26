@@ -20,15 +20,13 @@ public class ShooterConstants {
   public static final RollerConstantsTalonFX kFlywheelConstants = new RollerConstantsTalonFX();
   public static final Translation3d TurretToCam;
   public static final Translation3d robotToTurret;
-  // Allows quick sign flip when turret yaw axis convention differs (1.0 or -1.0)
   public static double TURRET_YAW_SIGN = 1.0;
-  // Camera pitch in degrees (positive = nose-up). Adjust to match the physical mount.
   public static double CAMERA_PITCH_DEGREES = -33;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-  public static final double cancoderToTurretRatio = (360 / 400); // TODO
+  public static final double cancoderToTurretRatio = (360 / 400); // 
 
   public static Pose2d shooterTransform =
       new Pose2d(
@@ -37,9 +35,9 @@ public class ShooterConstants {
   static {
     robotToTurret =
         new Translation3d(
-            Units.inchesToMeters(-2.25), // og -1.25, V2 x 4.625
-            Units.inchesToMeters(4.625), // og 4, V2 y 2.25
-            Units.inchesToMeters(21)); // z is LL Height, og 21
+            Units.inchesToMeters(-2.25), 
+            Units.inchesToMeters(4.625), 
+            Units.inchesToMeters(21));
     TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
 
     kFlywheelConstants.kMaxForwardOutput = 12.0;
@@ -49,22 +47,17 @@ public class ShooterConstants {
     kFlywheelConstants.kSupplyCurrentLimit = 40;
     kFlywheelConstants.kStatorCurrentLimit = 80;
 
-    kFlywheelConstants.kKp = 0.0; // 0.5
-    kFlywheelConstants.kKs = 0.0; // 0.599609375
-    kFlywheelConstants.kKv = 0.0; // 0.008679999969899654
+    kFlywheelConstants.kKp = 0.04; 
+    kFlywheelConstants.kKs = 0.0703125; 
+    kFlywheelConstants.kKv = 0.008999999612569809; 
 
     kFlywheelConstants.kEnableSupplyCurrentLimit = true;
     kFlywheelConstants.kEnableStatorCurrentLimit = true;
 
-    kFlywheelConstants.counterClockwisePositive = true;
-
-    TalonFXConstants followerConstants = new TalonFXConstants();
-    followerConstants.id = Ports.TURRET_FLYWHEEL2;
-    followerConstants.counterClockwisePositive = false;
-    followerConstants.invert_sensor_phase = false;
-    kFlywheelConstants.kFollowerConstants = new TalonFXConstants[] {followerConstants};
-
-    kFlywheelConstants.kFollowerOpposeMasterDirection = false;
+    kFlywheelConstants.counterClockwisePositive = false;
+  kFlywheelConstants.kMainConstants.id = Ports.TURRET_FLYWHEEL1;
+    kFlywheelConstants.kFollowerID = Ports.TURRET_FLYWHEEL2;
+    kFlywheelConstants.kFollowerOpposeMasterDirection = true;
 
     // Default maps for LOB
     InterpolatingDoubleTreeMap lobHood = new InterpolatingDoubleTreeMap();
@@ -83,14 +76,12 @@ public class ShooterConstants {
     hubHood.put(2.64, 10.0);
     hubHood.put(3.5, 16.0);
 
-    InterpolatingDoubleTreeMap hubFly =
-        new InterpolatingDoubleTreeMap(); // TODO add a shit ton of values (madtown)
-    hubFly.put(1.0, 35.0); // Hub
-    hubFly.put(3.0, 50.0); // Depot
-    hubFly.put(3.6, 52.5); // trench
-    hubFly.put(4.0, 56.5); // tower side
-    hubFly.put(5.0, 70.0); // Human (figure out)
-    hubFly.put(5.4, 77.0); // Far-most Human again
+    InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
+    hubFly.put(1.6, 37.0); // Front Hub
+    hubFly.put(3.0, 52.0); // Mid Hub
+    hubFly.put(3.6, 52.5); // depot 
+    hubFly.put(4.6, 52.5); 
+    hubFly.put(5.4, 69.0); //Human Side
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
@@ -105,17 +96,16 @@ public class ShooterConstants {
       kTurretServoConstants.kName = "Shooter/Turret";
 
       kTurretServoConstants.kMainConstants.id = Ports.TURRET;
-      kTurretServoConstants.kMainConstants.counterClockwisePositive = true;
+      kTurretServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kTurretServoConstants.kHomePosition = 0.0;
-      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 65.545454; // og 104.166667
+      kTurretServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 60; 
+      kTurretServoConstants.kMinUnitsLimit = -300.0;
+      kTurretServoConstants.kMaxUnitsLimit = 0;
 
-      kTurretServoConstants.kMinUnitsLimit = -160.0;
-      kTurretServoConstants.kMaxUnitsLimit = 160;
-
-      kTurretServoConstants.kKp = 0.0; // 4.0
-      kTurretServoConstants.kKi = 0.0; // 5.0
-      kTurretServoConstants.kKd = 0.0; // 0.1
+      kTurretServoConstants.kKp = 7.5; 
+      kTurretServoConstants.kKi = 0.0; 
+      kTurretServoConstants.kKd = 0.2; 
 
       kTurretServoConstants.kKs = 0.0;
       kTurretServoConstants.kKv = 0.0;
@@ -124,9 +114,6 @@ public class ShooterConstants {
 
       kTurretServoConstants.kGravityType = GravityTypeValue.Arm_Cosine;
 
-      kTurretServoConstants.kCruiseVelocity = 200000;
-      kTurretServoConstants.kAcceleration = 10000;
-
       kTurretServoConstants.kMaxForwardOutput = 12.0;
       kTurretServoConstants.kMaxReverseOutput = -12.0;
 
@@ -134,7 +121,7 @@ public class ShooterConstants {
       kTurretServoConstants.kSupplyCurrentLimit = 30;
 
       kTurretServoConstants.kEnableStatorCurrentLimit = true;
-      kTurretServoConstants.kStatorCurrentLimit = 30;
+      kTurretServoConstants.kStatorCurrentLimit = 50;
 
       kTurretServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
@@ -151,27 +138,24 @@ public class ShooterConstants {
       kHoodServoConstants.kName = "Shooter/Hood";
 
       kHoodServoConstants.kMainConstants.id = Ports.HOOD;
-      kHoodServoConstants.kMainConstants.counterClockwisePositive = true;
+      kHoodServoConstants.kMainConstants.counterClockwisePositive = false;
 
       kHoodServoConstants.kHomePosition = 0.0;
       kHoodServoConstants.kRotationsPerUnitDistance = 1 / 360.0 * 88.3; // og 1 / 360.0 * 96 / 1
 
       kHoodServoConstants.kMinUnitsLimit = 0.0;
-      kHoodServoConstants.kMaxUnitsLimit = 30.0; // TODO find max
+      kHoodServoConstants.kMaxUnitsLimit = 30.0; 
 
-      kHoodServoConstants.kKp = 0.0; // 3
-      kHoodServoConstants.kKi = 0.0; // 9.5
-      kHoodServoConstants.kKd = 0.0; // 0.02
+      kHoodServoConstants.kKp = 4.0; 
+      kHoodServoConstants.kKi = 7.0; 
+      kHoodServoConstants.kKd = 0.05; 
 
-      kHoodServoConstants.kKs = 0.0; // 0.9
+      kHoodServoConstants.kKs = 0.0; 
       kHoodServoConstants.kKv = 0.0;
       kHoodServoConstants.kKa = 0.0;
       kHoodServoConstants.kKg = 0.0;
 
       kHoodServoConstants.kGravityType = GravityTypeValue.Arm_Cosine;
-
-      kHoodServoConstants.kCruiseVelocity = 200000;
-      kHoodServoConstants.kAcceleration = 10000;
 
       kHoodServoConstants.kMaxForwardOutput = 12.0;
       kHoodServoConstants.kMaxReverseOutput = -12.0;
@@ -182,7 +166,7 @@ public class ShooterConstants {
       kHoodServoConstants.kEnableStatorCurrentLimit = true;
       kHoodServoConstants.kStatorCurrentLimit = 15;
 
-      kHoodServoConstants.kNeutralMode = NeutralModeValue.Brake;
+      kHoodServoConstants.kNeutralMode = NeutralModeValue.Coast;
 
       kHoodServoConstants.kHomingTimeout = 0.5;
       kHoodServoConstants.kHomingOutput = -0.2;
