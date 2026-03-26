@@ -63,6 +63,7 @@ public class DynamicAuto extends AutoBase {
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
     sh.setDesiredState(Shooter.State.STOW_HOOD);
+    su.mIntake.stateRequest(Intake.State.STOW).act();
     p.setOverride(false);
     sh.forceStow(true);
 
@@ -71,15 +72,14 @@ public class DynamicAuto extends AutoBase {
     r(new TrajectoryAction(t.next(), 1.5, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
-    r(new ShootAction(4, su, 1));
+    r(new ShootAction(4, su, 2));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(), 1, d));
+    r(new TrajectoryAction(t.next(), -.3, d));
 
     r(new TrajectoryAction(t.next(), 1.5, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new ShootAction(4, su, 1));
-    su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new TrajectoryAction(t.next(), 1.5, d));
+    r(new ShootAction(10, su, 2));
+
   }
 }

@@ -34,6 +34,7 @@ public class ServoMotorIOSim implements ServoMotorIO {
 
     inputs.error_rotations = (demand - inputs.position_rots);
     switch (mControlState) {
+      case POSITION_VOLTAGE:
       case POSITION:
         inputs.position_rots += inputs.error_rotations * dt / tau; // bad guess at motion for sim
         break;
@@ -63,5 +64,9 @@ public class ServoMotorIOSim implements ServoMotorIO {
   public void runPosition(double rotations) {
     mControlState = ControlState.POSITION;
     demand = rotations;
+  }
+  @Override
+  public void runPositionVoltage(double units) {
+      runPosition(units);
   }
 }

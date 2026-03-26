@@ -18,8 +18,8 @@ public class ShootAction implements Action {
     this(durationSeconds, s, 0);
   }
 
-  public ShootAction(double durationSeconds, Superstructure s, double spinupTime) {
-    this.spinupTime = spinupTime;
+  public ShootAction(double durationSeconds, Superstructure s, double squeezeTime) {
+    this.spinupTime = squeezeTime;
     this.durationSeconds = durationSeconds;
     this.s = s;
     timer = new Timer();
@@ -36,9 +36,9 @@ public class ShootAction implements Action {
   public void update() {
     Logger.recordOutput("SpinTIMER", spinupTimer.get());
     if (spinupTimer.get() > spinupTime) {
-      s.mIndexer.setState(Indexer.State.FEED);
+      s.mIntake.conformToState(Intake.State.SQUEEZING);
     } else {
-      s.mIndexer.setState(Indexer.State.SPINUP);
+      s.mIntake.conformToState(Intake.State.IDLE);
     }
   }
 
@@ -58,7 +58,7 @@ public class ShootAction implements Action {
     spinupTimer.reset();
     spinupTimer.start();
     s.mIntake.conformToState(Intake.State.SQUEEZING);
-    s.mIndexer.setState(Indexer.State.SPINUP);
+    s.mIndexer.setState(Indexer.State.FEED);
     s.mShooter.setDesiredState(Shooter.State.HUB);
     s.mShooter.forceStow(false);
   }
