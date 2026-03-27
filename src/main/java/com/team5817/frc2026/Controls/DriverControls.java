@@ -62,11 +62,11 @@ public class DriverControls {
     if (driver.leftBumper.wasReleased() && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
       s.mIntake.conformToState(Intake.State.IDLE);
     }
-    
+
     if (codriver.leftBumper.wasActivated()) {
       s.mIndexer.stateRequest(Indexer.State.EXHAUST);
     }
-    if (codriver.leftBumper.wasReleased() &&  s.mIndexer.getState() == Indexer.State.EXHAUST) {
+    if (codriver.leftBumper.wasReleased() && s.mIndexer.getState() == Indexer.State.EXHAUST) {
       s.mIndexer.stateRequest(Indexer.State.IDLE);
     }
 

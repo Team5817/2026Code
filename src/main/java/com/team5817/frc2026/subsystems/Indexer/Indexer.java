@@ -21,7 +21,6 @@ public class Indexer extends Subsystem {
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
 
-
   public Indexer(RollerSubsystemIO spindexerIO, RollerSubsystemIO tunnelIO) {
     spindexer = new RollerSubsystem<>(SpindexerState.IDLE, "Indexer/Spindexer", spindexerIO);
     tunnel = new RollerSubsystem<>(TunnelState.IDLE, "Indexer/Tunnel", tunnelIO);

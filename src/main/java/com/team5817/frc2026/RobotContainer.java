@@ -20,7 +20,6 @@ import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
 import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
-import com.team5817.lib.drivers.Lights.LightsIO;
 import com.team5817.lib.drivers.Lights.LightsIOCANDLE;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;

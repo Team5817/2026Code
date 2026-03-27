@@ -45,9 +45,7 @@ public class ShootingPlanner {
     this.shooterVelocitySupplier = () -> builder.shooterVelocitySupplier.get().wpi();
     this.atStateSupplier = builder.atStateSupplier;
     this.timeSinceVision =
-        builder.timeSinceVision != null
-            ? builder.timeSinceVision
-            : () -> Double.POSITIVE_INFINITY;
+        builder.timeSinceVision != null ? builder.timeSinceVision : () -> Double.POSITIVE_INFINITY;
 
     this.config = ShootingConfig.defaultConfig();
 
@@ -57,8 +55,7 @@ public class ShootingPlanner {
           return (v != null && Double.isFinite(v)) ? v : 0.0;
         };
 
-    Map<ShootingTarget, Supplier<Translation2d>> futureTo =
-        new EnumMap<>(ShootingTarget.class);
+    Map<ShootingTarget, Supplier<Translation2d>> futureTo = new EnumMap<>(ShootingTarget.class);
 
     futureTo.put(ShootingTarget.HUB, () -> computeFutureVector(ShootingTarget.HUB));
     futureTo.put(ShootingTarget.LOBL, () -> computeFutureVector(ShootingTarget.LOBL));
@@ -73,10 +70,8 @@ public class ShootingPlanner {
 
           Translation2d current = pose.getTranslation();
 
-          Translation2d lNow =
-              ShootingTarget.LOBL.getLocation().wpi().minus(current);
-          Translation2d rNow =
-              ShootingTarget.LOBR.getLocation().wpi().minus(current);
+          Translation2d lNow = ShootingTarget.LOBL.getLocation().wpi().minus(current);
+          Translation2d rNow = ShootingTarget.LOBR.getLocation().wpi().minus(current);
 
           double diff = lNow.getNorm() - rNow.getNorm();
 
@@ -228,8 +223,7 @@ public class ShootingPlanner {
       return Shooter.State.STOW_HOOD;
     }
 
-    Translation2d toHub =
-        ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
+    Translation2d toHub = ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
 
     double tof = timeForDistance.applyAsDouble(toHub.getNorm());
 
@@ -259,11 +253,9 @@ public class ShootingPlanner {
     if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
     if (futureHubPos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
     if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
-    if (futureHubPos.inBounds(config.dangerBoundsFlippedOpponent))
-      return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
     if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
-    if (futureHubPos.inBounds(config.dangerBoundsOpponent))
-      return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
 
     // ✅ FIXED: decision based on CURRENT pose
     if (pos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
@@ -278,8 +270,7 @@ public class ShootingPlanner {
   }
 
   public Boolean shouldShoot() {
-    if(!atStateSupplier.getAsBoolean())
-      return false;
+    if (!atStateSupplier.getAsBoolean()) return false;
     return override;
   }
 

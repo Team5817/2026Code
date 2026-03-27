@@ -3,8 +3,6 @@ package com.team5817.frc2026.autos.Modes;
 import com.team5817.frc2026.autos.Actions.ShootAction;
 import com.team5817.frc2026.autos.Actions.ShootWhenInZone;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
-
-
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
@@ -28,12 +26,10 @@ public class CD extends AutoBase {
     this.sh = s.mShooter;
     this.p = sh.getPlanner();
 
-    Trajectory COToDP = l.trajectories.get("COToDP");   
+    Trajectory COToDP = l.trajectories.get("COToDP");
     Trajectory DPToDE = l.trajectories.get("DPToDE");
     t = new TrajectorySet(COToDP, DPToDE);
-
   }
-
 
   @Override
   public void routine() {
