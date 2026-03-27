@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SHToN3"
+            "pathName": "COToDP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "N3ToC0"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C0ToC1"
+            "pathName": "DPToDE"
           }
         }
       ]

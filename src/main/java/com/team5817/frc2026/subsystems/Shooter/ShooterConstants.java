@@ -61,14 +61,14 @@ public class ShooterConstants {
 
     // Default maps for LOB
     InterpolatingDoubleTreeMap lobHood = new InterpolatingDoubleTreeMap();
-    lobHood.put(1.0, 19.0);
-    lobHood.put(2.0, 21.0);
-    lobHood.put(3.5, 27.0);
-    lobHood.put(5.0, 30.0);
+    lobHood.put(1.0, 20.0);
+    lobHood.put(2.0, 22.0);
+    lobHood.put(3.5, 28.0);
+    lobHood.put(5.0, 31.0);
 
     InterpolatingDoubleTreeMap lobFly = new InterpolatingDoubleTreeMap();
-    lobFly.put(1.0, 48.0);
-    lobFly.put(5.0, 70.0);
+    lobFly.put(6.0, 45.0);
+    lobFly.put(10.0, 66.0);
 
     // Default maps for HUB
     InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();

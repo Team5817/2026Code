@@ -37,9 +37,7 @@ public class ShootAction implements Action {
     Logger.recordOutput("SpinTIMER", spinupTimer.get());
     if (spinupTimer.get() > spinupTime) {
       s.mIntake.conformToState(Intake.State.SQUEEZING);
-    } else {
-      s.mIntake.conformToState(Intake.State.IDLE);
-    }
+    } 
   }
 
   @Override
@@ -57,7 +55,7 @@ public class ShootAction implements Action {
     timer.start();
     spinupTimer.reset();
     spinupTimer.start();
-    s.mIntake.conformToState(Intake.State.SQUEEZING);
+    s.mIntake.conformToState(Intake.State.IDLE);
     s.mIndexer.setState(Indexer.State.FEED);
     s.mShooter.setDesiredState(Shooter.State.HUB);
     s.mShooter.forceStow(false);

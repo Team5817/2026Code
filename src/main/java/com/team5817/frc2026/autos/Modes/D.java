@@ -2,6 +2,7 @@ package com.team5817.frc2026.autos.Modes;
 
 import com.team5817.frc2026.autos.Actions.ParallelAction;
 import com.team5817.frc2026.autos.Actions.ShootAction;
+import com.team5817.frc2026.autos.Actions.ShootWhenInZone;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 
 import java.util.List;
@@ -50,17 +51,18 @@ public class D extends AutoBase {
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), 1, d));
-    r(new TrajectoryAction(t.next(), -.2, d));
+    r(new TrajectoryAction(t.next(), -.1, d));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new ParallelAction(List.of(
         new TrajectoryAction(t.next(), d),
-        new ShootAction(6, su, 2)
+        new ShootWhenInZone(5, su, 60)
     )));
+
+
+    su.mIntake.stateRequest(Intake.State.INTAKING).act();
+    r(new TrajectoryAction(t.next(), 1, d));
+    r(new ShootAction(6, su, 2));
     
-    r(new ParallelAction(List.of(
-        new TrajectoryAction(t.next(), d),
-        new ShootAction(6, su, 2)
-    )));
   }
 }

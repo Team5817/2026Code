@@ -27,12 +27,6 @@
           "data": {
             "pathName": "CNE2ToNSHOT"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NSHOTToNE2"
-          }
         }
       ]
     }

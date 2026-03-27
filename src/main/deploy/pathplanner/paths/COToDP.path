@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.226055555555556,
-        "y": 7.676986111111111
+        "x": 3.65,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.758416666666667,
-        "y": 7.536909722222221
+        "x": 3.4155902777777776,
+        "y": 4.625756944444444
       },
       "isLocked": false,
-      "linkedName": "SD"
+      "linkedName": "SC"
     },
     {
       "anchor": {
-        "x": 7.679243055555556,
-        "y": 4.729291666666666
+        "x": 1.1748263888888888,
+        "y": 5.929076388888888
       },
       "prevControl": {
-        "x": 7.459993055555557,
-        "y": 7.3237499999999995
+        "x": 1.863027777777778,
+        "y": 5.667194444444444
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MT2"
+      "linkedName": "DP"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Depot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
