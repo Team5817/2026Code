@@ -1,6 +1,5 @@
 package com.team5817.lib.drivers.Rollers;
 
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -110,13 +109,15 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
 
     PhoenixUtil.tryUntilOk(5, () -> mMain.optimizeBusUtilization(0, 1.0));
 
-    if(mConstants.kFollowerID != null){
+    if (mConstants.kFollowerID != null) {
       TalonFXFactory.createPermanentFollowerTalon(
-      mConstants.kFollowerID,
-      mConstants.kMainConstants.id,
-      mConstants.kFollowerOpposeMasterDirection ? MotorAlignmentValue.Opposed : MotorAlignmentValue.Aligned);
+          mConstants.kFollowerID,
+          mConstants.kMainConstants.id,
+          mConstants.kFollowerOpposeMasterDirection
+              ? MotorAlignmentValue.Opposed
+              : MotorAlignmentValue.Aligned);
     }
-    
+
     this.mConstants = mConstants;
   }
 

@@ -65,8 +65,9 @@ public class ServoMotorIOSim implements ServoMotorIO {
     mControlState = ControlState.POSITION;
     demand = rotations;
   }
+
   @Override
   public void runPositionVoltage(double units) {
-      runPosition(units);
+    runPosition(units);
   }
 }

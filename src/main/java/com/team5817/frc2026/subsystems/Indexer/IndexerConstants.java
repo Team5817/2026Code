@@ -17,7 +17,6 @@ public class IndexerConstants {
     kSpindexerConstants.kEnableStatorCurrentLimit = true;
     kSpindexerConstants.kNeutralMode = NeutralModeValue.Coast;
 
-
     kTunnelConstants.kMainConstants.id = Ports.TUNNEL;
     kTunnelConstants.kSupplyCurrentLimit = 40;
     kTunnelConstants.kStatorCurrentLimit = 30;

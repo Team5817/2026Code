@@ -1,7 +1,5 @@
 package com.team254.lib.drivers;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -39,7 +37,7 @@ public class TalonFXFactory {
   }
 
   public static TalonFX createPermanentFollowerTalon(
-    CanDeviceId follower_id, CanDeviceId main_id, MotorAlignmentValue opposeMasterDirection) {
+      CanDeviceId follower_id, CanDeviceId main_id, MotorAlignmentValue opposeMasterDirection) {
     final TalonFX talon = createTalon(follower_id);
     talon.setControl(new Follower(main_id.getDeviceNumber(), opposeMasterDirection));
     return talon;
