@@ -47,7 +47,7 @@ public class DriverControls {
     if (driver.leftTrigger.wasActivated()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
     }
-    if (driver.rightBumper.wasActivated() && !driver.leftTrigger.isBeingPressed()) {
+    if (codriver.rightBumper.wasActivated() && !driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.SQUEEZING);
     }
     if (driver.leftTrigger.wasReleased()) {

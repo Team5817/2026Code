@@ -20,6 +20,8 @@ import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
 import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
+import com.team5817.lib.drivers.Lights.LightsIO;
+import com.team5817.lib.drivers.Lights.LightsIOCANDLE;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOTalonFX;
@@ -114,7 +116,7 @@ public class RobotContainer {
             new VisionIOLimelight("limelight-front", mDrive::getHeading),
             new VisionIOLimelight("limelight-back", mDrive::getHeading));
 
-    mLight = new Lights(new LightsIOSim());
+    mLight = new Lights(new LightsIOCANDLE(25));
 
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 

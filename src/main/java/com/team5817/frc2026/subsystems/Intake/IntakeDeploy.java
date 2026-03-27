@@ -21,7 +21,7 @@ public class IntakeDeploy extends StateBasedServoMotorSubsystem<IntakeDeploy.Sta
   public enum State implements ServoState {
     OUT(0.3175),
     DISABLED(),
-    SQUEEZE(0.2),
+    SQUEEZE(0.1),
     ZERO(0);
 
     @Getter private double demand = 0;
