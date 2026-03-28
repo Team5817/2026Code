@@ -23,14 +23,14 @@ public enum ShootingTarget {
   LOBR(
       ShooterConstants.HOOD_MAP_LOB,
       ShooterConstants.FLYWHEEL_MAP_LOB,
-      new Translation2d(0, .8),
+      new Translation2d(0, .9),
       10.0,
       30.0,
       1),
   LOBL(
       ShooterConstants.HOOD_MAP_LOB,
       ShooterConstants.FLYWHEEL_MAP_LOB,
-      new Translation2d(0, 7.4),
+      new Translation2d(0, 7.5),
       10.0,
       30.0,
       1),
