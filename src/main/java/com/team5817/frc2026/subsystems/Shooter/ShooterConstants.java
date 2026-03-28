@@ -65,7 +65,8 @@ public class ShooterConstants {
 
     InterpolatingDoubleTreeMap lobFly = new InterpolatingDoubleTreeMap();
     lobFly.put(6.0, 45.0);
-    lobFly.put(10.0, 66.0);
+    lobFly.put(10.0, 68.0);
+    lobFly.put(15.0, 95.0);
 
     // Default maps for HUB
     InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
