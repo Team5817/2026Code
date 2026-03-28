@@ -68,8 +68,8 @@ public class IntakeConstants {
 
     public enum FeederState implements IRollerState {
       IDLE(0),
-      INTAKING(-12),
-      EXHAUST(12);
+      INTAKING(-10),
+      EXHAUST(10);
 
       @Getter private final double demand;
       @Getter private final RollerControlMode controlMode;
