@@ -110,7 +110,6 @@ public class Robot extends LoggedRobot {
     controls = new DriverControls(mDrive, mRobotContainer.mSuperstructure);
     controlBoard = controls.mControlBoard;
 
-    Logger.recordOutput("isComp", RobotConstants.isComp);
   }
 
   /** This method is called periodically, regardless of the robot's mode. */
