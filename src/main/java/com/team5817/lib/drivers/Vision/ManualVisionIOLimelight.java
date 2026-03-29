@@ -49,7 +49,7 @@ public class ManualVisionIOLimelight implements VisionIO {
     // ---------------- CONNECTION ----------------
     inputs.connected =
         ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 250;
-    Logger.recordOutput("Vision/Connected", inputs.connected);
+    // Logger.recordOutput("Vision/Connected", inputs.connected);
 
     // ---------------- TARGET ANGLES ----------------
     inputs.latestTargetObservation =
@@ -61,16 +61,16 @@ public class ManualVisionIOLimelight implements VisionIO {
     orientationPublisher.accept(new double[] {driveYaw.getDegrees(), 0, 0, 0, 0, 0});
     NetworkTableInstance.getDefault().flush();
 
-    Logger.recordOutput("Vision/DriveYawDeg", driveYaw.getDegrees());
+    // Logger.recordOutput("Vision/DriveYawDeg", driveYaw.getDegrees());
 
     // ---------------- CAMERA SUPPLIER ----------------
     Pose3d robotToCamera = cameraPoseSupplier.get();
 
-    Logger.recordOutput("Vision/RTC", robotToCamera);
+    // Logger.recordOutput("Vision/RTC", robotToCamera);
 
     Transform3d cameraToRobot = new Transform3d(robotToCamera, new Pose3d());
 
-    Logger.recordOutput("Vision/CTR", cameraToRobot);
+    // Logger.recordOutput("Vision/CTR", cameraToRobot);
 
     Set<Integer> tagIds = new HashSet<>();
     List<PoseObservation> poseObservations = new LinkedList<>();
@@ -81,11 +81,11 @@ public class ManualVisionIOLimelight implements VisionIO {
 
       Pose3d llPose = parsePose(raw.value);
 
-      Logger.recordOutput("Vision/LL", llPose);
+      // Logger.recordOutput("Vision/LL", llPose);
 
       Pose3d computed = incomingIsRobotPose ? llPose : llPose.transformBy(cameraToRobot);
 
-      Logger.recordOutput("Vision/Computed", computed);
+      // Logger.recordOutput("Vision/Computed", computed);
 
       poseObservations.add(
           new PoseObservation(
