@@ -7,7 +7,6 @@ import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.RobotController;
 import java.util.*;
 import java.util.function.Supplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ManualVisionIOLimelight implements VisionIO {
 

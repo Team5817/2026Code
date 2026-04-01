@@ -7,7 +7,6 @@ import com.team5817.lib.swerve.SwerveHeadingController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import java.util.OptionalDouble;
-import org.littletonrobotics.junction.Logger;
 
 /** Class responsible for planning the motion for auto-alignment. */
 public class AutoAlignMotionPlanner {
@@ -40,7 +39,6 @@ public class AutoAlignMotionPlanner {
     this.poseDeadband =
         Pose2d.fromTranslation(poseDeadband.getTranslation())
             .withRotation(poseDeadband.getRotation());
-
   }
 
   public ChassisSpeeds updateAutoAlign(double timestamp, Pose2d current_pose) {
@@ -77,10 +75,9 @@ public class AutoAlignMotionPlanner {
     mAutoAlignComplete = false;
     // translationWithinDeadband && rotationWithinDeadband && Math.abs(driveSpeed) < .1;
 
-
     heartbeat++;
     if (mStartTime.isPresent() && mAutoAlignComplete) {
-    
+
       mStartTime = OptionalDouble.empty();
     }
 

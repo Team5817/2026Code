@@ -407,11 +407,7 @@ public class Drive extends Subsystem {
   @Override
   public void outputTelemetry() {
     // Log empty setpoint states when disabled
-    if (DriverStation.isDisabled()) {
-    }
-
-
-
+    if (DriverStation.isDisabled()) {}
   }
 
   /**
@@ -429,8 +425,6 @@ public class Drive extends Subsystem {
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds.wpi());
     SwerveDriveKinematics.desaturateWheelSpeeds(
         setpointStates, TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * speedScalar);
-
-
 
     // Send setpoints to modules
     for (int i = 0; i < 4; i++) {

@@ -25,7 +25,7 @@ public class ShooterConstants {
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-  public static final double cancoderToTurretRatio = (360 / 400); 
+  public static final double cancoderToTurretRatio = (360 / 400);
 
   public static Pose2d shooterTransform =
       new Pose2d(
