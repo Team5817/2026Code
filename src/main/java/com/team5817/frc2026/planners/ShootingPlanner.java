@@ -247,7 +247,6 @@ public class ShootingPlanner {
       futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
     }
 
-    // safety checks still use BOTH
     if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
     if (futureHubPos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
     if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
@@ -257,7 +256,6 @@ public class ShootingPlanner {
     if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
     if (futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
 
-    // ✅ FIXED: decision based on CURRENT pose
     if (pos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
 
     return Shooter.State.LOB;

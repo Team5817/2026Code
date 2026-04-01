@@ -13,7 +13,7 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
 import com.team5817.lib.motion.TrajectorySet;
 
-public class DynamicAuto extends AutoBase {
+public class MTC extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
@@ -21,7 +21,7 @@ public class DynamicAuto extends AutoBase {
   private Shooter sh;
   private ShootingPlanner p;
 
-  public DynamicAuto(Superstructure s, boolean isHumanSide, boolean isClose) {
+  public MTC(Superstructure s, boolean isHumanSide, boolean isClose) {
     this.d = s.mDrive;
     this.su = s;
     this.sh = s.mShooter;
@@ -54,7 +54,7 @@ public class DynamicAuto extends AutoBase {
 
     TelePrep = l.trajectories.get("NSHOTToNE2");
 
-    t = new TrajectorySet(!isHumanSide, Intake1, Return1, Intake2, Return2, TelePrep);
+    t = new TrajectorySet(!isHumanSide, Intake2, Return2, TelePrep);
   }
 
   @Override
@@ -67,18 +67,14 @@ public class DynamicAuto extends AutoBase {
     p.setOverride(false);
     sh.forceStow(true);
 
-    su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(), 1, d));
-    r(new TrajectoryAction(t.next(), 1.5, d));
-    su.mIntake.stateRequest(Intake.State.IDLE).act();
-
-    r(new ShootAction(4, su, 2));
+    r(new ShootAction(3, su, 1.5));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), -.3, d));
 
     r(new TrajectoryAction(t.next(), 1.5, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new ShootAction(10, su, 2));
+    r(new ShootAction(7, su, 3));
+    r(new TrajectoryAction(t.next(), d));
   }
 }

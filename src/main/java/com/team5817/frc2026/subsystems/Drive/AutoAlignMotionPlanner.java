@@ -41,14 +41,9 @@ public class AutoAlignMotionPlanner {
         Pose2d.fromTranslation(poseDeadband.getTranslation())
             .withRotation(poseDeadband.getRotation());
 
-    Logger.recordOutput(
-        "AutoAlign/Point",
-        new edu.wpi.first.math.geometry.Pose2d(
-            mFieldToTargetPoint.getTranslation().wpi(), mFieldToTargetPoint.getRotation().wpi()));
   }
 
   public ChassisSpeeds updateAutoAlign(double timestamp, Pose2d current_pose) {
-    Logger.recordOutput("AutoAlign/Valid Point", mFieldToTargetPoint != null);
     if (mFieldToTargetPoint == null) {
       return new ChassisSpeeds();
     }
@@ -82,13 +77,10 @@ public class AutoAlignMotionPlanner {
     mAutoAlignComplete = false;
     // translationWithinDeadband && rotationWithinDeadband && Math.abs(driveSpeed) < .1;
 
-    Logger.recordOutput("AutoAlign/TranslationDone", translationWithinDeadband);
-    Logger.recordOutput("AutoAlign/RotationDone", rotationWithinDeadband);
+
     heartbeat++;
-    Logger.recordOutput("AutfAlign/heart", heartbeat);
     if (mStartTime.isPresent() && mAutoAlignComplete) {
-      System.out.println(
-          "Auto align took: " + (Timer.getFPGATimestamp() - mStartTime.getAsDouble()));
+    
       mStartTime = OptionalDouble.empty();
     }
 

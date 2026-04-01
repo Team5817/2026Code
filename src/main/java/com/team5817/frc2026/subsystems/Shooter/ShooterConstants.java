@@ -25,7 +25,7 @@ public class ShooterConstants {
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_HUB;
-  public static final double cancoderToTurretRatio = (360 / 400); //
+  public static final double cancoderToTurretRatio = (360 / 400); 
 
   public static Pose2d shooterTransform =
       new Pose2d(
@@ -65,7 +65,8 @@ public class ShooterConstants {
 
     InterpolatingDoubleTreeMap lobFly = new InterpolatingDoubleTreeMap();
     lobFly.put(6.0, 45.0);
-    lobFly.put(10.0, 66.0);
+    lobFly.put(10.0, 68.0);
+    lobFly.put(15.0, 95.0);
 
     // Default maps for HUB
     InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
@@ -76,11 +77,11 @@ public class ShooterConstants {
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.6, 42.0); // Front Hub
     hubFly.put(2.4, 47.5); // left hub
-    hubFly.put(3.0, 52.0); // Mid Hub
-    hubFly.put(3.6, 52.5); // depot
+    hubFly.put(3.0, 51.5); // Mid Hub
+    hubFly.put(3.6, 53.0); // depot
     hubFly.put(4.1, 54.5); // left mid wall
     hubFly.put(4.6, 56.0); // Human Side
-    hubFly.put(5.2, 64.0); // Human Corner
+    hubFly.put(5.2, 64.5); // Human Corner
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;

@@ -208,7 +208,6 @@ public class Drive extends Subsystem {
       isStabilizing = true;
       resetHeadingController = false;
     }
-    Logger.recordOutput("Drive/TargetHeading", mHeadingController.getTargetHeading().getDegrees());
 
     if (!userSlowingDown) {
       isStabilizing = false;
@@ -409,15 +408,10 @@ public class Drive extends Subsystem {
   public void outputTelemetry() {
     // Log empty setpoint states when disabled
     if (DriverStation.isDisabled()) {
-      Logger.recordOutput("Drive/SwerveStates/Setpoints", new SwerveModuleState[] {});
-      Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
     }
 
-    Logger.recordOutput("Drive/State", mControlState);
-    Logger.recordOutput("Drive/SwerveStates/Measured", getModuleStates());
-    Logger.recordOutput("Drive/SwerveChassisSpeeds/Measured", getChassisSpeeds().wpi());
 
-    Logger.recordOutput("AutoAlign/mAlignment", mAlignment);
+
   }
 
   /**
@@ -436,9 +430,7 @@ public class Drive extends Subsystem {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         setpointStates, TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * speedScalar);
 
-    // Log unoptimized setpoints and setpoint speeds
-    Logger.recordOutput("Drive/SwerveStates/Setpoints", setpointStates);
-    Logger.recordOutput("Drive/SwerveChassisSpeeds/Setpoints", discreteSpeeds.wpi());
+
 
     // Send setpoints to modules
     for (int i = 0; i < 4; i++) {
@@ -446,7 +438,6 @@ public class Drive extends Subsystem {
     }
 
     // Log optimized setpoints (runSetpoint mutates each state)
-    Logger.recordOutput("Drive/SwerveStates/SetpointsOptimized", setpointStates);
   }
 
   /** Runs the drive in a straight line with the specified drive output. */
@@ -535,7 +526,6 @@ public class Drive extends Subsystem {
 
   public void allianceZeroGyro() {
     Boolean isRed = Util.isRed().get();
-    Logger.recordOutput("Drive/Alliance", isRed ? "Red" : "Blue");
     zeroGyro(isRed ? 180 : 0);
   }
 

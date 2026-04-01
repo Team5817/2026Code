@@ -3,7 +3,8 @@ package com.team5817.frc2026.autos;
 import com.team5817.frc2026.autos.Modes.CD;
 import com.team5817.frc2026.autos.Modes.D;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
-import com.team5817.frc2026.autos.Modes.DynamicAuto;
+import com.team5817.frc2026.autos.Modes.MT;
+import com.team5817.frc2026.autos.Modes.MTC;
 import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.autos.Modes.PLL;
 import com.team5817.frc2026.autos.Modes.PLR;
@@ -24,6 +25,7 @@ public class AutoModeFactory {
     DO_NOTHING,
     CLOSE_SWEEP,
     MT_SCOOP,
+    COUNTER_1323,
     D,
     CD,
     PL,
@@ -32,8 +34,8 @@ public class AutoModeFactory {
   }
 
   public enum StartingSelection {
-    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP),
-    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP, DesiredMode.D),
+    TRENCH_H(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP, DesiredMode.COUNTER_1323),
+    TRENCH_D(DesiredMode.DO_NOTHING, DesiredMode.CLOSE_SWEEP, DesiredMode.MT_SCOOP, DesiredMode.D, DesiredMode.COUNTER_1323),
     CENTER(
         DesiredMode.DO_NOTHING,
         DesiredMode.CD,
@@ -111,8 +113,12 @@ public class AutoModeFactory {
 
       case MT_SCOOP:
         return Optional.of(
-            new DynamicAuto(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
-
+            new MT(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
+            
+      case COUNTER_1323:
+        return Optional.of(
+            new MTC(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
+    
       case CD:
         return Optional.of(new CD(s));
 
