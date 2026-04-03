@@ -3,6 +3,7 @@ package com.team5817.frc2026.subsystems.Drive;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.team254.lib.geometry.Pose2d;
@@ -189,6 +190,7 @@ public class Drive extends Subsystem {
     speeds.omegaRadiansPerSecond *= speedScalar;
 
     runVelocity(getTeleopSetpoint(speeds));
+    Logger.recordOutput("Drive/Desired", getTeleopSetpoint(speeds));
   }
 
   public void setSpeedScalar(double scalar) {
@@ -563,5 +565,11 @@ public class Drive extends Subsystem {
       new edu.wpi.first.math.geometry.Translation2d(
           TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
     };
+  }
+
+  public void applyCurrentLimits(CurrentLimitsConfigs limits) {
+    for (int i = 0; i < 4; i++) {
+      modules[i].applyCurrentLimits(limits);
+    }
   }
 }

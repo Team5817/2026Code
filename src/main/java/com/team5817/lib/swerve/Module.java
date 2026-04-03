@@ -14,6 +14,7 @@
 package com.team5817.lib.swerve;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -143,5 +144,10 @@ public class Module {
   /** Returns the module velocity in rotations/sec (Phoenix native units). */
   public double getFFCharacterizationVelocity() {
     return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
+  }
+    
+  public void applyCurrentLimits(CurrentLimitsConfigs limits) {
+    io.applyCurrentLimits(limits);
+    System.out.println("Hi");
   }
 }

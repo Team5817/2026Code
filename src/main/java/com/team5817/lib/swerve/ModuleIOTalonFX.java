@@ -16,6 +16,7 @@ package com.team5817.lib.swerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -266,4 +267,24 @@ public class ModuleIOTalonFX implements ModuleIO {
               positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
   }
+  
+  public void applyCurrentLimits(CurrentLimitsConfigs limits) {
+    TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+    TalonFXConfiguration turnConfig = new TalonFXConfiguration();
+
+    driveConfig.CurrentLimits = limits;
+    turnConfig.CurrentLimits = limits;
+
+    driveTalon.getConfigurator().apply(driveConfig);
+    turnTalon.getConfigurator().apply(turnConfig);
+  }
+
+  public TalonFX getDriveTalon() {
+    return driveTalon;
+  }
+
+  public TalonFX getTurnTalon() {
+    return turnTalon;
+  }
 }
+

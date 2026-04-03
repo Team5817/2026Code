@@ -65,6 +65,20 @@ public class TunerConstants {
           .withSupplyCurrentLimit(40)
           .withSupplyCurrentLimitEnable(true)
           .withStatorCurrentLimitEnable(true));
+     
+
+    public static final CurrentLimitsConfigs autoCurrentimits =
+        new CurrentLimitsConfigs()
+            .withStatorCurrentLimit(Amps.of(60))
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimitEnable(false); 
+
+    public static final CurrentLimitsConfigs teleCurrentLimits =
+        new CurrentLimitsConfigs()
+            .withStatorCurrentLimit(Amps.of(60))
+            .withStatorCurrentLimitEnable(true)
+            .withSupplyCurrentLimit(40)
+            .withSupplyCurrentLimitEnable(true);
 
   // Initial configs for the azimuth encoder
   private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();
@@ -153,7 +167,7 @@ public class TunerConstants {
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft =
     ConstantCreator.createModuleConstants(
         5, 1, 1,
-        Rotations.of(0.021728515625), // rotate steer zero
+        Rotations.of(0.005126953125), // rotate steer zero
         kY.unaryMinus(),                                 // +y
         kX.unaryMinus(),                    // -x
         kInvertLeftSide, true, false);
@@ -161,7 +175,7 @@ public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfigura
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontRight =
     ConstantCreator.createModuleConstants(
         6, 2, 2,
-        Rotations.of(-0.104736328125), // rotate steer zero
+        Rotations.of(-0.104248046875), // rotate steer zero
         kY.unaryMinus(),                     // -y
         kX,                     // -x
         kInvertRightSide, true, false);
@@ -169,7 +183,7 @@ public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfigura
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackLeft =
     ConstantCreator.createModuleConstants(
         7, 3, 3,
-        Rotations.of(-0.298095703125), // rotate steer zero
+        Rotations.of(-0.31298828125), // rotate steer zero
         kY,                                  // +y
         kX.unaryMinus(),                                  // +x
         kInvertLeftSide, true, false);
@@ -177,7 +191,7 @@ public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfigura
 public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> BackRight =
     ConstantCreator.createModuleConstants(
         8, 4, 4,
-        Rotations.of(-0.213623046875), // rotate steer zero
+        Rotations.of(-0.18212890625), // rotate steer zero
         kY,                     // -y
         kX,                                  // +x
         kInvertRightSide, true, false);

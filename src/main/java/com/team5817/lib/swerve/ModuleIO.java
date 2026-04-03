@@ -16,6 +16,8 @@ package com.team5817.lib.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+
 public interface ModuleIO {
   @AutoLog
   public static class ModuleIOInputs {
@@ -49,6 +51,8 @@ public interface ModuleIO {
 
   /** Run the drive motor at the specified velocity. */
   public default void setDriveVelocity(double velocityRadPerSec) {}
+
+  public default void applyCurrentLimits(CurrentLimitsConfigs limits) {}
 
   /** Run the turn motor to the specified rotation. */
   public default void setTurnPosition(Rotation2d rotation) {}

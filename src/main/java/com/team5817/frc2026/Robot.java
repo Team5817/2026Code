@@ -13,6 +13,7 @@ import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.AutoExecuter;
 import com.team5817.frc2026.autos.AutoModeFactory;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
+import com.team5817.frc2026.generated.TunerConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.lib.Elastic;
@@ -127,6 +128,7 @@ public class Robot extends LoggedRobot {
     RobotVisualizer.outputTelemetry();
     elasticField2d.setRobotPose(mRobotContainer.mDrive.getPose().wpi());
     SmartDashboard.putData("Elastic/Field", elasticField2d);
+    Logger.recordOutput("Active Tracker/Time to Swap", ActiveTracker.getShiftInfo().remainingTime());
   }
 
   boolean disableGyroReset = false;
@@ -140,6 +142,8 @@ public class Robot extends LoggedRobot {
     mRobotContainer.mSuperstructure.request(new EmptyRequest());
     mRobotContainer.mShooter.forceStow(false);
     mAutoExecuter.start();
+    mDrive.applyCurrentLimits(TunerConstants.autoCurrentimits);
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -163,6 +167,8 @@ public class Robot extends LoggedRobot {
             .addName("AutoShoot"));
     mRobotContainer.mShooter.forceStow(false);
     ActiveTracker.initialize();
+    // mDrive.applyCurrentLimits(TunerConstants.teleCurrentLimits);
+
   }
 
   /** This method is called periodically during teleoperated mode. */

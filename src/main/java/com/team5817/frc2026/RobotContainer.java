@@ -121,7 +121,7 @@ public class RobotContainer {
 
     mClimb =
         new Climb(
-            new ServoMotorIOTalonFX(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+            new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
