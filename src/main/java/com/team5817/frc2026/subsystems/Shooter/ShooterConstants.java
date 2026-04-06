@@ -76,12 +76,12 @@ public class ShooterConstants {
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.6, 42.0); // Front Hub
-    hubFly.put(2.4, 47.5); // left hub
-    hubFly.put(3.0, 51.5); // Mid Hub
+    hubFly.put(2.4, 47.0); // left hub
+    hubFly.put(3.0, 51.0); // Mid Hub
     hubFly.put(3.6, 53.0); // depot
-    hubFly.put(4.1, 54.5); // left mid wall
-    hubFly.put(4.6, 56.0); // Human Side
-    hubFly.put(5.2, 64.5); // Human Corner
+    hubFly.put(4.1, 54.0); // left mid wall
+    hubFly.put(4.6, 55.0); // Human Side
+    hubFly.put(5.2, 64.0); // Human Corner
 
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;

@@ -71,7 +71,7 @@ public class DriverControls {
     }
 
     // RT Slow mode
-    double scalar = 1 - driver.getRightTriggerAxis() * 0.5;
+    double scalar = (driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2) ? 0.7: 1.0;
     mControlBoard.setSwerveScalar(scalar);
     d.setSpeedScalar(scalar); // TODO integrate to sotm to reduce sporadicitiy
 

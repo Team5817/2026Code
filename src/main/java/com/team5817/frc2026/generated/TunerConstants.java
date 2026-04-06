@@ -67,19 +67,6 @@ public class TunerConstants {
           .withStatorCurrentLimitEnable(true));
      
 
-    public static final CurrentLimitsConfigs autoCurrentimits =
-        new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(Amps.of(60))
-            .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimitEnable(false); 
-
-    public static final CurrentLimitsConfigs teleCurrentLimits =
-        new CurrentLimitsConfigs()
-            .withStatorCurrentLimit(Amps.of(60))
-            .withStatorCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(40)
-            .withSupplyCurrentLimitEnable(true);
-
   // Initial configs for the azimuth encoder
   private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();
 

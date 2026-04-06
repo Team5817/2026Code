@@ -47,7 +47,7 @@ public class Robot extends LoggedRobot {
   private AutoModeFactory mAutoModeFactory;
   DriverControls controls;
   ControlBoard controlBoard;
-
+  TunerConstants mTunerConstants;
   Drive mDrive;
 
   public Robot() {
@@ -143,7 +143,6 @@ public class Robot extends LoggedRobot {
     mRobotContainer.mSuperstructure.request(new EmptyRequest());
     mRobotContainer.mShooter.forceStow(false);
     mAutoExecuter.start();
-    mDrive.applyCurrentLimits(TunerConstants.autoCurrentimits);
   }
 
   /** This function is called periodically during autonomous. */
@@ -167,7 +166,6 @@ public class Robot extends LoggedRobot {
             .addName("AutoShoot"));
     mRobotContainer.mShooter.forceStow(false);
     ActiveTracker.initialize();
-    // mDrive.applyCurrentLimits(TunerConstants.teleCurrentLimits);
 
   }
 
