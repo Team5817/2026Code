@@ -1,8 +1,8 @@
 package com.team5817.frc2026.subsystems;
 
 import com.team5817.frc2026.ActiveTracker;
-import com.team5817.frc2026.subsystems.Climb.Climb;
 import com.team5817.frc2026.subsystems.Drive.Drive;
+import com.team5817.frc2026.subsystems.Elevator.Elevator;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Lights.Lights;
@@ -28,7 +28,7 @@ public class Superstructure extends Subsystem {
   public Shooter mShooter;
   public Intake mIntake;
   public Indexer mIndexer;
-  public Climb mClimb;
+  public Elevator mElevator;
   public Lights mLights;
 
   @Setter private boolean allowAutoShoot = true;
@@ -38,13 +38,13 @@ public class Superstructure extends Subsystem {
       Intake intake,
       Indexer spindexerGroup,
       Shooter shooter,
-      Climb climb,
+      Elevator elevator,
       Lights lights) {
     mDrive = drive;
     mIntake = intake;
     mIndexer = spindexerGroup;
     mShooter = shooter;
-    mClimb = climb;
+    mElevator = elevator;
     mLights = lights;
     this.requestExecutor = new RequestExecutor();
   }
@@ -78,7 +78,7 @@ public class Superstructure extends Subsystem {
       mLights.setLeds(LEDState.TWINKLE_WHITE);
       return;
     }
-    if (mClimb.getDesiredState() != Climb.State.ZERO) {
+    if (mElevator.getDesiredState() != Elevator.State.ZERO) {
       mLights.setLeds(LEDState.RAINBOW);
       return;
     }

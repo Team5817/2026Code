@@ -1,37 +1,35 @@
-package com.team5817.frc2026.subsystems.Climb;
+package com.team5817.frc2026.subsystems.Elevator;
 
-import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 
-public final class ClimbConstants {
+public final class ElevatorConstants {
   public static final ServoConstants kClimbServoConstants = new ServoConstants();
 
   static {
     kClimbServoConstants.kName = "Climb";
 
-    kClimbServoConstants.kMainConstants.id = Ports.CLIMB;
+    kClimbServoConstants.kMainConstants.id = Ports.ELEVATOR;
     kClimbServoConstants.kMainConstants.counterClockwisePositive = false;
 
-    kClimbServoConstants.kHomePosition = 0; // degrees
-    kClimbServoConstants.kRotationsPerUnitDistance = 129.205 / 90;
+    kClimbServoConstants.kHomePosition = 0; // meters
 
-    kClimbServoConstants.kMaxUnitsLimit = 140;
+    kClimbServoConstants.kRotationsPerUnitDistance = 1.0;
+
+    kClimbServoConstants.kMaxUnitsLimit = 1.0;
     kClimbServoConstants.kMinUnitsLimit = 0.0;
 
-    kClimbServoConstants.kKp = 0.0; // 16
+    kClimbServoConstants.kKp = 0.0;
     kClimbServoConstants.kKi = 0.0;
-    kClimbServoConstants.kKd = 0.0; // .2
+    kClimbServoConstants.kKd = 0.0;
     kClimbServoConstants.kKa = 0.0;
     kClimbServoConstants.kKs = 0.0;
     kClimbServoConstants.kKv = 0.0;
-    kClimbServoConstants.kKg = 0.0;
+    kClimbServoConstants.kKg = 0.0; 
 
-    kClimbServoConstants.kCruiseVelocity =
-        9999.0 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s
-    kClimbServoConstants.kAcceleration =
-        300 / kClimbServoConstants.kRotationsPerUnitDistance; // degrees / s^2
+    kClimbServoConstants.kCruiseVelocity = 9999.0 / kClimbServoConstants.kRotationsPerUnitDistance;
+    kClimbServoConstants.kAcceleration = 300 / kClimbServoConstants.kRotationsPerUnitDistance;
 
     kClimbServoConstants.kMaxForwardOutput = 12.0;
     kClimbServoConstants.kMaxReverseOutput = -12.0;
@@ -41,8 +39,6 @@ public final class ClimbConstants {
 
     kClimbServoConstants.kEnableStatorCurrentLimit = true;
     kClimbServoConstants.kStatorCurrentLimit = 80; // amps
-
-    kClimbServoConstants.kFollowerOpposeMasterDirection = MotorAlignmentValue.Aligned;
 
     kClimbServoConstants.kNeutralMode = NeutralModeValue.Brake;
 

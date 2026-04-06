@@ -4,10 +4,10 @@ import com.team254.lib.geometry.Pose2d;
 import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
 import com.team5817.frc2026.generated.TunerConstants;
-import com.team5817.frc2026.subsystems.Climb.Climb;
-import com.team5817.frc2026.subsystems.Climb.ClimbConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
+import com.team5817.frc2026.subsystems.Elevator.Elevator;
+import com.team5817.frc2026.subsystems.Elevator.ElevatorConstants;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Indexer.IndexerConstants;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -19,7 +19,6 @@ import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.frc2026.subsystems.Vision.Vision;
 import com.team5817.frc2026.subsystems.Vision.VisionConstants;
 import com.team5817.lib.RobotMode;
-import com.team5817.lib.drivers.Actuator.ActuatorIOSim;
 import com.team5817.lib.drivers.Lights.LightsIOCANDLE;
 import com.team5817.lib.drivers.Lights.LightsIOSim;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIOSim;
@@ -45,7 +44,7 @@ public class RobotContainer {
   public Indexer mIndexer = null;
   public Shooter mShooter = null;
   public Vision mVision = null;
-  public Climb mClimb = null;
+  public Elevator mElevator = null;
   public Lights mLight = null;
   public Superstructure mSuperstructure = null;
 
@@ -64,10 +63,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mIntake, mIndexer, mShooter, mClimb, mLight);
+    mSuperstructure = new Superstructure(mDrive, mIntake, mIndexer, mShooter, mElevator, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mIntake, mShooter, mIndexer, mClimb, mLight);
+        mDrive, mSuperstructure, mVision, mIntake, mShooter, mIndexer, mElevator, mLight);
   }
 
   public void makeRealRobot() {
@@ -120,8 +119,8 @@ public class RobotContainer {
 
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-    mClimb =
-        new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+    mElevator =
+        new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
@@ -133,9 +132,9 @@ public class RobotContainer {
             SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
     if (mDrive == null) SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
-    if (mClimb == null)
-      mClimb =
-          new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+    if (mElevator == null)
+      mElevator =
+          new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
 
     if (mIntake == null)
       mIntake =
@@ -201,9 +200,9 @@ public class RobotContainer {
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
 
-    if (mClimb == null)
-      mClimb =
-          new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+    if (mElevator == null)
+      mElevator =
+          new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
 
     if (mLight == null) mLight = new Lights(new LightsIOSim());
   }

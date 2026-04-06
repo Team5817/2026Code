@@ -1,7 +1,6 @@
-package com.team5817.frc2026.subsystems.Climb;
+package com.team5817.frc2026.subsystems.Elevator;
 
 import com.team5817.frc2026.RobotVisualizer;
-import com.team5817.lib.drivers.Actuator.ActuatorIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
@@ -10,28 +9,20 @@ import com.team5817.lib.requests.SequentialRequest;
 import com.team5817.lib.requests.WaitRequest;
 import lombok.Getter;
 
-/** Elevator subsystem for controlling the elevator mechanism. */
-public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
+public class Elevator extends StateBasedServoMotorSubsystem<Elevator.State> {
 
-  LatchRelease latchRelease;
-
-  public Climb(ServoMotorIO io, ActuatorIO latchIO) {
-    super(State.ZERO, io, true);
-    this.latchRelease = new LatchRelease(latchIO);
+  public Elevator(ServoMotorIO io) {
+    super(State.ZERO, io, false);
   }
+  
 
-  /** Enum representing the different states of the elevator. */
   public enum State implements ServoState {
-    ZERO(0),
-    READY(140), // -187 prep
-    DOWN(48); // -65 climbed
+    ZERO(0.0, 0.0),
+    EXTENDED(0.4, 0.02),  
+    RETRACTED(0.1, 0.01);  
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
-
-    State(double output) {
-      this(output, 0.01);
-    }
 
     State(double output, double allowable_error) {
       this.demand = output;
@@ -48,18 +39,17 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
       return ControlState.POSITION;
     }
   }
-
+ 
   public Request advanceClimbRequest() {
     System.out.println("Advancing climb from " + mDesiredState);
 
     switch (mDesiredState) {
       case ZERO:
-        latchRelease.setState(LatchRelease.State.RELEASED);
-        return stateRequest(State.READY);
-      case READY:
-        return stateRequest(State.DOWN);
-      case DOWN:
-        return stateRequest(State.READY);
+        return stateRequest(State.EXTENDED);
+      case EXTENDED:
+        return stateRequest(State.RETRACTED);
+      case RETRACTED:
+        return stateRequest(State.EXTENDED);
     }
     return null;
   }
@@ -86,21 +76,8 @@ public class Climb extends StateBasedServoMotorSubsystem<Climb.State> {
   }
 
   @Override
-  public void readPeriodicInputs() {
-    latchRelease.readPeriodicInputs();
-    super.readPeriodicInputs();
-  }
-
-  @Override
-  public void writePeriodicOutputs() {
-    latchRelease.writePeriodicOutputs();
-    super.writePeriodicOutputs();
-  }
-
-  @Override
   public void outputTelemetry() {
     RobotVisualizer.updateClimb(getPosition());
-    latchRelease.outputTelemetry();
     super.outputTelemetry();
   }
 }

@@ -101,12 +101,12 @@ public class DriverControls {
 
     // Climb Down
     if (driver.POV180.wasActivated()) {
-      s.mClimb.advanceClimbRequest().act();
+      s.mElevator.advanceClimbRequest().act();
     }
 
     // Climb Zero
     if (driver.POV0.wasActivated()) {
-      s.mClimb.resetClimbStages();
+      s.mElevator.resetClimbStages();
     }
 
     if (driver.POV270.isBeingPressed()) {
