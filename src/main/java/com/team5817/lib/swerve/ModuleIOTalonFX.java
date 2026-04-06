@@ -267,7 +267,7 @@ public class ModuleIOTalonFX implements ModuleIO {
               positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
   }
-  
+
   public void applyCurrentLimits(CurrentLimitsConfigs limits) {
     TalonFXConfiguration driveConfig = new TalonFXConfiguration();
     TalonFXConfiguration turnConfig = new TalonFXConfiguration();
@@ -287,4 +287,3 @@ public class ModuleIOTalonFX implements ModuleIO {
     return turnTalon;
   }
 }
-

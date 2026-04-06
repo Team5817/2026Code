@@ -7,12 +7,10 @@ import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Subsystem;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
+import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class IntakeRollers extends Subsystem {
@@ -23,32 +21,34 @@ public class IntakeRollers extends Subsystem {
   @Getter
   @Accessors(prefix = "m")
   private State mState = State.IDLE;
+
   private static DoubleSupplier voltageSupplier = () -> -10.0;
-  
-    public IntakeRollers(RollerSubsystemIO FeederIO, DoubleSupplier VoltageSupplier) {
-      this.feeder = new RollerSubsystem<State>(State.IDLE, "Intake/Feeder", FeederIO);
-      voltageSupplier = VoltageSupplier;
+
+  public IntakeRollers(RollerSubsystemIO FeederIO, DoubleSupplier VoltageSupplier) {
+    this.feeder = new RollerSubsystem<State>(State.IDLE, "Intake/Feeder", FeederIO);
+    voltageSupplier = VoltageSupplier;
+  }
+
+  public enum State implements IRollerState {
+    IDLE(0),
+    INTAKING(),
+    EXHAUST(10);
+
+    DoubleSupplier demand;
+    @Getter RollerControlMode controlMode = RollerControlMode.VOLTAGE;
+
+    State(double voltage) {
+      this.demand = () -> voltage;
     }
-  
-    public enum State implements IRollerState{
-      IDLE(0),
-      INTAKING(),
-      EXHAUST(10);
-  
-      DoubleSupplier demand;
-      @Getter
-      RollerControlMode controlMode = RollerControlMode.VOLTAGE;
-  
-      State(double voltage) {
-        this.demand = () -> voltage;
-      }
-      State(){
-          this.demand = voltageSupplier::getAsDouble;
+
+    State() {
+      this.demand = voltageSupplier::getAsDouble;
     }
+
     @Override
     public double getDemand() {
-       return demand.getAsDouble();
-    } 
+      return demand.getAsDouble();
+    }
   }
 
   @Override

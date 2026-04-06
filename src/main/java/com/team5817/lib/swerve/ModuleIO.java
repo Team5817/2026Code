@@ -13,10 +13,9 @@
 
 package com.team5817.lib.swerve;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.AutoLog;
-
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
 public interface ModuleIO {
   @AutoLog

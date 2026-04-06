@@ -145,7 +145,7 @@ public class Module {
   public double getFFCharacterizationVelocity() {
     return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
   }
-    
+
   public void applyCurrentLimits(CurrentLimitsConfigs limits) {
     io.applyCurrentLimits(limits);
     System.out.println("Hi");

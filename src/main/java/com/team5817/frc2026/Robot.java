@@ -128,7 +128,8 @@ public class Robot extends LoggedRobot {
     RobotVisualizer.outputTelemetry();
     elasticField2d.setRobotPose(mRobotContainer.mDrive.getPose().wpi());
     SmartDashboard.putData("Elastic/Field", elasticField2d);
-    Logger.recordOutput("Active Tracker/Time to Swap", ActiveTracker.getShiftInfo().remainingTime());
+    Logger.recordOutput(
+        "Active Tracker/Time to Swap", ActiveTracker.getShiftInfo().remainingTime());
   }
 
   boolean disableGyroReset = false;
@@ -143,7 +144,6 @@ public class Robot extends LoggedRobot {
     mRobotContainer.mShooter.forceStow(false);
     mAutoExecuter.start();
     mDrive.applyCurrentLimits(TunerConstants.autoCurrentimits);
-
   }
 
   /** This function is called periodically during autonomous. */

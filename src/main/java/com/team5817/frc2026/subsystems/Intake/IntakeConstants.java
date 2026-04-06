@@ -2,13 +2,9 @@ package com.team5817.frc2026.subsystems.Intake;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.frc2026.Ports;
-import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
-import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
-
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import lombok.Getter;
 
 public class IntakeConstants {
   /** Constants related to the Intake Deploy subsystem. */
@@ -52,15 +48,17 @@ public class IntakeConstants {
       kRackServoConstants.kHomingOutput = -.3;
       kRackServoConstants.kHomingTimeout = 0.2;
       kRackServoConstants.kHomingVelocityWindow = 5;
-  }
+    }
   }
 
   public static final class RollerConstants {
     public static final InterpolatingDoubleTreeMap voltageMap = new InterpolatingDoubleTreeMap();
+
     static {
       voltageMap.put(0.0, -4.0);
       voltageMap.put(5.0, -12.0);
     }
+
     public static RollerConstantsTalonFX kMotorConstants = new RollerConstantsTalonFX();
 
     static {
@@ -71,6 +69,5 @@ public class IntakeConstants {
       kMotorConstants.kMaxForwardOutput = 12.0;
       kMotorConstants.kMaxReverseOutput = -12.0;
     }
-
   }
 }

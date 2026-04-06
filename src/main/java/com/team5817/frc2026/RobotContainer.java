@@ -86,8 +86,7 @@ public class RobotContainer {
             new RollerSubsystemIOTalonFX(
                 Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.kMotorConstants, 2.5),
             new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants),
-            () -> mDrive.getChassisSpeeds().vxMetersPerSecond
-            );
+            () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
 
     mIndexer =
         new Indexer(
@@ -122,8 +121,7 @@ public class RobotContainer {
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
     mClimb =
-        new Climb(
-            new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
+        new Climb(new ServoMotorIOSim(ClimbConstants.kClimbServoConstants), new ActuatorIOSim());
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
