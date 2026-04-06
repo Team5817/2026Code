@@ -1,6 +1,7 @@
 package com.team5817.frc2026.subsystems.Intake;
 
 import com.team5817.frc2026.RobotVisualizer;
+import com.team5817.frc2026.subsystems.Intake.IntakeConstants.RollerConstants;
 import com.team5817.lib.drivers.Rollers.RollerSubsystemIO;
 import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Subsystem;
@@ -8,6 +9,9 @@ import com.team5817.lib.requests.LambdaRequest;
 import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import lombok.Getter;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends Subsystem {
@@ -16,8 +20,8 @@ public class Intake extends Subsystem {
   private static IntakeDeploy mIntakeDeploy;
   @Getter private State mState = State.IDLE;
 
-  public Intake(RollerSubsystemIO FeederIO, ServoMotorIO DeployIO) {
-    mIntakeRollers = new IntakeRollers(FeederIO);
+  public Intake(RollerSubsystemIO FeederIO, ServoMotorIO DeployIO, DoubleSupplier velocitySupplier) {
+    mIntakeRollers = new IntakeRollers(FeederIO, () -> RollerConstants.voltageMap.get(velocitySupplier.getAsDouble()));
     mIntakeDeploy = new IntakeDeploy(DeployIO.getConstants(), DeployIO);
   }
 

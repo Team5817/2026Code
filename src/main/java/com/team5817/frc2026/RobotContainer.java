@@ -85,7 +85,9 @@ public class RobotContainer {
         new Intake(
             new RollerSubsystemIOTalonFX(
                 Ports.INTAKE_ROLLERS, IntakeConstants.RollerConstants.kMotorConstants, 2.5),
-            new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants));
+            new ServoMotorIOTalonFX(IntakeConstants.DeployConstants.kRackServoConstants),
+            () -> mDrive.getChassisSpeeds().vxMetersPerSecond
+            );
 
     mIndexer =
         new Indexer(
@@ -141,7 +143,8 @@ public class RobotContainer {
       mIntake =
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants),
+              () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
 
     if (mIndexer == null)
       mIndexer =
@@ -170,7 +173,8 @@ public class RobotContainer {
       mIntake =
           new Intake(
               new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants));
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackServoConstants),
+              () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
 
     if (mIndexer == null)
       mIndexer =

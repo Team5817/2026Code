@@ -6,6 +6,8 @@ import com.team5817.lib.drivers.Rollers.IRollerState;
 import com.team5817.lib.drivers.Rollers.RollerConstantsTalonFX;
 import com.team5817.lib.drivers.Rollers.RollerSubsystem.RollerControlMode;
 import com.team5817.lib.drivers.Servos.ServoConstants;
+
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import lombok.Getter;
 
 public class IntakeConstants {
@@ -50,11 +52,15 @@ public class IntakeConstants {
       kRackServoConstants.kHomingOutput = -.3;
       kRackServoConstants.kHomingTimeout = 0.2;
       kRackServoConstants.kHomingVelocityWindow = 5;
-    }
+  }
   }
 
   public static final class RollerConstants {
-
+    public static final InterpolatingDoubleTreeMap voltageMap = new InterpolatingDoubleTreeMap();
+    static {
+      voltageMap.put(0.0, -4.0);
+      voltageMap.put(5.0, -12.0);
+    }
     public static RollerConstantsTalonFX kMotorConstants = new RollerConstantsTalonFX();
 
     static {
@@ -66,18 +72,5 @@ public class IntakeConstants {
       kMotorConstants.kMaxReverseOutput = -12.0;
     }
 
-    public enum FeederState implements IRollerState {
-      IDLE(0),
-      INTAKING(-10),
-      EXHAUST(10);
-
-      @Getter private final double demand;
-      @Getter private final RollerControlMode controlMode;
-
-      FeederState(double demand) {
-        this.demand = demand;
-        this.controlMode = RollerControlMode.VOLTAGE;
-      }
-    }
   }
 }

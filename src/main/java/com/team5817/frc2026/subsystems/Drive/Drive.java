@@ -410,6 +410,7 @@ public class Drive extends Subsystem {
   public void outputTelemetry() {
     // Log empty setpoint states when disabled
     if (DriverStation.isDisabled()) {}
+    Logger.recordOutput("Drive/ChassisSpeeds", getChassisSpeeds());
   }
 
   /**
