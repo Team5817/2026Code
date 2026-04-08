@@ -19,11 +19,14 @@ public class Intake extends Subsystem {
   @Getter private State mState = State.IDLE;
 
   public Intake(
-      RollerSubsystemIO FeederIO, ServoMotorIO DeployLeftIO, ServoMotorIO DeployRightIO, DoubleSupplier velocitySupplier) {
-        mIntakeRollers =
-            new IntakeRollers(
-                FeederIO, () -> RollerConstants.voltageMap.get(velocitySupplier.getAsDouble()));
-        mIntakeDeploy = new IntakeDeploy(DeployLeftIO, DeployRightIO);
+      RollerSubsystemIO FeederIO,
+      ServoMotorIO DeployLeftIO,
+      ServoMotorIO DeployRightIO,
+      DoubleSupplier velocitySupplier) {
+    mIntakeRollers =
+        new IntakeRollers(
+            FeederIO, () -> RollerConstants.voltageMap.get(velocitySupplier.getAsDouble()));
+    mIntakeDeploy = new IntakeDeploy(DeployLeftIO, DeployRightIO);
   }
 
   public enum State {
@@ -80,7 +83,8 @@ public class Intake extends Subsystem {
         mIntakeRollers.stateRequest(state.rollerState),
         mIntakeDeploy.stateRequest(state.deployState));
   }
-  public void home(){
+
+  public void home() {
     mIntakeDeploy.home();
   }
 
@@ -92,4 +96,3 @@ public class Intake extends Subsystem {
     Logger.recordOutput("Intake/Main State", mState);
   }
 }
-

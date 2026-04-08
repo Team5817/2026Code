@@ -120,8 +120,7 @@ public class RobotContainer {
 
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-    mElevator =
-        new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
+    mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
@@ -134,16 +133,15 @@ public class RobotContainer {
     if (mDrive == null) SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
     if (mElevator == null)
-      mElevator =
-          new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
+      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
 
     if (mIntake == null)
-        mIntake =
-            new Intake(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-                new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackLeftServoConstants),
-                new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackRightServoConstants),
-                () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
+      mIntake =
+          new Intake(
+              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackLeftServoConstants),
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackRightServoConstants),
+              () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
 
     if (mIndexer == null)
       mIndexer =
@@ -169,12 +167,12 @@ public class RobotContainer {
           };
 
     if (mIntake == null)
-        mIntake =
-            new Intake(
-                new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
-                new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackLeftServoConstants),
-                new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackRightServoConstants),
-                () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
+      mIntake =
+          new Intake(
+              new RollerSubsystemIOSim(DCMotor.getKrakenX44(1), 1, 0.01),
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackLeftServoConstants),
+              new ServoMotorIOSim(IntakeConstants.DeployConstants.kRackRightServoConstants),
+              () -> mDrive.getChassisSpeeds().vxMetersPerSecond);
 
     if (mIndexer == null)
       mIndexer =
@@ -204,8 +202,7 @@ public class RobotContainer {
               mVision::timeSinceUpdate);
 
     if (mElevator == null)
-      mElevator =
-          new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
+      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
 
     if (mLight == null) mLight = new Lights(new LightsIOSim());
   }

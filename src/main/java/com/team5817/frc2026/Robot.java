@@ -166,7 +166,6 @@ public class Robot extends LoggedRobot {
             .addName("AutoShoot"));
     mRobotContainer.mShooter.forceStow(false);
     ActiveTracker.initialize();
-
   }
 
   /** This method is called periodically during teleoperated mode. */

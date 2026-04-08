@@ -78,7 +78,6 @@ public class ServoConstants {
     return units * kRotationsPerUnitDistance;
   }
 
-
   public double getForwardSoftLimitRotations() {
     return (((kMaxUnitsLimit) * kRotationsPerUnitDistance) - kSoftLimitDeadband);
   }
@@ -86,7 +85,8 @@ public class ServoConstants {
   public double getReverseSoftLimitRotations() {
     return (((kMinUnitsLimit) * kRotationsPerUnitDistance) + kSoftLimitDeadband);
   }
-  public ServoConstants copy(){
+
+  public ServoConstants copy() {
     ServoConstants copy = new ServoConstants();
     copy.kName = this.kName;
     copy.kLooperDt = this.kLooperDt;

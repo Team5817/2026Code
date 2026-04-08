@@ -69,12 +69,13 @@ public class DriverControls {
     if (codriver.leftBumper.wasReleased() && s.mIndexer.getState() == Indexer.State.EXHAUST) {
       s.mIndexer.stateRequest(Indexer.State.IDLE);
     }
-    if(codriver.aButton.wasActivated()){
+    if (codriver.aButton.wasActivated()) {
       s.mIntake.home();
     }
 
     // RT Slow mode
-    double scalar = (driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2) ? 0.7: 1.0;
+    double scalar =
+        (driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2) ? 0.7 : 1.0;
     mControlBoard.setSwerveScalar(scalar);
     d.setSpeedScalar(scalar); // TODO integrate to sotm to reduce sporadicitiy
 

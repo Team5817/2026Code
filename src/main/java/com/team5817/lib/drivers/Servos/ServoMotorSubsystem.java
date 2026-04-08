@@ -280,7 +280,9 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   @Override
   public void outputTelemetry() {
     Logger.recordOutput(mConstants.kName + "/Control Mode", mControlState);
-    Logger.recordOutput(mConstants.kName + "/Demand", mControlState == ControlState.VOLTAGE ? demand : mConstants.rotationsToUnits(demand));
+    Logger.recordOutput(
+        mConstants.kName + "/Demand",
+        mControlState == ControlState.VOLTAGE ? demand : mConstants.rotationsToUnits(demand));
     Logger.recordOutput(mConstants.kName + "/Homing", mHoming);
   }
 

@@ -15,112 +15,109 @@ import org.littletonrobotics.junction.Logger;
 
 public class IntakeDeploy extends Subsystem {
 
-    private final StateBasedServoMotorSubsystem<State> mRackLeft;
-    private final StateBasedServoMotorSubsystem<State> mRackRight;
+  private final StateBasedServoMotorSubsystem<State> mRackLeft;
+  private final StateBasedServoMotorSubsystem<State> mRackRight;
 
-    @Getter private State mDesiredState = State.OUT;
+  @Getter private State mDesiredState = State.OUT;
 
-    public IntakeDeploy(ServoMotorIO leftIO, ServoMotorIO rightIO) {
-        mRackLeft  = new StateBasedServoMotorSubsystem<>(State.OUT, leftIO,  true);
-        mRackRight = new StateBasedServoMotorSubsystem<>(State.OUT, rightIO, true);
+  public IntakeDeploy(ServoMotorIO leftIO, ServoMotorIO rightIO) {
+    mRackLeft = new StateBasedServoMotorSubsystem<>(State.OUT, leftIO, true);
+    mRackRight = new StateBasedServoMotorSubsystem<>(State.OUT, rightIO, true);
+  }
+
+  public enum State implements ServoState {
+    OUT(0.3175),
+    SQUEEZE(0.1),
+    ZERO(0),
+    DISABLED();
+
+    @Getter private double demand = 0;
+    @Getter private double allowableError = 0.03;
+    @Getter private boolean disabled = false;
+    @Getter private NeutralModeValue neutralMode = NeutralModeValue.Brake;
+
+    State(double position) {
+      this.demand = position;
     }
 
-    public enum State implements ServoState {
-        OUT(0.3175),
-        SQUEEZE(0.1),
-        ZERO(0),
-        DISABLED();
-
-        @Getter private double demand = 0;
-        @Getter private double allowableError = 0.03;
-        @Getter private boolean disabled = false;
-        @Getter private NeutralModeValue neutralMode = NeutralModeValue.Brake;
-
-        State(double position) {
-            this.demand = position;
-        }
-
-        State() {
-            this.disabled = true;
-            this.neutralMode = NeutralModeValue.Coast;
-        }
-
-        @Override
-        public ControlState getControlState() {
-            return ControlState.POSITION;
-        }
+    State() {
+      this.disabled = true;
+      this.neutralMode = NeutralModeValue.Coast;
     }
 
     @Override
-    public void readPeriodicInputs() {
-        mRackLeft.readPeriodicInputs();
-        mRackRight.readPeriodicInputs();
+    public ControlState getControlState() {
+      return ControlState.POSITION;
+    }
+  }
+
+  @Override
+  public void readPeriodicInputs() {
+    mRackLeft.readPeriodicInputs();
+    mRackRight.readPeriodicInputs();
+  }
+
+  @Override
+  public void writePeriodicOutputs() {
+    boolean out =
+        Util.epsilonEquals(
+                mRackLeft.getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError())
+            && Util.epsilonEquals(
+                mRackRight.getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError());
+    Logger.recordOutput("Intake/Rack/Out", out);
+
+    if (out && mDesiredState == State.OUT) {
+      mRackLeft.setDesiredState(State.DISABLED);
+      mRackRight.setDesiredState(State.DISABLED);
     }
 
-    @Override
-    public void writePeriodicOutputs() {
-        boolean out = Util.epsilonEquals(
-                mRackLeft.getPosition(),
-                State.OUT.getDemand(),
-                State.OUT.getAllowableError())
-                &&
-                Util.epsilonEquals(
-                mRackRight.getPosition(),
-                State.OUT.getDemand(),
-                State.OUT.getAllowableError());
-        Logger.recordOutput("Intake/Rack/Out", out);
+    mRackLeft.writePeriodicOutputs();
+    mRackRight.writePeriodicOutputs();
+  }
 
-        if (out && mDesiredState == State.OUT) {
-            mRackLeft.setDesiredState(State.DISABLED);
-            mRackRight.setDesiredState(State.DISABLED);
-        }
+  @Override
+  public void stop() {
+    mRackLeft.stop();
+    mRackRight.stop();
+  }
 
-        mRackLeft.writePeriodicOutputs();
-        mRackRight.writePeriodicOutputs();
-    }
+  @Override
+  public boolean checkDeviceConfiguration() {
+    return mRackLeft.checkDeviceConfiguration() && mRackRight.checkDeviceConfiguration();
+  }
 
-    @Override
-    public void stop() {
-        mRackLeft.stop();
-        mRackRight.stop();
-    }
+  @Override
+  public boolean checkSystem() {
+    return mRackLeft.checkSystem() && mRackRight.checkSystem();
+  }
 
-    @Override
-    public boolean checkDeviceConfiguration() {
-        return mRackLeft.checkDeviceConfiguration() && mRackRight.checkDeviceConfiguration();
-    }
+  @Override
+  public void outputTelemetry() {
+    mRackLeft.outputTelemetry();
+    mRackRight.outputTelemetry();
+    Logger.recordOutput("Intake/Rack/State", mDesiredState);
+  }
 
-    @Override
-    public boolean checkSystem() {
-        return mRackLeft.checkSystem() && mRackRight.checkSystem();
-    }
+  public void home() {
+    mRackLeft.home();
+    mRackRight.home();
+    mRackLeft.setDesiredState(State.OUT);
+    mRackRight.setDesiredState(State.OUT);
+  }
 
-    @Override
-    public void outputTelemetry() {
-        mRackLeft.outputTelemetry();
-        mRackRight.outputTelemetry();
-        Logger.recordOutput("Intake/Rack/State", mDesiredState);
-    }
-    public void home(){
-        mRackLeft.home();
-        mRackRight.home();
-        mRackLeft.setDesiredState(State.OUT);
-        mRackRight.setDesiredState(State.OUT);
-    }
+  public Request stateRequest(State state) {
+    return new ParallelRequest(
+        new LambdaRequest(
+            () -> {
+              mDesiredState = state;
+              mRackLeft.setHoming(false);
+              mRackRight.setHoming(false);
+              mRackLeft.setDesiredState(state);
+              mRackRight.setDesiredState(state);
+            }));
+  }
 
-    public Request stateRequest(State state) {
-        return new ParallelRequest(
-            new LambdaRequest(() -> {
-                mDesiredState = state;
-                mRackLeft.setHoming(false);
-                mRackRight.setHoming(false);
-                mRackLeft.setDesiredState(state);
-                mRackRight.setDesiredState(state);
-            })
-        );
-    }
-
-    public double getPosition() {
-        return (mRackLeft.getPosition() + mRackRight.getPosition()) / 2.0;
-    }
+  public double getPosition() {
+    return (mRackLeft.getPosition() + mRackRight.getPosition()) / 2.0;
+  }
 }

@@ -26,7 +26,7 @@ public final class ElevatorConstants {
     kClimbServoConstants.kKa = 0.0;
     kClimbServoConstants.kKs = 0.0;
     kClimbServoConstants.kKv = 0.0;
-    kClimbServoConstants.kKg = 0.0; 
+    kClimbServoConstants.kKg = 0.0;
 
     kClimbServoConstants.kCruiseVelocity = 9999.0 / kClimbServoConstants.kRotationsPerUnitDistance;
     kClimbServoConstants.kAcceleration = 300 / kClimbServoConstants.kRotationsPerUnitDistance;

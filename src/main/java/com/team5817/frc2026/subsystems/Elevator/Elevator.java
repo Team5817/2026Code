@@ -14,12 +14,11 @@ public class Elevator extends StateBasedServoMotorSubsystem<Elevator.State> {
   public Elevator(ServoMotorIO io) {
     super(State.ZERO, io, false);
   }
-  
 
   public enum State implements ServoState {
     ZERO(0.0, 0.0),
-    EXTENDED(0.4, 0.02),  
-    RETRACTED(0.1, 0.01);  
+    EXTENDED(0.4, 0.02),
+    RETRACTED(0.1, 0.01);
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -39,7 +38,7 @@ public class Elevator extends StateBasedServoMotorSubsystem<Elevator.State> {
       return ControlState.POSITION;
     }
   }
- 
+
   public Request advanceClimbRequest() {
     System.out.println("Advancing climb from " + mDesiredState);
 

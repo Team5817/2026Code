@@ -13,48 +13,48 @@ public class IntakeConstants {
     public static final ServoConstants kRackRightServoConstants;
 
     static {
-        kRackLeftServoConstants.kName = "Intake/Rack/Left";
+      kRackLeftServoConstants.kName = "Intake/Rack/Left";
 
-        kRackLeftServoConstants.kMainConstants.id = Ports.RACK_LEFT;
-        kRackLeftServoConstants.kMainConstants.counterClockwisePositive = false;
+      kRackLeftServoConstants.kMainConstants.id = Ports.RACK_LEFT;
+      kRackLeftServoConstants.kMainConstants.counterClockwisePositive = false;
 
-        kRackLeftServoConstants.kHomePosition = 0.3175;
-        kRackLeftServoConstants.kRotationsPerUnitDistance = 143.6 * (3.28125 / 11.458);
-        kRackLeftServoConstants.kMaxUnitsLimit = 0.317;
-        kRackLeftServoConstants.kMinUnitsLimit = 0.0;
+      kRackLeftServoConstants.kHomePosition = 0.3175;
+      kRackLeftServoConstants.kRotationsPerUnitDistance = 143.6 * (3.28125 / 11.458);
+      kRackLeftServoConstants.kMaxUnitsLimit = 0.317;
+      kRackLeftServoConstants.kMinUnitsLimit = 0.0;
 
-        kRackLeftServoConstants.kKp = 1.5;
-        kRackLeftServoConstants.kKi = 0.0;
-        kRackLeftServoConstants.kKd = 0.0;
-        kRackLeftServoConstants.kKa = 0;
-        kRackLeftServoConstants.kKs = 0;
-        kRackLeftServoConstants.kKv = 0;
-        kRackLeftServoConstants.kKg = 0;
+      kRackLeftServoConstants.kKp = 1.5;
+      kRackLeftServoConstants.kKi = 0.0;
+      kRackLeftServoConstants.kKd = 0.0;
+      kRackLeftServoConstants.kKa = 0;
+      kRackLeftServoConstants.kKs = 0;
+      kRackLeftServoConstants.kKv = 0;
+      kRackLeftServoConstants.kKg = 0;
 
-        kRackLeftServoConstants.kCruiseVelocity = 1;
-        kRackLeftServoConstants.kAcceleration = 1000000000;
+      kRackLeftServoConstants.kCruiseVelocity = 1;
+      kRackLeftServoConstants.kAcceleration = 1000000000;
 
-        kRackLeftServoConstants.kMaxForwardOutput = 12.0;
-        kRackLeftServoConstants.kMaxReverseOutput = -12.0;
+      kRackLeftServoConstants.kMaxForwardOutput = 12.0;
+      kRackLeftServoConstants.kMaxReverseOutput = -12.0;
 
-        kRackLeftServoConstants.kEnableSupplyCurrentLimit = true;
-        kRackLeftServoConstants.kSupplyCurrentLimit = 80;
-        kRackLeftServoConstants.kEnableStatorCurrentLimit = true;
-        kRackLeftServoConstants.kStatorCurrentLimit = 60;
+      kRackLeftServoConstants.kEnableSupplyCurrentLimit = true;
+      kRackLeftServoConstants.kSupplyCurrentLimit = 80;
+      kRackLeftServoConstants.kEnableStatorCurrentLimit = true;
+      kRackLeftServoConstants.kStatorCurrentLimit = 60;
 
-        kRackLeftServoConstants.kNeutralMode = NeutralModeValue.Coast;
-        kRackLeftServoConstants.kHomingOutput = 0.3;
-        kRackLeftServoConstants.kHomingTimeout = 1.0;
-        kRackLeftServoConstants.kHomingVelocityWindow = .05;
+      kRackLeftServoConstants.kNeutralMode = NeutralModeValue.Coast;
+      kRackLeftServoConstants.kHomingOutput = 0.3;
+      kRackLeftServoConstants.kHomingTimeout = 1.0;
+      kRackLeftServoConstants.kHomingVelocityWindow = .05;
 
-        // Right 
-        kRackRightServoConstants = kRackLeftServoConstants.copy();
-        kRackRightServoConstants.kName = "Intake/Rack/Right";
+      // Right
+      kRackRightServoConstants = kRackLeftServoConstants.copy();
+      kRackRightServoConstants.kName = "Intake/Rack/Right";
 
-        kRackRightServoConstants.kMainConstants.id = Ports.RACK_RIGHT;
-        kRackRightServoConstants.kMainConstants.counterClockwisePositive = true; //TODO Flip maybe
+      kRackRightServoConstants.kMainConstants.id = Ports.RACK_RIGHT;
+      kRackRightServoConstants.kMainConstants.counterClockwisePositive = true; // TODO Flip maybe
     }
-}
+  }
 
   public static final class RollerConstants {
     public static final InterpolatingDoubleTreeMap voltageMap = new InterpolatingDoubleTreeMap();
