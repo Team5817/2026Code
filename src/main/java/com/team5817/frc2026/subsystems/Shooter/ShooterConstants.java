@@ -20,7 +20,7 @@ public class ShooterConstants {
   public static final Translation3d TurretToCam;
   public static final Translation3d robotToTurret;
   public static double TURRET_YAW_SIGN = 1.0;
-  public static double CAMERA_PITCH_DEGREES = -33;
+  public static double CAMERA_PITCH_DEGREES = -25;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_LOB;
   public static final InterpolatingDoubleTreeMap FLYWHEEL_MAP_LOB;
   public static final InterpolatingDoubleTreeMap HOOD_MAP_HUB;
@@ -29,13 +29,13 @@ public class ShooterConstants {
 
   public static Pose2d shooterTransform =
       new Pose2d(
-          Units.inchesToMeters(-2.25), Units.inchesToMeters(4.625), Rotation2d.fromDegrees(0.0));
+          Units.inchesToMeters(-2.25), Units.inchesToMeters(4.63), Rotation2d.fromDegrees(0.0));
 
   static {
     robotToTurret =
         new Translation3d(
-            Units.inchesToMeters(-2.25), Units.inchesToMeters(4.625), Units.inchesToMeters(21));
-    TurretToCam = new Translation3d(Units.inchesToMeters(6.5), 0, 0);
+            Units.inchesToMeters(-2.25), Units.inchesToMeters(4.63), Units.inchesToMeters(19.7));
+    TurretToCam = new Translation3d(Units.inchesToMeters(7.136), 0, 0);
 
     kFlywheelConstants.kMaxForwardOutput = 12.0;
     kFlywheelConstants.kMaxReverseOutput = -12.0;
