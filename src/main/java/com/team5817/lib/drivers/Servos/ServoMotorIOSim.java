@@ -50,8 +50,8 @@ public class ServoMotorIOSim implements ServoMotorIO {
     inputs.velocity_rps = (inputs.position_rots - lastPosRots) / dt;
     lastPosRots = inputs.position_rots;
 
-    inputs.position_units = mConstants.rotationsToHomedUnits(inputs.position_rots);
-    inputs.velocity_unitspS = mConstants.rotationsToHomedUnits(inputs.velocity_rps);
+    inputs.position_units = mConstants.rotationsToUnits(inputs.position_rots);
+    inputs.velocity_unitspS = mConstants.rotationsToUnits(inputs.velocity_rps);
   }
 
   @Override

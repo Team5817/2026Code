@@ -200,8 +200,8 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mServoInputs.rotor_position =
         mConstants.rotationsToUnits(mMain.getPosition().getValue().in(Rotations));
     mServoInputs.position_rots = mMainPositionSignal.asSupplier().get().in(Rotations);
-    mServoInputs.position_units = mConstants.rotationsToHomedUnits(mServoInputs.position_rots);
-    mServoInputs.velocity_unitspS = mConstants.rotationsToHomedUnits(mServoInputs.velocity_rps);
+    mServoInputs.position_units = mConstants.rotationsToUnits(mServoInputs.position_rots);
+    mServoInputs.velocity_unitspS = mConstants.rotationsToUnits(mServoInputs.velocity_rps);
     mServoInputs.active_trajectory_position = mMainClosedLoopReferenceSignal.asSupplier().get();
 
     final double newVelocity = mMainClosedLoopReferenceSlopeSignal.asSupplier().get();

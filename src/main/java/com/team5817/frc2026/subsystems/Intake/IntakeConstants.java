@@ -7,49 +7,54 @@ import com.team5817.lib.drivers.Servos.ServoConstants;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class IntakeConstants {
-  /** Constants related to the Intake Deploy subsystem. */
   public static final class DeployConstants {
-    public static final ServoConstants kRackServoConstants = new ServoConstants();
+
+    public static final ServoConstants kRackLeftServoConstants = new ServoConstants();
+    public static final ServoConstants kRackRightServoConstants;
 
     static {
-      kRackServoConstants.kName = "Intake/Rack";
+        kRackLeftServoConstants.kName = "Intake/Rack/Left";
 
-      kRackServoConstants.kMainConstants.id = Ports.INTAKE_DEPLOY;
-      kRackServoConstants.kMainConstants.counterClockwisePositive = false;
+        kRackLeftServoConstants.kMainConstants.id = Ports.RACK_LEFT;
+        kRackLeftServoConstants.kMainConstants.counterClockwisePositive = false;
 
-      kRackServoConstants.kHomePosition = 0;
-      kRackServoConstants.kRotationsPerUnitDistance = 143.6 * (3.28125 / 11.458);
-      kRackServoConstants.kMaxUnitsLimit = 0.317;
-      kRackServoConstants.kMinUnitsLimit = 0.0;
+        kRackLeftServoConstants.kHomePosition = 0.3175;
+        kRackLeftServoConstants.kRotationsPerUnitDistance = 143.6 * (3.28125 / 11.458);
+        kRackLeftServoConstants.kMaxUnitsLimit = 0.317;
+        kRackLeftServoConstants.kMinUnitsLimit = 0.0;
 
-      kRackServoConstants.kKp = 1.5;
-      kRackServoConstants.kKi = 0.0;
-      kRackServoConstants.kKd = 0.00;
-      kRackServoConstants.kKa = 0;
-      kRackServoConstants.kKs = 0;
+        kRackLeftServoConstants.kKp = 1.5;
+        kRackLeftServoConstants.kKi = 0.0;
+        kRackLeftServoConstants.kKd = 0.0;
+        kRackLeftServoConstants.kKa = 0;
+        kRackLeftServoConstants.kKs = 0;
+        kRackLeftServoConstants.kKv = 0;
+        kRackLeftServoConstants.kKg = 0;
 
-      kRackServoConstants.kKv = 0;
-      kRackServoConstants.kKg = 0;
+        kRackLeftServoConstants.kCruiseVelocity = 1;
+        kRackLeftServoConstants.kAcceleration = 1000000000;
 
-      kRackServoConstants.kCruiseVelocity = 1;
+        kRackLeftServoConstants.kMaxForwardOutput = 12.0;
+        kRackLeftServoConstants.kMaxReverseOutput = -12.0;
 
-      kRackServoConstants.kAcceleration = 1000000000;
+        kRackLeftServoConstants.kEnableSupplyCurrentLimit = true;
+        kRackLeftServoConstants.kSupplyCurrentLimit = 80;
+        kRackLeftServoConstants.kEnableStatorCurrentLimit = true;
+        kRackLeftServoConstants.kStatorCurrentLimit = 60;
 
-      kRackServoConstants.kMaxForwardOutput = 12.0;
-      kRackServoConstants.kMaxReverseOutput = -12.0;
+        kRackLeftServoConstants.kNeutralMode = NeutralModeValue.Coast;
+        kRackLeftServoConstants.kHomingOutput = 0.3;
+        kRackLeftServoConstants.kHomingTimeout = 1.0;
+        kRackLeftServoConstants.kHomingVelocityWindow = .05;
 
-      kRackServoConstants.kEnableSupplyCurrentLimit = true;
-      kRackServoConstants.kSupplyCurrentLimit = 80; // amps
+        // Right 
+        kRackRightServoConstants = kRackLeftServoConstants.copy();
+        kRackRightServoConstants.kName = "Intake/Rack/Right";
 
-      kRackServoConstants.kEnableStatorCurrentLimit = true;
-      kRackServoConstants.kStatorCurrentLimit = 60; // amps
-
-      kRackServoConstants.kNeutralMode = NeutralModeValue.Coast;
-      kRackServoConstants.kHomingOutput = -.3;
-      kRackServoConstants.kHomingTimeout = 0.2;
-      kRackServoConstants.kHomingVelocityWindow = 5;
+        kRackRightServoConstants.kMainConstants.id = Ports.RACK_RIGHT;
+        kRackRightServoConstants.kMainConstants.counterClockwisePositive = true; //TODO Flip maybe
     }
-  }
+}
 
   public static final class RollerConstants {
     public static final InterpolatingDoubleTreeMap voltageMap = new InterpolatingDoubleTreeMap();

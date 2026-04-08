@@ -81,7 +81,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
     applyVoltage(mConstants.kHomingOutput * 12);
     if (mHomingDebounce.update(
         Timer.getFPGATimestamp(), Math.abs(getVelocity()) < mConstants.kHomingVelocityWindow)) {
-      forceZero();
+      zeroSensors(mConstants.kHomePosition);
       mHomingDebounce = new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
       setPositionSetpoint(mConstants.kHomePosition);
       mHoming = false;
@@ -158,19 +158,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   public double getSetpoint() {
     return (mControlState == ControlState.POSITION
             || mControlState == ControlState.POSITION_VOLTAGE)
-        ? mConstants.rotationsToHomedUnits(demand)
-        : Double.NaN;
-  }
-
-  /**
-   * Gets the setpoint in homed units.
-   *
-   * @return The setpoint in homed units.
-   */
-  public double getSetpointHomed() {
-    return (mControlState == ControlState.POSITION
-            || mControlState == ControlState.POSITION_VOLTAGE)
-        ? mConstants.rotationsToHomedUnits(demand)
+        ? mConstants.rotationsToUnits(demand)
         : Double.NaN;
   }
 
@@ -180,7 +168,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @param units The setpoint in units.
    */
   public void setPositionSetpoint(double units) {
-    demand = constrainRotations(mConstants.homeAwareUnitsToRotations(units));
+    demand = constrainRotations(mConstants.unitsToRotations(units));
     if (mControlState != ControlState.POSITION) {
       mControlState = ControlState.POSITION;
     }
@@ -193,7 +181,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @param units The setpoint in units.
    */
   public void setPositionVoltageSetpoint(double units) {
-    demand = constrainRotations(mConstants.homeAwareUnitsToRotations(units));
+    demand = constrainRotations(mConstants.unitsToRotations(units));
     if (mControlState != ControlState.POSITION_VOLTAGE) {
       mControlState = ControlState.POSITION_VOLTAGE;
     }
@@ -230,7 +218,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
    * @return The active trajectory position.
    */
   public double getActiveTrajectoryPosition() {
-    return mConstants.rotationsToHomedUnits((mServoInputs.active_trajectory_position));
+    return mConstants.rotationsToUnits((mServoInputs.active_trajectory_position));
   }
 
   /**
@@ -292,7 +280,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   @Override
   public void outputTelemetry() {
     Logger.recordOutput(mConstants.kName + "/Control Mode", mControlState);
-    Logger.recordOutput(mConstants.kName + "/Demand", mConstants.rotationsToUnits(demand));
+    Logger.recordOutput(mConstants.kName + "/Demand", mControlState == ControlState.VOLTAGE ? demand : mConstants.rotationsToUnits(demand));
     Logger.recordOutput(mConstants.kName + "/Homing", mHoming);
   }
 

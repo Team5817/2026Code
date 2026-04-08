@@ -31,8 +31,9 @@ public class Ports {
   public static final CanDeviceId BR_CANCODER = new CanDeviceId(4, "canivore1");
 
   /* SUBSYSTEM CAN DEVICE IDS*/
-  public static final CanDeviceId INTAKE_DEPLOY = new CanDeviceId(9);
-  public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(10);
+  public static final CanDeviceId RACK_LEFT = new CanDeviceId(9);
+  public static final CanDeviceId RACK_RIGHT = new CanDeviceId(10);
+  public static final CanDeviceId INTAKE_ROLLERS = new CanDeviceId(11);
 
   public static final CanDeviceId SPINDEXER = new CanDeviceId(13);
   public static final CanDeviceId TUNNEL = new CanDeviceId(14);

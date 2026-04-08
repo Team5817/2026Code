@@ -69,17 +69,6 @@ public class ServoConstants {
   }
 
   /**
-   * Converts rotations to homed units.
-   *
-   * @param rotations The rotations.
-   * @return The homed units.
-   */
-  protected double rotationsToHomedUnits(double rotations) {
-    double val = rotationsToUnits(rotations);
-    return val + kHomePosition;
-  }
-
-  /**
    * Converts units to rotations.
    *
    * @param units The units.
@@ -89,21 +78,56 @@ public class ServoConstants {
     return units * kRotationsPerUnitDistance;
   }
 
-  /**
-   * Converts home-aware units to rotations.
-   *
-   * @param units The units.
-   * @return The rotations.
-   */
-  protected double homeAwareUnitsToRotations(double units) {
-    return unitsToRotations(units - kHomePosition);
-  }
 
   public double getForwardSoftLimitRotations() {
-    return (((kMaxUnitsLimit - kHomePosition) * kRotationsPerUnitDistance) - kSoftLimitDeadband);
+    return (((kMaxUnitsLimit) * kRotationsPerUnitDistance) - kSoftLimitDeadband);
   }
 
   public double getReverseSoftLimitRotations() {
-    return (((kMinUnitsLimit - kHomePosition) * kRotationsPerUnitDistance) + kSoftLimitDeadband);
+    return (((kMinUnitsLimit) * kRotationsPerUnitDistance) + kSoftLimitDeadband);
+  }
+  public ServoConstants copy(){
+    ServoConstants copy = new ServoConstants();
+    copy.kName = this.kName;
+    copy.kLooperDt = this.kLooperDt;
+    copy.kCANTimeout = this.kCANTimeout;
+    copy.kLongCANTimeoutMs = this.kLongCANTimeoutMs;
+    copy.kMainConstants = this.kMainConstants;
+    copy.kFollowerConstants = this.kFollowerConstants;
+    copy.kGravityType = this.kGravityType;
+    copy.kNeutralMode = this.kNeutralMode;
+    copy.kHomePosition = this.kHomePosition;
+    copy.kRotationsPerUnitDistance = this.kRotationsPerUnitDistance;
+    copy.kSoftLimitDeadband = this.kSoftLimitDeadband;
+    copy.kKp = this.kKp;
+    copy.kKi = this.kKi;
+    copy.kKd = this.kKd;
+    copy.kKv = this.kKv;
+    copy.kKa = this.kKa;
+    copy.kKs = this.kKs;
+    copy.kKg = this.kKg;
+    copy.kDeadband = this.kDeadband;
+    copy.kPositionKp = this.kPositionKp;
+    copy.kPositionKi = this.kPositionKi;
+    copy.kPositionKd = this.kPositionKd;
+    copy.kVelocityFeedforward = this.kVelocityFeedforward;
+    copy.kArbitraryFeedforward = this.kArbitraryFeedforward;
+    copy.kCruiseVelocity = this.kCruiseVelocity;
+    copy.kAcceleration = this.kAcceleration;
+    copy.kJerk = this.kJerk;
+    copy.kRampRate = this.kRampRate;
+    copy.kSupplyCurrentLimit = this.kSupplyCurrentLimit;
+    copy.kEnableSupplyCurrentLimit = this.kEnableSupplyCurrentLimit;
+    copy.kStatorCurrentLimit = this.kStatorCurrentLimit;
+    copy.kEnableStatorCurrentLimit = this.kEnableStatorCurrentLimit;
+    copy.kMaxForwardOutput = this.kMaxForwardOutput;
+    copy.kMaxReverseOutput = this.kMaxReverseOutput;
+    copy.kFollowerOpposeMasterDirection = this.kFollowerOpposeMasterDirection;
+    copy.kMaxUnitsLimit = this.kMaxUnitsLimit;
+    copy.kMinUnitsLimit = this.kMinUnitsLimit;
+    copy.kHomingTimeout = this.kHomingTimeout;
+    copy.kHomingVelocityWindow = this.kHomingVelocityWindow;
+    copy.kHomingOutput = this.kHomingOutput;
+    return copy;
   }
 }
