@@ -25,7 +25,7 @@ public class AutoModeFactory {
     DO_NOTHING,
     CLOSE_SWEEP,
     MT_SCOOP,
-    COUNTER_1323,
+    MT_COUNTER,
     D,
     CD,
     PL,
@@ -38,13 +38,13 @@ public class AutoModeFactory {
         DesiredMode.DO_NOTHING,
         DesiredMode.CLOSE_SWEEP,
         DesiredMode.MT_SCOOP,
-        DesiredMode.COUNTER_1323),
+        DesiredMode.MT_COUNTER),
     TRENCH_D(
         DesiredMode.DO_NOTHING,
         DesiredMode.CLOSE_SWEEP,
         DesiredMode.MT_SCOOP,
         DesiredMode.D,
-        DesiredMode.COUNTER_1323),
+        DesiredMode.MT_COUNTER),
     CENTER(
         DesiredMode.DO_NOTHING,
         DesiredMode.CD,
@@ -123,7 +123,7 @@ public class AutoModeFactory {
       case MT_SCOOP:
         return Optional.of(new MT(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 
-      case COUNTER_1323:
+      case MT_COUNTER:
         return Optional.of(
             new MTC(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 

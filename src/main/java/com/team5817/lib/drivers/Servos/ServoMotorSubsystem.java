@@ -46,7 +46,7 @@ public abstract class ServoMotorSubsystem extends Subsystem {
   protected ServoMotorSubsystem(ServoMotorIO io) {
     this.io = io;
     mConstants = io.getConstants();
-    mHomingDebounce = new DelayedBoolean(Timer.getFPGATimestamp(), mConstants.kHomingTimeout);
+    mHomingDebounce = new DelayedBoolean(Timer.getTimestamp(), mConstants.kHomingTimeout);
     forceZero();
   }
 

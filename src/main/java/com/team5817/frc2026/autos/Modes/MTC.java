@@ -7,7 +7,6 @@ import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
@@ -17,7 +16,6 @@ public class MTC extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
-  private Shield e;
   private Shooter sh;
   private ShootingPlanner p;
 
@@ -26,35 +24,14 @@ public class MTC extends AutoBase {
     this.su = s;
     this.sh = s.mShooter;
     this.p = sh.getPlanner();
-    this.e = s.mShield;
 
     Trajectory Intake1;
-    Trajectory Return1;
-    Trajectory Intake2;
-    Trajectory Return2;
-    Trajectory ReturnShoot2;
-    Trajectory TelePrep;
+    Trajectory ReturnShoot1;
 
-    Intake1 = l.trajectories.get("SHToMT1");
-    Return1 = l.trajectories.get("MT1ToHS");
-    ReturnShoot2 = l.trajectories.get("CNE2ToNSHOT");
-
-    if (isClose) {
-      Intake2 = l.trajectories.get("HSToCNE2");
-      {
-        Return2 = l.trajectories.get("CNE2ToNSHOT");
-      }
-
-    } else {
-      Intake2 = l.trajectories.get("HSToNE2");
-      {
-        Return2 = l.trajectories.get("NE2ToHS");
-      }
-    }
-
-    TelePrep = l.trajectories.get("NSHOTToNE2");
-
-    t = new TrajectorySet(!isHumanSide, Intake2, Return2, TelePrep);
+    Intake1 = l.trajectories.get("HSToCNE2");
+    ReturnShoot1 = l.trajectories.get("CNE2ToNSHOT");
+    
+    t = new TrajectorySet(!isHumanSide, Intake1, ReturnShoot1);
   }
 
   @Override
@@ -72,9 +49,8 @@ public class MTC extends AutoBase {
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), -.3, d));
 
-    r(new TrajectoryAction(t.next(), 1.5, d));
+    r(new TrajectoryAction(t.next(), 1.0, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
-    r(new ShootAction(7, su, 3));
-    r(new TrajectoryAction(t.next(), d));
+    r(new ShootAction(8, su, 3));
   }
 }
