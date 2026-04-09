@@ -30,7 +30,7 @@ public class MTC extends AutoBase {
 
     Intake1 = l.trajectories.get("HSToCNE2");
     ReturnShoot1 = l.trajectories.get("CNE2ToNSHOT");
-    
+
     t = new TrajectorySet(!isHumanSide, Intake1, ReturnShoot1);
   }
 
