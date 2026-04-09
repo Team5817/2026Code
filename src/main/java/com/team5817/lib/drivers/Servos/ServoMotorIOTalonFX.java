@@ -76,19 +76,19 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     mMainClosedLoopOutputSignal = mMain.getClosedLoopOutput();
     mMainClosedLoopReferenceSlopeSignal = mMain.getClosedLoopReferenceSlope();
 
-    Phoenix6Util.checkErrorAndRetry(() -> mMainPositionSignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainVelocitySignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopError.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainStatorCurrentSignal.setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMainOutputVoltageSignal.setUpdateFrequency(200, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainPositionSignal.setUpdateFrequency(50, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainVelocitySignal.setUpdateFrequency(20, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopError.setUpdateFrequency(4, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainStatorCurrentSignal.setUpdateFrequency(20, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainOutputVoltageSignal.setUpdateFrequency(20, 0.05));
     Phoenix6Util.checkErrorAndRetry(
-        () -> mMainOutputPercentageSignal.setUpdateFrequency(200, 0.05));
+        () -> mMainOutputPercentageSignal.setUpdateFrequency(4, 0.05));
     Phoenix6Util.checkErrorAndRetry(
-        () -> mMainClosedLoopReferenceSignal.setUpdateFrequency(200, 0.05));
+        () -> mMainClosedLoopReferenceSignal.setUpdateFrequency(4, 0.05));
     Phoenix6Util.checkErrorAndRetry(
-        () -> mMainClosedLoopOutputSignal.setUpdateFrequency(200, 0.05));
+        () -> mMainClosedLoopOutputSignal.setUpdateFrequency(4, 0.05));
     Phoenix6Util.checkErrorAndRetry(
-        () -> mMainClosedLoopReferenceSlopeSignal.setUpdateFrequency(200, 0.05));
+        () -> mMainClosedLoopReferenceSlopeSignal.setUpdateFrequency(4, 0.05));
 
     mMainConfig = TalonFXFactory.getDefaultConfig();
 
@@ -175,6 +175,7 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
       TalonUtil.applyAndCheckConfiguration(follower, followerConfig);
     }
     TalonUtil.applyAndCheckConfiguration(mMain, mMainConfig);
+    mMain.optimizeBusUtilization();
   }
 
   @Override

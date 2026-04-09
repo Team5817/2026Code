@@ -120,20 +120,20 @@ public class RobotContainer {
 
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-    mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
+    mElevator = new Elevator(new ServoMotorIOTalonFX(ElevatorConstants.kShieldServoConstants));
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
 
   public void fillInSimulatedSubsytems() {
 
-    driveSimulation =
+    if(mDrive == null) driveSimulation =
         new SwerveDriveSimulation(
             SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
     if (mDrive == null) SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
     if (mElevator == null)
-      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
+      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kShieldServoConstants));
 
     if (mIntake == null)
       mIntake =
@@ -202,7 +202,7 @@ public class RobotContainer {
               mVision::timeSinceUpdate);
 
     if (mElevator == null)
-      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kClimbServoConstants));
+      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kShieldServoConstants));
 
     if (mLight == null) mLight = new Lights(new LightsIOSim());
   }

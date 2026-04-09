@@ -10,7 +10,7 @@ public class IntakeConstants {
   public static final class DeployConstants {
 
     public static final ServoConstants kRackLeftServoConstants = new ServoConstants();
-    public static final ServoConstants kRackRightServoConstants;
+    public static final ServoConstants kRackRightServoConstants = new ServoConstants();
 
     static {
       kRackLeftServoConstants.kName = "Intake/Rack/Left";
@@ -47,12 +47,39 @@ public class IntakeConstants {
       kRackLeftServoConstants.kHomingTimeout = 1.0;
       kRackLeftServoConstants.kHomingVelocityWindow = .05;
 
-      // Right
-      kRackRightServoConstants = kRackLeftServoConstants.copy();
       kRackRightServoConstants.kName = "Intake/Rack/Right";
 
       kRackRightServoConstants.kMainConstants.id = Ports.RACK_RIGHT;
-      kRackRightServoConstants.kMainConstants.counterClockwisePositive = true; // TODO Flip maybe
+      kRackRightServoConstants.kMainConstants.counterClockwisePositive = true;
+
+      kRackRightServoConstants.kHomePosition = 0.3175;
+      kRackRightServoConstants.kRotationsPerUnitDistance = 143.6 * (3.28125 / 11.458);
+      kRackRightServoConstants.kMaxUnitsLimit = 0.317;
+      kRackRightServoConstants.kMinUnitsLimit = 0.0;
+
+      kRackRightServoConstants.kKp = 1.5;
+      kRackRightServoConstants.kKi = 0.0;
+      kRackRightServoConstants.kKd = 0.0;
+      kRackRightServoConstants.kKa = 0;
+      kRackRightServoConstants.kKs = 0;
+      kRackRightServoConstants.kKv = 0;
+      kRackRightServoConstants.kKg = 0;
+
+      kRackRightServoConstants.kCruiseVelocity = 1;
+      kRackRightServoConstants.kAcceleration = 1000000000;
+
+      kRackRightServoConstants.kMaxForwardOutput = 12.0;
+      kRackRightServoConstants.kMaxReverseOutput = -12.0;
+
+      kRackRightServoConstants.kEnableSupplyCurrentLimit = true;
+      kRackRightServoConstants.kSupplyCurrentLimit = 80;
+      kRackRightServoConstants.kEnableStatorCurrentLimit = true;
+      kRackRightServoConstants.kStatorCurrentLimit = 60;
+
+      kRackRightServoConstants.kNeutralMode = NeutralModeValue.Coast;
+      kRackRightServoConstants.kHomingOutput = 0.3;
+      kRackRightServoConstants.kHomingTimeout = 1.0;
+      kRackRightServoConstants.kHomingVelocityWindow = .05;
     }
   }
 

@@ -45,9 +45,6 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
     this.reduction = reduction;
     mMain = new TalonFX(id.getDeviceNumber(), id.getBus());
 
-    Phoenix6Util.checkErrorAndRetry(() -> mMain.getBridgeOutput().setUpdateFrequency(200, 0.05));
-    Phoenix6Util.checkErrorAndRetry(() -> mMain.getFault_Hardware().setUpdateFrequency(4, 0.05));
-
     config = TalonFXFactory.getDefaultConfig();
 
     config.Slot0.kP = mConstants.kKp;
@@ -98,7 +95,7 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
         5,
         () ->
             BaseStatusSignal.setUpdateFrequencyForAll(
-                50.0,
+                8.0,
                 position,
                 velocity,
                 appliedVoltage,
@@ -106,8 +103,6 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
                 torqueCurrent,
                 tempCelsius,
                 tempFault));
-
-    PhoenixUtil.tryUntilOk(5, () -> mMain.optimizeBusUtilization(0, 1.0));
 
     if (mConstants.kFollowerID != null) {
       TalonFXFactory.createPermanentFollowerTalon(

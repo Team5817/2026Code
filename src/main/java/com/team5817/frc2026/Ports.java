@@ -43,13 +43,12 @@ public class Ports {
   public static final CanDeviceId TURRET_FLYWHEEL1 = new CanDeviceId(20);
   public static final CanDeviceId TURRET_FLYWHEEL2 = new CanDeviceId(21);
 
-  public static final CanDeviceId ELEVATOR = new CanDeviceId(22);
+  public static final CanDeviceId SHIELD = new CanDeviceId(22);
 
   public static final CanDeviceId TURRET_CANCODER = new CanDeviceId(23);
   public static final CanDeviceId PIGEON = new CanDeviceId(24, "canivore1");
 
   public static final CanDeviceId LEDS = new CanDeviceId(25);
-  // public static final CanDeviceId CLIMB_CANCODER = new CanDeviceId(26, "canivore1"); // TODO
 
   /* BEAM BREAK DIO CHANNELS */
   // public static final int INDEXER_BEAM_BREAK = 0;

@@ -5,45 +5,45 @@ import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 
 public final class ElevatorConstants {
-  public static final ServoConstants kClimbServoConstants = new ServoConstants();
+  public static final ServoConstants kShieldServoConstants = new ServoConstants();
 
   static {
-    kClimbServoConstants.kName = "Climb";
+    kShieldServoConstants.kName = "Shield";
 
-    kClimbServoConstants.kMainConstants.id = Ports.ELEVATOR;
-    kClimbServoConstants.kMainConstants.counterClockwisePositive = false;
+    kShieldServoConstants.kMainConstants.id = Ports.SHIELD;
+    kShieldServoConstants.kMainConstants.counterClockwisePositive = true;
 
-    kClimbServoConstants.kHomePosition = 0; // meters
+    kShieldServoConstants.kHomePosition = 0; // meters
 
-    kClimbServoConstants.kRotationsPerUnitDistance = 1.0;
+    kShieldServoConstants.kRotationsPerUnitDistance = 8.09/.32;
 
-    kClimbServoConstants.kMaxUnitsLimit = 1.0;
-    kClimbServoConstants.kMinUnitsLimit = 0.0;
+    kShieldServoConstants.kMaxUnitsLimit = .32;
+    kShieldServoConstants.kMinUnitsLimit = 0.0;
 
-    kClimbServoConstants.kKp = 0.0;
-    kClimbServoConstants.kKi = 0.0;
-    kClimbServoConstants.kKd = 0.0;
-    kClimbServoConstants.kKa = 0.0;
-    kClimbServoConstants.kKs = 0.0;
-    kClimbServoConstants.kKv = 0.0;
-    kClimbServoConstants.kKg = 0.0;
+    kShieldServoConstants.kKp = 1.8;
+    kShieldServoConstants.kKi = 0.0;
+    kShieldServoConstants.kKd = 0.0;
+    kShieldServoConstants.kKa = 0.0;
+    kShieldServoConstants.kKs = 0.0;
+    kShieldServoConstants.kKv = 0.0;
+    kShieldServoConstants.kKg = 0.0;
 
-    kClimbServoConstants.kCruiseVelocity = 9999.0 / kClimbServoConstants.kRotationsPerUnitDistance;
-    kClimbServoConstants.kAcceleration = 300 / kClimbServoConstants.kRotationsPerUnitDistance;
+    kShieldServoConstants.kCruiseVelocity = 15.0 / kShieldServoConstants.kRotationsPerUnitDistance;
+    kShieldServoConstants.kAcceleration = 999 / kShieldServoConstants.kRotationsPerUnitDistance;
 
-    kClimbServoConstants.kMaxForwardOutput = 12.0;
-    kClimbServoConstants.kMaxReverseOutput = -12.0;
+    kShieldServoConstants.kMaxForwardOutput = 12.0;
+    kShieldServoConstants.kMaxReverseOutput = -12.0;
 
-    kClimbServoConstants.kEnableSupplyCurrentLimit = true;
-    kClimbServoConstants.kSupplyCurrentLimit = 40; // amps
+    kShieldServoConstants.kEnableSupplyCurrentLimit = true;
+    kShieldServoConstants.kSupplyCurrentLimit = 30; // amps
 
-    kClimbServoConstants.kEnableStatorCurrentLimit = true;
-    kClimbServoConstants.kStatorCurrentLimit = 80; // amps
+    kShieldServoConstants.kEnableStatorCurrentLimit = true;
+    kShieldServoConstants.kStatorCurrentLimit = 30; // amps
 
-    kClimbServoConstants.kNeutralMode = NeutralModeValue.Brake;
+    kShieldServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
-    kClimbServoConstants.kHomingTimeout = 0.5;
-    kClimbServoConstants.kHomingOutput = -.25;
-    kClimbServoConstants.kHomingVelocityWindow = 0.1;
+    kShieldServoConstants.kHomingTimeout = 0.5;
+    kShieldServoConstants.kHomingOutput = -.25;
+    kShieldServoConstants.kHomingVelocityWindow = 0.1;
   }
 }
