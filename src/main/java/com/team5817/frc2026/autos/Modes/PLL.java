@@ -46,7 +46,7 @@ public class PLL extends AutoBase {
     r(new TrajectoryAction(t.next(), d));
     r(new ShootAction(4, su));
 
-    r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d) )));
+    r(new ParallelAction(List.of(new TrajectoryAction(t.next(), d))));
     r(new TrajectoryAction(t.next(), d));
   }
 }

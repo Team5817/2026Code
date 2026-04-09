@@ -111,7 +111,6 @@ public class DriverControls {
     if (driver.getPOV() == 180) {
       s.mShield.zeroRequest().act();
     }
-
   }
 
   CustomXboxController driver;

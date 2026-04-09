@@ -81,12 +81,10 @@ public class ServoMotorIOTalonFX implements ServoMotorIO {
     Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopError.setUpdateFrequency(4, 0.05));
     Phoenix6Util.checkErrorAndRetry(() -> mMainStatorCurrentSignal.setUpdateFrequency(20, 0.05));
     Phoenix6Util.checkErrorAndRetry(() -> mMainOutputVoltageSignal.setUpdateFrequency(20, 0.05));
-    Phoenix6Util.checkErrorAndRetry(
-        () -> mMainOutputPercentageSignal.setUpdateFrequency(4, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainOutputPercentageSignal.setUpdateFrequency(4, 0.05));
     Phoenix6Util.checkErrorAndRetry(
         () -> mMainClosedLoopReferenceSignal.setUpdateFrequency(4, 0.05));
-    Phoenix6Util.checkErrorAndRetry(
-        () -> mMainClosedLoopOutputSignal.setUpdateFrequency(4, 0.05));
+    Phoenix6Util.checkErrorAndRetry(() -> mMainClosedLoopOutputSignal.setUpdateFrequency(4, 0.05));
     Phoenix6Util.checkErrorAndRetry(
         () -> mMainClosedLoopReferenceSlopeSignal.setUpdateFrequency(4, 0.05));
 

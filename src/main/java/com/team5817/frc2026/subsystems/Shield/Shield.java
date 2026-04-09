@@ -5,7 +5,6 @@ import com.team5817.lib.drivers.Servos.ServoMotorIO;
 import com.team5817.lib.drivers.Servos.ServoState;
 import com.team5817.lib.drivers.Servos.StateBasedServoMotorSubsystem;
 import com.team5817.lib.requests.Request;
-
 import lombok.Getter;
 
 public class Shield extends StateBasedServoMotorSubsystem<Shield.State> {
@@ -38,17 +37,17 @@ public class Shield extends StateBasedServoMotorSubsystem<Shield.State> {
     }
   }
 
-    public Request advanceShieldRequest() {
-      if (mDesiredState == State.EXTENDED) {
-        return stateRequest(State.RETRACTED);
-      } else {
-        return stateRequest(State.EXTENDED);
-      }
+  public Request advanceShieldRequest() {
+    if (mDesiredState == State.EXTENDED) {
+      return stateRequest(State.RETRACTED);
+    } else {
+      return stateRequest(State.EXTENDED);
     }
+  }
 
-    public Request zeroRequest() {
-      return stateRequest(State.ZERO);
-    }
+  public Request zeroRequest() {
+    return stateRequest(State.ZERO);
+  }
 
   @Override
   public void outputTelemetry() {

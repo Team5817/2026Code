@@ -90,8 +90,7 @@ public class RobotContainer {
 
     mIndexer =
         new Indexer(
-            new RollerSubsystemIOTalonFX(
-                Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2), 
+            new RollerSubsystemIOTalonFX(Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2),
             new RollerSubsystemIOTalonFX(Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
 
     mShooter =
@@ -102,8 +101,7 @@ public class RobotContainer {
                 Ports.TURRET_FLYWHEEL1, ShooterConstants.kFlywheelConstants, 1),
             mDrive::getPose,
             mDrive::getChassisSpeeds,
-            () -> 0.0 
-            );
+            () -> 0.0);
 
     mVision =
         new Vision(
@@ -127,9 +125,10 @@ public class RobotContainer {
 
   public void fillInSimulatedSubsytems() {
 
-    if(mDrive == null) driveSimulation =
-        new SwerveDriveSimulation(
-            SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
+    if (mDrive == null)
+      driveSimulation =
+          new SwerveDriveSimulation(
+              SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
     if (mDrive == null) SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
     if (mShield == null)
