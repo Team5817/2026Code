@@ -1,6 +1,5 @@
 package com.team5817.frc2026.Controls;
 
-import com.team5817.frc2026.field.AlignmentPoint.AlignmentType;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
@@ -103,21 +102,16 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Climb Down
-    if (driver.POV180.wasActivated()) {
-      s.mElevator.advanceClimbRequest().act();
+    // Shield Extend
+    if (driver.getXButtonPressed()) {
+      s.mShield.advanceShieldRequest().act();
     }
 
-    // Climb Zero
-    if (driver.POV0.wasActivated()) {
-      s.mElevator.resetClimbStages();
+    // Shield Zero
+    if (driver.getPOV() == 180) {
+      s.mShield.zeroRequest().act();
     }
 
-    if (driver.POV270.isBeingPressed()) {
-      d.autoAlign(AlignmentType.CLIMB_PREP);
-    } else if (driver.POV90.isBeingPressed()) {
-      d.autoAlign(AlignmentType.CLIMB_ENTRY);
-    } else d.setAutoAlignFinishedOverride(true);
   }
 
   CustomXboxController driver;

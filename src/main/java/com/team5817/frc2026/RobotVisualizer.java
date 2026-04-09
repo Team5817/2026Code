@@ -104,7 +104,7 @@ public class RobotVisualizer {
   }
 
   /* ================= CLIMB ================= */
-  public static void updateClimb(double angleDeg) {
+  public static void updateShield(double angleDeg) {
     mechanismPoses[9] =
         new Pose3d(
             -0.261, 0.0, 0.4614, new Rotation3d(0, Units.degreesToRadians(-140 + angleDeg), 0));

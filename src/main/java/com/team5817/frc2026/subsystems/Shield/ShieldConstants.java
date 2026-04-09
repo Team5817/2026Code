@@ -1,10 +1,10 @@
-package com.team5817.frc2026.subsystems.Elevator;
+package com.team5817.frc2026.subsystems.Shield;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team5817.frc2026.Ports;
 import com.team5817.lib.drivers.Servos.ServoConstants;
 
-public final class ElevatorConstants {
+public final class ShieldConstants {
   public static final ServoConstants kShieldServoConstants = new ServoConstants();
 
   static {

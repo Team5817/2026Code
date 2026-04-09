@@ -2,10 +2,10 @@ package com.team5817.frc2026.subsystems;
 
 import com.team5817.frc2026.ActiveTracker;
 import com.team5817.frc2026.subsystems.Drive.Drive;
-import com.team5817.frc2026.subsystems.Elevator.Elevator;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Lights.Lights;
+import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.drivers.Subsystem;
@@ -28,7 +28,7 @@ public class Superstructure extends Subsystem {
   public Shooter mShooter;
   public Intake mIntake;
   public Indexer mIndexer;
-  public Elevator mElevator;
+  public Shield mShield;
   public Lights mLights;
 
   @Setter private boolean allowAutoShoot = true;
@@ -38,13 +38,13 @@ public class Superstructure extends Subsystem {
       Intake intake,
       Indexer spindexerGroup,
       Shooter shooter,
-      Elevator elevator,
+      Shield shield,
       Lights lights) {
     mDrive = drive;
     mIntake = intake;
     mIndexer = spindexerGroup;
     mShooter = shooter;
-    mElevator = elevator;
+    mShield = shield;
     mLights = lights;
     this.requestExecutor = new RequestExecutor();
   }
@@ -78,7 +78,7 @@ public class Superstructure extends Subsystem {
       mLights.setLeds(LEDState.TWINKLE_WHITE);
       return;
     }
-    if (mElevator.getDesiredState() != Elevator.State.ZERO) {
+    if (mShield.getDesiredState() != Shield.State.ZERO) {
       mLights.setLeds(LEDState.RAINBOW);
       return;
     }

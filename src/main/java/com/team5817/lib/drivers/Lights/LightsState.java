@@ -48,11 +48,3 @@ public class LightsState {
     }
   }
 }
-
-/*Idle: White
-Not Locked: Yellow
-Locked: Green
-Dual mode: Fire
-Climb: Purple
-Hopper empty: Flash Orange
-Alliance shift: Red or Blue */

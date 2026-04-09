@@ -6,13 +6,13 @@ import com.team254.lib.geometry.Translation2d;
 import com.team5817.frc2026.generated.TunerConstants;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Drive.SwerveConstants;
-import com.team5817.frc2026.subsystems.Elevator.Elevator;
-import com.team5817.frc2026.subsystems.Elevator.ElevatorConstants;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Indexer.IndexerConstants;
 import com.team5817.frc2026.subsystems.Intake.Intake;
 import com.team5817.frc2026.subsystems.Intake.IntakeConstants;
 import com.team5817.frc2026.subsystems.Lights.Lights;
+import com.team5817.frc2026.subsystems.Shield.Shield;
+import com.team5817.frc2026.subsystems.Shield.ShieldConstants;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Shooter.ShooterConstants;
 import com.team5817.frc2026.subsystems.Superstructure;
@@ -44,7 +44,7 @@ public class RobotContainer {
   public Indexer mIndexer = null;
   public Shooter mShooter = null;
   public Vision mVision = null;
-  public Elevator mElevator = null;
+  public Shield mShield = null;
   public Lights mLight = null;
   public Superstructure mSuperstructure = null;
 
@@ -63,10 +63,10 @@ public class RobotContainer {
     fillInSimulatedSubsytems();
     SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-    mSuperstructure = new Superstructure(mDrive, mIntake, mIndexer, mShooter, mElevator, mLight);
+    mSuperstructure = new Superstructure(mDrive, mIntake, mIndexer, mShooter, mShield, mLight);
 
     mSubsystemManager.setSubsystems(
-        mDrive, mSuperstructure, mVision, mIntake, mShooter, mIndexer, mElevator, mLight);
+        mDrive, mSuperstructure, mVision, mIntake, mShooter, mIndexer, mShield, mLight);
   }
 
   public void makeRealRobot() {
@@ -91,7 +91,7 @@ public class RobotContainer {
     mIndexer =
         new Indexer(
             new RollerSubsystemIOTalonFX(
-                Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2), // TODO placeholder
+                Ports.SPINDEXER, IndexerConstants.kSpindexerConstants, 2), 
             new RollerSubsystemIOTalonFX(Ports.TUNNEL, IndexerConstants.kTunnelConstants, 1));
 
     mShooter =
@@ -102,7 +102,7 @@ public class RobotContainer {
                 Ports.TURRET_FLYWHEEL1, ShooterConstants.kFlywheelConstants, 1),
             mDrive::getPose,
             mDrive::getChassisSpeeds,
-            () -> 0.0 // placeholder for vision timing supplier
+            () -> 0.0 
             );
 
     mVision =
@@ -120,7 +120,7 @@ public class RobotContainer {
 
     mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
-    mElevator = new Elevator(new ServoMotorIOTalonFX(ElevatorConstants.kShieldServoConstants));
+    mShield = new Shield(new ServoMotorIOTalonFX(ShieldConstants.kShieldServoConstants));
   }
 
   public void wasteVision(Optional<Translation2d> gamepiecePoseMeters, double timestampSeconds) {}
@@ -132,8 +132,8 @@ public class RobotContainer {
             SwerveConstants.driveConfig, new Pose2d(3, 3, new Rotation2d()).wpi());
     if (mDrive == null) SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation);
 
-    if (mElevator == null)
-      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kShieldServoConstants));
+    if (mShield == null)
+      mShield = new Shield(new ServoMotorIOSim(ShieldConstants.kShieldServoConstants));
 
     if (mIntake == null)
       mIntake =
@@ -201,8 +201,8 @@ public class RobotContainer {
               mDrive::getChassisSpeeds,
               mVision::timeSinceUpdate);
 
-    if (mElevator == null)
-      mElevator = new Elevator(new ServoMotorIOSim(ElevatorConstants.kShieldServoConstants));
+    if (mShield == null)
+      mShield = new Shield(new ServoMotorIOSim(ShieldConstants.kShieldServoConstants));
 
     if (mLight == null) mLight = new Lights(new LightsIOSim());
   }

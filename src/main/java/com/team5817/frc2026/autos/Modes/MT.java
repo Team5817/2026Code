@@ -6,8 +6,8 @@ import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Drive.Drive;
-import com.team5817.frc2026.subsystems.Elevator.Elevator;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
@@ -17,7 +17,7 @@ public class MT extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
-  private Elevator e;
+  private Shield e;
   private Shooter sh;
   private ShootingPlanner p;
 
@@ -26,7 +26,7 @@ public class MT extends AutoBase {
     this.su = s;
     this.sh = s.mShooter;
     this.p = sh.getPlanner();
-    this.e = s.mElevator;
+    this.e = s.mShield;
 
     Trajectory Intake1;
     Trajectory Return1;
