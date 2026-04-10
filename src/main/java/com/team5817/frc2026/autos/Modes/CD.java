@@ -1,7 +1,6 @@
 package com.team5817.frc2026.autos.Modes;
 
 import com.team5817.frc2026.autos.Actions.ShootAction;
-import com.team5817.frc2026.autos.Actions.ShootWhenInZone;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
@@ -37,9 +36,8 @@ public class CD extends AutoBase {
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
     sh.followPlan(false);
 
-    r(new TrajectoryAction(t.next(), 1, d));
-    r(new ShootWhenInZone(3, su, 50));
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
+    r(new TrajectoryAction(t.next(), 1, d));
     r(new TrajectoryAction(t.next(), 1, d));
     r(new ShootAction(6, su, 2));
   }
