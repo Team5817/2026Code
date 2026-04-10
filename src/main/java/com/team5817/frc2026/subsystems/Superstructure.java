@@ -75,13 +75,10 @@ public class Superstructure extends Subsystem {
 
   public void handleLED() {
     if (DriverStation.isDisabled()) {
-      mLights.setLeds(LEDState.TWINKLE_WHITE);
+      mLights.setLeds(LEDState.NONE);
       return;
     }
-    if (mShield.getDesiredState() != Shield.State.ZERO) {
-      mLights.setLeds(LEDState.RAINBOW);
-      return;
-    }
+
     if (ActiveTracker.getShiftInfo().active()) {
       if (ActiveTracker.getShiftInfo().remainingTime() < 5) mLights.setLeds(LEDState.BLINK_BLUE);
       else {

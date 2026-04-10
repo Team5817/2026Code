@@ -10,13 +10,13 @@ import lombok.Getter;
 public class Shield extends StateBasedServoMotorSubsystem<Shield.State> {
 
   public Shield(ServoMotorIO io) {
-    super(State.ZERO, io, false);
+    super(State.ZERO, io, true);
   }
 
   public enum State implements ServoState {
     ZERO(0.0, 0.0),
     EXTENDED(0.4, 0.02),
-    RETRACTED(0.1, 0.01);
+    RETRACTED(0.0, 0.01);
 
     @Getter private double demand = 0;
     @Getter private double allowableError = 0;
@@ -54,4 +54,5 @@ public class Shield extends StateBasedServoMotorSubsystem<Shield.State> {
     RobotVisualizer.updateShield(getPosition());
     super.outputTelemetry();
   }
+
 }
