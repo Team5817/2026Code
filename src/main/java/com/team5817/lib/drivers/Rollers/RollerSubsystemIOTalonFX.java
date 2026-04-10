@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.team254.lib.drivers.CanDeviceId;
-import com.team254.lib.drivers.Phoenix6Util;
 import com.team254.lib.drivers.TalonFXFactory;
 import com.team5817.lib.util.PhoenixUtil;
 import edu.wpi.first.math.util.Units;
@@ -32,7 +31,8 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
   private final StatusSignal<Boolean> tempFault;
 
   private final VoltageOut voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0);
-  private final VelocityDutyCycle velocityOut = new VelocityDutyCycle(0).withUpdateFreqHz(0).withSlot(0);
+  private final VelocityDutyCycle velocityOut =
+      new VelocityDutyCycle(0).withUpdateFreqHz(0).withSlot(0);
   private final TorqueCurrentFOC torqueCurrentOut = new TorqueCurrentFOC(0.0).withUpdateFreqHz(0);
 
   private final TalonFXConfiguration config;
@@ -73,9 +73,10 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
     config.MotorOutput.PeakForwardDutyCycle = mConstants.kMaxForwardOutput / 12.0;
     config.MotorOutput.PeakReverseDutyCycle = mConstants.kMaxReverseOutput / 12.0;
 
-    config.MotorOutput.Inverted = (mConstants.counterClockwisePositive
-        ? InvertedValue.CounterClockwise_Positive
-        : InvertedValue.Clockwise_Positive);
+    config.MotorOutput.Inverted =
+        (mConstants.counterClockwisePositive
+            ? InvertedValue.CounterClockwise_Positive
+            : InvertedValue.Clockwise_Positive);
 
     config.MotorOutput.NeutralMode = mConstants.kNeutralMode;
 
@@ -91,22 +92,16 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
     // duty cycle, motor volt, torque current
     PhoenixUtil.tryUntilOk(
         5,
-        () -> BaseStatusSignal.setUpdateFrequencyForAll(
-            8.0,
-            position,
-            velocity,
-            supplyCurrent,
-            tempCelsius,
-            tempFault));
+        () ->
+            BaseStatusSignal.setUpdateFrequencyForAll(
+                8.0, position, velocity, supplyCurrent, tempCelsius, tempFault));
 
     PhoenixUtil.tryUntilOk(
         5,
-        () -> BaseStatusSignal.setUpdateFrequencyForAll(
-            50.0,
-            appliedVoltage,
-            torqueCurrent,
-            mMain.getBridgeOutput()));
-            
+        () ->
+            BaseStatusSignal.setUpdateFrequencyForAll(
+                50.0, appliedVoltage, torqueCurrent, mMain.getBridgeOutput()));
+
     if (mConstants.kFollowerID != null) {
       TalonFXFactory.createPermanentFollowerTalon(
           mConstants.kFollowerID,
@@ -124,22 +119,23 @@ public class RollerSubsystemIOTalonFX implements RollerSubsystemIO {
     BaseStatusSignal.refreshAll(
         position, velocity, appliedVoltage, supplyCurrent, torqueCurrent, tempCelsius, tempFault);
 
-    inputs.data = new RollerSubsystemIOData(
-        Units.rotationsToRadians(position.getValueAsDouble()) / reduction,
-        Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction,
-        appliedVoltage.getValueAsDouble(),
-        supplyCurrent.getValueAsDouble(),
-        torqueCurrent.getValueAsDouble(),
-        tempCelsius.getValueAsDouble(),
-        tempFault.getValue(),
-        BaseStatusSignal.isAllGood(
-            position,
-            velocity,
-            appliedVoltage,
-            supplyCurrent,
-            torqueCurrent,
-            tempCelsius,
-            tempFault));
+    inputs.data =
+        new RollerSubsystemIOData(
+            Units.rotationsToRadians(position.getValueAsDouble()) / reduction,
+            Units.rotationsToRadians(velocity.getValueAsDouble()) / reduction,
+            appliedVoltage.getValueAsDouble(),
+            supplyCurrent.getValueAsDouble(),
+            torqueCurrent.getValueAsDouble(),
+            tempCelsius.getValueAsDouble(),
+            tempFault.getValue(),
+            BaseStatusSignal.isAllGood(
+                position,
+                velocity,
+                appliedVoltage,
+                supplyCurrent,
+                torqueCurrent,
+                tempCelsius,
+                tempFault));
   }
 
   @Override

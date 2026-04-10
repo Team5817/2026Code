@@ -54,5 +54,4 @@ public class Shield extends StateBasedServoMotorSubsystem<Shield.State> {
     RobotVisualizer.updateShield(getPosition());
     super.outputTelemetry();
   }
-
 }
