@@ -27,7 +27,8 @@ public class CD extends AutoBase {
 
     Trajectory COToDP = l.trajectories.get("COToDP");
     Trajectory DPToDE = l.trajectories.get("DPToDE");
-    t = new TrajectorySet(COToDP, DPToDE);
+    Trajectory DEToDP = l.trajectories.get("DEToDP");
+    t = new TrajectorySet(COToDP, DPToDE, DEToDP);
   }
 
   @Override
@@ -37,6 +38,7 @@ public class CD extends AutoBase {
     sh.followPlan(false);
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
+    r(new TrajectoryAction(t.next(), 1, d));
     r(new TrajectoryAction(t.next(), 1, d));
     r(new TrajectoryAction(t.next(), 1, d));
     r(new ShootAction(6, su, 2));
