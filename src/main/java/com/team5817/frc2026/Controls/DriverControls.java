@@ -104,7 +104,6 @@ public class DriverControls {
 
     // Shield Extend 
     if (driver.getXButtonPressed()) {
-        if (s.mIntake.getMState() == Intake.State.STOW) 
             s.mShield.advanceShieldRequest().act();
   
     }
