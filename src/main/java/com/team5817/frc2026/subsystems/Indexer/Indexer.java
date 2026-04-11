@@ -74,8 +74,8 @@ public class Indexer extends Subsystem {
 
   public enum TunnelState implements IRollerState {
     IDLE(0),
-    IN(10),
-    EXHAUST(-10);
+    IN(12),
+    EXHAUST(-12);
 
     private final double demand;
 
