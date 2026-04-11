@@ -45,7 +45,7 @@ public class DriverControls {
     // LT Intake
     if (driver.leftTrigger.wasActivated()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-      s.mShield.stateRequest(Shield.State.ZERO);
+      s.mShield.stateRequest(Shield.State.ZERO).act();
     }
     if (codriver.rightBumper.wasActivated() && !driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.SQUEEZING);
