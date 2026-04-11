@@ -3,6 +3,7 @@ package com.team5817.frc2026.Controls;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
@@ -103,9 +104,9 @@ public class DriverControls {
     }
 
     // Shield Extend 
-    if (driver.getXButtonPressed() && s.mIntake.getMState() == Intake.State.STOW) {
-            s.mShield.advanceShieldRequest().act();
-  
+    if (driver.getXButtonPressed()) {
+      if(s.mShield.getDesiredState() == Shield.State.EXTENDED || s.mIntake.getMState() == Intake.State.STOW)
+          s.mShield.advanceShieldRequest().act();
     }
 
     // Shield Zero
