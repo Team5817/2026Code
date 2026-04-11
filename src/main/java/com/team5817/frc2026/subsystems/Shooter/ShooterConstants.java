@@ -73,6 +73,7 @@ public class ShooterConstants {
     hubHood.put(1.0, 3.0);
     hubHood.put(2.64, 10.0);
     hubHood.put(3.5, 16.0);
+    hubHood.put(5.1, 18.0);
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
     hubFly.put(1.6, 24.0); // Front Hub
