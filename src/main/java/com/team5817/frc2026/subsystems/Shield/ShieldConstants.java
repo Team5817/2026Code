@@ -38,7 +38,7 @@ public final class ShieldConstants {
     kShieldServoConstants.kSupplyCurrentLimit = 30; // amps
 
     kShieldServoConstants.kEnableStatorCurrentLimit = true;
-    kShieldServoConstants.kStatorCurrentLimit = 30; // amps
+    kShieldServoConstants.kStatorCurrentLimit = 60; // amps
 
     kShieldServoConstants.kNeutralMode = NeutralModeValue.Brake;
 
