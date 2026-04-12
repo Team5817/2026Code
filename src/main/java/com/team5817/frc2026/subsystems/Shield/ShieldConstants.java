@@ -15,9 +15,9 @@ public final class ShieldConstants {
 
     kShieldServoConstants.kHomePosition = 0; // meters
 
-    kShieldServoConstants.kRotationsPerUnitDistance = 8.09 / .32;
+    kShieldServoConstants.kRotationsPerUnitDistance = 8.09 / .302;
 
-    kShieldServoConstants.kMaxUnitsLimit = .32;
+    kShieldServoConstants.kMaxUnitsLimit = .302;
     kShieldServoConstants.kMinUnitsLimit = 0.0;
 
     kShieldServoConstants.kKp = 10.0;

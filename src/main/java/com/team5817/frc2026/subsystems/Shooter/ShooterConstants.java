@@ -78,9 +78,9 @@ public class ShooterConstants {
     hubFly.put(1.6, 24.0); // Front Hub
     hubFly.put(2.4, 27.5); // left hub
     hubFly.put(3.0, 32.0); // Mid Hub
-    hubFly.put(3.6, 35.0); // depot 
-    hubFly.put(4.6, 40.5); // Human Side3
-    hubFly.put(5.2, 52.0); // Human Corner
+    hubFly.put(3.6, 36.0); // depot 
+    hubFly.put(4.6, 42.5); // Human Side3
+    hubFly.put(5.2, 55.0); // Human Corner
     HOOD_MAP_LOB = lobHood;
     FLYWHEEL_MAP_LOB = lobFly;
     HOOD_MAP_HUB = hubHood;
