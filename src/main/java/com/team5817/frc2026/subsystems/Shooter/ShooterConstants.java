@@ -71,7 +71,7 @@ public class ShooterConstants {
     // Default maps for HUB
     InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
     hubHood.put(1.0, 3.0);
-    hubHood.put(2.64, 11.0);
+    hubHood.put(2.64, 10.5);
     hubHood.put(3.5, 16.0);
     hubHood.put(4.7, 16.5);
     hubHood.put(5.1, 18.0);
