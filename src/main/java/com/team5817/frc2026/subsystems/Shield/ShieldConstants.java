@@ -20,13 +20,13 @@ public final class ShieldConstants {
     kShieldServoConstants.kMaxUnitsLimit = .32;
     kShieldServoConstants.kMinUnitsLimit = 0.0;
 
-    kShieldServoConstants.kKp = 1.8;
+    kShieldServoConstants.kKp = 10.0;
     kShieldServoConstants.kKi = 0.0;
     kShieldServoConstants.kKd = 0.0;
     kShieldServoConstants.kKa = 0.0;
     kShieldServoConstants.kKs = 0.0;
     kShieldServoConstants.kKv = 0.0;
-    kShieldServoConstants.kKg = 0.0;
+    kShieldServoConstants.kKg = 2.0;
 
     kShieldServoConstants.kCruiseVelocity = 15.0 / kShieldServoConstants.kRotationsPerUnitDistance;
     kShieldServoConstants.kAcceleration = 999 / kShieldServoConstants.kRotationsPerUnitDistance;
@@ -38,7 +38,7 @@ public final class ShieldConstants {
     kShieldServoConstants.kSupplyCurrentLimit = 30; // amps
 
     kShieldServoConstants.kEnableStatorCurrentLimit = true;
-    kShieldServoConstants.kStatorCurrentLimit = 30; // amps
+    kShieldServoConstants.kStatorCurrentLimit = 60; // amps
 
     kShieldServoConstants.kNeutralMode = NeutralModeValue.Brake;
 

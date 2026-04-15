@@ -35,7 +35,7 @@ public class LightsState {
     YELLOW(Color.kYellow, "SOLID"),
     TEAL(Color.kTeal, "SOLID"),
     PURPLE(Color.kPurple, "SOLID"),
-    NONE(Color.kWhite, "SOLID"),
+    NONE(Color.kBlue, "SOLID"),
     BLINK_BLUE(Color.kBlue, "STROBE"),
     RAINBOW(null, "RAINBOW");
 

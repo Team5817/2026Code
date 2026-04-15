@@ -3,6 +3,7 @@ package com.team5817.frc2026.Controls;
 import com.team5817.frc2026.subsystems.Drive.Drive;
 import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
+import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
@@ -44,6 +45,7 @@ public class DriverControls {
     // LT Intake
     if (driver.leftTrigger.wasActivated()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
+      s.mShield.stateRequest(Shield.State.ZERO).act();
     }
     if (codriver.rightBumper.wasActivated() && !driver.leftTrigger.isBeingPressed()) {
       s.mIntake.conformToState(Intake.State.SQUEEZING);
@@ -102,10 +104,10 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Shield Extend
+    // Shield Extend 
     if (driver.getXButtonPressed()) {
-      s.mShield.advanceShieldRequest().act();
-      s.mIntake.conformToState(Intake.State.STOW);
+      if(s.mShield.getDesiredState() == Shield.State.EXTENDED || s.mIntake.getMState() == Intake.State.STOW)
+          s.mShield.advanceShieldRequest().act();
     }
 
     // Shield Zero

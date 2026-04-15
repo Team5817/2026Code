@@ -1,8 +1,9 @@
 package com.team5817.frc2026.autos.Modes;
 
 import com.team5817.frc2026.autos.Actions.ShootAction;
-import com.team5817.frc2026.autos.Actions.ShootWhenInZone;
 import com.team5817.frc2026.autos.Actions.TrajectoryAction;
+import com.team254.lib.geometry.Pose2d;
+import com.team254.lib.geometry.Transform2d;
 import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
@@ -28,18 +29,20 @@ public class CD extends AutoBase {
 
     Trajectory COToDP = l.trajectories.get("COToDP");
     Trajectory DPToDE = l.trajectories.get("DPToDE");
-    t = new TrajectorySet(COToDP, DPToDE);
+    Trajectory DEToDP = l.trajectories.get("DEToDP");
+    t = new TrajectorySet(COToDP, DPToDE, DEToDP);
   }
-
+  
   @Override
   public void routine() {
     d.simResetWorldPose(t.initalPose());
     d.zeroGyro(t.initalPose().getRotation().getDegrees());
+    d.setPose(t.initalPose().transformBy(new Pose2d(0,1,0)));
     sh.followPlan(false);
 
-    r(new TrajectoryAction(t.next(), 1, d));
-    r(new ShootWhenInZone(3, su, 50));
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
+    r(new TrajectoryAction(t.next(), 1, d));
+    r(new TrajectoryAction(t.next(), 1, d));
     r(new TrajectoryAction(t.next(), 1, d));
     r(new ShootAction(6, su, 2));
   }
