@@ -104,10 +104,10 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Shield Extend 
+    // Shield Extend
     if (driver.getXButtonPressed()) {
-      if(s.mShield.getDesiredState() == Shield.State.EXTENDED || s.mIntake.getMState() == Intake.State.STOW)
-          s.mShield.advanceShieldRequest().act();
+      if (s.mShield.getDesiredState() == Shield.State.EXTENDED
+          || s.mIntake.getMState() == Intake.State.STOW) s.mShield.advanceShieldRequest().act();
     }
 
     // Shield Zero
