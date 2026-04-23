@@ -25,37 +25,37 @@ public class ShootingPlanner {
 
 
 
-public DoubleSupplier getTurretAngleSupplier(ShootingTarget hub) {
-    return this::getManualTurret;
-}
-public void changeTurretBy(double deg){
-  setManualTurret(getManualTurret()+deg);
-}
+  public DoubleSupplier getTurretAngleSupplier(ShootingTarget hub) {
+      return this::getManualTurret;
+  }
+  public void changeTurretBy(double deg){
+    setManualTurret(getManualTurret()+deg);
+  }
 
-public DoubleSupplier getHoodAngleSupplier(ShootingTarget hub) {
-    return this::getManualHood;
-}
+  public DoubleSupplier getHoodAngleSupplier(ShootingTarget hub) {
+      return this::getManualHood;
+  }
 
-public void changeHoodBy(double deg){
-  setManualHood(getManualHood()+deg);
-} 
+  public void changeHoodBy(double deg){
+    setManualHood(getManualHood()+deg);
+  } 
 
-public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget hub) {
-    return this::getManualFlywheel;
-}
+  public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget hub) {
+      return this::getManualFlywheel;
+  }
 
-public void changeFlywheelBy(double rpm){
-  setManualFlywheel(getManualFlywheel()+rpm);
-} 
+  public void changeFlywheelBy(double rpm){
+    setManualFlywheel(getManualFlywheel()+rpm);
+  } 
 
-public boolean shouldShoot() {
-    return override;
-}
+  public boolean shouldShoot() {
+      return override;
+  }
 
-public State recommendedShooterState() {
+  public State recommendedShooterState() {
 
-return State.HUB;
- }
+  return State.HUB;
+  }
 
 
 }

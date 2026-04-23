@@ -61,9 +61,9 @@ public class DriverControls {
     }
 
     //MANUAL HOOD
-    if (driver.POV180.wasActivated()) {
+    if (driver.POV0.wasActivated()) {
       s.mShooter.getPlanner().changeHoodBy(2);
-    } else if (driver.POV0.wasActivated()) {
+    } else if (driver.POV180.wasActivated()) {
       s.mShooter.getPlanner().changeHoodBy(-2);
     }
 
