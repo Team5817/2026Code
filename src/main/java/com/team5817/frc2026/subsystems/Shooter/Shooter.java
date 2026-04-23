@@ -42,13 +42,7 @@ public class Shooter extends Subsystem {
         () -> robotPoseSupplier.get().transformBy(ShooterConstants.shooterTransform);
 
     // Use builder pattern to create ShootingPlanner
-    this.planner =
-        ShootingPlanner.builder()
-            .shooterPoseSupplier(shooterPoseSupplier)
-            .shooterVelocitySupplier(robotVelocitySupplier)
-            .atStateSupplier(() -> atState && !forcedStow)
-            .timeSinceVisionSupplier(timeSinceVision)
-            .build();
+    this.planner = new ShootingPlanner();
 
     this.turret =
         new Turret(
@@ -129,12 +123,6 @@ public class Shooter extends Subsystem {
 
   @Override
   public void periodic() {
-
-    if (followPlan) setDesiredState(planner.recommendedShooterState());
-    if (forcedStow) {
-      desiredState = State.STOW_HOOD;
-    }
-
     atState = turret.atState() && hood.atState();
 
     turret.setDesiredState(desiredState.turretState);

@@ -116,7 +116,6 @@ public class RobotContainer {
 
     mLight = new Lights(new LightsIOCANDLE(25));
 
-    mShooter.getPlanner().setTimeSinceVisionSupplier(mVision::timeSinceUpdate);
 
     mShield = new Shield(new ServoMotorIOTalonFX(ShieldConstants.kShieldServoConstants));
   }

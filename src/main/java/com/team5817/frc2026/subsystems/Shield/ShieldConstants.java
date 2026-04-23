@@ -20,13 +20,13 @@ public final class ShieldConstants {
     kShieldServoConstants.kMaxUnitsLimit = .32;
     kShieldServoConstants.kMinUnitsLimit = 0.0;
 
-    kShieldServoConstants.kKp = 10.0;
+    kShieldServoConstants.kKp = 0.0;//10
     kShieldServoConstants.kKi = 0.0;
     kShieldServoConstants.kKd = 0.0;
     kShieldServoConstants.kKa = 0.0;
     kShieldServoConstants.kKs = 0.0;
     kShieldServoConstants.kKv = 0.0;
-    kShieldServoConstants.kKg = 2.0;
+    kShieldServoConstants.kKg = 0.0;//2
 
     kShieldServoConstants.kCruiseVelocity = 15.0 / kShieldServoConstants.kRotationsPerUnitDistance;
     kShieldServoConstants.kAcceleration = 999 / kShieldServoConstants.kRotationsPerUnitDistance;

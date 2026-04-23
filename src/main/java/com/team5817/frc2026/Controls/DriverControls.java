@@ -28,6 +28,7 @@ public class DriverControls {
   }
 
   public void oneControllerMode() {
+   
     if (driver.getBackButton()) {
       s.mShooter.setDesiredState(Shooter.State.STOW);
       s.mIntake.conformToState(Intake.State.STOW);
@@ -36,19 +37,14 @@ public class DriverControls {
 
     s.mShooter
         .getPlanner()
-        .setOverride(driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2);
+        .setOverride(driver.getRightTriggerAxis() >0.2);
 
-    // RB don't Shoot
-    s.setAllowAutoShoot(!driver.getRightBumperButton());
+    // Zero
     if (driver.getStartButton()) d.allianceZeroGyro();
 
     // LT Intake
     if (driver.leftTrigger.wasActivated()) {
       s.mIntake.conformToState(Intake.State.INTAKING);
-      s.mShield.stateRequest(Shield.State.ZERO).act();
-    }
-    if (codriver.rightBumper.wasActivated() && !driver.leftTrigger.isBeingPressed()) {
-      s.mIntake.conformToState(Intake.State.SQUEEZING);
     }
     if (driver.leftTrigger.wasReleased()) {
       s.mIntake.conformToState(Intake.State.IDLE);
@@ -56,14 +52,37 @@ public class DriverControls {
     if (driver.rightBumper.wasReleased() && s.mIntake.getMState() == Intake.State.SQUEEZING)
       s.mIntake.conformToState(Intake.State.IDLE);
 
-    // LB Outtake
-    if (driver.leftBumper.wasActivated()) {
-      s.mIntake.conformToState(Intake.State.EXHAUSTING);
+    // MANUAL TURRET
+    if(driver.rightBumper.wasActivated()) {
+      s.mShooter.getPlanner().changeTurretBy(10);
     }
-    if (driver.leftBumper.wasReleased() && s.mIntake.getMState() == Intake.State.EXHAUSTING) {
-      s.mIntake.conformToState(Intake.State.IDLE);
+    if(driver.leftBumper.wasActivated()) {
+      s.mShooter.getPlanner().changeTurretBy(-10);
     }
 
+    //MANUAL HOOD
+    if (driver.POV180.wasActivated()) {
+      s.mShooter.getPlanner().changeHoodBy(2);
+    } else if (driver.POV0.wasActivated()) {
+      s.mShooter.getPlanner().changeHoodBy(-2);
+    }
+
+    //MANUAL FLYWHEEL
+    if(driver.POV90.wasActivated()) {
+      s.mShooter.getPlanner().changeFlywheelBy(20);
+    } else if (driver.POV270.wasActivated()) {
+      s.mShooter.getPlanner().changeFlywheelBy(-20);
+    }
+
+    //MANUAL TURRET FAST
+    if(driver.getXButtonPressed()) {
+      s.mShooter.getPlanner().changeTurretBy(90);
+    }
+    if(driver.getBButtonPressed()) {
+      s.mShooter.getPlanner().changeTurretBy(-90);
+    }
+
+    //codriver exhaust
     if (codriver.leftBumper.wasActivated()) {
       s.mIndexer.stateRequest(Indexer.State.EXHAUST);
     }
@@ -74,12 +93,6 @@ public class DriverControls {
       s.mIntake.home();
     }
 
-    // RT Slow mode
-    double scalar =
-        (driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2) ? 0.7 : 1.0;
-    mControlBoard.setSwerveScalar(scalar);
-    d.setSpeedScalar(scalar); // TODO integrate to sotm to reduce sporadicitiy
-
     // Y Close
     if (driver.getYButtonPressed()) {
       s.request(s.CloseShotRequest());
@@ -88,32 +101,17 @@ public class DriverControls {
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Intake Stow
+    // A Force Hood + Stow Intake
     if (driver.getAButtonPressed()) {
-      s.mIntake.conformToState(Intake.State.STOW);
-    }
-
-    // B Force Hood
-    if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
       s.mShooter.forceStow(true);
-      s.mIndexer.setState(Indexer.State.IDLE);
+      s.mIntake.conformToState(Intake.State.STOW);
       s.request(new EmptyRequest());
     }
-    if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {
+    if (driver.getAButtonReleased()) {
       s.mShooter.forceStow(false);
       s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
     }
 
-    // Shield Extend
-    if (driver.getXButtonPressed()) {
-      if (s.mShield.getDesiredState() == Shield.State.EXTENDED
-          || s.mIntake.getMState() == Intake.State.STOW) s.mShield.advanceShieldRequest().act();
-    }
-
-    // Shield Zero
-    if (driver.getPOV() == 180) {
-      s.mShield.zeroRequest().act();
-    }
   }
 
   CustomXboxController driver;
