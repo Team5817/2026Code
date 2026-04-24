@@ -24,7 +24,6 @@ public class ShootingPlanner {
   double manualFlywheel = 0;
 
 
-
   public DoubleSupplier getTurretAngleSupplier(ShootingTarget hub) {
       return this::getManualTurret;
   }
@@ -45,8 +44,8 @@ public class ShootingPlanner {
   }
 
   public void changeFlywheelBy(double rpm){
-    setManualFlywheel(getManualFlywheel()+rpm);
-  } 
+    setManualFlywheel(Math.max(0, getManualFlywheel()+rpm));
+  }
 
   public boolean shouldShoot() {
       return override;

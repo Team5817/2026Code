@@ -54,10 +54,10 @@ public class DriverControls {
 
     // MANUAL TURRET
     if(driver.rightBumper.wasActivated()) {
-      s.mShooter.getPlanner().changeTurretBy(10);
+      s.mShooter.getPlanner().changeTurretBy(20);
     }
     if(driver.leftBumper.wasActivated()) {
-      s.mShooter.getPlanner().changeTurretBy(-10);
+      s.mShooter.getPlanner().changeTurretBy(-20);
     }
 
     //MANUAL HOOD
