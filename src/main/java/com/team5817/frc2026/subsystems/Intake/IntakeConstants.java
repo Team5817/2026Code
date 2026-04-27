@@ -88,7 +88,7 @@ public class IntakeConstants {
 
     static {
       voltageMap.put(0.0, -4.0);
-      voltageMap.put(5.0, -12.0);
+      voltageMap.put(5.0, -9.0);
     }
 
     public static RollerConstantsTalonFX kMotorConstants = new RollerConstantsTalonFX();

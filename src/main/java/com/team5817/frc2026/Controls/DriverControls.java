@@ -1,18 +1,13 @@
 package com.team5817.frc2026.Controls;
 
 import com.team5817.frc2026.subsystems.Drive.Drive;
-import com.team5817.frc2026.subsystems.Indexer.Indexer;
 import com.team5817.frc2026.subsystems.Intake.Intake;
-import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.requests.AutoShootRequest;
 import com.team5817.lib.requests.EmptyRequest;
 
-/**
- * The DriverControls class handles the input from the driver and co-driver controllers and
- * translates them into actions for the robot's subsystems.
- */
+
 public class DriverControls {
 
   public ControlBoard mControlBoard;
@@ -24,7 +19,6 @@ public class DriverControls {
     this.s = s;
     this.mControlBoard = new ControlBoard(d);
     this.driver = mControlBoard.driver;
-    this.codriver = mControlBoard.operator;
   }
 
   public void oneControllerMode() {
@@ -82,17 +76,6 @@ public class DriverControls {
       s.mShooter.getPlanner().changeTurretBy(-90);
     }
 
-    //codriver exhaust
-    if (codriver.leftBumper.wasActivated()) {
-      s.mIndexer.stateRequest(Indexer.State.EXHAUST);
-    }
-    if (codriver.leftBumper.wasReleased() && s.mIndexer.getState() == Indexer.State.EXHAUST) {
-      s.mIndexer.stateRequest(Indexer.State.IDLE);
-    }
-    if (codriver.aButton.wasActivated()) {
-      s.mIntake.home();
-    }
-
     // Y Close
     if (driver.getYButtonPressed()) {
       s.request(s.CloseShotRequest());
@@ -115,15 +98,5 @@ public class DriverControls {
   }
 
   CustomXboxController driver;
-  CustomXboxController codriver;
 
-  /**
-   * Handles the input for the two controller mode. This mode is used when both driver and co-driver
-   * controllers are available.
-   */
-  public void twoControllerMode() {
-    if (driver.getStartButton()) {
-      d.allianceZeroGyro();
-    }
-  }
 }

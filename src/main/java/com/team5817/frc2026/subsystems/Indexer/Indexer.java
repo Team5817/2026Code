@@ -47,8 +47,8 @@ public class Indexer extends Subsystem {
 
   public enum SpindexerState implements IRollerState {
     IDLE(0),
-    COUNTERCLOCK(-10),
-    CLOCK(10);
+    COUNTERCLOCK(-8.5),
+    CLOCK(8.5);
 
     private final double demand;
 
@@ -74,8 +74,8 @@ public class Indexer extends Subsystem {
 
   public enum TunnelState implements IRollerState {
     IDLE(0),
-    IN(10),
-    EXHAUST(-10);
+    IN(8.5),
+    EXHAUST(-8.5);
 
     private final double demand;
 
