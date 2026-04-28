@@ -1,0 +1,63 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.270186335403727,
+        "y": 7.38695652173913
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.658358473824314,
+        "y": 7.129423247559893
+      },
+      "isLocked": false,
+      "linkedName": "SH2"
+    },
+    {
+      "anchor": {
+        "x": 8.11708961845608,
+        "y": 4.610425909494232
+      },
+      "prevControl": {
+        "x": 6.9179503105590054,
+        "y": 7.0489440993788826
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MT3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3068459657701715,
+      "rotationDegrees": -50.0
+    },
+    {
+      "waypointRelativePos": 0.69559902200489,
+      "rotationDegrees": -59.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -80.0
+  },
+  "reversed": false,
+  "folder": "Cook",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

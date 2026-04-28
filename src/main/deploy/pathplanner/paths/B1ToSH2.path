@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.215,
+        "y": 5.947347222222223
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.892215277777778,
+        "y": 7.208034722222221
+      },
+      "isLocked": false,
+      "linkedName": "B1"
+    },
+    {
+      "anchor": {
+        "x": 4.270186335403727,
+        "y": 7.38695652173913
+      },
+      "prevControl": {
+        "x": 3.811916666666667,
+        "y": 7.384652777777777
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "SH2"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 0.6,
+    "maxAcceleration": 0.17,
+    "maxAngularVelocity": 580.0,
+    "maxAngularAcceleration": 400.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Cook",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

@@ -5,6 +5,7 @@ import com.team5817.frc2026.autos.Modes.D;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.MT;
 import com.team5817.frc2026.autos.Modes.MTC;
+import com.team5817.frc2026.autos.Modes.MTB;
 import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.autos.Modes.PLL;
 import com.team5817.frc2026.autos.Modes.PLR;
@@ -26,6 +27,7 @@ public class AutoModeFactory {
     CLOSE_SWEEP,
     MT_SCOOP,
     MT_COUNTER,
+    MT_BUMP,
     D,
     CD,
     PL,
@@ -38,13 +40,15 @@ public class AutoModeFactory {
         DesiredMode.DO_NOTHING,
         DesiredMode.CLOSE_SWEEP,
         DesiredMode.MT_SCOOP,
-        DesiredMode.MT_COUNTER),
+        DesiredMode.MT_COUNTER,
+        DesiredMode.MT_BUMP),
     TRENCH_D(
         DesiredMode.DO_NOTHING,
         DesiredMode.CLOSE_SWEEP,
         DesiredMode.MT_SCOOP,
         DesiredMode.D,
-        DesiredMode.MT_COUNTER),
+        DesiredMode.MT_COUNTER,
+        DesiredMode.MT_BUMP),
     CENTER(
         DesiredMode.DO_NOTHING,
         DesiredMode.CD,
@@ -115,6 +119,7 @@ public class AutoModeFactory {
    * @return An Optional containing the AutoBase instance if a valid mode is found, otherwise an
    *     empty Optional.
    */
+  
   private Optional<AutoBase> getAutoModeForParams(DesiredMode mode) {
     switch (mode) {
       case DO_NOTHING:
@@ -126,6 +131,10 @@ public class AutoModeFactory {
       case MT_COUNTER:
         return Optional.of(
             new MTC(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
+
+      case MT_BUMP:
+        return Optional.of(
+          new MTB(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 
       case CD:
         return Optional.of(new CD(s));
