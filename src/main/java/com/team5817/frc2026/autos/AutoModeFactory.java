@@ -4,8 +4,8 @@ import com.team5817.frc2026.autos.Modes.CD;
 import com.team5817.frc2026.autos.Modes.D;
 import com.team5817.frc2026.autos.Modes.DoNothingMode;
 import com.team5817.frc2026.autos.Modes.MT;
-import com.team5817.frc2026.autos.Modes.MTC;
 import com.team5817.frc2026.autos.Modes.MTB;
+import com.team5817.frc2026.autos.Modes.MTC;
 import com.team5817.frc2026.autos.Modes.PL;
 import com.team5817.frc2026.autos.Modes.PLL;
 import com.team5817.frc2026.autos.Modes.PLR;
@@ -119,7 +119,6 @@ public class AutoModeFactory {
    * @return An Optional containing the AutoBase instance if a valid mode is found, otherwise an
    *     empty Optional.
    */
-  
   private Optional<AutoBase> getAutoModeForParams(DesiredMode mode) {
     switch (mode) {
       case DO_NOTHING:
@@ -134,7 +133,7 @@ public class AutoModeFactory {
 
       case MT_BUMP:
         return Optional.of(
-          new MTB(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
+            new MTB(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 
       case CD:
         return Optional.of(new CD(s));
