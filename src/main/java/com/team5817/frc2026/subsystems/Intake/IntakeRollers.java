@@ -31,8 +31,8 @@ public class IntakeRollers extends Subsystem {
 
   public enum State implements IRollerState {
     IDLE(0),
-    INTAKING(),
-    EXHAUST(10);
+    INTAKING(-7),
+    EXHAUST(8);
 
     DoubleSupplier demand;
     @Getter RollerControlMode controlMode = RollerControlMode.VOLTAGE;

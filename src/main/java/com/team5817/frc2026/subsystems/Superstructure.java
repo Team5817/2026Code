@@ -74,15 +74,15 @@ public class Superstructure extends Subsystem {
   }
 
   public void handleLED() {
-    if (DriverStation.isDisabled()) {
+  if (DriverStation.isDisabled()) {
       mLights.setLeds(LEDState.BLUE);
       return;
     }
 
-    mLights.setLeds(LEDState.RAINBOW);
+    mLights.setLeds(LEDState.BLINK_BLUE);
   }
 
-  public boolean requestsCompleted() {
+  public boolean requestsCompleted() { 
     return this.requestExecutor.isFinished();
   }
 

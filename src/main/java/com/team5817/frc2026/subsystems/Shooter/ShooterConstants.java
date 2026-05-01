@@ -114,8 +114,8 @@ public class ShooterConstants {
 
       kTurretServoConstants.kGravityType = GravityTypeValue.Arm_Cosine;
 
-      kTurretServoConstants.kMaxForwardOutput = 12.0;
-      kTurretServoConstants.kMaxReverseOutput = -12.0;
+      kTurretServoConstants.kMaxForwardOutput = 6.5;
+      kTurretServoConstants.kMaxReverseOutput = -6.5;
 
       kTurretServoConstants.kEnableSupplyCurrentLimit = true;
       kTurretServoConstants.kSupplyCurrentLimit = 30;
