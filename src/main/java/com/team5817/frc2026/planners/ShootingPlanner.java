@@ -18,9 +18,12 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShootingPlanner {
 
-  private static final int CONVERGENCE_ITERS = 5;
+  private static final int CONVERGENCE_ITERS = 10; // og 5, increased for better drag convergence
   private static final double MIN_NORM = 1e-4;
   private static final double LOB_HYSTERESIS = 0.2; // meters
+
+
+  private double dragConstantK = Double.POSITIVE_INFINITY; // TUNE THIS — start at 0.5s
 
   private final Map<ShootingTarget, DoubleSupplier> hoodAngleSuppliers =
       new EnumMap<>(ShootingTarget.class);
@@ -37,7 +40,6 @@ public class ShootingPlanner {
   private final DoubleUnaryOperator timeForDistance;
   private final ShootingConfig config;
 
-  // 🔧 keeps lob side stable
   private ShootingTarget lastLobSide = ShootingTarget.LOBL;
 
   private ShootingPlanner(Builder builder) {
@@ -61,7 +63,6 @@ public class ShootingPlanner {
     futureTo.put(ShootingTarget.LOBL, () -> computeFutureVector(ShootingTarget.LOBL));
     futureTo.put(ShootingTarget.LOBR, () -> computeFutureVector(ShootingTarget.LOBR));
 
-    // ✅ FIXED: LOB side selection based on CURRENT pose, not future
     futureTo.put(
         ShootingTarget.LOB,
         () -> {
@@ -69,13 +70,11 @@ public class ShootingPlanner {
           if (pose == null) return new Translation2d(MIN_NORM, 0.0);
 
           Translation2d current = pose.getTranslation();
-
           Translation2d lNow = ShootingTarget.LOBL.getLocation().wpi().minus(current);
           Translation2d rNow = ShootingTarget.LOBR.getLocation().wpi().minus(current);
 
           double diff = lNow.getNorm() - rNow.getNorm();
 
-          // hysteresis to prevent flipping
           if (Math.abs(diff) > LOB_HYSTERESIS) {
             lastLobSide = diff < 0 ? ShootingTarget.LOBL : ShootingTarget.LOBR;
           }
@@ -85,7 +84,6 @@ public class ShootingPlanner {
               : computeFutureVector(ShootingTarget.LOBR);
         });
 
-    // Output suppliers
     for (ShootingTarget t : ShootingTarget.values()) {
       Supplier<Translation2d> vec = futureTo.get(t);
 
@@ -94,7 +92,6 @@ public class ShootingPlanner {
           () -> {
             double d = vec.get().getNorm();
             if (!Double.isFinite(d) || d < MIN_NORM) return 0.0;
-
             Double val = t.getHoodMap().get(d);
             return val != null && Double.isFinite(val) ? val : 0.0;
           });
@@ -104,7 +101,6 @@ public class ShootingPlanner {
           () -> {
             double d = vec.get().getNorm();
             if (!Double.isFinite(d) || d < MIN_NORM) return 0.0;
-
             Double val = t.getFlywheelMap().get(d);
             return val != null && Double.isFinite(val) ? val : 0.0;
           });
@@ -118,6 +114,183 @@ public class ShootingPlanner {
           });
     }
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                         Drag Compensation Math                             */
+  /* -------------------------------------------------------------------------- */
+
+  private double dragAdjustedDisplacement(double velocity, double tof) {
+    if (!Double.isFinite(dragConstantK) || dragConstantK <= 0.0) {
+      // Drag disabled or invalid — fall back to Galilean
+      return velocity * tof;
+    }
+    // Linear drag formula: v * k * (1 - e^(-tof/k))
+    return velocity * dragConstantK * (1.0 - Math.exp(-tof / dragConstantK));
+  }
+
+  private double effectiveTof(double tof) {
+    if (!Double.isFinite(dragConstantK) || dragConstantK <= 0.0) {
+      return tof;
+    }
+    return dragConstantK * (1.0 - Math.exp(-tof / dragConstantK));
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Core Math                                   */
+  /* -------------------------------------------------------------------------- */
+
+  private Translation2d computeFutureVector(ShootingTarget target) {
+    Pose2d pose = shooterPoseSupplier.get();
+    ChassisSpeeds speeds = shooterVelocitySupplier.get();
+
+    if (pose == null || speeds == null) {
+      return new Translation2d(MIN_NORM, 0.0);
+    }
+
+    double vx = Double.isFinite(speeds.vxMetersPerSecond) ? speeds.vxMetersPerSecond : 0.0;
+    double vy = Double.isFinite(speeds.vyMetersPerSecond) ? speeds.vyMetersPerSecond : 0.0;
+    double omega =
+        Double.isFinite(speeds.omegaRadiansPerSecond) ? speeds.omegaRadiansPerSecond : 0.0;
+
+    Pose2d futurePose = pose;
+    Translation2d targetPos = target.getLocation().wpi();
+
+    double distance = targetPos.minus(futurePose.getTranslation()).getNorm();
+
+    for (int i = 0; i < CONVERGENCE_ITERS; i++) {
+      double tof = timeForDistance.applyAsDouble(distance);
+      if (!Double.isFinite(tof) || tof <= 0.0) break;
+
+      double tofEff = effectiveTof(tof);
+
+      Twist2d twist = new Twist2d(
+          vx * tofEff,
+          vy * tofEff,
+          omega * tof);
+
+      futurePose = pose.exp(twist); 
+
+      distance = targetPos.minus(futurePose.getTranslation()).getNorm();
+    }
+
+    double finalTof = timeForDistance.applyAsDouble(distance);
+    Logger.recordOutput("Shooter/Drag/EffectiveTof_" + target.name(), effectiveTof(finalTof));
+    Logger.recordOutput("Shooter/Drag/RawTof_" + target.name(), finalTof);
+    Logger.recordOutput("Shooter/Drag/DragConstantK", dragConstantK);
+    Logger.recordOutput("Shooter/Drag/RobotSpeed",
+        Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond));
+
+    Translation2d result = targetPos.minus(futurePose.getTranslation());
+
+    if (!Double.isFinite(result.getX())
+        || !Double.isFinite(result.getY())
+        || result.getNorm() < MIN_NORM) {
+      return new Translation2d(MIN_NORM, 0.0);
+    }
+
+    return result;
+  }
+
+  @AutoLogOutput(key = "Shooter/Planner/RecommendedState")
+  public Shooter.State recommendedShooterState() {
+    Pose2d current = shooterPoseSupplier.get();
+    ChassisSpeeds speeds = shooterVelocitySupplier.get();
+
+    if (current == null || speeds == null) {
+      return Shooter.State.STOW_HOOD;
+    }
+
+    Translation2d toHub = ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
+
+    double tof = timeForDistance.applyAsDouble(toHub.getNorm());
+    double tofEff = effectiveTof(tof);
+
+    double vx = Double.isFinite(speeds.vxMetersPerSecond) ? speeds.vxMetersPerSecond : 0.0;
+    double vy = Double.isFinite(speeds.vyMetersPerSecond) ? speeds.vyMetersPerSecond : 0.0;
+    double omega =
+        Double.isFinite(speeds.omegaRadiansPerSecond) ? speeds.omegaRadiansPerSecond : 0.0;
+
+    Twist2d twist = new Twist2d(vx * tofEff, vy * tofEff, omega * tof);
+    Pose2d futureHub = current.exp(twist);
+
+    Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
+
+    com.team254.lib.geometry.Translation2d pos =
+        new com.team254.lib.geometry.Translation2d(current.getTranslation());
+    com.team254.lib.geometry.Translation2d futureHubPos =
+        new com.team254.lib.geometry.Translation2d(futureHub.getTranslation());
+
+    if (Util.isRed().orElse(false)) {
+      pos = pos.mirrorAboutX(FieldConstants.LinesVertical.center);
+      futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
+    }
+
+    if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
+    if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
+    if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
+    if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
+    if (futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
+
+    if (pos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
+
+    return Shooter.State.LOB;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                            Public API                                      */
+  /* -------------------------------------------------------------------------- */
+
+  /**
+   * Sets the linear drag constant k (seconds).
+   
+   *   - Start with k = Double.POSITIVE_INFINITY (disabled, Galilean behavior)
+   *   - If shots overcorrect: inc k
+   *   - If shots undercorrect: dec k
+   *   - Typical range: 0.3 – 2 seconds
+   * @param k Drag constant in seconds. Use Double.POSITIVE_INFINITY to disable.
+   */
+
+  public void setDragConstantK(double k) {
+    this.dragConstantK = k;
+  }
+
+  public double getDragConstantK() {
+    return dragConstantK;
+  }
+
+  boolean override = false;
+
+  public void setOverride(boolean newOverride) {
+    this.override = newOverride;
+  }
+
+  public Boolean shouldShoot() {
+    if (!atStateSupplier.getAsBoolean()) return false;
+    return override;
+  }
+
+  public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
+    return hoodAngleSuppliers.get(target);
+  }
+
+  public DoubleSupplier getTurretAngleSupplier(ShootingTarget target) {
+    return turretAngleSuppliers.get(target);
+  }
+
+  public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget target) {
+    return flywheelSpeedSuppliers.get(target);
+  }
+
+  public void setTimeSinceVisionSupplier(DoubleSupplier timeSinceVision) {
+    this.timeSinceVision = timeSinceVision;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                            Builder                                         */
+  /* -------------------------------------------------------------------------- */
 
   public static Builder builder() {
     return new Builder();
@@ -152,135 +325,13 @@ public class ShootingPlanner {
     }
 
     public ShootingPlanner build() {
-      if (shooterPoseSupplier == null) {
+      if (shooterPoseSupplier == null)
         throw new IllegalStateException("shooterPoseSupplier must be set");
-      }
-      if (shooterVelocitySupplier == null) {
+      if (shooterVelocitySupplier == null)
         throw new IllegalStateException("shooterVelocitySupplier must be set");
-      }
-      if (atStateSupplier == null) {
+      if (atStateSupplier == null)
         throw new IllegalStateException("atStateSupplier must be set");
-      }
       return new ShootingPlanner(this);
     }
-  }
-
-  public void setTimeSinceVisionSupplier(DoubleSupplier timeSinceVision) {
-    this.timeSinceVision = timeSinceVision;
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                Core Math                                   */
-  /* -------------------------------------------------------------------------- */
-
-  private Translation2d computeFutureVector(ShootingTarget target) {
-    Pose2d pose = shooterPoseSupplier.get();
-    ChassisSpeeds speeds = shooterVelocitySupplier.get();
-
-    if (pose == null || speeds == null) {
-      return new Translation2d(MIN_NORM, 0.0);
-    }
-
-    Pose2d futurePose = pose;
-    Translation2d targetPos = target.getLocation().wpi();
-
-    double distance = targetPos.minus(futurePose.getTranslation()).getNorm();
-
-    for (int i = 0; i < CONVERGENCE_ITERS; i++) {
-      double tof = timeForDistance.applyAsDouble(distance);
-      if (!Double.isFinite(tof) || tof <= 0.0) break;
-
-      double vx = Double.isFinite(speeds.vxMetersPerSecond) ? speeds.vxMetersPerSecond : 0.0;
-      double vy = Double.isFinite(speeds.vyMetersPerSecond) ? speeds.vyMetersPerSecond : 0.0;
-      double omega =
-          Double.isFinite(speeds.omegaRadiansPerSecond) ? speeds.omegaRadiansPerSecond : 0.0;
-
-      Twist2d twist = new Twist2d(vx * tof, vy * tof, omega * tof);
-      futurePose = futurePose.exp(twist);
-
-      distance = targetPos.minus(futurePose.getTranslation()).getNorm();
-    }
-
-    Translation2d result = targetPos.minus(futurePose.getTranslation());
-
-    if (!Double.isFinite(result.getX())
-        || !Double.isFinite(result.getY())
-        || result.getNorm() < MIN_NORM) {
-      return new Translation2d(MIN_NORM, 0.0);
-    }
-
-    return result;
-  }
-
-  /* -------------------------------------------------------------------------- */
-
-  @AutoLogOutput(key = "Shooter/Planner/RecommendedState")
-  public Shooter.State recommendedShooterState() {
-    Pose2d current = shooterPoseSupplier.get();
-    ChassisSpeeds speeds = shooterVelocitySupplier.get();
-
-    if (current == null || speeds == null) {
-      return Shooter.State.STOW_HOOD;
-    }
-
-    Translation2d toHub = ShootingTarget.HUB.getLocation().wpi().minus(current.getTranslation());
-
-    double tof = timeForDistance.applyAsDouble(toHub.getNorm());
-
-    Twist2d twist =
-        new Twist2d(
-            speeds.vxMetersPerSecond * tof,
-            speeds.vyMetersPerSecond * tof,
-            speeds.omegaRadiansPerSecond * tof);
-
-    Pose2d futureHub = current.exp(twist);
-
-    Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
-
-    com.team254.lib.geometry.Translation2d pos =
-        new com.team254.lib.geometry.Translation2d(current.getTranslation());
-    com.team254.lib.geometry.Translation2d futureHubPos =
-        new com.team254.lib.geometry.Translation2d(futureHub.getTranslation());
-
-    if (Util.isRed().orElse(false)) {
-      pos = pos.mirrorAboutX(FieldConstants.LinesVertical.center);
-      futureHubPos = futureHubPos.mirrorAboutX(FieldConstants.LinesVertical.center);
-    }
-
-    if (pos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
-    if (futureHubPos.inBounds(config.dangerBounds)) return Shooter.State.STOW_HOOD;
-    if (pos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
-    if (futureHubPos.inBounds(config.dangerBoundsFlipped)) return Shooter.State.STOW_HOOD;
-    if (pos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
-    if (futureHubPos.inBounds(config.dangerBoundsFlippedOpponent)) return Shooter.State.STOW_HOOD;
-    if (pos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
-    if (futureHubPos.inBounds(config.dangerBoundsOpponent)) return Shooter.State.STOW_HOOD;
-
-    if (pos.x() < config.hubBounds.maxX()) return Shooter.State.HUB;
-
-    return Shooter.State.LOB;
-  }
-
-  boolean override = false;
-
-  public void setOverride(boolean newOverride) {
-    this.override = newOverride;
-  }
-
-  public Boolean shouldShoot() {
-    if (!atStateSupplier.getAsBoolean()) return false;
-    return override;
-  }
-
-  public DoubleSupplier getHoodAngleSupplier(ShootingTarget target) {
-    return hoodAngleSuppliers.get(target);
-  }
-
-  public DoubleSupplier getTurretAngleSupplier(ShootingTarget target) {
-    return turretAngleSuppliers.get(target);
-  }
-
-  public DoubleSupplier getFlywheelSpeedSupplier(ShootingTarget target) {
-    return flywheelSpeedSuppliers.get(target);
   }
 }
