@@ -78,7 +78,7 @@ public class DriverControls {
     double scalar =
         (driver.getRightBumperButton() || codriver.getLeftTriggerAxis() > 0.2) ? 0.7 : 1.0;
     mControlBoard.setSwerveScalar(scalar);
-    d.setSpeedScalar(scalar); // TODO integrate to sotm to reduce sporadicitiy
+    d.setSpeedScalar(scalar);    
 
     // Y Close
     if (driver.getYButtonPressed()) {

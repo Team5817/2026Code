@@ -31,8 +31,8 @@ public final class ShieldConstants {
     kShieldServoConstants.kCruiseVelocity = 15.0 / kShieldServoConstants.kRotationsPerUnitDistance;
     kShieldServoConstants.kAcceleration = 999 / kShieldServoConstants.kRotationsPerUnitDistance;
 
-    kShieldServoConstants.kMaxForwardOutput = 12.0;
-    kShieldServoConstants.kMaxReverseOutput = -12.0;
+    kShieldServoConstants.kMaxForwardOutput = 9.0;
+    kShieldServoConstants.kMaxReverseOutput = -9.0;
 
     kShieldServoConstants.kEnableSupplyCurrentLimit = true;
     kShieldServoConstants.kSupplyCurrentLimit = 30; // amps
