@@ -7,7 +7,6 @@ import com.team5817.frc2026.autos.AutoBase;
 import com.team5817.frc2026.autos.TrajectoryLibrary.l;
 import com.team5817.frc2026.planners.ShootingPlanner;
 import com.team5817.frc2026.subsystems.Drive.Drive;
-import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.frc2026.subsystems.Superstructure;
 import com.team5817.lib.motion.Trajectory;
@@ -18,7 +17,6 @@ public class PLR extends AutoBase {
   private Drive d;
   private Superstructure su;
   private TrajectorySet t;
-  private Shield c;
   private Shooter sh;
   private ShootingPlanner p;
 
@@ -27,7 +25,6 @@ public class PLR extends AutoBase {
     this.su = s;
     this.sh = s.mShooter;
     this.p = sh.getPlanner();
-    this.c = s.mShield;
 
     Trajectory SCToCO = l.trajectories.get("SCToCO");
     Trajectory COToC0 = l.trajectories.get("COToC0");
