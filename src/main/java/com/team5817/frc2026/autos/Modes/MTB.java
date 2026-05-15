@@ -54,15 +54,15 @@ public class MTB extends AutoBase {
 
     r(
         new ParallelAction(
-            List.of(new TrajectoryAction(t.next(), 1.5, d), new ShootWhenInZone(6.0, su, 1.0))));
+            List.of(new TrajectoryAction(t.next(), 1.0, d), new ShootWhenInZone(6.0, su, 1.0))));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
-    r(new TrajectoryAction(t.next(), 1, d));
-    r(new TrajectoryAction(t.next(), 1.5, d));
+    r(new TrajectoryAction(t.next(), 1.0, d));
+    r(new TrajectoryAction(t.next(), 1.0, d));
     su.mIntake.stateRequest(Intake.State.IDLE).act();
 
     r(
         new ParallelAction(
-            List.of(new TrajectoryAction(t.next(), 1.5, d), new ShootWhenInZone(6.0, su, 1.0))));
+            List.of(new TrajectoryAction(t.next(), 1.0, d), new ShootWhenInZone(6.0, su, 1.0))));
   }
 }
