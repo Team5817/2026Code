@@ -69,21 +69,24 @@ public class ShooterConstants {
     lobFly.put(15.0, 98.0);
 
     InterpolatingDoubleTreeMap hubHood = new InterpolatingDoubleTreeMap();
-    hubHood.put(1.0, 3.0);
-    hubHood.put(2.64, 10.5);
-    hubHood.put(3.5, 16.0);
-    hubHood.put(4.7, 16.5);
+    hubHood.put(1.0, 2.9);
+    hubHood.put(2.5, 9.5);
+    hubHood.put(3.3, 15.4);
+    hubHood.put(4.7, 16.8);
     hubHood.put(5.1, 18.0);
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
-    hubFly.put(1.6, 24.0); // Front Hub
-    hubFly.put(2.4, 27.0); // left hub
-    hubFly.put(3.0, 31.0); // Mid Hub
-    hubFly.put(3.6, 34.0); // depot
-    hubFly.put(4.6, 42.0); // Human Side3
-    hubFly.put(5.2, 50.0); // Human Corner
+    hubFly.put(1.5, 26.0); 
+    hubFly.put(2.0, 29.0); 
+    hubFly.put(2.6, 30.0); 
+    hubFly.put(3.0, 33.0); 
+    hubFly.put(3.2, 34.0); 
+    hubFly.put(3.6, 35.0); 
+    hubFly.put(4.0, 35.5); 
+    hubFly.put(4.6, 43.0); 
+    hubFly.put(5.2, 50.0); 
     HOOD_MAP_LOB = lobHood;
-    FLYWHEEL_MAP_LOB = lobFly;
+    FLYWHEEL_MAP_LOB = lobFly; 
     HOOD_MAP_HUB = hubHood;
     FLYWHEEL_MAP_HUB = hubFly;
   }
@@ -113,8 +116,8 @@ public class ShooterConstants {
 
       kTurretServoConstants.kGravityType = GravityTypeValue.Arm_Cosine;
 
-      kTurretServoConstants.kMaxForwardOutput = 12.0;
-      kTurretServoConstants.kMaxReverseOutput = -12.0;
+      kTurretServoConstants.kMaxForwardOutput = 10.0;
+      kTurretServoConstants.kMaxReverseOutput = -10.0;
 
       kTurretServoConstants.kEnableSupplyCurrentLimit = true;
       kTurretServoConstants.kSupplyCurrentLimit = 30;

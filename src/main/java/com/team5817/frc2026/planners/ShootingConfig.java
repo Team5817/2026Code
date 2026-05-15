@@ -40,10 +40,10 @@ public class ShootingConfig {
   public static ShootingConfig defaultConfig() {
     InterpolatingDoubleTreeMap timeMap = new InterpolatingDoubleTreeMap();
 
-    timeMap.put(1.0, 0.16);
-    timeMap.put(3.0, 0.25);
-    timeMap.put(5.0, 0.27);
-    timeMap.put(10.0, 0.5);
+    timeMap.put(1.0, 0.19);
+    timeMap.put(3.0, 0.33);
+    timeMap.put(5.0, 0.31);
+    timeMap.put(10.0, 0.45);
 
     Bounds hubBounds = new Bounds(0.0, 0.0, 4.6, 8);
     Bounds dangerBounds = new Bounds(3.65, 0, 5.5, 1.3);

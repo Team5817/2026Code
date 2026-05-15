@@ -88,7 +88,7 @@ public class IntakeConstants {
 
     static {
       voltageMap.put(0.0, -4.0);
-      voltageMap.put(5.0, -11.0);
+      voltageMap.put(5.0, -10.0);
     }
 
     public static RollerConstantsTalonFX kMotorConstants = new RollerConstantsTalonFX();
@@ -98,8 +98,8 @@ public class IntakeConstants {
       kMotorConstants.kStatorCurrentLimit = 80;
       kMotorConstants.kEnableSupplyCurrentLimit = true;
       kMotorConstants.kEnableStatorCurrentLimit = true;
-      kMotorConstants.kMaxForwardOutput = 12.0;
-      kMotorConstants.kMaxReverseOutput = -12.0;
+      kMotorConstants.kMaxForwardOutput = 10.0;
+      kMotorConstants.kMaxReverseOutput = -10.0;
     }
   }
 }
