@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.270186335403727,
-        "y": 7.38695652173913
+        "x": 4.318473824312333,
+        "y": 7.5479148181011535
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.441064773735581,
-        "y": 7.161614906832297
+        "x": 7.4893522626441875,
+        "y": 7.322573203194321
       },
       "isLocked": false,
       "linkedName": "SH2"
@@ -57,7 +57,7 @@
   "folder": "Cook",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -29.577838681261245
   },
   "useDefaultConstraints": false
 }
