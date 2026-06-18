@@ -236,7 +236,7 @@ public class ShootingPlanner {
     Pose2d futureHub = current.exp(twist);
 
     if (Double.isFinite(futureHub.getX()) && Double.isFinite(futureHub.getY())) {
-        Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
+      Logger.recordOutput("Shooter/Planner/FuturePose", futureHub);
     }
     com.team254.lib.geometry.Translation2d pos =
         new com.team254.lib.geometry.Translation2d(current.getTranslation());

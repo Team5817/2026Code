@@ -76,17 +76,17 @@ public class ShooterConstants {
     hubHood.put(5.1, 18.0);
 
     InterpolatingDoubleTreeMap hubFly = new InterpolatingDoubleTreeMap();
-    hubFly.put(1.5, 26.0); 
-    hubFly.put(2.0, 29.0); 
-    hubFly.put(2.6, 30.0); 
-    hubFly.put(3.0, 33.0); 
-    hubFly.put(3.2, 34.0); 
-    hubFly.put(3.6, 35.0); 
-    hubFly.put(4.0, 35.5); 
-    hubFly.put(4.6, 43.0); 
-    hubFly.put(5.2, 50.0); 
+    hubFly.put(1.5, 26.0);
+    hubFly.put(2.0, 29.0);
+    hubFly.put(2.6, 30.0);
+    hubFly.put(3.0, 33.0);
+    hubFly.put(3.2, 34.0);
+    hubFly.put(3.6, 35.0);
+    hubFly.put(4.0, 35.5);
+    hubFly.put(4.6, 43.0);
+    hubFly.put(5.2, 50.0);
     HOOD_MAP_LOB = lobHood;
-    FLYWHEEL_MAP_LOB = lobFly; 
+    FLYWHEEL_MAP_LOB = lobFly;
     HOOD_MAP_HUB = hubHood;
     FLYWHEEL_MAP_HUB = hubFly;
   }
