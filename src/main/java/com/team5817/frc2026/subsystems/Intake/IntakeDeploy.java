@@ -59,20 +59,23 @@ public class IntakeDeploy extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    boolean out =
-        Util.epsilonEquals(
-                mRackLeft.getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError())
-            && Util.epsilonEquals(
-                mRackRight.getPosition(), State.OUT.getDemand(), State.OUT.getAllowableError());
-    Logger.recordOutput("Intake/Rack/Out", out);
+    boolean leftOut = atState(mRackLeft, State.OUT);
+    boolean rightOut = atState(mRackRight, State.OUT);
+    Logger.recordOutput("Intake/Rack/LeftOut", leftOut);
+    Logger.recordOutput("Intake/Rack/RightOut", rightOut);
+    Logger.recordOutput("Intake/Rack/Out", leftOut && rightOut);
 
-    if (out && mDesiredState == State.OUT) {
-      mRackLeft.setDesiredState(State.DISABLED);
-      mRackRight.setDesiredState(State.DISABLED);
+    if (mDesiredState == State.OUT) {
+      mRackLeft.setDesiredState(leftOut ? State.DISABLED : State.OUT);
+      mRackRight.setDesiredState(rightOut ? State.DISABLED : State.OUT);
     }
 
     mRackLeft.writePeriodicOutputs();
     mRackRight.writePeriodicOutputs();
+  }
+
+  private boolean atState(StateBasedServoMotorSubsystem<State> rack, State state) {
+    return Util.epsilonEquals(rack.getPosition(), state.getDemand(), state.getAllowableError());
   }
 
   @Override
@@ -101,6 +104,7 @@ public class IntakeDeploy extends Subsystem {
   public void home() {
     mRackLeft.home();
     mRackRight.home();
+    mDesiredState = State.OUT;
     mRackLeft.setDesiredState(State.OUT);
     mRackRight.setDesiredState(State.OUT);
   }
