@@ -24,10 +24,9 @@ public class AutoModeFactory {
 
   public enum DesiredMode {
     DO_NOTHING,
-    CLOSE_SWEEP,
-    MT_SCOOP,
+    MAIN_SCOOP,
     MT_COUNTER,
-    MT_BUMP,
+    MAIN_BUMP,
     D,
     CD,
     PL,
@@ -38,17 +37,15 @@ public class AutoModeFactory {
   public enum StartingSelection {
     TRENCH_H(
         DesiredMode.DO_NOTHING,
-        DesiredMode.CLOSE_SWEEP,
-        DesiredMode.MT_SCOOP,
+        DesiredMode.MAIN_SCOOP,
         DesiredMode.MT_COUNTER,
-        DesiredMode.MT_BUMP),
+        DesiredMode.MAIN_BUMP),
     TRENCH_D(
         DesiredMode.DO_NOTHING,
-        DesiredMode.CLOSE_SWEEP,
-        DesiredMode.MT_SCOOP,
+      DesiredMode.MAIN_SCOOP,
         DesiredMode.D,
         DesiredMode.MT_COUNTER,
-        DesiredMode.MT_BUMP),
+        DesiredMode.MAIN_BUMP),
     CENTER(
         DesiredMode.DO_NOTHING,
         DesiredMode.CD,
@@ -124,14 +121,14 @@ public class AutoModeFactory {
       case DO_NOTHING:
         return Optional.of(new DoNothingMode());
 
-      case MT_SCOOP:
+      case MAIN_SCOOP:
         return Optional.of(new MT(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 
       case MT_COUNTER:
         return Optional.of(
             new MTC(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 
-      case MT_BUMP:
+      case MAIN_BUMP:
         return Optional.of(
             new MTB(s, mCachedStartingSelection == StartingSelection.TRENCH_H, true));
 

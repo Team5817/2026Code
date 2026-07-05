@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.620729166666667,
-        "y": 5.8438125
+        "x": 5.638558376736111,
+        "y": 5.052947410300925
       },
       "isLocked": false,
       "linkedName": "MT3"
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.05702917771883289,
+      "waypointRelativePos": 0.20877878289473686,
       "rotationDegrees": 180.0
     }
   ],
@@ -64,7 +64,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Cook",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -80.0
