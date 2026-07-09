@@ -36,16 +36,16 @@ public class AutoModeFactory {
 
   public enum StartingSelection {
     TRENCH_H(
-      DesiredMode.MAIN_SCOOP,
-      DesiredMode.MAIN_BUMP,
-      DesiredMode.MT_COUNTER,
-      DesiredMode.DO_NOTHING),
+        DesiredMode.MAIN_SCOOP,
+        DesiredMode.MAIN_BUMP,
+        DesiredMode.MT_COUNTER,
+        DesiredMode.DO_NOTHING),
     TRENCH_D(
-      DesiredMode.MAIN_SCOOP,
-      DesiredMode.MAIN_BUMP,
-      DesiredMode.MT_COUNTER,
-      DesiredMode.D,
-      DesiredMode.DO_NOTHING),
+        DesiredMode.MAIN_SCOOP,
+        DesiredMode.MAIN_BUMP,
+        DesiredMode.MT_COUNTER,
+        DesiredMode.D,
+        DesiredMode.DO_NOTHING),
     CENTER(
         DesiredMode.CD,
         DesiredMode.PL,
