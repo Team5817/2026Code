@@ -34,7 +34,7 @@ public class MTB extends AutoBase {
     Trajectory Return2 = l.trajectories.get("MT3ToB1");
     Trajectory Shoot2 = l.trajectories.get("B1ToSH2");
 
-    t = new TrajectorySet(false, Intake1, Return1, Shoot1, Intake2, Return2, Shoot2);
+    t = new TrajectorySet(isHumanSide, Intake1, Return1, Shoot1, Intake2, Return2, Shoot2);
   }
 
   @Override
@@ -54,7 +54,7 @@ public class MTB extends AutoBase {
 
     r(
         new ParallelAction(
-            List.of(new TrajectoryAction(t.next(), 1.0, d), new ShootWhenInZone(6.0, su, 1.0))));
+            List.of(new TrajectoryAction(t.next(), 1.0, d), new ShootWhenInZone(5.0, su, 1.0))));
 
     su.mIntake.stateRequest(Intake.State.INTAKING).act();
     r(new TrajectoryAction(t.next(), 1.0, d));

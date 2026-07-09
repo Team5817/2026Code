@@ -23,35 +23,35 @@ public class AutoModeFactory {
   private final Superstructure s;
 
   public enum DesiredMode {
-    DO_NOTHING,
     MAIN_SCOOP,
-    MT_COUNTER,
     MAIN_BUMP,
+    MT_COUNTER,
     D,
     CD,
     PL,
     PL_LEFT,
-    PL_RIGHT
+    PL_RIGHT,
+    DO_NOTHING
   }
 
   public enum StartingSelection {
     TRENCH_H(
-        DesiredMode.DO_NOTHING,
-        DesiredMode.MAIN_SCOOP,
-        DesiredMode.MT_COUNTER,
-        DesiredMode.MAIN_BUMP),
-    TRENCH_D(
-        DesiredMode.DO_NOTHING,
       DesiredMode.MAIN_SCOOP,
-        DesiredMode.D,
-        DesiredMode.MT_COUNTER,
-        DesiredMode.MAIN_BUMP),
+      DesiredMode.MAIN_BUMP,
+      DesiredMode.MT_COUNTER,
+      DesiredMode.DO_NOTHING),
+    TRENCH_D(
+      DesiredMode.MAIN_SCOOP,
+      DesiredMode.MAIN_BUMP,
+      DesiredMode.MT_COUNTER,
+      DesiredMode.D,
+      DesiredMode.DO_NOTHING),
     CENTER(
-        DesiredMode.DO_NOTHING,
         DesiredMode.CD,
         DesiredMode.PL,
         DesiredMode.PL_LEFT,
-        DesiredMode.PL_RIGHT);
+        DesiredMode.PL_RIGHT,
+        DesiredMode.DO_NOTHING);
 
     public List<DesiredMode> modes;
 
