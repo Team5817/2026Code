@@ -205,7 +205,7 @@ public class Drive extends Subsystem {
     boolean userSlowingDown = Math.abs(speeds.omegaRadiansPerSecond) < 0.15;
     boolean robotRotatingSlowly = Math.abs(gyroInputs.yawVelocityRadPerSec) < 0.3;
 
-    if (!isStabilizing && userSlowingDown && robotRotatingSlowly && !resetHeadingController) {
+    if (!isStabilizing && userSlowingDown && !resetHeadingController) {
       mHeadingController.setStabilizeTarget(getHeading());
       isStabilizing = true;
       resetHeadingController = false;

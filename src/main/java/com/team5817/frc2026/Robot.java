@@ -126,7 +126,7 @@ public class Robot extends LoggedRobot {
       needsZero = false;
     }
     Logger.recordOutput("Elastic/Match Time", Timer.getMatchTime());
-    mSubsystemManager.updateSubsystems();
+    mSubsystemManager.getFullCycleMS();
     RobotVisualizer.outputTelemetry();
     elasticField2d.setRobotPose(mRobotContainer.mDrive.getPose().wpi());
     SmartDashboard.putData("Elastic/Field", elasticField2d);

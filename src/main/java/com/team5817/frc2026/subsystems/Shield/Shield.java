@@ -14,7 +14,7 @@ public class Shield extends StateBasedServoMotorSubsystem<Shield.State> {
   }
 
   public enum State implements ServoState {
-    ZERO(0.0, 0.0),
+    ZERO(0.0, 0.02),
     EXTENDED(0.4, 0.02),
     RETRACTED(0.0, 0.01);
 
