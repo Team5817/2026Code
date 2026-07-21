@@ -9,7 +9,7 @@ import lombok.Getter;
 
 public class Hood extends StateBasedServoMotorSubsystem<Hood.State> {
 
-  private static final double kTightError = 1.3;
+  private static final double kTightError = 1.0;
   private static final double kLooseError = 4.0;
 
   public Hood(ServoMotorIO io, DoubleSupplier hubAngleSupplier, DoubleSupplier lobAngleSupplier) {
