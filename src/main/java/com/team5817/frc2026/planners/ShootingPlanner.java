@@ -268,6 +268,10 @@ public class ShootingPlanner {
     this.override = newOverride;
   }
 
+  public boolean isOverride() {
+    return override;
+  }
+
   public Boolean shouldShoot() {
     if (!atStateSupplier.getAsBoolean()) return false;
     return override;
