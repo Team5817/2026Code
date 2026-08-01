@@ -79,29 +79,10 @@ public class DriverControls {
     mControlBoard.setSwerveScalar(scalar);
     d.setSpeedScalar(scalar);
 
-    // // Y Close
-    // if (driver.getYButtonPressed()) {
-    //   s.request(s.CloseShotRequest());
-    // }
-    // if (driver.getYButtonReleased()) {
-    //   s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
-    // }
-
     // Intake Stow
     if (driver.getAButtonPressed()) {
       s.mIntake.conformToState(Intake.State.STOW);
     }
-
-    // B Force Hood
-    // if (driver.getBButtonPressed() || codriver.getBButtonPressed()) {
-    //   s.mShooter.forceStow(true);
-    //   s.mIndexer.setState(Indexer.State.IDLE);
-    //   s.request(new EmptyRequest());
-    // }
-    // if (driver.getBButtonReleased() || codriver.getBButtonReleased()) {
-    //   s.mShooter.forceStow(false);
-    //   s.request(new AutoShootRequest(s.mShooter.getPlanner(), s).addName("AutoShoot"));
-    // }
 
     // Shield Extend
     if (driver.getXButtonPressed()) {

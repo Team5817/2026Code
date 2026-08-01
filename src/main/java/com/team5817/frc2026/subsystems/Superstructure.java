@@ -9,11 +9,8 @@ import com.team5817.frc2026.subsystems.Shield.Shield;
 import com.team5817.frc2026.subsystems.Shooter.Shooter;
 import com.team5817.lib.drivers.Lights.LightsState.LEDState;
 import com.team5817.lib.drivers.Subsystem;
-import com.team5817.lib.requests.NeverEndingRequest;
-import com.team5817.lib.requests.ParallelRequest;
 import com.team5817.lib.requests.Request;
 import com.team5817.lib.requests.RequestExecutor;
-import com.team5817.lib.requests.SequentialRequest;
 import edu.wpi.first.wpilibj.DriverStation;
 import lombok.Setter;
 import org.littletonrobotics.junction.Logger;
@@ -47,24 +44,6 @@ public class Superstructure extends Subsystem {
     mShield = shield;
     mLights = lights;
     this.requestExecutor = new RequestExecutor();
-  }
-
-  public Request CloseShotRequest() {
-    return new SequentialRequest(
-            new ParallelRequest(
-                mShooter.stateRequest(Shooter.State.CLOSE),
-                mIndexer.stateRequest(Indexer.State.FEED)),
-            new NeverEndingRequest())
-        .addName("CloseShot");
-  }
-
-  public Request FarShotRequest() {
-    return new SequentialRequest(
-            new ParallelRequest(
-                mShooter.stateRequest(Shooter.State.FAR),
-                mIndexer.stateRequest(Indexer.State.FEED)),
-            new NeverEndingRequest())
-        .addName("FarShot");
   }
 
   @Override

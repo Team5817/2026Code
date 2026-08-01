@@ -268,6 +268,7 @@ public class ShootingPlanner {
     this.override = newOverride;
   }
 
+
   public boolean isOverride() {
     return override;
   }

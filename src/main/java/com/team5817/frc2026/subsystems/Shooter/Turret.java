@@ -49,7 +49,6 @@ public class Turret extends StateBasedServoMotorSubsystem<Turret.State> {
   }
 
   public enum State implements ServoState {
-    HEADINGTEST(kTightError),
     STOW(0.0, kLooseError),
     HUB(kTightError),
     LOBBING(kTightError);
