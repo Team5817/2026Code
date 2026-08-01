@@ -177,7 +177,7 @@ public class ShooterConstants {
   }
 
   public enum FlywheelState implements IRollerState {
-    IDLE(15, RollerControlMode.VOLTAGE),
+    IDLE(20, RollerControlMode.VELOCITY),
     CLOSE(43.0, RollerControlMode.VELOCITY),
     FAR(65.0, RollerControlMode.VELOCITY),
     HUB(70.0, RollerControlMode.VELOCITY),

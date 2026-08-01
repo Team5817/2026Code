@@ -46,6 +46,7 @@ public class ShootAction implements Action {
     s.mIntake.conformToState(Intake.State.IDLE);
     s.mShooter.setDesiredState(Shooter.State.STOW_HOOD);
     s.mShooter.forceStow(true);
+    s.mShooter.getPlanner().setOverride(false);
   }
 
   @Override
@@ -59,5 +60,7 @@ public class ShootAction implements Action {
     s.mIndexer.setState(Indexer.State.FEED);
     s.mShooter.setDesiredState(Shooter.State.HUB);
     s.mShooter.forceStow(false);
+    s.mShooter.getPlanner().setOverride(true);   
+
   }
 }
