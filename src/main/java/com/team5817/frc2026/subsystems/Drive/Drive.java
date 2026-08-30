@@ -32,6 +32,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -120,6 +121,15 @@ public class Drive extends Subsystem {
   @Setter private boolean autoAlignFinishedOverride = false;
 
   private double speedScalar = 1.0;
+
+  /**
+   * Rate-limits how fast the driver's translation-command magnitude may change (m/s per second),
+   * leaving its direction untouched. Softens hard stick reversals that would otherwise break wheel
+   * traction. Tune via {@link SwerveConstants#kTranslationAccelLimit}.
+   */
+  private final SlewRateLimiter mTranslationMagLimiter =
+      new SlewRateLimiter(SwerveConstants.kTranslationAccelLimit);
+
   public static final Lock odometryLock = new ReentrantLock();
   private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
@@ -185,12 +195,22 @@ public class Drive extends Subsystem {
 
   public void feedTeleopSetpoint(ChassisSpeeds speeds) {
 
+    // Slew-limit the translation
+    double rawMagnitude = Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+    double limitedMagnitude = mTranslationMagLimiter.calculate(rawMagnitude);
+    double magnitudeScale = rawMagnitude > 1e-6 ? limitedMagnitude / rawMagnitude : 0.0;
+    speeds.vxMetersPerSecond *= magnitudeScale;
+    speeds.vyMetersPerSecond *= magnitudeScale;
+
     speeds.vxMetersPerSecond *= speedScalar;
     speeds.vyMetersPerSecond *= speedScalar;
     speeds.omegaRadiansPerSecond *= speedScalar;
 
-    runVelocity(getTeleopSetpoint(speeds));
-    Logger.recordOutput("Drive/Desired", getTeleopSetpoint(speeds));
+    ChassisSpeeds teleopSetpoint = getTeleopSetpoint(speeds);
+    runVelocity(teleopSetpoint);
+    Logger.recordOutput("Drive/TeleopTranslationMagnitude/Raw", rawMagnitude);
+    Logger.recordOutput("Drive/TeleopTranslationMagnitude/Limited", limitedMagnitude);
+    Logger.recordOutput("Drive/Desired", teleopSetpoint);
   }
 
   public void setSpeedScalar(double scalar) {
@@ -360,6 +380,12 @@ public class Drive extends Subsystem {
   @Override
   public void readPeriodicInputs() {
     if (DriverStation.isAutonomous()) updateAuto();
+
+    if (!DriverStation.isTeleopEnabled()) {
+      ChassisSpeeds measured = getChassisSpeeds();
+      mTranslationMagLimiter.reset(
+          Math.hypot(measured.vxMetersPerSecond, measured.vyMetersPerSecond));
+    }
 
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);

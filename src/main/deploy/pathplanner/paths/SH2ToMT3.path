@@ -20,8 +20,8 @@
         "y": 4.610425909494232
       },
       "prevControl": {
-        "x": 6.8814166666666665,
-        "y": 6.41629861111111
+        "x": 7.15422728587963,
+        "y": 6.610803891782407
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
   "folder": "Cook",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -29.577838681261245
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

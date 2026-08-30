@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.577838681261245
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Cook",

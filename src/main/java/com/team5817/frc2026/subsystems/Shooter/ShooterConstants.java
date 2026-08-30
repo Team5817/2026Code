@@ -37,8 +37,8 @@ public class ShooterConstants {
             Units.inchesToMeters(-2.25), Units.inchesToMeters(4.63), Units.inchesToMeters(19.7));
     TurretToCam = new Translation3d(Units.inchesToMeters(7.136), 0, 0);
 
-    kFlywheelConstants.kMaxForwardOutput = 12.0;
-    kFlywheelConstants.kMaxReverseOutput = -12.0;
+    kFlywheelConstants.kMaxForwardOutput = 0.0;//12
+    kFlywheelConstants.kMaxReverseOutput = -0.0;//-12
 
     kFlywheelConstants.kNeutralMode = NeutralModeValue.Coast;
     kFlywheelConstants.kSupplyCurrentLimit = 40;
@@ -116,8 +116,8 @@ public class ShooterConstants {
 
       kTurretServoConstants.kGravityType = GravityTypeValue.Arm_Cosine;
 
-      kTurretServoConstants.kMaxForwardOutput = 10.0;
-      kTurretServoConstants.kMaxReverseOutput = -10.0;
+      kTurretServoConstants.kMaxForwardOutput = 0.0;//10
+      kTurretServoConstants.kMaxReverseOutput = -0.0;//-10
 
       kTurretServoConstants.kEnableSupplyCurrentLimit = true;
       kTurretServoConstants.kSupplyCurrentLimit = 30;
@@ -159,8 +159,8 @@ public class ShooterConstants {
 
       kHoodServoConstants.kGravityType = GravityTypeValue.Arm_Cosine;
 
-      kHoodServoConstants.kMaxForwardOutput = 12.0;
-      kHoodServoConstants.kMaxReverseOutput = -12.0;
+      kHoodServoConstants.kMaxForwardOutput = 0.0;//12
+      kHoodServoConstants.kMaxReverseOutput = -0.0;//-12
 
       kHoodServoConstants.kEnableSupplyCurrentLimit = true;
       kHoodServoConstants.kSupplyCurrentLimit = 30;

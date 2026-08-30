@@ -43,6 +43,13 @@ public final class SwerveConstants {
 
   public static final double kTrajectoryDeadband = .05;
 
+  /**
+   * Teleop translation acceleration limit (m/s^2). 
+   * Lower = smoother but slower to build speed; higher = more responsive but closer to
+   * unclamped behavior. ~9.0 is roughly 0.5 s from a stop to full speed.
+   */
+  public static final double kTranslationAccelLimit = 9.0;
+
   public static final SwerveModuleSimulationConfig moduleConfig =
       new SwerveModuleSimulationConfig(
           DCMotor.getKrakenX60(1),

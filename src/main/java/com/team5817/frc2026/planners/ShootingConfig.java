@@ -53,12 +53,12 @@ public class ShootingConfig {
     Bounds dangerBoundsFlippedOpponent = dangerBounds.flippedAboutX().flippedAboutY();
 
     Logger.recordOutput(
-        "Shooting/DangerBounds",
+        "Bounds/DangerBounds",
         new double[] {
           dangerBounds.minX(), dangerBounds.minY(), dangerBounds.maxX(), dangerBounds.maxY()
         });
     Logger.recordOutput(
-        "Shooting/DangerBoundsOpponent",
+        "Bounds/DangerBoundsOpponent",
         new double[] {
           dangerBoundsOpponent.minX(),
           dangerBoundsOpponent.minY(),
@@ -66,7 +66,7 @@ public class ShootingConfig {
           dangerBoundsOpponent.maxY()
         });
     Logger.recordOutput(
-        "Shooting/DangerBoundsFlipped",
+        "Bounds/DangerBoundsFlipped",
         new double[] {
           dangerBoundsFlipped.minX(),
           dangerBoundsFlipped.minY(),
@@ -74,7 +74,7 @@ public class ShootingConfig {
           dangerBoundsFlipped.maxY()
         });
     Logger.recordOutput(
-        "Shooting/DangerBoundsFlippedOpponent",
+        "Bounds/DangerBoundsFlippedOpponent",
         new double[] {
           dangerBoundsFlippedOpponent.minX(),
           dangerBoundsFlippedOpponent.minY(),
@@ -82,7 +82,7 @@ public class ShootingConfig {
           dangerBoundsFlippedOpponent.maxY()
         });
     Logger.recordOutput(
-        "Shooting/BlockedBounds",
+        "Bounds/BlockedBounds",
         new double[] {
           blockedBounds.minX(), blockedBounds.minY(), blockedBounds.maxX(), blockedBounds.maxY()
         });
